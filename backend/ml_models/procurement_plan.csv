@@ -1,0 +1,129 @@
+city_cd,product_name,daily_avg,method
+BLR,A2 Buffalo Milk,2206.8,lgbm
+BLR,A2 Buffalo Milk UHT 1L Pack,9.7,lgbm
+BLR,A2 Desi Cow Milk,487.8,lgbm
+BLR,Assorted Pack of 3 Breakfast Cereals,1.0,lgbm
+BLR,Blueberry Lassi,1.0,lgbm
+BLR,Buffalo Butter,1.7,lgbm
+BLR,Buffalo Cup Curd,29.1,lgbm
+BLR,Buffalo Cup Curd 85g,14.8,lgbm
+BLR,Buffalo Cup Curd 85g (4 Pack),0.9,lgbm
+BLR,Buffalo Ghee (350 g),2.6,lgbm
+BLR,Buffalo Ghee Spout,0.0,lgbm
+BLR,Butter Milk Cup,44.2,lgbm
+BLR,Choco Ragi Crunchers - Pack of 3,2.5,lgbm
+BLR,Choco Ragi Crunchers 200G,1.0,lgbm
+BLR,Cow Butter,3.2,lgbm
+BLR,Cow Cup Curd,17.1,lgbm
+BLR,Cow Ghee (350 g),2.5,lgbm
+BLR,Cow Ghee Spout,1.0,lgbm
+BLR,Cow Milk,2023.6,lgbm
+BLR,Curd,189.3,lgbm
+BLR,Desi Cow Ghee,0.5,lgbm
+BLR,Double Toned A2 Buffalo Milk,592.9,lgbm
+BLR,High Protein Curd,5.9,lgbm
+BLR,High Protein Milk,219.3,lgbm
+BLR,High Protein Paneer,4.5,lgbm
+BLR,Honey Fruit & Nut Muesli - Pack of 3,3.1,lgbm
+BLR,Honey Fruit & Nut Muesli 200G,1.0,lgbm
+BLR,Insulated Milk Delivery Bag (Blue),0.8,lgbm
+BLR,Insulated Milk Delivery Bag (Red),1.0,lgbm
+BLR,Malai Paneer 200G,30.7,lgbm
+BLR,Mango Lassi,4.0,lgbm
+BLR,Mango Millet Pops - Pack of 3,1.1,lgbm
+BLR,Probiotic Cup Curd,18.5,lgbm
+BLR,Salted Buffalo Butter,1.0,lgbm
+BLR,Salted Cow Butter,1.9,lgbm
+BLR,Skim Milk,535.3,lgbm
+BLR,Sweet Lassi,6.1,lgbm
+BLR,Toned Milk,192.4,lgbm
+BLR,Tub Curd,3.8,lgbm
+HYD,A2 Buffalo Milk,19362.1,lgbm_hyd
+HYD,A2 Buffalo Milk UHT 1L Pack,46.3,lgbm_hyd
+HYD,A2 Desi Cow Milk,2589.3,lgbm_hyd
+HYD,Assorted Pack of 3 Breakfast Cereals,11.2,lgbm_hyd
+HYD,Blueberry Lassi,13.6,lgbm_hyd
+HYD,Buffalo Butter,15.8,lgbm_hyd
+HYD,Buffalo Cup Curd,258.9,lgbm_hyd
+HYD,Buffalo Cup Curd 85g,200.3,lgbm_hyd
+HYD,Buffalo Cup Curd 85g (4 Pack),27.6,lgbm_hyd
+HYD,Buffalo Ghee (350 g),36.9,lgbm_hyd
+HYD,Buffalo Ghee Spout,2.9,lgbm_hyd
+HYD,Butter Milk Cup,266.4,lgbm_hyd
+HYD,Butter Milk Cup 2 Combo,1.0,lgbm_hyd
+HYD,Butter Milk Pouch 2 Combo,8.6,lgbm_hyd
+HYD,Choco Ragi Crunchers - Pack of 3,23.8,lgbm_hyd
+HYD,Choco Ragi Crunchers 200G,3.7,lgbm_hyd
+HYD,Cow Butter,22.7,lgbm_hyd
+HYD,Cow Cup Curd,151.4,lgbm_hyd
+HYD,Cow Ghee (350 g),51.7,lgbm_hyd
+HYD,Cow Ghee Spout,5.2,lgbm_hyd
+HYD,Cow Milk,11610.4,lgbm_hyd
+HYD,Curd,1295.9,lgbm_hyd
+HYD,Curd 2 Combo,2.1,lgbm_hyd
+HYD,Desi Cow Ghee,8.4,lgbm_hyd
+HYD,Double Toned A2 Buffalo Milk,7982.4,lgbm_hyd
+HYD,High Protein Curd,22.6,lgbm_hyd
+HYD,High Protein Milk,589.2,lgbm_hyd
+HYD,High Protein Paneer,18.3,lgbm_hyd
+HYD,Honey Fruit & Nut Muesli - Pack of 3,11.1,lgbm_hyd
+HYD,Honey Fruit & Nut Muesli 200G,3.2,lgbm_hyd
+HYD,Insulated Milk Delivery Bag (Blue),1.0,lgbm_hyd
+HYD,Malai Paneer 200G,128.2,lgbm_hyd
+HYD,Mango Lassi,21.7,lgbm_hyd
+HYD,Mango Millet Pops - Pack of 3,10.3,lgbm_hyd
+HYD,Mango Millet Pops 200G,2.8,lgbm_hyd
+HYD,Probiotic Cup Curd,136.6,lgbm_hyd
+HYD,Salted Buffalo Butter,7.2,lgbm_hyd
+HYD,Salted Cow Butter,9.9,lgbm_hyd
+HYD,Skim Milk,4865.9,lgbm_hyd
+HYD,Sweet Lassi,66.9,lgbm_hyd
+HYD,Toned Milk,3301.8,lgbm_hyd
+HYD,Tub Curd,31.3,lgbm_hyd
+PNQ,A2 Buffalo Milk,36.0,lgbm
+PNQ,A2 Buffalo Milk UHT 1L Pack,0.5,lgbm
+PNQ,A2 Desi Cow Milk,67.5,lgbm
+PNQ,Buffalo Butter,1.0,lgbm
+PNQ,Buffalo Cup Curd,2.1,lgbm
+PNQ,Buffalo Cup Curd 85g,4.1,lgbm
+PNQ,Butter Milk Cup,4.2,lgbm
+PNQ,Choco Ragi Crunchers - Pack of 3,1.0,lgbm
+PNQ,Choco Ragi Crunchers 200G,1.0,lgbm
+PNQ,Cow Cup Curd,1.6,lgbm
+PNQ,Cow Ghee (350 g),1.0,lgbm
+PNQ,Cow Milk,56.4,lgbm
+PNQ,Curd,2.1,lgbm
+PNQ,Desi Cow Ghee,1.0,lgbm
+PNQ,Double Toned A2 Buffalo Milk,5.3,lgbm
+PNQ,High Protein Curd,1.2,lgbm
+PNQ,High Protein Milk,0.9,lgbm
+PNQ,High Protein Paneer,1.2,lgbm
+PNQ,Malai Paneer 200G,3.6,lgbm
+PNQ,Mango Millet Pops - Pack of 3,1.0,lgbm
+PNQ,Mango Millet Pops 200G,1.0,lgbm
+PNQ,Probiotic Cup Curd,1.0,lgbm
+PNQ,Skim Milk,2.7,lgbm
+PNQ,Sweet Lassi,1.9,lgbm
+PNQ,Toned Milk,1.4,lgbm
+PNQ,Tub Curd,1.1,lgbm
+VGA,A2 Buffalo Milk,30.3,lgbm
+VGA,A2 Desi Cow Milk,5.8,lgbm
+VGA,Buffalo Cup Curd,0.0,lgbm
+VGA,Buffalo Cup Curd 85g,0.5,lgbm
+VGA,Buffalo Cup Curd 85g (4 Pack),1.0,lgbm
+VGA,Butter Milk Cup,0.5,lgbm
+VGA,Cow Cup Curd,1.2,lgbm
+VGA,Cow Milk,11.4,lgbm
+VGA,Curd,3.2,lgbm
+VGA,Desi Cow Ghee,1.0,lgbm
+VGA,Double Toned A2 Buffalo Milk,12.4,lgbm
+VGA,High Protein Milk,0.5,lgbm
+VGA,Honey Fruit & Nut Muesli - Pack of 3,1.0,lgbm
+VGA,Insulated Milk Delivery Bag (Red),1.0,lgbm
+VGA,Malai Paneer 200G,2.1,lgbm
+VGA,Probiotic Cup Curd,1.1,lgbm
+VGA,Probiotic Cup Curd 2 Combo,0.0,lgbm
+VGA,Skim Milk,14.2,lgbm
+VGA,Sweet Lassi,0.0,lgbm
+VGA,Toned Milk,32.5,lgbm
+VGA,Tub Curd,1.0,lgbm

@@ -1,0 +1,130 @@
+date,festival,cities,impact,year,impact_direction
+01-01-2024,New Year Day,ALL,HIGH,2024,0
+14-01-2024,Makar Sankranti / Pongal,ALL,HIGH,2024,1
+15-01-2024,Kanuma,"HYD,VGA",HIGH,2024,1
+26-01-2024,Republic Day,ALL,MED,2024,-1
+14-02-2024,Vasant Panchami,ALL,MED,2024,0
+24-02-2024,Maha Shivaratri,ALL,HIGH,2024,1
+08-03-2024,Mahashivratri,ALL,HIGH,2024,1
+24-03-2024,Holika Dahan,ALL,MED,2024,-1
+25-03-2024,Holi,ALL,HIGH,2024,-1
+09-04-2024,Ugadi / Telugu New Year,"HYD,VGA,BLR",HIGH,2024,1
+11-04-2024,Gudi Padwa,PNQ,HIGH,2024,-1
+13-04-2024,Baisakhi,ALL,MED,2024,0
+14-04-2024,Tamil New Year / Vishu,BLR,MED,2024,0
+17-04-2024,Ram Navami,ALL,HIGH,2024,1
+23-04-2024,Hanuman Jayanti,ALL,MED,2024,0
+01-05-2024,Maharashtra Day,PNQ,HIGH,2024,-1
+10-05-2024,Akshaya Tritiya,ALL,HIGH,2024,0
+23-05-2024,Buddha Purnima,ALL,MED,2024,0
+02-06-2024,Telangana Formation Day,"HYD,VGA",HIGH,2024,-1
+16-06-2024,Eid al-Adha / Bakrid,"HYD,VGA",HIGH,2024,-1
+21-06-2024,Vat Purnima,PNQ,MED,2024,0
+07-07-2024,Jagannath Rath Yatra,ALL,MED,2024,0
+21-07-2024,Guru Purnima,ALL,MED,2024,0
+28-07-2024,Bonalu Start,HYD,HIGH,2024,1
+04-08-2024,Bonalu End,HYD,HIGH,2024,1
+09-08-2024,Nag Panchami,ALL,MED,2024,0
+15-08-2024,Independence Day,ALL,HIGH,2024,-1
+19-08-2024,Raksha Bandhan,ALL,HIGH,2024,1
+26-08-2024,Krishna Janmashtami,ALL,HIGH,2024,1
+06-09-2024,Hartalika Teej,ALL,MED,2024,0
+07-09-2024,Ganesh Chaturthi,ALL,HIGH,2024,1
+15-09-2024,Onam,BLR,HIGH,2024,0
+16-09-2024,Vishwakarma Puja,ALL,MED,2024,0
+17-09-2024,Ganesh Visarjan,ALL,HIGH,2024,0
+02-10-2024,Gandhi Jayanti,ALL,MED,2024,0
+03-10-2024,Navratri Begins,ALL,HIGH,2024,0
+12-10-2024,Dussehra / Vijayadashami,ALL,HIGH,2024,1
+15-10-2024,Bathukamma Start,"HYD,VGA",HIGH,2024,1
+20-10-2024,Karwa Chauth,ALL,MED,2024,0
+23-10-2024,Bathukamma End (Saddula Bathukamma),"HYD,VGA",HIGH,2024,1
+29-10-2024,Dhanteras,ALL,HIGH,2024,1
+31-10-2024,Narak Chaturdashi,ALL,HIGH,2024,0
+01-11-2024,Diwali / Laxmi Puja,ALL,HIGH,2024,1
+01-11-2024,Karnataka Rajyotsava,BLR,HIGH,2024,-1
+02-11-2024,Govardhan Puja,ALL,HIGH,2024,0
+03-11-2024,Bhai Dooj,ALL,HIGH,2024,0
+15-11-2024,Dev Diwali / Guru Nanak Jayanti,ALL,MED,2024,1
+26-11-2024,Chhath Puja,ALL,MED,2024,0
+11-12-2024,Gita Jayanti,ALL,MED,2024,0
+25-12-2024,Christmas,ALL,HIGH,2024,1
+01-01-2025,New Year Day,ALL,HIGH,2025,0
+14-01-2025,Makar Sankranti / Pongal,ALL,HIGH,2025,1
+15-01-2025,Kanuma,"HYD,VGA",HIGH,2025,1
+26-01-2025,Republic Day,ALL,MED,2025,-1
+02-02-2025,Vasant Panchami,ALL,MED,2025,0
+26-02-2025,Maha Shivaratri,ALL,HIGH,2025,1
+13-03-2025,Holika Dahan,ALL,MED,2025,-1
+14-03-2025,Holi,ALL,HIGH,2025,-1
+30-03-2025,Ugadi / Telugu New Year,"HYD,VGA,BLR",HIGH,2025,1
+31-03-2025,Gudi Padwa,PNQ,HIGH,2025,-1
+06-04-2025,Ram Navami,ALL,HIGH,2025,1
+10-04-2025,Mahavir Jayanti,ALL,MED,2025,0
+14-04-2025,Vaisakhi / Tamil New Year,ALL,MED,2025,0
+18-04-2025,Good Friday,ALL,MED,2025,-1
+01-05-2025,Maharashtra Day,PNQ,HIGH,2025,-1
+30-05-2025,Akshaya Tritiya,ALL,HIGH,2025,0
+02-06-2025,Telangana Formation Day,"HYD,VGA",HIGH,2025,-1
+10-06-2025,Eid al-Adha / Bakrid,"HYD,VGA",HIGH,2025,-1
+10-07-2025,Guru Purnima,ALL,MED,2025,0
+20-07-2025,Bonalu Start,HYD,HIGH,2025,1
+27-07-2025,Bonalu End,HYD,HIGH,2025,1
+29-07-2025,Nag Panchami,ALL,MED,2025,0
+08-08-2025,Varalakshmi Vratam,"HYD,VGA,BLR",HIGH,2025,0
+09-08-2025,Raksha Bandhan,ALL,HIGH,2025,1
+15-08-2025,Independence Day,ALL,HIGH,2025,-1
+16-08-2025,Krishna Janmashtami,ALL,HIGH,2025,1
+27-08-2025,Ganesh Chaturthi,ALL,HIGH,2025,1
+04-09-2025,Onam,BLR,HIGH,2025,0
+17-09-2025,Vishwakarma Puja,ALL,MED,2025,0
+22-09-2025,Navratri Begins,ALL,HIGH,2025,0
+28-09-2025,Durga Puja Begins,ALL,HIGH,2025,1
+01-10-2025,Maha Navami,ALL,HIGH,2025,0
+02-10-2025,Dussehra / Vijayadashami,ALL,HIGH,2025,1
+06-10-2025,Sharad Purnima,ALL,MED,2025,0
+09-10-2025,Karwa Chauth,ALL,MED,2025,0
+12-10-2025,Bathukamma Start,"HYD,VGA",HIGH,2025,1
+18-10-2025,Dhanteras,ALL,HIGH,2025,1
+20-10-2025,Diwali,ALL,HIGH,2025,1
+20-10-2025,Bathukamma End (Saddula Bathukamma),"HYD,VGA",HIGH,2025,1
+22-10-2025,Bhai Dooj,ALL,HIGH,2025,0
+27-10-2025,Chhath Puja,ALL,MED,2025,0
+01-11-2025,Karnataka Rajyotsava,BLR,HIGH,2025,-1
+05-11-2025,Kartik Purnima,ALL,MED,2025,0
+01-12-2025,Geeta Jayanti,ALL,MED,2025,0
+16-12-2025,Dhanu Sankranti,ALL,MED,2025,1
+25-12-2025,Christmas,ALL,HIGH,2025,1
+01-01-2026,New Year Day,ALL,HIGH,2026,0
+14-01-2026,Makar Sankranti / Pongal,ALL,HIGH,2026,1
+15-01-2026,Kanuma,"HYD,VGA",HIGH,2026,1
+26-01-2026,Republic Day,ALL,MED,2026,-1
+15-02-2026,Maha Shivaratri,ALL,HIGH,2026,1
+02-03-2026,Holika Dahan,ALL,MED,2026,-1
+03-03-2026,Holi,ALL,HIGH,2026,-1
+19-03-2026,Ugadi / Telugu New Year,"HYD,VGA,BLR",HIGH,2026,1
+20-03-2026,Gudi Padwa,PNQ,HIGH,2026,-1
+21-03-2026,Eid ul-Fitr,"HYD,VGA",HIGH,2026,-1
+27-03-2026,Ram Navami,ALL,HIGH,2026,1
+02-04-2026,Hanuman Jayanti,ALL,MED,2026,0
+03-04-2026,Good Friday,ALL,MED,2026,-1
+19-04-2026,Akshaya Tritiya,ALL,HIGH,2026,0
+01-05-2026,Maharashtra Day,PNQ,HIGH,2026,-1
+27-05-2026,Eid al-Adha / Bakrid,"HYD,VGA",HIGH,2026,-1
+02-06-2026,Telangana Formation Day,"HYD,VGA",HIGH,2026,-1
+26-06-2026,Shahadat Imam Hussain,HYD,MED,2026,0
+10-08-2026,Bonalu,HYD,HIGH,2026,1
+15-08-2026,Independence Day,ALL,HIGH,2026,-1
+26-08-2026,Eid Miladun Nabi,"HYD,VGA",MED,2026,-1
+28-08-2026,Bonalu (HYD Special),HYD,HIGH,2026,1
+04-09-2026,Krishna Janmashtami,ALL,HIGH,2026,1
+14-09-2026,Ganesh Chaturthi,ALL,HIGH,2026,1
+10-10-2026,Bathukamma Start,"HYD,VGA",HIGH,2026,1
+18-10-2026,Bathukamma End,"HYD,VGA",HIGH,2026,1
+01-11-2026,Karnataka Rajyotsava,BLR,HIGH,2026,-1
+08-11-2026,Diwali,ALL,HIGH,2026,1
+09-11-2026,Govardhan Puja,ALL,HIGH,2026,0
+10-11-2026,Bhai Dooj,ALL,HIGH,2026,0
+24-11-2026,Kartik Purnima,ALL,MED,2026,0
+16-12-2026,Dhanu Sankranti,ALL,MED,2026,1
+25-12-2026,Christmas,ALL,HIGH,2026,1
