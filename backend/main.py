@@ -98,6 +98,13 @@ HYD_STABLE_MILK_PRODUCTS = {
     "Skim Milk",
     "Toned Milk",
 }
+BLR_BLEND_PRODUCTS = {
+    "A2 Buffalo Milk",
+    "Cow Milk",
+    "Curd",
+    "Skim Milk",
+}
+BLR_SEVEN_DAY_PRODUCTS = {"A2 Desi Cow Milk"}
 
 print("Loading model + data at startup...")
 with open(os.path.join(MODEL_DIR, "lgbm_model.pkl"), "rb") as f:
@@ -525,7 +532,10 @@ def _guarded_model_prediction(raw_pred: float, features: dict, allow_baseline_fa
 
 
 def _calibration_factor(city: str, product: str, target_type: str, is_hyd_model: bool) -> float:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
+    # BLR's saved May/June calibration currently adds upward bias to the
+    # strongest live products. Keep the raw model until BLR is retrained on
+    # refreshed fact-table history.
+    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES or city == "BLR":
         return 1.0
     if is_hyd_model:
         return float(_model_hyd_calibration.get(product, 1.0))
@@ -533,7 +543,7 @@ def _calibration_factor(city: str, product: str, target_type: str, is_hyd_model:
 
 
 def _dow_calibration_factor(city: str, product: str, day_of_week: int, target_type: str, is_hyd_model: bool) -> float:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
+    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES or city == "BLR":
         return 1.0
     if is_hyd_model:
         return float(_model_hyd_dow_calibration.get(f"{product}|{int(day_of_week)}", 1.0))
@@ -557,6 +567,27 @@ def _apply_procurement_calibration(
     if combined_factor == 1.0:
         return prediction, factor, dow_factor
     return int(max(0, round(prediction * combined_factor))), factor, dow_factor
+
+
+def _apply_blr_hybrid_forecast(
+    prediction: int,
+    city: str,
+    product: str,
+    target_type: str,
+    features: dict,
+) -> tuple[int, str]:
+    if city != "BLR" or target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
+        return prediction, "model"
+
+    roll_7 = float(features.get("roll_7_mean", 0) or 0)
+    roll_28 = float(features.get("roll_28_mean", 0) or 0)
+    lag_7 = float(features.get("lag_7", 0) or 0)
+    if product in BLR_SEVEN_DAY_PRODUCTS and roll_7 > 0:
+        return int(round(roll_7)), "recent_7_day"
+    if product in BLR_BLEND_PRODUCTS and min(roll_7, roll_28, lag_7) > 0:
+        blended = (0.55 * roll_7) + (0.30 * roll_28) + (0.15 * lag_7)
+        return int(round(blended)), "recent_blend_7_28_lag7"
+    return prediction, "model"
 
 
 def _apply_hyd_momentum_floor(
@@ -761,6 +792,13 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     is_hyd_model,
                     int(feats.get("day_of_week", pred_dt.dayofweek)),
                 )
+                final_ad_hoc_pred, blr_forecast_method = _apply_blr_hybrid_forecast(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
                 final_ad_hoc_pred, momentum_floor_qty, momentum_factor = _apply_hyd_momentum_floor(
                     final_ad_hoc_pred,
                     city,
@@ -797,6 +835,7 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     "predicted_orders": max(1, round(unknown_ad_hoc_qty / 1.15)),
                     "method": "ml_unknown_adhoc",
                     "prediction_source": pred_source,
+                    "blr_forecast_method": blr_forecast_method,
                     "calibration_factor": calibration_factor,
                     "dow_calibration_factor": dow_calibration_factor,
                     "momentum_floor_qty": momentum_floor_qty,
@@ -877,6 +916,13 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     int(feats.get("day_of_week", current_dt.dayofweek)),
                 )
                 model_total_adhoc = calibrated_total
+                model_total_adhoc, blr_forecast_method = _apply_blr_hybrid_forecast(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
                 model_total_adhoc, momentum_floor_qty, momentum_factor = _apply_hyd_momentum_floor(
                     model_total_adhoc,
                     city,
@@ -916,6 +962,7 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     "run_rate_floor_qty": run_rate_floor_qty,
                     "run_rate_factor": run_rate_factor,
                     "prediction_source": pred_source,
+                    "blr_forecast_method": blr_forecast_method,
                     "subscription_qty": int(round(sub_dict.get((city, product), 0))),
                     "known_buy_once_qty": known_qty,
                     "ml_unknown_adhoc_qty": ml_unknown_qty,
@@ -1002,7 +1049,9 @@ def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame
     actual_available = (
         actual_df is not None
         and not actual_df.empty
-        and _parse_forecast_date(date) <= _today_ist()
+        # Same-day operational rows are incomplete and can change materially.
+        # Only completed dates may be presented as final actual demand.
+        and _parse_forecast_date(date) < _today_ist()
     )
     if actual_available:
         display_mode = "actual"
