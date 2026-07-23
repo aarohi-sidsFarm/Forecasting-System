@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Legend, Cell,
@@ -85,11 +85,14 @@ export default function App() {
   const [activeTab, setTab]       = useState("overview");
   const [cityFilter, setCity]     = useState("All");
   const [prodFilter, setProd]     = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showComponents, setShowComponents] = useState(false);
+  const ROWS_PER_PAGE = 20;
   const [selectedDate, _setDate]  = useState(getInitialDate());
   const [trendDays, setTrendDays] = useState(14);
 
   const setDate = (d) => {
-    setData(null); // Clear data to trigger loading screen for new date
+    setData(null);
     _setDate(d);
     const url = new URL(window.location);
     url.searchParams.set("date", d);
@@ -100,12 +103,12 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await getForecastDay(dt);
+      const res = await getForecastDay(dt, true);
       setData(res);
     } catch (e) {
       if (e.message.includes("404")) {
         setError(
-          `No forecast cached for ${dt}. The backend will compute it on the fly — try again in a moment.`
+          `No forecast cached for ${dt}. The backend will compute it on the fly - try again in a moment.`
         );
       } else {
         setError(`Could not reach backend: ${e.message}`);
@@ -150,6 +153,16 @@ export default function App() {
     return true;
   });
 
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * ROWS_PER_PAGE,
+    currentPage * ROWS_PER_PAGE
+  );
+  const totalPages = Math.ceil(filteredProducts.length / ROWS_PER_PAGE);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [cityFilter, prodFilter]);
+
   const topProducts = (data?.product_breakdown ?? [])
     .reduce((acc, r) => {
       const ex = acc.find(x => x.product_name === r.product_name);
@@ -165,12 +178,30 @@ export default function App() {
       }
       return acc;
     }, [])
-    .sort((a, b) => b.total_orders - a.total_orders)
+    .sort((a, b) => b.total_quantity - a.total_quantity)
     .slice(0, 10);
 
   const citySummary = data?.city_summary ?? [];
   const meta        = data?.meta ?? {};
   const totalQty    = meta.total_quantity ?? 0;
+  const mlUnknownQty = meta.ml_unknown_adhoc_qty ?? meta.ml_qty;
+  const isActualMode = meta.display_mode === "actual";
+
+  const statusLabel = (row) => {
+    if (!isActualMode) return "Forecast";
+    const pct = Number(row.forecast_abs_error_pct ?? 0);
+    if (pct <= 1) return "On target";
+    if (pct <= 3) return "Watch";
+    return "High variance";
+  };
+
+  const statusStyle = (row) => {
+    const label = statusLabel(row);
+    if (label === "On target") return { background: "#dcfce7", color: "#16a34a" };
+    if (label === "Watch") return { background: "#fef3c7", color: "#d97706" };
+    if (label === "High variance") return { background: "#fee2e2", color: "#dc2626" };
+    return { background: "#e0e7ff", color: "#4338ca" };
+  };
 
   if (loading && !data) {
     return (
@@ -190,12 +221,12 @@ export default function App() {
   return (
     <div className="app">
 
-      {/* ── HEADER ── */}
+      {/* HEADER */}
       <header className="header">
         <div className="header-left">
           <div className="logo">S</div>
           <div>
-            <div className="header-title">Sid's Farm · Forecast</div>
+            <div className="header-title">Sid's Farm Model</div>
             <div className="header-subtitle">LGBM + Subscription Model</div>
           </div>
         </div>
@@ -234,45 +265,50 @@ export default function App() {
 
           <button
             className="btn btn-export"
-            onClick={() => window.open(`${API_BASE}/forecast_raw`, "_blank")}
+            onClick={() => window.open(`${API_BASE}/export/milk_city_forecast.csv?date=${selectedDate}&days=7&refresh=true`, "_blank")}
           >
-            ↓ Export
+            Export
           </button>
 
-          <span className="live-badge">● LIVE</span>
+          <span className="live-badge">LIVE</span>
         </div>
       </header>
 
-      {/* ── MAIN CONTENT ── */}
+      {/* MAIN CONTENT */}
       <main className="main">
 
         {/* Error banner */}
         {error && (
           <div className="error-banner fade-in">
-            <strong>⚠ {error}</strong>
+            <strong>{error}</strong>
             <div style={{ marginTop: 4, fontSize: 12, opacity: 0.8 }}>
               Ensure backend is running: <code>uvicorn main:app --reload --port 8000</code>
             </div>
           </div>
         )}
 
-        {/* ── KEY METRICS ── */}
+        {/* KEY METRICS */}
         <div className="metrics-row">
           <div className="metric-card fade-in stagger-1" style={{"--accent-color": "#818cf8"}}>
-            <div className="metric-label">Total Forecast</div>
+            <div className="metric-label">{isActualMode ? "Actual Demand" : "Total Forecast"}</div>
             <div className="metric-value" style={{ color: "#818cf8" }}>{fmt(totalQty)}</div>
             <div className="metric-sub">
               units for {meta.order_date ?? selectedDate}
+              {isActualMode && (
+                <span className="metric-sub-pill" style={{ background: "#e0f2fe", color: "#0369a1" }}>
+                  D2C actual
+                </span>
+              )}
             </div>
           </div>
 
           <div className="metric-card fade-in stagger-2">
             <div className="metric-label">Subscription</div>
             <div className="metric-value" style={{ color: "#34d399" }}>
-              {meta.subscription_pct != null ? `${meta.subscription_pct}%` : "—"}
+              {meta.subscription_pct != null ? `${meta.subscription_pct}%` : "-"}
             </div>
             <div className="metric-sub">
-              {meta.subscription_qty != null ? `${fmt(meta.subscription_qty)} units` : "—"}
+              {meta.subscription_qty != null ? `${fmt(meta.subscription_qty)} units` : "-"}
               <span className="metric-sub-pill" style={{ background: "#dcfce7", color: "#16a34a" }}>
                 subs
               </span>
@@ -280,14 +316,27 @@ export default function App() {
           </div>
 
           <div className="metric-card fade-in stagger-3">
-            <div className="metric-label">ML Forecast</div>
+            <div className="metric-label">Known Buy Once</div>
             <div className="metric-value" style={{ color: "#fbbf24" }}>
-              {meta.ml_qty != null ? fmt(meta.ml_qty) : "—"}
+              {meta.known_buy_once_qty != null ? fmt(meta.known_buy_once_qty) : "-"}
             </div>
             <div className="metric-sub">
-              units via LGBM
+              already placed
               <span className="metric-sub-pill" style={{ background: "#fef3c7", color: "#d97706" }}>
-                model
+                orders
+              </span>
+            </div>
+          </div>
+
+          <div className="metric-card fade-in stagger-4">
+            <div className="metric-label">{isActualMode ? "Forecast Error" : "ML Procurement Gap"}</div>
+            <div className="metric-value" style={{ color: "#a78bfa" }}>
+              {isActualMode ? fmt(meta.forecast_error_qty) : (mlUnknownQty != null ? fmt(mlUnknownQty) : "-")}
+            </div>
+            <div className="metric-sub">
+              {isActualMode ? `${meta.forecast_abs_error_pct ?? 0}% abs error` : "above live known"}
+              <span className="metric-sub-pill" style={{ background: "#ede9fe", color: "#7c3aed" }}>
+                {isActualMode ? "actual check" : "LGBM"}
               </span>
             </div>
           </div>
@@ -295,14 +344,14 @@ export default function App() {
           <div className="metric-card fade-in stagger-4">
             <div className="metric-label">Coverage</div>
             <div className="metric-value" style={{ color: "#f87171" }}>
-              {meta.total_cities ?? "—"} <span style={{ fontSize: 14, color: "#7a8099", fontWeight: 500 }}>cities</span>{" "}
-              · {meta.total_products ?? "—"} <span style={{ fontSize: 14, color: "#7a8099", fontWeight: 500 }}>SKUs</span>
+              {meta.total_cities ?? "-"} <span style={{ fontSize: 14, color: "#7a8099", fontWeight: 500 }}>cities</span>{" "}
+              · {meta.total_products ?? "-"} <span style={{ fontSize: 14, color: "#7a8099", fontWeight: 500 }}>SKUs</span>
             </div>
             <div className="metric-sub">active products across all cities</div>
           </div>
         </div>
 
-        {/* ── CITY BREAKDOWN ── */}
+        {/* CITY BREAKDOWN */}
         {citySummary.length > 0 && (
           <div
             className="city-grid fade-in"
@@ -339,7 +388,7 @@ export default function App() {
         {/* No data state */}
         {!loading && !data && !error && (
           <div className="card empty-state fade-in">
-            <div className="empty-icon">📭</div>
+            <div className="empty-icon">No data</div>
             No forecast data for <strong>{selectedDate}</strong>.
             Try a different date or check that the backend is running.
           </div>
@@ -347,7 +396,7 @@ export default function App() {
 
         {data && (
           <>
-            {/* ── TABS ── */}
+            {/* TABS */}
             <div className="tabs">
               {[
                 ["overview", "Products"],
@@ -364,7 +413,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* ── TAB: PRODUCTS TABLE ── */}
+            {/* TAB: PRODUCTS TABLE */}
             {activeTab === "overview" && (
               <div className="card fade-in">
                 <div className="card-title">
@@ -391,6 +440,12 @@ export default function App() {
                       ))}
                     </select>
                     <span className="row-count">{filteredProducts.length} rows</span>
+                    <button
+                      className={`btn ${showComponents ? "active" : ""}`}
+                      onClick={() => setShowComponents(v => !v)}
+                    >
+                      Details
+                    </button>
                   </div>
                 </div>
 
@@ -400,20 +455,23 @@ export default function App() {
                       <tr>
                         <th>City</th>
                         <th>Product</th>
-                        <th>Source</th>
-                        <th style={{ textAlign: "right" }}>Forecast Units</th>
-                        <th style={{ textAlign: "right" }}>Orders</th>
+                        <th>Status</th>
+                        <th style={{ textAlign: "right" }}>Forecast</th>
+                        {isActualMode && <th style={{ textAlign: "right" }}>Actual</th>}
+                        {showComponents && <th style={{ textAlign: "right" }}>Subs</th>}
+                        {showComponents && <th style={{ textAlign: "right" }}>Known</th>}
+                        {showComponents && <th style={{ textAlign: "right" }}>ML Gap</th>}
                       </tr>
                     </thead>
                     <tbody>
                       {filteredProducts.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="empty-state">
+                          <td colSpan={(isActualMode ? 5 : 4) + (showComponents ? 3 : 0)} className="empty-state">
                             No rows match your filters.
                           </td>
                         </tr>
                       ) : (
-                        filteredProducts.map((r, i) => (
+                        paginatedProducts.map((r, i) => (
                           <tr key={`${selectedDate}-${r.city}-${r.product_name}-${i}`}>
                             <td>
                               <span className="city-dot" style={{ background: getColor(r.city) }} />
@@ -421,47 +479,66 @@ export default function App() {
                             </td>
                             <td className="product-name">{r.product_name}</td>
                             <td>
-                              {(() => {
-                                let label = "ML";
-                                let bg = "#fef3c7";
-                                let fg = "#d97706";
-                                
-                                if (r.method === "subscription") {
-                                  label = "Subs";
-                                  bg = "#dcfce7";
-                                  fg = "#16a34a";
-                                } else if (r.method === "hybrid") {
-                                  label = "Hybrid";
-                                  bg = "#e0e7ff";
-                                  fg = "#4338ca";
-                                }
-                                
-                                return (
-                                  <span style={{
-                                    fontSize: 10, fontWeight: 700, padding: "2px 8px",
-                                    borderRadius: 4, background: bg, color: fg
-                                  }}>
-                                    {label}
-                                  </span>
-                                );
-                              })()}
+                              <span style={{
+                                fontSize: 10, fontWeight: 700, padding: "2px 8px",
+                                borderRadius: 4, ...statusStyle(r)
+                              }}>
+                                {statusLabel(r)}
+                              </span>
                             </td>
                             <td className="qty-value" style={{ textAlign: "right" }}>
-                              {fmt(r.total_quantity)}
+                              {fmt(r.forecast_quantity ?? r.total_quantity)}
                             </td>
-                            <td style={{ textAlign: "right", color: "#4a5068" }}>
-                              {fmt(r.total_orders)}
-                            </td>
+                            {isActualMode && (
+                              <td className="qty-value" style={{ textAlign: "right" }}>
+                                {fmt(r.actual_quantity ?? r.total_quantity)}
+                              </td>
+                            )}
+                            {showComponents && (
+                              <td style={{ textAlign: "right", color: "#4a5068" }}>
+                                {fmt(r.subscription_qty)}
+                              </td>
+                            )}
+                            {showComponents && (
+                              <td style={{ textAlign: "right", color: "#4a5068" }}>
+                                {fmt(r.known_buy_once_qty)}
+                              </td>
+                            )}
+                            {showComponents && (
+                              <td style={{ textAlign: "right", color: "#4a5068" }}>
+                                {fmt(r.ml_unknown_adhoc_qty)}
+                              </td>
+                            )}
                           </tr>
                         ))
                       )}
                     </tbody>
                   </table>
                 </div>
+
+                {totalPages > 1 && (
+                  <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '16px', padding: '16px', borderTop: '1px solid #e2e5ec', background: '#fafbfc', borderRadius: '0 0 12px 12px' }}>
+                    <button 
+                      className="btn" 
+                      disabled={currentPage === 1} 
+                      onClick={() => setCurrentPage(p => p - 1)}>
+                      Prev
+                    </button>
+                    <span style={{ display: 'flex', alignItems: 'center', fontSize: '13px', color: '#5c6379', fontWeight: 500 }}>
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button 
+                      className="btn" 
+                      disabled={currentPage === totalPages} 
+                      onClick={() => setCurrentPage(p => p + 1)}>
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
-            {/* ── TAB: CHARTS ── */}
+            {/* TAB: CHARTS */}
             {activeTab === "charts" && (
               <>
                 <div className="two-col">
@@ -532,7 +609,7 @@ export default function App() {
                       />
                       <Tooltip content={<CustomTip />} />
                       <Bar
-                        dataKey="total_orders"
+                        dataKey="total_quantity"
                         name="Forecast Units"
                         fill="#818cf8"
                         radius={[0, 6, 6, 0]}
@@ -543,7 +620,7 @@ export default function App() {
               </>
             )}
 
-            {/* ── TAB: TREND ── */}
+            {/* TAB: TREND */}
             {activeTab === "trend" && (
               <div className="card fade-in">
                 <div className="card-title">
@@ -561,7 +638,7 @@ export default function App() {
 
                 {trend.length === 0 ? (
                   <div className="empty-state">
-                    <div className="empty-icon">📭</div>
+                    <div className="empty-icon">No data</div>
                     No trend data yet. The backend will populate this after the first forecast run.
                   </div>
                 ) : (
@@ -571,7 +648,7 @@ export default function App() {
                         <strong>{trend.length}</strong> days
                       </span>
                       <span>
-                        <strong>{trend[0]?.date}</strong> → <strong>{trend[trend.length - 1]?.date}</strong>
+                        <strong>{trend[0]?.date}</strong> to <strong>{trend[trend.length - 1]?.date}</strong>
                       </span>
                       <span>
                         Total: <strong style={{ color: "#818cf8" }}>
@@ -610,9 +687,10 @@ export default function App() {
 
         {/* Footer */}
         <footer className="footer">
-          Sid's Farm Forecasting — Built by Aarohi
+          Sid's Farm Forecasting - Built by Aarohi
         </footer>
       </main>
     </div>
   );
 }
+

@@ -2,8 +2,9 @@ import pandas as pd
 import glob
 import os
 
-csv_folder = r"D:\ML_Forecasting_Model\csv files"
-output_file = r"D:\ML_Forecasting_Model\training_clean.csv"
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+csv_folder = os.path.join(PROJECT_DIR, "data", "raw", "monthly_orders")
+output_file = os.path.join(PROJECT_DIR, "data", "processed", "training_clean.csv")
 
 # ── Column mapping: new CSV format → internal pipeline names ──
 REQUIRED = ['target_date', 'city_cd', 'product_name']

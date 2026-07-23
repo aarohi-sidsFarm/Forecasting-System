@@ -3,8 +3,12 @@ import numpy as np
 import os
 import shutil
 
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROCESSED_DIR = os.path.join(PROJECT_DIR, 'data', 'processed')
+MODEL_DIR = os.path.join(PROJECT_DIR, 'backend', 'ml_models')
+
 print("Loading training_filled.csv...")
-df = pd.read_csv('training_filled.csv', parse_dates=['target_date'])
+df = pd.read_csv(os.path.join(PROCESSED_DIR, 'training_filled.csv'), parse_dates=['target_date'])
 
 # 1. Base Calendar Features
 print("Computing calendar features...")
@@ -23,7 +27,7 @@ df.loc[(df['city_cd'] != 'HYD') & (df['day_of_week'] == 3), 'is_midweek_peak'] =
 
 # 2. Festivals
 print("Loading festival calendar...")
-fest_df = pd.read_csv(os.path.join('backend', 'ml_models', 'festival_list_2024_2026.csv'))
+fest_df = pd.read_csv(os.path.join(MODEL_DIR, 'festival_list_2024_2026.csv'))
 fest_df['date'] = pd.to_datetime(fest_df['date'], format='mixed', dayfirst=True)
 
 festival_set = set(fest_df['date'])
@@ -47,16 +51,21 @@ df['is_post_festival'] = df['target_date'].isin(post_fest_set).astype(int)
 df['festival_impact_direction'] = df['target_date'].map(festival_impact_dict).fillna(0).astype(int)
 
 # 3. DOW demand ratio
-print("Computing DOW ratios...")
-dow_ratio_lookup = {}
-for (city, product), grp in df.groupby(['city_cd', 'product_name']):
-    week_mean = grp['total_qty'].mean()
-    dow_means = grp.groupby('day_of_week')['total_qty'].mean()
-    dow_ratio_lookup[(city, product)] = {
-        d: round(float(dow_means.get(d, week_mean)) / (week_mean + 1e-5), 4)
-        for d in range(7)
-    }
-df['dow_demand_ratio'] = df.apply(lambda r: dow_ratio_lookup.get((r['city_cd'], r['product_name']), {}).get(r['day_of_week'], 1.0), axis=1)
+# Use only prior observations so validation rows cannot see future weekday demand.
+print("Computing time-safe DOW ratios...")
+df = df.sort_values(['city_cd', 'product_name', 'target_date']).reset_index(drop=True)
+df['_prior_series_mean'] = (
+    df.groupby(['city_cd', 'product_name'])['total_qty']
+      .transform(lambda x: x.shift(1).expanding().mean())
+)
+df['_prior_dow_mean'] = (
+    df.groupby(['city_cd', 'product_name', 'day_of_week'])['total_qty']
+      .transform(lambda x: x.shift(1).expanding().mean())
+)
+df['dow_demand_ratio'] = (
+    df['_prior_dow_mean'] / (df['_prior_series_mean'] + 1e-5)
+).replace([np.inf, -np.inf], np.nan).fillna(1.0).round(4)
+df = df.drop(columns=['_prior_series_mean', '_prior_dow_mean'])
 
 # 4. Lag and rolling features
 print("Computing lags and rolling window features...")
@@ -75,18 +84,41 @@ df['roll_28_mean'] = grouped['total_qty'].transform(lambda x: x.shift(1).rolling
 
 df['trend_ratio_7_28'] = round(df['roll_7_mean'] / (df['roll_28_mean'] + 1), 4)
 
-df['demand_slope_28d'] = 0.0
-df['days_since_nonzero'] = 0.0
+def _prior_slope_28d(x):
+    def slope(vals):
+        arr = vals.to_numpy(dtype=float)
+        if len(arr) < 2:
+            return 0.0
+        return float(np.polyfit(np.arange(len(arr)), arr, 1)[0])
+    return x.shift(1).rolling(28, min_periods=2).apply(slope, raw=False)
+
+
+def _days_since_nonzero(x):
+    values = x.shift(1).fillna(0).to_numpy()
+    out = []
+    last_seen = None
+    for i, val in enumerate(values):
+        if last_seen is None:
+            out.append(float(i + 1))
+        else:
+            out.append(float(i - last_seen))
+        if val > 0:
+            last_seen = i
+    return pd.Series(out, index=x.index)
+
+
+df['demand_slope_28d'] = grouped['total_qty'].transform(_prior_slope_28d).fillna(0.0)
+df['days_since_nonzero'] = grouped['total_qty'].transform(_days_since_nonzero).fillna(0.0)
 
 # Drop any temporary columns and fill NaNs
 df['roll_7_std'] = df['roll_7_std'].fillna(0)
 df = df.fillna(0)
 
 # Sort and save
-df.to_csv('training_features.csv', index=False)
-print("Saved training_features.csv in root.")
+output_path = os.path.join(PROCESSED_DIR, 'training_features.csv')
+df.to_csv(output_path, index=False)
+print(f"Saved {output_path}.")
 
-dest_dir = os.path.join('backend', 'ml_models')
-os.makedirs(dest_dir, exist_ok=True)
-shutil.copy('training_features.csv', os.path.join(dest_dir, 'training_features.csv'))
+os.makedirs(MODEL_DIR, exist_ok=True)
+shutil.copy(output_path, os.path.join(MODEL_DIR, 'training_features.csv'))
 print("Copied training_features.csv to backend/ml_models/.")

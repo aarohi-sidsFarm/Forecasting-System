@@ -1,0 +1,208 @@
+import os
+import pickle
+import warnings
+
+import lightgbm as lgb
+import numpy as np
+import pandas as pd
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.preprocessing import LabelEncoder
+
+warnings.filterwarnings("ignore")
+
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(PROJECT_DIR, "backend", "ml_models")
+FEATURE_PATH = os.path.join(DATA_DIR, "training_features.csv")
+
+df = pd.read_csv(FEATURE_PATH, parse_dates=["target_date"])
+df = df[df["city_cd"] == "HYD"].reset_index(drop=True)
+is_residual_target = "known_buy_once_qty_at_cutoff" in df.columns
+is_procurement_target = {"final_subscription_qty", "final_buy_once_qty"}.issubset(df.columns)
+target_type = "procurement_final_total" if is_procurement_target else ("remaining_unknown_adhoc" if is_residual_target else "total_adhoc")
+
+le_product = LabelEncoder()
+df["product_enc"] = le_product.fit_transform(df["product_name"])
+
+grp_ord = df.groupby("product_name")
+df["_qpo_raw"] = df["total_qty"] / (df["total_orders"] + 1)
+df["qty_per_order"] = grp_ord["_qpo_raw"].shift(1).round(2)
+df.drop(columns=["_qpo_raw"], inplace=True)
+
+activity_col = "final_adhoc_qty" if is_residual_target and "final_adhoc_qty" in df.columns else "total_qty"
+series_activity = df[df[activity_col] > 0].groupby("product_name")["target_date"].count()
+min_active_days = 15
+active_series = series_activity[series_activity >= min_active_days].index
+df = df[df["product_name"].isin(active_series)].reset_index(drop=True)
+
+if not is_residual_target:
+    df = df[df["roll_28_mean"] >= 0.05].reset_index(drop=True)
+
+print(f"Target type                 : {target_type}")
+print(f"Activity column             : {activity_col}")
+print(f"HYD products after filtering: {df['product_name'].nunique()}")
+print(f"Rows                        : {len(df)}")
+print(f"Positive target rows        : {int((df['total_qty'] > 0).sum())}")
+
+if df.empty:
+    raise ValueError("No HYD rows left after filtering. Check residual export date parsing and target sparsity.")
+
+feature_cols = [
+    "product_enc",
+    "day_of_week", "day_of_month", "month", "week_of_year",
+    "is_weekend", "is_month_start", "is_month_end",
+    "lag_1", "lag_7", "lag_14", "lag_28",
+    "roll_7_mean", "roll_7_std", "roll_14_mean", "roll_28_mean",
+    "is_festival", "is_city_festival", "is_pre_festival", "is_post_festival",
+    "festival_impact_direction", "qty_per_order", "is_midweek_peak",
+    "dow_demand_ratio", "trend_ratio_7_28", "demand_slope_28d", "days_since_nonzero",
+    "snapshot_subscription_qty", "snapshot_buy_once_qty", "snapshot_visible_qty",
+    "snapshot_visible_orders",
+]
+if is_residual_target:
+    feature_cols.append("known_buy_once_qty_at_cutoff")
+
+feature_cols = [c for c in feature_cols if c in df.columns]
+target = "total_qty"
+
+cutoff = df["target_date"].max() - pd.Timedelta(days=30)
+train = df[df["target_date"] < cutoff].copy()
+test = df[df["target_date"] >= cutoff].copy()
+
+if train.empty or test.empty:
+    raise ValueError("HYD train/test split is empty. Check date range in training_features.csv.")
+
+print(f"\nCutoff (auto): {cutoff.date()}  (last 30 days = test)")
+print(f"Train : {train['target_date'].min().date()} -> {train['target_date'].max().date()} | {len(train)} rows")
+print(f"Test  : {test['target_date'].min().date()} -> {test['target_date'].max().date()} | {len(test)} rows")
+
+x_train, y_train = train[feature_cols], train[target]
+x_test, y_test = test[feature_cols], test[target]
+
+params = {
+    "objective": "regression_l1" if is_residual_target else "quantile",
+    "metric": "mae" if is_residual_target else "quantile",
+    "learning_rate": 0.02,
+    "num_leaves": 48,
+    "min_child_samples": 8 if is_residual_target else 15,
+    "feature_fraction": 0.75,
+    "bagging_fraction": 0.75,
+    "bagging_freq": 5,
+    "lambda_l1": 0.5,
+    "lambda_l2": 0.5,
+    "verbose": -1,
+    "seed": 42,
+}
+if not is_residual_target:
+    params["alpha"] = 0.60
+    params["first_metric_only"] = True
+
+days_from_max = (train["target_date"].max() - train["target_date"]).dt.days
+sample_weights = np.exp(-days_from_max / 180)
+sample_weights = sample_weights / sample_weights.mean()
+if is_residual_target:
+    sample_weights = sample_weights * np.where(train[target] > 0, 10.0, 1.0)
+
+dtrain = lgb.Dataset(x_train, label=y_train, weight=sample_weights)
+dval = lgb.Dataset(x_test, label=y_test, reference=dtrain)
+
+print("\nTraining HYD-specific LightGBM...")
+model_hyd = lgb.train(
+    params,
+    dtrain,
+    num_boost_round=3000,
+    valid_sets=[dval],
+    callbacks=[
+        lgb.early_stopping(stopping_rounds=250, verbose=False),
+        lgb.log_evaluation(100),
+    ],
+)
+
+test = test.copy()
+test["pred_qty"] = model_hyd.predict(x_test).clip(0)
+
+
+def wape(actual, predicted):
+    actual = np.asarray(actual)
+    predicted = np.asarray(predicted)
+    mask = actual > 0
+    total_actual = np.sum(actual[mask])
+    if total_actual == 0:
+        return np.nan
+    return np.sum(np.abs(actual[mask] - predicted[mask])) / total_actual * 100
+
+
+mae = mean_absolute_error(y_test, test["pred_qty"])
+rmse = np.sqrt(mean_squared_error(y_test, test["pred_qty"]))
+wape_val = wape(y_test.values, test["pred_qty"].values)
+bias = (test["pred_qty"] - test[target]).mean()
+
+print("\n=== HYD MODEL PERFORMANCE ===")
+print(f"MAE   : {mae:.2f}")
+print(f"RMSE  : {rmse:.2f}")
+print(f"WAPE  : {wape_val:.2f}%")
+print(f"Bias  : {bias:.2f}")
+
+print("\n=== HYD PRODUCT-WISE WAPE (TOP 10 WORST) ===")
+prod_wape = test.groupby("product_name").apply(
+    lambda x: pd.Series(
+        {
+            "actual_avg": x[target].mean().round(2),
+            "pred_avg": x["pred_qty"].mean().round(2),
+            "wape": wape(x[target].values, x["pred_qty"].values),
+        }
+    )
+).sort_values("wape", ascending=False)
+print(prod_wape.head(10).to_string())
+
+calibration = {}
+dow_calibration = {}
+if target_type == "procurement_final_total":
+    grouped_calibration = test.groupby("product_name").agg(
+        actual_sum=(target, "sum"),
+        pred_sum=("pred_qty", "sum"),
+        days=(target, "count"),
+    ).reset_index()
+    for _, row in grouped_calibration.iterrows():
+        if row["days"] < 14 or row["actual_sum"] <= 0 or row["pred_sum"] <= 0:
+            continue
+        factor = float(row["actual_sum"] / row["pred_sum"])
+        calibration[row["product_name"]] = round(float(np.clip(factor, 0.90, 1.10)), 4)
+
+    print("\n=== HYD VALIDATION CALIBRATION FACTORS ===")
+    for product, factor in sorted(calibration.items()):
+        print(f"  {product}: {factor:.4f}")
+
+    test["_cal_pred_qty"] = test.apply(
+        lambda r: r["pred_qty"] * calibration.get(r["product_name"], 1.0),
+        axis=1,
+    )
+    grouped_dow_calibration = test.groupby(["product_name", "day_of_week"]).agg(
+        actual_sum=(target, "sum"),
+        pred_sum=("_cal_pred_qty", "sum"),
+        days=(target, "count"),
+    ).reset_index()
+    for _, row in grouped_dow_calibration.iterrows():
+        if row["days"] < 3 or row["actual_sum"] <= 0 or row["pred_sum"] <= 0:
+            continue
+        factor = float(row["actual_sum"] / row["pred_sum"])
+        key = f"{row['product_name']}|{int(row['day_of_week'])}"
+        dow_calibration[key] = round(float(np.clip(factor, 0.97, 1.03)), 4)
+
+    print("\n=== HYD VALIDATION DOW CALIBRATION FACTORS ===")
+    for key, factor in sorted(dow_calibration.items()):
+        print(f"  {key}: {factor:.4f}")
+
+hyd_model_path = os.path.join(DATA_DIR, "lgbm_model_hyd.pkl")
+with open(hyd_model_path, "wb") as f:
+    pickle.dump(
+        {
+            "model": model_hyd,
+            "le_product": le_product,
+            "target_type": target_type,
+            "calibration": calibration,
+            "dow_calibration": dow_calibration,
+        },
+        f,
+    )
+
+print(f"\nHYD model saved : {hyd_model_path}")
