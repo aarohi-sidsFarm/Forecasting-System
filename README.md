@@ -75,6 +75,50 @@ cd D:\ML_Forecasting_Model
 .\venv\Scripts\python.exe ml_pipeline\train_hyd_lgbm.py
 ```
 
+## Festival Analysis
+
+Festival flags are already included in training and serving:
+
+```text
+is_festival
+is_city_festival
+is_pre_festival
+is_post_festival
+festival_impact_direction
+```
+
+To analyze actual festival uplift, export festival windows from Redash using:
+
+```text
+redash_queries/festival_demand_history.sql
+```
+
+Save/merge the exports into:
+
+```text
+data/raw/festival_exports/festival_demand_windows_combined.csv
+```
+
+Then run:
+
+```powershell
+cd D:\ML_Forecasting_Model
+.\venv\Scripts\python.exe ml_pipeline\analyze_festival_exports.py
+```
+
+Outputs:
+
+```text
+data/processed/festival_demand_summary.csv
+data/processed/festival_impact_by_day.csv
+data/processed/festival_uplift_recommendations.csv
+reports/festival_impact_report.md
+```
+
+Use `festival_uplift_recommendations.csv` before adding any manual festival
+guardrail. Only recommendations with at least two observed years should be used
+for production adjustments.
+
 ## Backend
 
 Create `backend\.env` using `backend\.env.example`, then run:

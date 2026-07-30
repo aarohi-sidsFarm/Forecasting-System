@@ -21,6 +21,7 @@ PROJECT_DIR = os.path.dirname(APP_DIR)
 MODEL_DIR = os.path.join(APP_DIR, "ml_models")
 PROCESSED_DIR = os.path.join(PROJECT_DIR, "data", "processed")
 ACCURACY_CACHE_PATH = os.path.join(PROCESSED_DIR, "recent_forecast_backtest.csv")
+FESTIVAL_RECOMMENDATION_PATH = os.path.join(PROCESSED_DIR, "festival_uplift_recommendations.csv")
 
 
 def _load_env_files() -> None:
@@ -164,6 +165,7 @@ for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
 fest_df = pd.read_csv(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"))
 fest_df["date"] = pd.to_datetime(fest_df["date"], format="mixed", dayfirst=True)
 _festival_set = set(fest_df["date"])
+_festival_name_by_date = fest_df.groupby("date")["festival"].first().to_dict()
 _blr_fest_set = set(fest_df[fest_df["cities"].str.contains("BLR", na=False)]["date"])
 _hyd_vga_fest_set = set(fest_df[fest_df["cities"].str.contains("HYD|VGA", na=False)]["date"])
 _high_impact_dates = set(fest_df[fest_df["impact"] == "HIGH"]["date"])
@@ -173,6 +175,32 @@ _festival_impact_dict = (
     fest_df.groupby("date")["impact_direction"].max().to_dict()
     if "impact_direction" in fest_df.columns else {}
 )
+if os.path.exists(FESTIVAL_RECOMMENDATION_PATH):
+    _festival_reco_df = pd.read_csv(FESTIVAL_RECOMMENDATION_PATH)
+else:
+    _festival_reco_df = pd.DataFrame()
+_festival_guardrail_lookup = {}
+if not _festival_reco_df.empty:
+    _festival_reco_df["city_cd"] = _festival_reco_df["city_cd"].astype(str).str.upper().str.strip()
+    _festival_reco_df["product_name"] = _festival_reco_df["product_name"].apply(lambda x: str(x).strip())
+    _festival_reco_df["festival_name"] = _festival_reco_df["festival_name"].astype(str).str.strip()
+    _festival_reco_df["observed_years"] = pd.to_numeric(_festival_reco_df["observed_years"], errors="coerce").fillna(0).astype(int)
+    _festival_reco_df["recommended_peak_offset"] = pd.to_numeric(_festival_reco_df["recommended_peak_offset"], errors="coerce").fillna(0).astype(int)
+    _festival_reco_df["recommended_peak_uplift_pct"] = pd.to_numeric(
+        _festival_reco_df["recommended_peak_uplift_pct"], errors="coerce"
+    ).fillna(0.0)
+    eligible_recos = _festival_reco_df[
+        (_festival_reco_df["observed_years"] >= 2)
+        & (_festival_reco_df["recommended_peak_uplift_pct"].abs() >= 3)
+    ].copy()
+    for _, row in eligible_recos.iterrows():
+        key = (
+            row["festival_name"],
+            row["city_cd"],
+            row["product_name"],
+            int(row["recommended_peak_offset"]),
+        )
+        _festival_guardrail_lookup[key] = float(row["recommended_peak_uplift_pct"])
 
 print(f"  Models loaded. Plan rows: {len(_lgbm_p)}")
 print(f"  Training data: {len(_train_df)} rows, {len(_train_lookup)} series from {os.path.basename(_train_path)}")
@@ -524,6 +552,9 @@ def _festival_status() -> dict:
         "start_date": str(fest_df["date"].min().date()) if not fest_df.empty else None,
         "end_date": str(fest_df["date"].max().date()) if not fest_df.empty else None,
         "high_impact_dates": int(len(_high_impact_dates)),
+        "guardrail_recommendation_path": os.path.relpath(FESTIVAL_RECOMMENDATION_PATH, PROJECT_DIR),
+        "guardrails_loaded": int(len(_festival_guardrail_lookup)),
+        "guardrail_cap_pct": 5,
         "features": [
             "is_festival",
             "is_city_festival",
@@ -838,6 +869,43 @@ def _apply_hyd_toned_recency_cap(
     return cap_qty, cap_qty, round(cap_qty / max(prediction, 1), 4)
 
 
+def _apply_festival_guardrail(
+    prediction: int,
+    city: str,
+    product: str,
+    dt: pd.Timestamp,
+    features: dict,
+) -> tuple[int, str | None, float, int]:
+    if not _festival_guardrail_lookup:
+        return prediction, None, 1.0, 0
+    if not (
+        features.get("is_festival", 0)
+        or features.get("is_city_festival", 0)
+        or features.get("is_pre_festival", 0)
+        or features.get("is_post_festival", 0)
+    ):
+        return prediction, None, 1.0, 0
+
+    dt = pd.Timestamp(dt).normalize()
+    candidate_dates = [dt - pd.Timedelta(days=offset) for offset in range(-3, 4)]
+    for festival_date in candidate_dates:
+        festival_name = _festival_name_by_date.get(festival_date)
+        if not festival_name:
+            continue
+        offset = int((dt - festival_date).days)
+        uplift_pct = _festival_guardrail_lookup.get((festival_name, city, product, offset))
+        if uplift_pct is None:
+            continue
+
+        capped_pct = float(np.clip(uplift_pct, -5.0, 5.0))
+        factor = 1.0 + (capped_pct / 100.0)
+        adjusted = int(round(prediction * factor))
+        if adjusted == prediction:
+            return prediction, festival_name, 1.0, offset
+        return max(0, adjusted), festival_name, round(factor, 4), offset
+    return prediction, None, 1.0, 0
+
+
 def _build_model_features(
     city: str,
     product: str,
@@ -1022,6 +1090,13 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     target_type,
                     feats,
                 )
+                final_ad_hoc_pred, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    pred_dt,
+                    feats,
+                )
                 future_preds[(city, product, pred_dt)] = final_ad_hoc_pred
                 if pred_dt not in forecast_dates:
                     continue
@@ -1057,6 +1132,9 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     "sunday_cap_factor": sunday_cap_factor,
                     "toned_cap_qty": toned_cap_qty,
                     "toned_cap_factor": toned_cap_factor,
+                    "festival_guardrail_name": festival_guardrail_name,
+                    "festival_guardrail_factor": festival_guardrail_factor,
+                    "festival_guardrail_offset": festival_guardrail_offset,
                 })
 
         process_batch(batch_global, meta_global, _model, FEATURE_ORDER, _model_target_type, False)
@@ -1173,6 +1251,13 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     target_type,
                     feats,
                 )
+                model_total_adhoc, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    current_dt,
+                    feats,
+                )
                 future_preds[(city, product, current_dt)] = model_total_adhoc
                 if current_dt != dt:
                     continue
@@ -1203,6 +1288,9 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     "sunday_cap_factor": sunday_cap_factor,
                     "toned_cap_qty": toned_cap_qty,
                     "toned_cap_factor": toned_cap_factor,
+                    "festival_guardrail_name": festival_guardrail_name,
+                    "festival_guardrail_factor": festival_guardrail_factor,
+                    "festival_guardrail_offset": festival_guardrail_offset,
                     "prediction_source": pred_source,
                     "blr_forecast_method": blr_forecast_method,
                     "subscription_qty": int(round(sub_dict.get((city, product), 0))),
