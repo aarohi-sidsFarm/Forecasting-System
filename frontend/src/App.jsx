@@ -4,7 +4,7 @@ import {
   Tooltip, ResponsiveContainer, Legend, Cell,
   ComposedChart,
 } from "recharts";
-import { getForecastDay, getForecastTrend, API_BASE } from "./api";
+import { getForecastDay, getForecastTrend, getStatus, API_BASE } from "./api";
 import "./App.css";
 
 const CITY_COLORS = {
@@ -45,6 +45,12 @@ const getDateLabel = (dateStr) => {
   return             { label: `D+${diff}`,                  color: "#fbbf24" };
 };
 
+const addDays = (dateStr, days) => {
+  const d = new Date(`${dateStr}T00:00:00`);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
 const QUICK_DATES = [
   ["D-1",  -1],
   ["Today", 0],
@@ -80,6 +86,7 @@ export default function App() {
 
   const [data, setData]           = useState(null);
   const [trend, setTrend]         = useState([]);
+  const [systemStatus, setSystemStatus] = useState(null);
   const [loading, setLoading]     = useState(true);
   const [error, setError]         = useState(null);
   const [activeTab, setTab]       = useState("overview");
@@ -127,10 +134,20 @@ export default function App() {
     }
   }, [trendDays]);
 
+  const loadStatus = useCallback(async () => {
+    try {
+      const res = await getStatus();
+      setSystemStatus(res);
+    } catch {
+      setSystemStatus(null);
+    }
+  }, []);
+
   useEffect(() => {
     loadData(selectedDate);
     loadTrend();
-  }, [selectedDate, trendDays, loadData, loadTrend]);
+    loadStatus();
+  }, [selectedDate, trendDays, loadData, loadTrend, loadStatus]);
 
   const cities   = [...new Set((data?.product_breakdown ?? []).map(r => r.city))].sort();
   const products = [...new Set((data?.product_breakdown ?? []).map(r => r.product_name))].sort();
@@ -186,6 +203,19 @@ export default function App() {
   const totalQty    = meta.total_quantity ?? 0;
   const mlUnknownQty = meta.ml_unknown_adhoc_qty ?? meta.ml_qty;
   const isActualMode = meta.display_mode === "actual";
+  const freshness = meta.training_data_freshness ?? {};
+  const freshnessText = freshness.max_training_date
+    ? (freshness.is_stale ? "Model stale" : "Model fresh")
+    : "Model status";
+  const freshnessTitle = freshness.max_training_date
+    ? `Training data through ${freshness.max_training_date}. Age: ${freshness.age_days ?? "-"} day(s).`
+    : "Training freshness is unavailable in this response.";
+  const statusFreshness = systemStatus?.training_data_freshness ?? freshness;
+  const redashStatus = systemStatus?.redash ?? {};
+  const accuracyCache = systemStatus?.accuracy_cache ?? {};
+  const guardrails = systemStatus?.guardrails ?? {};
+  const festivalCalendar = systemStatus?.festival_calendar ?? {};
+  const statusTone = statusFreshness?.is_stale || !redashStatus?.api_key_configured ? "warning" : "ok";
 
   const statusLabel = (row) => {
     if (!isActualMode) return "Forecast";
@@ -270,6 +300,20 @@ export default function App() {
             Export
           </button>
 
+          <button
+            className="btn"
+            onClick={() => window.open(`${API_BASE}/export/accuracy_report.csv?start_date=${addDays(selectedDate, -6)}&end_date=${selectedDate}&refresh=false`, "_blank")}
+          >
+            Accuracy
+          </button>
+
+          <span
+            className={`freshness-badge ${freshness.is_stale ? "stale" : "fresh"}`}
+            title={freshness.warning || freshnessTitle}
+          >
+            {freshnessText}
+          </span>
+
           <span className="live-badge">LIVE</span>
         </div>
       </header>
@@ -283,6 +327,38 @@ export default function App() {
             <strong>{error}</strong>
             <div style={{ marginTop: 4, fontSize: 12, opacity: 0.8 }}>
               Ensure backend is running: <code>uvicorn main:app --reload --port 8000</code>
+            </div>
+          </div>
+        )}
+
+        {systemStatus && (
+          <div className={`status-strip fade-in ${statusTone}`}>
+            <div className="status-pill primary">
+              <span className="status-label">Model</span>
+              <strong>{statusFreshness?.is_stale ? "Stale" : "Fresh"}</strong>
+              <span>trained through {statusFreshness?.max_training_date ?? "-"}</span>
+            </div>
+            <div className="status-pill">
+              <span className="status-label">Targets</span>
+              <strong>{systemStatus.models?.hyd_target_type ?? "-"}</strong>
+              <span>{guardrails.rules?.length ?? 0} guardrails active</span>
+            </div>
+            <div className="status-pill">
+              <span className="status-label">Redash</span>
+              <strong>{redashStatus.api_key_configured ? "Configured" : "Missing key"}</strong>
+              <span>
+                sub {redashStatus.query_ids?.subscription ?? "-"} · actual {redashStatus.query_ids?.selected_actuals ?? "-"}
+              </span>
+            </div>
+            <div className="status-pill">
+              <span className="status-label">Festivals</span>
+              <strong>{festivalCalendar.rows ? fmt(festivalCalendar.rows) : "No"} rows</strong>
+              <span>{festivalCalendar.start_date && festivalCalendar.end_date ? `${festivalCalendar.start_date} to ${festivalCalendar.end_date}` : "calendar unavailable"}</span>
+            </div>
+            <div className="status-pill">
+              <span className="status-label">Accuracy Cache</span>
+              <strong>{accuracyCache.rows ? fmt(accuracyCache.rows) : "No"} rows</strong>
+              <span>{accuracyCache.start_date && accuracyCache.end_date ? `${accuracyCache.start_date} to ${accuracyCache.end_date}` : "run refresh"}</span>
             </div>
           </div>
         )}
