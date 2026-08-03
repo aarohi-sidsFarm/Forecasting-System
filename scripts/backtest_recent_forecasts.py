@@ -174,7 +174,7 @@ def write_daily_summary(df: pd.DataFrame, report_dir: Path, summary_date: str, s
     rec = recommendation(overall_wape, city_summary, packet_breaches)
 
     summary_csv = report_dir / f"daily_accuracy_summary_{summary_date}.csv"
-    product_summary.to_csv(summary_csv, index=False)
+    product_summary.to_csv(summary_csv, index=False, lineterminator="\n")
 
     md_path = report_dir / f"daily_accuracy_summary_{summary_date}.md"
     lines = [
@@ -247,7 +247,7 @@ def main() -> None:
         df = df[df["city"].isin(cities) & df["product_name"].isin(products)].copy()
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(output, index=False)
+    df.to_csv(output, index=False, lineterminator="\n")
     print_summary(df, args.packet_limit)
     summary_date = args.summary_date or args.end_date
     write_daily_summary(df, Path(args.report_dir), summary_date, args.start_date, args.end_date, args.packet_limit)

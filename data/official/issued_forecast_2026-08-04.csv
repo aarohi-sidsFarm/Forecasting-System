@@ -1,0 +1,99 @@
+forecast_date,city,product_name,forecast_quantity
+2026-08-04,HYD,A2 Buffalo Milk,16658
+2026-08-04,HYD,Double Toned A2 Buffalo Milk,5277
+2026-08-04,HYD,Cow Milk,9437
+2026-08-04,HYD,A2 Desi Cow Milk,1604
+2026-08-04,HYD,Skim Milk,2329
+2026-08-04,HYD,Toned Milk,9996
+2026-08-04,HYD,Curd,1430
+2026-08-04,BLR,A2 Buffalo Milk,2552
+2026-08-04,BLR,Double Toned A2 Buffalo Milk,547
+2026-08-04,BLR,Cow Milk,1775
+2026-08-04,BLR,A2 Desi Cow Milk,646
+2026-08-04,BLR,Skim Milk,464
+2026-08-04,BLR,Toned Milk,545
+2026-08-04,BLR,Curd,221
+2026-08-05,HYD,A2 Buffalo Milk,16856
+2026-08-05,HYD,Double Toned A2 Buffalo Milk,5316
+2026-08-05,HYD,Cow Milk,9595
+2026-08-05,HYD,A2 Desi Cow Milk,1641
+2026-08-05,HYD,Skim Milk,2314
+2026-08-05,HYD,Toned Milk,10176
+2026-08-05,HYD,Curd,1482
+2026-08-05,BLR,A2 Buffalo Milk,2579
+2026-08-05,BLR,Double Toned A2 Buffalo Milk,556
+2026-08-05,BLR,Cow Milk,1781
+2026-08-05,BLR,A2 Desi Cow Milk,673
+2026-08-05,BLR,Skim Milk,470
+2026-08-05,BLR,Toned Milk,545
+2026-08-05,BLR,Curd,219
+2026-08-06,HYD,A2 Buffalo Milk,16805
+2026-08-06,HYD,Double Toned A2 Buffalo Milk,5288
+2026-08-06,HYD,Cow Milk,9514
+2026-08-06,HYD,A2 Desi Cow Milk,1615
+2026-08-06,HYD,Skim Milk,2294
+2026-08-06,HYD,Toned Milk,10128
+2026-08-06,HYD,Curd,1473
+2026-08-06,BLR,A2 Buffalo Milk,2554
+2026-08-06,BLR,Double Toned A2 Buffalo Milk,536
+2026-08-06,BLR,Cow Milk,1775
+2026-08-06,BLR,A2 Desi Cow Milk,648
+2026-08-06,BLR,Skim Milk,472
+2026-08-06,BLR,Toned Milk,546
+2026-08-06,BLR,Curd,220
+2026-08-07,HYD,A2 Buffalo Milk,16762
+2026-08-07,HYD,Double Toned A2 Buffalo Milk,5278
+2026-08-07,HYD,Cow Milk,9730
+2026-08-07,HYD,A2 Desi Cow Milk,1625
+2026-08-07,HYD,Skim Milk,2302
+2026-08-07,HYD,Toned Milk,10190
+2026-08-07,HYD,Curd,1430
+2026-08-07,BLR,A2 Buffalo Milk,2569
+2026-08-07,BLR,Double Toned A2 Buffalo Milk,534
+2026-08-07,BLR,Cow Milk,1780
+2026-08-07,BLR,A2 Desi Cow Milk,670
+2026-08-07,BLR,Skim Milk,469
+2026-08-07,BLR,Toned Milk,540
+2026-08-07,BLR,Curd,216
+2026-08-08,HYD,A2 Buffalo Milk,16578
+2026-08-08,HYD,Double Toned A2 Buffalo Milk,5227
+2026-08-08,HYD,Cow Milk,9716
+2026-08-08,HYD,A2 Desi Cow Milk,1633
+2026-08-08,HYD,Skim Milk,2282
+2026-08-08,HYD,Toned Milk,9983
+2026-08-08,HYD,Curd,1433
+2026-08-08,BLR,A2 Buffalo Milk,2556
+2026-08-08,BLR,Double Toned A2 Buffalo Milk,516
+2026-08-08,BLR,Cow Milk,1780
+2026-08-08,BLR,A2 Desi Cow Milk,641
+2026-08-08,BLR,Skim Milk,469
+2026-08-08,BLR,Toned Milk,541
+2026-08-08,BLR,Curd,215
+2026-08-09,HYD,A2 Buffalo Milk,16116
+2026-08-09,HYD,Double Toned A2 Buffalo Milk,5053
+2026-08-09,HYD,Cow Milk,9292
+2026-08-09,HYD,A2 Desi Cow Milk,1576
+2026-08-09,HYD,Skim Milk,2168
+2026-08-09,HYD,Toned Milk,9632
+2026-08-09,HYD,Curd,1359
+2026-08-09,BLR,A2 Buffalo Milk,2531
+2026-08-09,BLR,Double Toned A2 Buffalo Milk,506
+2026-08-09,BLR,Cow Milk,1770
+2026-08-09,BLR,A2 Desi Cow Milk,626
+2026-08-09,BLR,Skim Milk,469
+2026-08-09,BLR,Toned Milk,542
+2026-08-09,BLR,Curd,214
+2026-08-10,HYD,A2 Buffalo Milk,16465
+2026-08-10,HYD,Double Toned A2 Buffalo Milk,5141
+2026-08-10,HYD,Cow Milk,9571
+2026-08-10,HYD,A2 Desi Cow Milk,1669
+2026-08-10,HYD,Skim Milk,2290
+2026-08-10,HYD,Toned Milk,9911
+2026-08-10,HYD,Curd,1464
+2026-08-10,BLR,A2 Buffalo Milk,2567
+2026-08-10,BLR,Double Toned A2 Buffalo Milk,536
+2026-08-10,BLR,Cow Milk,1780
+2026-08-10,BLR,A2 Desi Cow Milk,644
+2026-08-10,BLR,Skim Milk,468
+2026-08-10,BLR,Toned Milk,542
+2026-08-10,BLR,Curd,216
