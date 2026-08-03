@@ -34,6 +34,7 @@ def arguments() -> argparse.Namespace:
     parser.add_argument("--refresh", action="store_true")
     parser.add_argument("--cities", default="HYD,BLR")
     parser.add_argument("--products", default=",".join(app.MILK_EXPORT_PRODUCTS))
+    parser.add_argument("--packet-limit", type=int, default=100)
     return parser.parse_args()
 
 
@@ -93,6 +94,7 @@ async def backtest(start_date: str, end_date: str, refresh: bool) -> pd.DataFram
     result["forecast_quantity"] = pd.to_numeric(result["forecast_quantity"], errors="coerce").fillna(0).round()
     result["actual_quantity"] = pd.to_numeric(result["actual_quantity"], errors="coerce").fillna(0).round()
     result["difference"] = result["forecast_quantity"] - result["actual_quantity"]
+    result["absolute_error_packets"] = result["difference"].abs()
     result["abs_error_pct"] = (
         result["difference"].abs() / result["actual_quantity"].where(result["actual_quantity"] > 0) * 100
     ).round(2)
@@ -109,7 +111,9 @@ def bias_pct(frame: pd.DataFrame) -> float:
     return float(frame["difference"].sum() / actual * 100) if actual else 0.0
 
 
-def recommendation(overall_wape: float, city_summary: pd.DataFrame) -> str:
+def recommendation(overall_wape: float, city_summary: pd.DataFrame, packet_breaches: int) -> str:
+    if packet_breaches:
+        return f"Do not share blindly. {packet_breaches} rows breach the packet-error limit."
     hyd = city_summary.loc[city_summary["city"] == "HYD", "wape_pct"]
     blr = city_summary.loc[city_summary["city"] == "BLR", "wape_pct"]
     hyd_wape = float(hyd.iloc[0]) if not hyd.empty else overall_wape
@@ -157,7 +161,7 @@ def markdown_table(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
-def write_daily_summary(df: pd.DataFrame, report_dir: Path, summary_date: str, start_date: str, end_date: str) -> None:
+def write_daily_summary(df: pd.DataFrame, report_dir: Path, summary_date: str, start_date: str, end_date: str, packet_limit: int) -> None:
     report_dir.mkdir(parents=True, exist_ok=True)
     city_summary = aggregate_summary(df, ["city"])
     product_summary = aggregate_summary(df, ["city", "product_name"])
@@ -165,7 +169,9 @@ def write_daily_summary(df: pd.DataFrame, report_dir: Path, summary_date: str, s
     worst_over = df.sort_values("difference", ascending=False).head(10)
     overall_wape = wape(df) if not df.empty else 0.0
     overall_bias = bias_pct(df) if not df.empty else 0.0
-    rec = recommendation(overall_wape, city_summary)
+    packet_breaches = int((df["absolute_error_packets"] >= packet_limit).sum())
+    packet_compliance = 100 * (df["absolute_error_packets"] < packet_limit).mean() if not df.empty else 0.0
+    rec = recommendation(overall_wape, city_summary, packet_breaches)
 
     summary_csv = report_dir / f"daily_accuracy_summary_{summary_date}.csv"
     product_summary.to_csv(summary_csv, index=False)
@@ -180,6 +186,8 @@ def write_daily_summary(df: pd.DataFrame, report_dir: Path, summary_date: str, s
         "",
         f"- Overall WAPE: `{overall_wape:.2f}%`",
         f"- Overall bias: `{overall_bias:.2f}%`",
+        f"- Packet-limit compliance (< {packet_limit}): `{packet_compliance:.2f}%`",
+        f"- Packet-limit breaches: `{packet_breaches}`",
         f"- Recommendation: **{rec}**",
         "",
         "## City Summary",
@@ -208,7 +216,7 @@ def write_daily_summary(df: pd.DataFrame, report_dir: Path, summary_date: str, s
     print(f"Saved summary MD : {md_path}")
 
 
-def print_summary(df: pd.DataFrame) -> None:
+def print_summary(df: pd.DataFrame, packet_limit: int) -> None:
     if df.empty:
         print("No comparable forecast/actual rows.")
         return
@@ -217,6 +225,9 @@ def print_summary(df: pd.DataFrame) -> None:
     print(f"Rows : {len(df)}")
     print(f"WAPE : {wape(df):.2f}%")
     print(f"Bias : {df['difference'].sum():.0f} packets")
+    breaches = int((df["absolute_error_packets"] >= packet_limit).sum())
+    compliance = 100 * (df["absolute_error_packets"] < packet_limit).mean()
+    print(f"Packet compliance (< {packet_limit}): {compliance:.2f}% | breaches {breaches}")
 
     print("\n=== CITY WAPE ===")
     for city, frame in df.groupby("city"):
@@ -237,9 +248,9 @@ def main() -> None:
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output, index=False)
-    print_summary(df)
+    print_summary(df, args.packet_limit)
     summary_date = args.summary_date or args.end_date
-    write_daily_summary(df, Path(args.report_dir), summary_date, args.start_date, args.end_date)
+    write_daily_summary(df, Path(args.report_dir), summary_date, args.start_date, args.end_date, args.packet_limit)
     print(f"\nSaved: {output}")
 
 

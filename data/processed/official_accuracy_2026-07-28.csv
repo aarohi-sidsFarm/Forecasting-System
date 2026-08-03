@@ -1,0 +1,15 @@
+forecast_date,city,product_name,forecast_quantity,actual_quantity,difference,deviation_pct,absolute_deviation_pct,absolute_error_packets,packet_error_pass
+2026-07-28,BLR,A2 Buffalo Milk,2628,2497.00,131.00,5.25,5.25,131.00,False
+2026-07-28,BLR,A2 Desi Cow Milk,739,651.00,88.00,13.52,13.52,88.00,True
+2026-07-28,BLR,Cow Milk,1810,1749.00,61.00,3.49,3.49,61.00,True
+2026-07-28,BLR,Curd,244,237.00,7.00,2.95,2.95,7.00,True
+2026-07-28,BLR,Double Toned A2 Buffalo Milk,515,532.00,-17.00,-3.20,3.20,17.00,True
+2026-07-28,BLR,Skim Milk,485,454.00,31.00,6.83,6.83,31.00,True
+2026-07-28,BLR,Toned Milk,549,559.00,-10.00,-1.79,1.79,10.00,True
+2026-07-28,HYD,A2 Buffalo Milk,16822,16660.00,162.00,0.97,0.97,162.00,False
+2026-07-28,HYD,A2 Desi Cow Milk,1621,1591.00,30.00,1.89,1.89,30.00,True
+2026-07-28,HYD,Cow Milk,9592,9307.00,285.00,3.06,3.06,285.00,False
+2026-07-28,HYD,Curd,1542,1411.00,131.00,9.28,9.28,131.00,False
+2026-07-28,HYD,Double Toned A2 Buffalo Milk,5354,5270.00,84.00,1.59,1.59,84.00,True
+2026-07-28,HYD,Skim Milk,2363,2248.00,115.00,5.12,5.12,115.00,False
+2026-07-28,HYD,Toned Milk,10285,9955.00,330.00,3.31,3.31,330.00,False

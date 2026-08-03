@@ -31,6 +31,10 @@ def main() -> None:
     parser.add_argument("--forecast-csv", required=True)
     parser.add_argument("--actuals-csv", default=str(DEFAULT_ACTUALS))
     parser.add_argument("--through", help="Latest completed date, YYYY-MM-DD")
+    parser.add_argument(
+        "--packet-limit", type=int, default=100,
+        help="Pass requires absolute packet error below this value.",
+    )
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
@@ -84,6 +88,8 @@ def main() -> None:
         np.nan,
     )
     report["absolute_deviation_pct"] = report.deviation_pct.abs()
+    report["absolute_error_packets"] = report.difference.abs()
+    report["packet_error_pass"] = report.absolute_error_packets.lt(args.packet_limit)
     report = report.sort_values(keys)
     report["forecast_date"] = report.forecast_date.dt.strftime("%Y-%m-%d")
 
@@ -95,6 +101,10 @@ def main() -> None:
             "rows": len(group),
             "wape_pct": 100 * group.difference.abs().sum() / group.actual_quantity.sum(),
             "bias_pct": 100 * group.difference.sum() / group.actual_quantity.sum(),
+            "packet_limit": args.packet_limit,
+            "packet_pass_rows": int(group.packet_error_pass.sum()),
+            "packet_breach_rows": int((~group.packet_error_pass).sum()),
+            "packet_compliance_pct": 100 * group.packet_error_pass.mean(),
         }),
         include_groups=False,
     )
