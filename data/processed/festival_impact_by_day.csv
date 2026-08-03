@@ -1,0 +1,2911 @@
+festival_name,city_cd,product_name,days_from_festival,observed_years,median_qty,median_baseline_qty,median_uplift_pct,avg_uplift_pct
+Akshaya Tritiya,BLR,A2 Buffalo Milk,-7,3,1805.0,1790.5,0.0,-0.88
+Akshaya Tritiya,BLR,A2 Buffalo Milk,-6,3,1854.0,1790.5,3.55,2.17
+Akshaya Tritiya,BLR,A2 Buffalo Milk,-5,3,1859.0,1790.5,3.83,3.03
+Akshaya Tritiya,BLR,A2 Buffalo Milk,-4,3,1803.0,1790.5,2.05,2.89
+Akshaya Tritiya,BLR,A2 Buffalo Milk,-3,3,1739.0,1790.5,6.01,3.76
+Akshaya Tritiya,BLR,A2 Buffalo Milk,-2,3,1789.0,1790.5,4.64,3.24
+Akshaya Tritiya,BLR,A2 Buffalo Milk,-1,3,1687.0,1790.5,1.97,-0.45
+Akshaya Tritiya,BLR,A2 Buffalo Milk,0,3,1734.0,1790.5,-3.16,-2.77
+Akshaya Tritiya,BLR,A2 Buffalo Milk,1,3,1658.0,1790.5,-7.4,-3.96
+Akshaya Tritiya,BLR,A2 Buffalo Milk,2,3,1691.0,1790.5,-5.56,-6.07
+Akshaya Tritiya,BLR,A2 Buffalo Milk,3,3,1682.0,1790.5,-6.06,-5.49
+Akshaya Tritiya,BLR,A2 Buffalo Milk,4,3,1651.0,1790.5,-2.46,-3.23
+Akshaya Tritiya,BLR,A2 Buffalo Milk,5,3,1708.0,1790.5,-0.68,-1.29
+Akshaya Tritiya,BLR,A2 Buffalo Milk,6,3,1768.0,1790.5,-0.57,0.53
+Akshaya Tritiya,BLR,A2 Buffalo Milk,7,3,1778.0,1790.5,-4.21,-3.23
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,-7,3,347.0,344.0,-0.33,-0.75
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,-6,3,362.0,344.0,5.23,1.15
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,-5,3,362.0,344.0,5.23,2.76
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,-4,3,350.0,344.0,1.74,4.68
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,-3,3,339.0,344.0,-1.19,0.76
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,-2,3,334.0,344.0,-2.3,1.24
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,-1,3,332.0,344.0,-2.18,3.68
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,0,3,328.0,344.0,-0.33,-1.66
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,1,3,317.0,344.0,-0.6,3.41
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,2,3,326.0,344.0,4.26,1.33
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,3,3,307.0,344.0,-8.2,-7.58
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,4,3,304.0,344.0,-0.4,-1.93
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,5,3,331.0,344.0,-3.78,-2.54
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,6,3,333.0,344.0,0.4,0.71
+Akshaya Tritiya,BLR,A2 Desi Cow Milk,7,3,341.0,344.0,-0.87,-0.46
+Akshaya Tritiya,BLR,Cow Milk,-7,3,1716.0,1652.0,3.87,-3.55
+Akshaya Tritiya,BLR,Cow Milk,-6,3,1787.0,1652.0,5.65,-1.34
+Akshaya Tritiya,BLR,Cow Milk,-5,3,1700.0,1652.0,2.91,-3.26
+Akshaya Tritiya,BLR,Cow Milk,-4,3,1769.0,1652.0,1.87,-1.54
+Akshaya Tritiya,BLR,Cow Milk,-3,3,1769.0,1652.0,-4.05,-3.17
+Akshaya Tritiya,BLR,Cow Milk,-2,3,1727.0,1652.0,0.91,1.33
+Akshaya Tritiya,BLR,Cow Milk,-1,3,1667.0,1652.0,0.37,-0.11
+Akshaya Tritiya,BLR,Cow Milk,0,3,1583.0,1652.0,-0.96,-1.62
+Akshaya Tritiya,BLR,Cow Milk,1,3,1656.0,1652.0,-1.18,-2.75
+Akshaya Tritiya,BLR,Cow Milk,2,3,1684.0,1652.0,-4.72,-3.61
+Akshaya Tritiya,BLR,Cow Milk,3,3,1674.0,1652.0,1.33,-0.01
+Akshaya Tritiya,BLR,Cow Milk,4,3,1604.0,1652.0,-2.91,-1.23
+Akshaya Tritiya,BLR,Cow Milk,5,3,1600.0,1652.0,-3.15,3.81
+Akshaya Tritiya,BLR,Cow Milk,6,3,1604.0,1652.0,-2.91,5.29
+Akshaya Tritiya,BLR,Cow Milk,7,3,1561.0,1652.0,-1.87,5.16
+Akshaya Tritiya,BLR,Curd,-7,3,198.0,192.5,2.86,10.69
+Akshaya Tritiya,BLR,Curd,-6,3,191.0,192.5,-0.78,1.37
+Akshaya Tritiya,BLR,Curd,-5,3,184.0,192.5,-1.56,-0.49
+Akshaya Tritiya,BLR,Curd,-4,3,171.0,192.5,4.69,1.93
+Akshaya Tritiya,BLR,Curd,-3,3,77.0,192.5,-1.56,-19.73
+Akshaya Tritiya,BLR,Curd,-2,3,248.0,192.5,15.62,19.48
+Akshaya Tritiya,BLR,Curd,-1,3,193.0,192.5,-3.66,-5.82
+Akshaya Tritiya,BLR,Curd,0,3,164.0,192.5,-6.24,-5.45
+Akshaya Tritiya,BLR,Curd,1,3,156.0,192.5,-15.62,-10.16
+Akshaya Tritiya,BLR,Curd,2,3,152.0,192.5,-17.19,-12.53
+Akshaya Tritiya,BLR,Curd,3,3,166.0,192.5,-13.77,-6.32
+Akshaya Tritiya,BLR,Curd,4,3,138.0,192.5,-14.84,-13.34
+Akshaya Tritiya,BLR,Curd,5,3,213.0,192.5,-5.81,-2.55
+Akshaya Tritiya,BLR,Curd,6,3,194.0,192.5,0.0,-1.96
+Akshaya Tritiya,BLR,Curd,7,3,215.0,192.5,0.0,3.54
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,-7,3,400.0,429.5,-5.01,-4.14
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,-6,3,409.0,429.5,-1.75,-2.36
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,-5,3,436.0,429.5,0.93,-0.65
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,-4,3,433.0,429.5,0.81,1.66
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,-3,3,399.0,429.5,3.24,0.64
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,-2,3,440.0,429.5,3.7,3.67
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,-1,3,413.0,429.5,1.16,2.96
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,0,3,415.0,429.5,-3.94,-2.66
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,1,3,373.0,429.5,-7.41,-6.16
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,2,3,413.0,429.5,-4.4,-8.45
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,3,3,420.0,429.5,-2.21,-4.05
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,4,3,406.0,429.5,-5.09,-4.37
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,5,3,433.0,429.5,0.23,-0.96
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,6,3,432.0,429.5,2.31,2.04
+Akshaya Tritiya,BLR,Double Toned A2 Buffalo Milk,7,3,427.0,429.5,-0.23,0.66
+Akshaya Tritiya,BLR,Skim Milk,-7,3,392.0,381.5,2.75,4.77
+Akshaya Tritiya,BLR,Skim Milk,-6,3,382.0,381.5,0.13,2.35
+Akshaya Tritiya,BLR,Skim Milk,-5,3,381.0,381.5,-0.13,1.03
+Akshaya Tritiya,BLR,Skim Milk,-4,3,369.0,381.5,-0.97,1.66
+Akshaya Tritiya,BLR,Skim Milk,-3,3,345.0,381.5,0.49,0.86
+Akshaya Tritiya,BLR,Skim Milk,-2,3,376.0,381.5,3.4,4.86
+Akshaya Tritiya,BLR,Skim Milk,-1,3,348.0,381.5,-8.78,-7.23
+Akshaya Tritiya,BLR,Skim Milk,0,3,347.0,381.5,-9.04,-8.29
+Akshaya Tritiya,BLR,Skim Milk,1,3,345.0,381.5,-9.57,-10.67
+Akshaya Tritiya,BLR,Skim Milk,2,3,350.0,381.5,-1.46,-1.62
+Akshaya Tritiya,BLR,Skim Milk,3,3,332.0,381.5,-5.83,-7.47
+Akshaya Tritiya,BLR,Skim Milk,4,3,368.0,381.5,-6.32,-6.85
+Akshaya Tritiya,BLR,Skim Milk,5,3,385.0,381.5,0.92,-0.37
+Akshaya Tritiya,BLR,Skim Milk,6,3,380.0,381.5,2.04,5.4
+Akshaya Tritiya,BLR,Skim Milk,7,3,420.0,381.5,5.83,1.32
+Akshaya Tritiya,BLR,Toned Milk,-7,1,433.0,463.5,-6.58,-6.58
+Akshaya Tritiya,BLR,Toned Milk,-6,1,435.0,463.5,-6.15,-6.15
+Akshaya Tritiya,BLR,Toned Milk,-5,1,471.0,463.5,1.62,1.62
+Akshaya Tritiya,BLR,Toned Milk,-4,1,459.0,463.5,-0.97,-0.97
+Akshaya Tritiya,BLR,Toned Milk,-3,1,486.0,463.5,4.85,4.85
+Akshaya Tritiya,BLR,Toned Milk,-2,1,456.0,463.5,-1.62,-1.62
+Akshaya Tritiya,BLR,Toned Milk,-1,1,496.0,463.5,7.01,7.01
+Akshaya Tritiya,BLR,Toned Milk,0,1,482.0,463.5,3.99,3.99
+Akshaya Tritiya,BLR,Toned Milk,1,1,498.0,463.5,7.44,7.44
+Akshaya Tritiya,BLR,Toned Milk,2,1,487.0,463.5,5.07,5.07
+Akshaya Tritiya,BLR,Toned Milk,3,1,489.0,463.5,5.5,5.5
+Akshaya Tritiya,BLR,Toned Milk,4,1,475.0,463.5,2.48,2.48
+Akshaya Tritiya,BLR,Toned Milk,5,1,479.0,463.5,3.34,3.34
+Akshaya Tritiya,BLR,Toned Milk,6,1,468.0,463.5,0.97,0.97
+Akshaya Tritiya,BLR,Toned Milk,7,1,441.0,463.5,-4.85,-4.85
+Akshaya Tritiya,HYD,A2 Buffalo Milk,-7,3,14774.0,13930.0,3.76,2.97
+Akshaya Tritiya,HYD,A2 Buffalo Milk,-6,3,14397.0,13930.0,3.19,2.69
+Akshaya Tritiya,HYD,A2 Buffalo Milk,-5,3,14682.0,13930.0,4.09,3.23
+Akshaya Tritiya,HYD,A2 Buffalo Milk,-4,3,14107.0,13930.0,1.27,2.73
+Akshaya Tritiya,HYD,A2 Buffalo Milk,-3,3,14011.0,13930.0,3.24,2.78
+Akshaya Tritiya,HYD,A2 Buffalo Milk,-2,3,13900.0,13930.0,3.02,2.77
+Akshaya Tritiya,HYD,A2 Buffalo Milk,-1,3,13980.0,13930.0,0.62,1.88
+Akshaya Tritiya,HYD,A2 Buffalo Milk,0,3,13958.0,13930.0,0.2,0.34
+Akshaya Tritiya,HYD,A2 Buffalo Milk,1,3,13703.0,13930.0,-1.63,-1.41
+Akshaya Tritiya,HYD,A2 Buffalo Milk,2,3,13704.0,13930.0,-1.62,-2.74
+Akshaya Tritiya,HYD,A2 Buffalo Milk,3,3,13392.0,13930.0,-3.86,-4.46
+Akshaya Tritiya,HYD,A2 Buffalo Milk,4,3,13258.0,13930.0,-4.82,-4.14
+Akshaya Tritiya,HYD,A2 Buffalo Milk,5,3,13531.0,13930.0,-2.86,-2.29
+Akshaya Tritiya,HYD,A2 Buffalo Milk,6,3,13647.0,13930.0,-2.03,-2.51
+Akshaya Tritiya,HYD,A2 Buffalo Milk,7,3,13753.0,13930.0,-1.27,-2.71
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,-7,3,1386.0,1337.5,1.99,1.88
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,-6,3,1398.0,1337.5,4.52,2.16
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,-5,3,1405.0,1337.5,5.05,3.83
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,-4,3,1384.0,1337.5,3.48,3.34
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,-3,3,1297.0,1337.5,-0.89,-1.32
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,-2,3,1303.0,1337.5,0.21,0.67
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,-1,3,1299.0,1337.5,-0.47,0.3
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,0,3,1397.0,1337.5,2.08,1.3
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,1,3,1326.0,1337.5,-0.86,-1.55
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,2,3,1354.0,1337.5,1.23,-1.23
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,3,3,1283.0,1337.5,-4.07,-4.15
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,4,3,1291.0,1337.5,-3.35,-2.29
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,5,3,1269.0,1337.5,-0.64,-1.82
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,6,3,1285.0,1337.5,-3.93,-3.89
+Akshaya Tritiya,HYD,A2 Desi Cow Milk,7,3,1290.0,1337.5,-3.55,-3.49
+Akshaya Tritiya,HYD,Cow Milk,-7,3,8329.0,7963.5,2.03,2.61
+Akshaya Tritiya,HYD,Cow Milk,-6,3,8302.0,7963.5,2.08,2.55
+Akshaya Tritiya,HYD,Cow Milk,-5,3,8294.0,7963.5,4.11,2.9
+Akshaya Tritiya,HYD,Cow Milk,-4,3,8083.0,7963.5,1.5,2.23
+Akshaya Tritiya,HYD,Cow Milk,-3,3,7932.0,7963.5,0.93,1.38
+Akshaya Tritiya,HYD,Cow Milk,-2,3,7906.0,7963.5,0.34,1.27
+Akshaya Tritiya,HYD,Cow Milk,-1,3,7922.0,7963.5,0.78,0.87
+Akshaya Tritiya,HYD,Cow Milk,0,3,7983.0,7963.5,0.24,0.22
+Akshaya Tritiya,HYD,Cow Milk,1,3,7697.0,7963.5,-2.97,-1.84
+Akshaya Tritiya,HYD,Cow Milk,2,3,7753.0,7963.5,-2.64,-2.89
+Akshaya Tritiya,HYD,Cow Milk,3,3,7655.0,7963.5,-3.87,-2.89
+Akshaya Tritiya,HYD,Cow Milk,4,3,7602.0,7963.5,-4.06,-3.34
+Akshaya Tritiya,HYD,Cow Milk,5,3,7844.0,7963.5,-1.5,-1.47
+Akshaya Tritiya,HYD,Cow Milk,6,3,7758.0,7963.5,-2.58,-3.41
+Akshaya Tritiya,HYD,Cow Milk,7,3,7769.0,7963.5,-2.44,-4.04
+Akshaya Tritiya,HYD,Curd,-7,3,1398.0,1438.0,3.55,1.16
+Akshaya Tritiya,HYD,Curd,-6,3,1381.0,1438.0,1.99,0.33
+Akshaya Tritiya,HYD,Curd,-5,3,1448.0,1438.0,5.83,4.35
+Akshaya Tritiya,HYD,Curd,-4,3,1428.0,1438.0,4.18,4.23
+Akshaya Tritiya,HYD,Curd,-3,3,1273.0,1438.0,3.32,-0.82
+Akshaya Tritiya,HYD,Curd,-2,3,1569.0,1438.0,7.61,11.6
+Akshaya Tritiya,HYD,Curd,-1,3,1235.0,1438.0,-9.46,-6.51
+Akshaya Tritiya,HYD,Curd,0,3,898.0,1438.0,-5.9,-14.89
+Akshaya Tritiya,HYD,Curd,1,3,1008.0,1438.0,-5.28,-12.28
+Akshaya Tritiya,HYD,Curd,2,3,1416.0,1438.0,-2.4,-2.74
+Akshaya Tritiya,HYD,Curd,3,3,1418.0,1438.0,-1.39,-4.51
+Akshaya Tritiya,HYD,Curd,4,3,1301.0,1438.0,-8.23,-5.85
+Akshaya Tritiya,HYD,Curd,5,3,1274.0,1438.0,-5.28,-5.81
+Akshaya Tritiya,HYD,Curd,6,3,1455.0,1438.0,-0.21,11.26
+Akshaya Tritiya,HYD,Curd,7,3,1387.0,1438.0,-4.87,14.34
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,-7,3,5119.0,5146.5,2.58,1.81
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,-6,3,5166.0,5146.5,1.64,1.55
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,-5,3,5242.0,5146.5,0.83,1.04
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,-4,3,5264.0,5146.5,0.82,1.01
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,-3,3,5313.0,5146.5,2.91,1.27
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,-2,3,5268.0,5146.5,2.36,1.0
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,-1,3,5307.0,5146.5,0.17,0.35
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,0,3,5139.0,5146.5,-0.49,-0.75
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,1,3,5166.0,5146.5,-5.34,-3.52
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,2,3,5179.0,5146.5,-4.0,-4.87
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,3,3,5238.0,5146.5,-4.68,-5.0
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,4,3,5135.0,5146.5,-4.35,-3.68
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,5,3,5158.0,5146.5,-2.96,-2.1
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,6,3,4980.0,5146.5,-2.89,-2.9
+Akshaya Tritiya,HYD,Double Toned A2 Buffalo Milk,7,3,4919.0,5146.5,-0.44,-1.6
+Akshaya Tritiya,HYD,Skim Milk,-7,3,2352.0,2325.5,1.14,2.68
+Akshaya Tritiya,HYD,Skim Milk,-6,3,2339.0,2325.5,0.58,1.43
+Akshaya Tritiya,HYD,Skim Milk,-5,3,2400.0,2325.5,2.64,1.85
+Akshaya Tritiya,HYD,Skim Milk,-4,3,2312.0,2325.5,1.42,1.57
+Akshaya Tritiya,HYD,Skim Milk,-3,3,2286.0,2325.5,2.64,1.43
+Akshaya Tritiya,HYD,Skim Milk,-2,3,2335.0,2325.5,1.74,2.39
+Akshaya Tritiya,HYD,Skim Milk,-1,3,2316.0,2325.5,-0.13,-0.18
+Akshaya Tritiya,HYD,Skim Milk,0,3,2318.0,2325.5,-2.81,-1.96
+Akshaya Tritiya,HYD,Skim Milk,1,3,2279.0,2325.5,-2.0,-3.84
+Akshaya Tritiya,HYD,Skim Milk,2,3,2287.0,2325.5,-1.66,-3.75
+Akshaya Tritiya,HYD,Skim Milk,3,3,2259.0,2325.5,-2.86,-5.37
+Akshaya Tritiya,HYD,Skim Milk,4,3,2216.0,2325.5,-4.71,-4.03
+Akshaya Tritiya,HYD,Skim Milk,5,3,2289.0,2325.5,-2.43,-2.23
+Akshaya Tritiya,HYD,Skim Milk,6,3,2301.0,2325.5,-3.52,-2.74
+Akshaya Tritiya,HYD,Skim Milk,7,3,2139.0,2325.5,0.29,-2.99
+Akshaya Tritiya,HYD,Toned Milk,-7,1,8423.0,8670.5,-2.85,-2.85
+Akshaya Tritiya,HYD,Toned Milk,-6,1,8569.0,8670.5,-1.17,-1.17
+Akshaya Tritiya,HYD,Toned Milk,-5,1,8872.0,8670.5,2.32,2.32
+Akshaya Tritiya,HYD,Toned Milk,-4,1,8809.0,8670.5,1.6,1.6
+Akshaya Tritiya,HYD,Toned Milk,-3,1,8928.0,8670.5,2.97,2.97
+Akshaya Tritiya,HYD,Toned Milk,-2,1,8928.0,8670.5,2.97,2.97
+Akshaya Tritiya,HYD,Toned Milk,-1,1,8873.0,8670.5,2.34,2.34
+Akshaya Tritiya,HYD,Toned Milk,0,1,8706.0,8670.5,0.41,0.41
+Akshaya Tritiya,HYD,Toned Milk,1,1,8753.0,8670.5,0.95,0.95
+Akshaya Tritiya,HYD,Toned Milk,2,1,8817.0,8670.5,1.69,1.69
+Akshaya Tritiya,HYD,Toned Milk,3,1,8878.0,8670.5,2.39,2.39
+Akshaya Tritiya,HYD,Toned Milk,4,1,8772.0,8670.5,1.17,1.17
+Akshaya Tritiya,HYD,Toned Milk,5,1,8779.0,8670.5,1.25,1.25
+Akshaya Tritiya,HYD,Toned Milk,6,1,8569.0,8670.5,-1.17,-1.17
+Akshaya Tritiya,HYD,Toned Milk,7,1,8243.0,8670.5,-4.93,-4.93
+Diwali,BLR,A2 Buffalo Milk,-7,2,1789.0,1735.0,3.22,3.22
+Diwali,BLR,A2 Buffalo Milk,-6,2,1767.0,1735.0,1.66,1.66
+Diwali,BLR,A2 Buffalo Milk,-5,2,1726.5,1735.0,-1.52,-1.52
+Diwali,BLR,A2 Buffalo Milk,-4,2,1693.0,1735.0,-3.62,-3.62
+Diwali,BLR,A2 Buffalo Milk,-3,2,1659.5,1735.0,-5.92,-5.92
+Diwali,BLR,A2 Buffalo Milk,-2,2,1653.0,1735.0,-5.12,-5.12
+Diwali,BLR,A2 Buffalo Milk,-1,2,1529.0,1735.0,-11.51,-11.51
+Diwali,BLR,A2 Buffalo Milk,0,2,1624.0,1735.0,-5.66,-5.66
+Diwali,BLR,A2 Buffalo Milk,1,2,1431.5,1735.0,-17.75,-17.75
+Diwali,BLR,A2 Buffalo Milk,2,2,1433.5,1735.0,-18.67,-18.67
+Diwali,BLR,A2 Buffalo Milk,3,2,1456.0,1735.0,-17.32,-17.32
+Diwali,BLR,A2 Buffalo Milk,4,2,1611.0,1735.0,-6.81,-6.81
+Diwali,BLR,A2 Buffalo Milk,5,2,1651.0,1735.0,-4.1,-4.1
+Diwali,BLR,A2 Buffalo Milk,6,2,1674.0,1735.0,-2.61,-2.61
+Diwali,BLR,A2 Buffalo Milk,7,2,1724.5,1735.0,-0.32,-0.32
+Diwali,BLR,A2 Desi Cow Milk,-7,2,371.0,369.75,-0.59,-0.59
+Diwali,BLR,A2 Desi Cow Milk,-6,2,363.5,369.75,-1.21,-1.21
+Diwali,BLR,A2 Desi Cow Milk,-5,2,367.5,369.75,-0.63,-0.63
+Diwali,BLR,A2 Desi Cow Milk,-4,2,360.0,369.75,-3.68,-3.68
+Diwali,BLR,A2 Desi Cow Milk,-3,2,373.5,369.75,0.45,0.45
+Diwali,BLR,A2 Desi Cow Milk,-2,2,365.0,369.75,-0.6,-0.6
+Diwali,BLR,A2 Desi Cow Milk,-1,2,359.0,369.75,-3.12,-3.12
+Diwali,BLR,A2 Desi Cow Milk,0,2,364.0,369.75,-1.54,-1.54
+Diwali,BLR,A2 Desi Cow Milk,1,2,323.0,369.75,-14.06,-14.06
+Diwali,BLR,A2 Desi Cow Milk,2,2,331.0,369.75,-12.9,-12.9
+Diwali,BLR,A2 Desi Cow Milk,3,2,334.0,369.75,-11.18,-11.18
+Diwali,BLR,A2 Desi Cow Milk,4,2,362.0,369.75,-2.54,-2.54
+Diwali,BLR,A2 Desi Cow Milk,5,2,387.0,369.75,4.67,4.67
+Diwali,BLR,A2 Desi Cow Milk,6,2,381.5,369.75,4.48,4.48
+Diwali,BLR,A2 Desi Cow Milk,7,2,412.5,369.75,11.84,11.84
+Diwali,BLR,Cow Milk,-7,2,1869.0,1850.5,1.01,1.01
+Diwali,BLR,Cow Milk,-6,2,1881.0,1850.5,1.58,1.58
+Diwali,BLR,Cow Milk,-5,2,1866.0,1850.5,0.6,0.6
+Diwali,BLR,Cow Milk,-4,2,1819.0,1850.5,-2.11,-2.11
+Diwali,BLR,Cow Milk,-3,2,1771.5,1850.5,-4.46,-4.46
+Diwali,BLR,Cow Milk,-2,2,1698.5,1850.5,-8.14,-8.14
+Diwali,BLR,Cow Milk,-1,2,1613.0,1850.5,-12.66,-12.66
+Diwali,BLR,Cow Milk,0,2,1720.5,1850.5,-7.06,-7.06
+Diwali,BLR,Cow Milk,1,2,1537.5,1850.5,-17.12,-17.12
+Diwali,BLR,Cow Milk,2,2,1538.5,1850.5,-17.22,-17.22
+Diwali,BLR,Cow Milk,3,2,1558.5,1850.5,-16.08,-16.08
+Diwali,BLR,Cow Milk,4,2,1714.5,1850.5,-7.34,-7.34
+Diwali,BLR,Cow Milk,5,2,1763.5,1850.5,-4.39,-4.39
+Diwali,BLR,Cow Milk,6,2,1785.0,1850.5,-3.3,-3.3
+Diwali,BLR,Cow Milk,7,2,1867.5,1850.5,1.06,1.06
+Diwali,BLR,Curd,-7,2,233.5,211.0,18.96,18.96
+Diwali,BLR,Curd,-6,2,218.5,211.0,11.17,11.17
+Diwali,BLR,Curd,-5,2,249.5,211.0,25.2,25.2
+Diwali,BLR,Curd,-4,2,198.0,211.0,-9.8,-9.8
+Diwali,BLR,Curd,-3,2,200.5,211.0,-6.28,-6.28
+Diwali,BLR,Curd,-2,2,155.0,211.0,-25.48,-25.48
+Diwali,BLR,Curd,-1,2,208.0,211.0,12.68,12.68
+Diwali,BLR,Curd,0,2,247.5,211.0,26.76,26.76
+Diwali,BLR,Curd,1,2,186.5,211.0,-8.99,-8.99
+Diwali,BLR,Curd,2,2,217.0,211.0,9.06,9.06
+Diwali,BLR,Curd,3,2,186.0,211.0,-6.2,-6.2
+Diwali,BLR,Curd,4,2,221.0,211.0,2.43,2.43
+Diwali,BLR,Curd,5,2,215.5,211.0,-0.93,-0.93
+Diwali,BLR,Curd,6,2,189.0,211.0,-6.7,-6.7
+Diwali,BLR,Curd,7,2,184.0,211.0,-18.47,-18.47
+Diwali,BLR,Double Toned A2 Buffalo Milk,-7,2,424.0,412.25,2.36,2.36
+Diwali,BLR,Double Toned A2 Buffalo Milk,-6,2,431.0,412.25,4.61,4.61
+Diwali,BLR,Double Toned A2 Buffalo Milk,-5,2,420.0,412.25,1.1,1.1
+Diwali,BLR,Double Toned A2 Buffalo Milk,-4,2,401.0,412.25,-3.52,-3.52
+Diwali,BLR,Double Toned A2 Buffalo Milk,-3,2,396.5,412.25,-4.76,-4.76
+Diwali,BLR,Double Toned A2 Buffalo Milk,-2,2,377.5,412.25,-8.06,-8.06
+Diwali,BLR,Double Toned A2 Buffalo Milk,-1,2,345.5,412.25,-15.2,-15.2
+Diwali,BLR,Double Toned A2 Buffalo Milk,0,2,384.5,412.25,-5.98,-5.98
+Diwali,BLR,Double Toned A2 Buffalo Milk,1,2,350.0,412.25,-15.69,-15.69
+Diwali,BLR,Double Toned A2 Buffalo Milk,2,2,352.5,412.25,-15.94,-15.94
+Diwali,BLR,Double Toned A2 Buffalo Milk,3,2,368.0,412.25,-11.6,-11.6
+Diwali,BLR,Double Toned A2 Buffalo Milk,4,2,396.0,412.25,-5.03,-5.03
+Diwali,BLR,Double Toned A2 Buffalo Milk,5,2,401.0,412.25,-2.26,-2.26
+Diwali,BLR,Double Toned A2 Buffalo Milk,6,2,424.5,412.25,3.84,3.84
+Diwali,BLR,Double Toned A2 Buffalo Milk,7,2,423.5,412.25,3.52,3.52
+Diwali,BLR,Skim Milk,-7,2,359.0,342.75,7.62,7.62
+Diwali,BLR,Skim Milk,-6,2,354.0,342.75,6.98,6.98
+Diwali,BLR,Skim Milk,-5,2,353.5,342.75,1.61,1.61
+Diwali,BLR,Skim Milk,-4,2,330.5,342.75,-6.64,-6.64
+Diwali,BLR,Skim Milk,-3,2,345.5,342.75,0.9,0.9
+Diwali,BLR,Skim Milk,-2,2,313.5,342.75,-10.02,-10.02
+Diwali,BLR,Skim Milk,-1,2,318.0,342.75,-6.85,-6.85
+Diwali,BLR,Skim Milk,0,2,321.5,342.75,-10.18,-10.18
+Diwali,BLR,Skim Milk,1,2,293.5,342.75,-16.1,-16.1
+Diwali,BLR,Skim Milk,2,2,291.0,342.75,-19.05,-19.05
+Diwali,BLR,Skim Milk,3,2,307.5,342.75,-12.08,-12.08
+Diwali,BLR,Skim Milk,4,2,331.0,342.75,-4.43,-4.43
+Diwali,BLR,Skim Milk,5,2,340.5,342.75,-1.32,-1.32
+Diwali,BLR,Skim Milk,6,2,336.0,342.75,-0.11,-0.11
+Diwali,BLR,Skim Milk,7,2,353.0,342.75,2.56,2.56
+Diwali,BLR,Toned Milk,-7,1,183.0,195.0,-6.15,-6.15
+Diwali,BLR,Toned Milk,-6,1,204.0,195.0,4.62,4.62
+Diwali,BLR,Toned Milk,-5,1,194.0,195.0,-0.51,-0.51
+Diwali,BLR,Toned Milk,-4,1,196.0,195.0,0.51,0.51
+Diwali,BLR,Toned Milk,-3,1,187.0,195.0,-4.1,-4.1
+Diwali,BLR,Toned Milk,-2,1,204.0,195.0,4.62,4.62
+Diwali,BLR,Toned Milk,-1,1,174.0,195.0,-10.77,-10.77
+Diwali,BLR,Toned Milk,0,1,172.0,195.0,-11.79,-11.79
+Diwali,BLR,Toned Milk,1,1,182.0,195.0,-6.67,-6.67
+Diwali,BLR,Toned Milk,2,1,184.0,195.0,-5.64,-5.64
+Diwali,BLR,Toned Milk,3,1,182.0,195.0,-6.67,-6.67
+Diwali,BLR,Toned Milk,4,1,178.0,195.0,-8.72,-8.72
+Diwali,BLR,Toned Milk,5,1,187.0,195.0,-4.1,-4.1
+Diwali,BLR,Toned Milk,6,1,206.0,195.0,5.64,5.64
+Diwali,BLR,Toned Milk,7,1,205.0,195.0,5.13,5.13
+Diwali,HYD,A2 Buffalo Milk,-7,2,15141.5,15229.5,-0.53,-0.53
+Diwali,HYD,A2 Buffalo Milk,-6,2,15250.0,15229.5,0.13,0.13
+Diwali,HYD,A2 Buffalo Milk,-5,2,15332.0,15229.5,0.61,0.61
+Diwali,HYD,A2 Buffalo Milk,-4,2,15053.5,15229.5,-1.3,-1.3
+Diwali,HYD,A2 Buffalo Milk,-3,2,15126.5,15229.5,-0.72,-0.72
+Diwali,HYD,A2 Buffalo Milk,-2,2,15057.0,15229.5,-1.16,-1.16
+Diwali,HYD,A2 Buffalo Milk,-1,2,15050.0,15229.5,-1.12,-1.12
+Diwali,HYD,A2 Buffalo Milk,0,2,15979.0,15229.5,4.93,4.93
+Diwali,HYD,A2 Buffalo Milk,1,2,14504.0,15229.5,-4.78,-4.78
+Diwali,HYD,A2 Buffalo Milk,2,2,14383.5,15229.5,-5.7,-5.7
+Diwali,HYD,A2 Buffalo Milk,3,2,14627.0,15229.5,-4.18,-4.18
+Diwali,HYD,A2 Buffalo Milk,4,2,15089.0,15229.5,-1.0,-1.0
+Diwali,HYD,A2 Buffalo Milk,5,2,15197.0,15229.5,-0.2,-0.2
+Diwali,HYD,A2 Buffalo Milk,6,2,15139.0,15229.5,-0.52,-0.52
+Diwali,HYD,A2 Buffalo Milk,7,2,15277.5,15229.5,0.34,0.34
+Diwali,HYD,A2 Desi Cow Milk,-7,2,1479.5,1492.0,-0.84,-0.84
+Diwali,HYD,A2 Desi Cow Milk,-6,2,1464.0,1492.0,-1.86,-1.86
+Diwali,HYD,A2 Desi Cow Milk,-5,2,1460.0,1492.0,-2.11,-2.11
+Diwali,HYD,A2 Desi Cow Milk,-4,2,1438.0,1492.0,-3.58,-3.58
+Diwali,HYD,A2 Desi Cow Milk,-3,2,1523.0,1492.0,2.12,2.12
+Diwali,HYD,A2 Desi Cow Milk,-2,2,1477.5,1492.0,-0.96,-0.96
+Diwali,HYD,A2 Desi Cow Milk,-1,2,1493.5,1492.0,0.13,0.13
+Diwali,HYD,A2 Desi Cow Milk,0,2,1663.0,1492.0,11.5,11.5
+Diwali,HYD,A2 Desi Cow Milk,1,2,1436.0,1492.0,-3.74,-3.74
+Diwali,HYD,A2 Desi Cow Milk,2,2,1421.0,1492.0,-4.71,-4.71
+Diwali,HYD,A2 Desi Cow Milk,3,2,1437.5,1492.0,-3.58,-3.58
+Diwali,HYD,A2 Desi Cow Milk,4,2,1546.0,1492.0,3.64,3.64
+Diwali,HYD,A2 Desi Cow Milk,5,2,1676.0,1492.0,12.35,12.35
+Diwali,HYD,A2 Desi Cow Milk,6,2,1478.5,1492.0,-0.92,-0.92
+Diwali,HYD,A2 Desi Cow Milk,7,2,1555.0,1492.0,4.24,4.24
+Diwali,HYD,Cow Milk,-7,2,8844.5,8906.5,-0.66,-0.66
+Diwali,HYD,Cow Milk,-6,2,8914.5,8906.5,0.08,0.08
+Diwali,HYD,Cow Milk,-5,2,8825.5,8906.5,-0.98,-0.98
+Diwali,HYD,Cow Milk,-4,2,8689.0,8906.5,-2.53,-2.53
+Diwali,HYD,Cow Milk,-3,2,8823.5,8906.5,-0.98,-0.98
+Diwali,HYD,Cow Milk,-2,2,8795.0,8906.5,-1.32,-1.32
+Diwali,HYD,Cow Milk,-1,2,8779.0,8906.5,-1.4,-1.4
+Diwali,HYD,Cow Milk,0,2,9769.0,8906.5,9.6,9.6
+Diwali,HYD,Cow Milk,1,2,8548.5,8906.5,-4.03,-4.03
+Diwali,HYD,Cow Milk,2,2,8466.0,8906.5,-5.03,-5.03
+Diwali,HYD,Cow Milk,3,2,8541.5,8906.5,-4.19,-4.19
+Diwali,HYD,Cow Milk,4,2,8886.0,8906.5,-0.23,-0.23
+Diwali,HYD,Cow Milk,5,2,10010.5,8906.5,12.32,12.32
+Diwali,HYD,Cow Milk,6,2,8953.0,8906.5,0.56,0.56
+Diwali,HYD,Cow Milk,7,2,9090.5,8906.5,2.0,2.0
+Diwali,HYD,Curd,-7,2,1034.0,1092.5,-4.72,-4.72
+Diwali,HYD,Curd,-6,2,1113.0,1092.5,1.92,1.92
+Diwali,HYD,Curd,-5,2,1642.5,1092.5,66.25,66.25
+Diwali,HYD,Curd,-4,2,1053.0,1092.5,-4.49,-4.49
+Diwali,HYD,Curd,-3,2,1184.0,1092.5,3.72,3.72
+Diwali,HYD,Curd,-2,2,1418.5,1092.5,24.2,24.2
+Diwali,HYD,Curd,-1,2,1336.0,1092.5,16.6,16.6
+Diwali,HYD,Curd,0,2,2319.5,1092.5,127.93,127.93
+Diwali,HYD,Curd,1,2,1440.5,1092.5,39.42,39.42
+Diwali,HYD,Curd,2,2,1645.5,1092.5,53.28,53.28
+Diwali,HYD,Curd,3,2,1301.0,1092.5,14.15,14.15
+Diwali,HYD,Curd,4,2,1714.0,1092.5,70.54,70.54
+Diwali,HYD,Curd,5,2,883.5,1092.5,-17.24,-17.24
+Diwali,HYD,Curd,6,2,939.0,1092.5,-10.67,-10.67
+Diwali,HYD,Curd,7,2,1336.5,1092.5,17.45,17.45
+Diwali,HYD,Double Toned A2 Buffalo Milk,-7,2,5649.0,5649.0,-0.01,-0.01
+Diwali,HYD,Double Toned A2 Buffalo Milk,-6,2,5674.0,5649.0,0.44,0.44
+Diwali,HYD,Double Toned A2 Buffalo Milk,-5,2,5677.5,5649.0,0.45,0.45
+Diwali,HYD,Double Toned A2 Buffalo Milk,-4,2,5580.5,5649.0,-1.24,-1.24
+Diwali,HYD,Double Toned A2 Buffalo Milk,-3,2,5579.5,5649.0,-1.26,-1.26
+Diwali,HYD,Double Toned A2 Buffalo Milk,-2,2,5614.5,5649.0,-0.6,-0.6
+Diwali,HYD,Double Toned A2 Buffalo Milk,-1,2,5564.5,5649.0,-1.46,-1.46
+Diwali,HYD,Double Toned A2 Buffalo Milk,0,2,5928.0,5649.0,4.94,4.94
+Diwali,HYD,Double Toned A2 Buffalo Milk,1,2,5383.0,5649.0,-4.74,-4.74
+Diwali,HYD,Double Toned A2 Buffalo Milk,2,2,5388.5,5649.0,-4.72,-4.72
+Diwali,HYD,Double Toned A2 Buffalo Milk,3,2,5430.0,5649.0,-3.97,-3.97
+Diwali,HYD,Double Toned A2 Buffalo Milk,4,2,5628.5,5649.0,-0.38,-0.38
+Diwali,HYD,Double Toned A2 Buffalo Milk,5,2,5612.5,5649.0,-0.63,-0.63
+Diwali,HYD,Double Toned A2 Buffalo Milk,6,2,5576.0,5649.0,-1.25,-1.25
+Diwali,HYD,Double Toned A2 Buffalo Milk,7,2,5653.0,5649.0,0.08,0.08
+Diwali,HYD,Skim Milk,-7,2,2461.0,2427.5,1.58,1.58
+Diwali,HYD,Skim Milk,-6,2,2461.5,2427.5,1.6,1.6
+Diwali,HYD,Skim Milk,-5,2,2456.5,2427.5,0.97,0.97
+Diwali,HYD,Skim Milk,-4,2,2388.0,2427.5,-2.09,-2.09
+Diwali,HYD,Skim Milk,-3,2,2426.0,2427.5,-0.41,-0.41
+Diwali,HYD,Skim Milk,-2,2,2413.5,2427.5,-0.55,-0.55
+Diwali,HYD,Skim Milk,-1,2,2340.5,2427.5,-3.54,-3.54
+Diwali,HYD,Skim Milk,0,2,2441.0,2427.5,0.51,0.51
+Diwali,HYD,Skim Milk,1,2,2301.5,2427.5,-5.52,-5.52
+Diwali,HYD,Skim Milk,2,2,2274.5,2427.5,-6.81,-6.81
+Diwali,HYD,Skim Milk,3,2,2340.0,2427.5,-4.36,-4.36
+Diwali,HYD,Skim Milk,4,2,2366.5,2427.5,-2.65,-2.65
+Diwali,HYD,Skim Milk,5,2,2419.5,2427.5,-0.3,-0.3
+Diwali,HYD,Skim Milk,6,2,2378.0,2427.5,-1.72,-1.72
+Diwali,HYD,Skim Milk,7,2,2430.5,2427.5,0.12,0.12
+Diwali,HYD,Toned Milk,-7,1,3065.0,3171.5,-3.36,-3.36
+Diwali,HYD,Toned Milk,-6,1,3179.0,3171.5,0.24,0.24
+Diwali,HYD,Toned Milk,-5,1,3157.0,3171.5,-0.46,-0.46
+Diwali,HYD,Toned Milk,-4,1,3210.0,3171.5,1.21,1.21
+Diwali,HYD,Toned Milk,-3,1,3155.0,3171.5,-0.52,-0.52
+Diwali,HYD,Toned Milk,-2,1,3120.0,3171.5,-1.62,-1.62
+Diwali,HYD,Toned Milk,-1,1,3078.0,3171.5,-2.95,-2.95
+Diwali,HYD,Toned Milk,0,1,3319.0,3171.5,4.65,4.65
+Diwali,HYD,Toned Milk,1,1,2938.0,3171.5,-7.36,-7.36
+Diwali,HYD,Toned Milk,2,1,3168.0,3171.5,-0.11,-0.11
+Diwali,HYD,Toned Milk,3,1,3165.0,3171.5,-0.2,-0.2
+Diwali,HYD,Toned Milk,4,1,3252.0,3171.5,2.54,2.54
+Diwali,HYD,Toned Milk,5,1,3172.0,3171.5,0.02,0.02
+Diwali,HYD,Toned Milk,6,1,3171.0,3171.5,-0.02,-0.02
+Diwali,HYD,Toned Milk,7,1,3158.0,3171.5,-0.43,-0.43
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,-7,1,1345.0,1333.5,0.86,0.86
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,-6,1,1254.0,1333.5,-5.96,-5.96
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,-5,1,1216.0,1333.5,-8.81,-8.81
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,-4,1,1164.0,1333.5,-12.71,-12.71
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,-3,1,1242.0,1333.5,-6.86,-6.86
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,-2,1,1201.0,1333.5,-9.94,-9.94
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,-1,1,1300.0,1333.5,-2.51,-2.51
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,0,1,1082.0,1333.5,-18.86,-18.86
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,1,1,1010.0,1333.5,-24.26,-24.26
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,2,1,1031.0,1333.5,-22.68,-22.68
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,3,1,1262.0,1333.5,-5.36,-5.36
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,4,1,1322.0,1333.5,-0.86,-0.86
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,5,1,1351.0,1333.5,1.31,1.31
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,6,1,1346.0,1333.5,0.94,0.94
+Diwali Laxmi Puja,BLR,A2 Buffalo Milk,7,1,1393.0,1333.5,4.46,4.46
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,-7,1,280.0,285.5,-1.93,-1.93
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,-6,1,276.0,285.5,-3.33,-3.33
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,-5,1,256.0,285.5,-10.33,-10.33
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,-4,1,273.0,285.5,-4.38,-4.38
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,-3,1,284.0,285.5,-0.53,-0.53
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,-2,1,267.0,285.5,-6.48,-6.48
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,-1,1,274.0,285.5,-4.03,-4.03
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,0,1,223.0,285.5,-21.89,-21.89
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,1,1,215.0,285.5,-24.69,-24.69
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,2,1,230.0,285.5,-19.44,-19.44
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,3,1,266.0,285.5,-6.83,-6.83
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,4,1,291.0,285.5,1.93,1.93
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,5,1,305.0,285.5,6.83,6.83
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,6,1,314.0,285.5,9.98,9.98
+Diwali Laxmi Puja,BLR,A2 Desi Cow Milk,7,1,298.0,285.5,4.38,4.38
+Diwali Laxmi Puja,BLR,Cow Milk,-7,1,1730.0,1719.0,0.64,0.64
+Diwali Laxmi Puja,BLR,Cow Milk,-6,1,1673.0,1719.0,-2.68,-2.68
+Diwali Laxmi Puja,BLR,Cow Milk,-5,1,1586.0,1719.0,-7.74,-7.74
+Diwali Laxmi Puja,BLR,Cow Milk,-4,1,1598.0,1719.0,-7.04,-7.04
+Diwali Laxmi Puja,BLR,Cow Milk,-3,1,1597.0,1719.0,-7.1,-7.1
+Diwali Laxmi Puja,BLR,Cow Milk,-2,1,1541.0,1719.0,-10.35,-10.35
+Diwali Laxmi Puja,BLR,Cow Milk,-1,1,1591.0,1719.0,-7.45,-7.45
+Diwali Laxmi Puja,BLR,Cow Milk,0,1,1374.0,1719.0,-20.07,-20.07
+Diwali Laxmi Puja,BLR,Cow Milk,1,1,1336.0,1719.0,-22.28,-22.28
+Diwali Laxmi Puja,BLR,Cow Milk,2,1,1369.0,1719.0,-20.36,-20.36
+Diwali Laxmi Puja,BLR,Cow Milk,3,1,1597.0,1719.0,-7.1,-7.1
+Diwali Laxmi Puja,BLR,Cow Milk,4,1,1719.0,1719.0,0.0,0.0
+Diwali Laxmi Puja,BLR,Cow Milk,5,1,1719.0,1719.0,0.0,0.0
+Diwali Laxmi Puja,BLR,Cow Milk,6,1,1770.0,1719.0,2.97,2.97
+Diwali Laxmi Puja,BLR,Cow Milk,7,1,1770.0,1719.0,2.97,2.97
+Diwali Laxmi Puja,BLR,Curd,-7,1,190.0,127.0,49.61,49.61
+Diwali Laxmi Puja,BLR,Curd,-6,1,207.0,127.0,62.99,62.99
+Diwali Laxmi Puja,BLR,Curd,-5,1,112.0,127.0,-11.81,-11.81
+Diwali Laxmi Puja,BLR,Curd,-4,1,127.0,127.0,0.0,0.0
+Diwali Laxmi Puja,BLR,Curd,-3,1,110.0,127.0,-13.39,-13.39
+Diwali Laxmi Puja,BLR,Curd,-2,1,220.0,127.0,73.23,73.23
+Diwali Laxmi Puja,BLR,Curd,-1,1,220.0,127.0,73.23,73.23
+Diwali Laxmi Puja,BLR,Curd,0,1,140.0,127.0,10.24,10.24
+Diwali Laxmi Puja,BLR,Curd,1,1,181.0,127.0,42.52,42.52
+Diwali Laxmi Puja,BLR,Curd,2,1,157.0,127.0,23.62,23.62
+Diwali Laxmi Puja,BLR,Curd,3,1,135.0,127.0,6.3,6.3
+Diwali Laxmi Puja,BLR,Curd,4,1,127.0,127.0,0.0,0.0
+Diwali Laxmi Puja,BLR,Curd,5,1,148.0,127.0,16.54,16.54
+Diwali Laxmi Puja,BLR,Curd,6,1,91.0,127.0,-28.35,-28.35
+Diwali Laxmi Puja,BLR,Curd,7,1,115.0,127.0,-9.45,-9.45
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,-7,1,335.0,327.0,2.45,2.45
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,-6,1,312.0,327.0,-4.59,-4.59
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,-5,1,297.0,327.0,-9.17,-9.17
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,-4,1,291.0,327.0,-11.01,-11.01
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,-3,1,299.0,327.0,-8.56,-8.56
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,-2,1,285.0,327.0,-12.84,-12.84
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,-1,1,311.0,327.0,-4.89,-4.89
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,0,1,261.0,327.0,-20.18,-20.18
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,1,1,248.0,327.0,-24.16,-24.16
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,2,1,270.0,327.0,-17.43,-17.43
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,3,1,288.0,327.0,-11.93,-11.93
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,4,1,319.0,327.0,-2.45,-2.45
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,5,1,344.0,327.0,5.2,5.2
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,6,1,342.0,327.0,4.59,4.59
+Diwali Laxmi Puja,BLR,Double Toned A2 Buffalo Milk,7,1,340.0,327.0,3.98,3.98
+Diwali Laxmi Puja,BLR,Skim Milk,-7,1,209.0,184.5,13.28,13.28
+Diwali Laxmi Puja,BLR,Skim Milk,-6,1,179.0,184.5,-2.98,-2.98
+Diwali Laxmi Puja,BLR,Skim Milk,-5,1,158.0,184.5,-14.36,-14.36
+Diwali Laxmi Puja,BLR,Skim Milk,-4,1,184.0,184.5,-0.27,-0.27
+Diwali Laxmi Puja,BLR,Skim Milk,-3,1,158.0,184.5,-14.36,-14.36
+Diwali Laxmi Puja,BLR,Skim Milk,-2,1,171.0,184.5,-7.32,-7.32
+Diwali Laxmi Puja,BLR,Skim Milk,-1,1,148.0,184.5,-19.78,-19.78
+Diwali Laxmi Puja,BLR,Skim Milk,0,1,146.0,184.5,-20.87,-20.87
+Diwali Laxmi Puja,BLR,Skim Milk,1,1,132.0,184.5,-28.46,-28.46
+Diwali Laxmi Puja,BLR,Skim Milk,2,1,153.0,184.5,-17.07,-17.07
+Diwali Laxmi Puja,BLR,Skim Milk,3,1,170.0,184.5,-7.86,-7.86
+Diwali Laxmi Puja,BLR,Skim Milk,4,1,177.0,184.5,-4.07,-4.07
+Diwali Laxmi Puja,BLR,Skim Milk,5,1,189.0,184.5,2.44,2.44
+Diwali Laxmi Puja,BLR,Skim Milk,6,1,185.0,184.5,0.27,0.27
+Diwali Laxmi Puja,BLR,Skim Milk,7,1,185.0,184.5,0.27,0.27
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,-7,1,14491.0,14484.5,0.04,0.04
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,-6,1,14389.0,14484.5,-0.66,-0.66
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,-5,1,13891.0,14484.5,-4.1,-4.1
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,-4,1,14260.0,14484.5,-1.55,-1.55
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,-3,1,14265.0,14484.5,-1.52,-1.52
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,-2,1,14479.0,14484.5,-0.04,-0.04
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,-1,1,15234.0,14484.5,5.17,5.17
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,0,1,13719.0,14484.5,-5.28,-5.28
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,1,1,13205.0,14484.5,-8.83,-8.83
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,2,1,13206.0,14484.5,-8.83,-8.83
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,3,1,14115.0,14484.5,-2.55,-2.55
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,4,1,14478.0,14484.5,-0.04,-0.04
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,5,1,14635.0,14484.5,1.04,1.04
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,6,1,14615.0,14484.5,0.9,0.9
+Diwali Laxmi Puja,HYD,A2 Buffalo Milk,7,1,14552.0,14484.5,0.47,0.47
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,-7,1,1462.0,1503.0,-2.73,-2.73
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,-6,1,1439.0,1503.0,-4.26,-4.26
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,-5,1,1410.0,1503.0,-6.19,-6.19
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,-4,1,1487.0,1503.0,-1.06,-1.06
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,-3,1,1482.0,1503.0,-1.4,-1.4
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,-2,1,1482.0,1503.0,-1.4,-1.4
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,-1,1,1644.0,1503.0,9.38,9.38
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,0,1,1438.0,1503.0,-4.32,-4.32
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,1,1,1381.0,1503.0,-8.12,-8.12
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,2,1,1373.0,1503.0,-8.65,-8.65
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,3,1,1541.0,1503.0,2.53,2.53
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,4,1,1674.0,1503.0,11.38,11.38
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,5,1,1519.0,1503.0,1.06,1.06
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,6,1,1554.0,1503.0,3.39,3.39
+Diwali Laxmi Puja,HYD,A2 Desi Cow Milk,7,1,1567.0,1503.0,4.26,4.26
+Diwali Laxmi Puja,HYD,Cow Milk,-7,1,8467.0,8500.5,-0.39,-0.39
+Diwali Laxmi Puja,HYD,Cow Milk,-6,1,8260.0,8500.5,-2.83,-2.83
+Diwali Laxmi Puja,HYD,Cow Milk,-5,1,8111.0,8500.5,-4.58,-4.58
+Diwali Laxmi Puja,HYD,Cow Milk,-4,1,8291.0,8500.5,-2.46,-2.46
+Diwali Laxmi Puja,HYD,Cow Milk,-3,1,8247.0,8500.5,-2.98,-2.98
+Diwali Laxmi Puja,HYD,Cow Milk,-2,1,8404.0,8500.5,-1.14,-1.14
+Diwali Laxmi Puja,HYD,Cow Milk,-1,1,9147.0,8500.5,7.61,7.61
+Diwali Laxmi Puja,HYD,Cow Milk,0,1,8102.0,8500.5,-4.69,-4.69
+Diwali Laxmi Puja,HYD,Cow Milk,1,1,7902.0,8500.5,-7.04,-7.04
+Diwali Laxmi Puja,HYD,Cow Milk,2,1,7963.0,8500.5,-6.32,-6.32
+Diwali Laxmi Puja,HYD,Cow Milk,3,1,8456.0,8500.5,-0.52,-0.52
+Diwali Laxmi Puja,HYD,Cow Milk,4,1,9390.0,8500.5,10.46,10.46
+Diwali Laxmi Puja,HYD,Cow Milk,5,1,8582.0,8500.5,0.96,0.96
+Diwali Laxmi Puja,HYD,Cow Milk,6,1,8534.0,8500.5,0.39,0.39
+Diwali Laxmi Puja,HYD,Cow Milk,7,1,8556.0,8500.5,0.65,0.65
+Diwali Laxmi Puja,HYD,Curd,-7,1,844.0,794.5,6.23,6.23
+Diwali Laxmi Puja,HYD,Curd,-6,1,1914.0,794.5,140.91,140.91
+Diwali Laxmi Puja,HYD,Curd,-5,1,760.0,794.5,-4.34,-4.34
+Diwali Laxmi Puja,HYD,Curd,-4,1,699.0,794.5,-12.02,-12.02
+Diwali Laxmi Puja,HYD,Curd,-3,1,835.0,794.5,5.1,5.1
+Diwali Laxmi Puja,HYD,Curd,-2,1,771.0,794.5,-2.96,-2.96
+Diwali Laxmi Puja,HYD,Curd,-1,1,2414.0,794.5,203.84,203.84
+Diwali Laxmi Puja,HYD,Curd,0,1,1409.0,794.5,77.34,77.34
+Diwali Laxmi Puja,HYD,Curd,1,1,1357.0,794.5,70.8,70.8
+Diwali Laxmi Puja,HYD,Curd,2,1,776.0,794.5,-2.33,-2.33
+Diwali Laxmi Puja,HYD,Curd,3,1,1873.0,794.5,135.75,135.75
+Diwali Laxmi Puja,HYD,Curd,4,1,748.0,794.5,-5.85,-5.85
+Diwali Laxmi Puja,HYD,Curd,5,1,853.0,794.5,7.36,7.36
+Diwali Laxmi Puja,HYD,Curd,6,1,805.0,794.5,1.32,1.32
+Diwali Laxmi Puja,HYD,Curd,7,1,784.0,794.5,-1.32,-1.32
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,-7,1,5553.0,5539.0,0.25,0.25
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,-6,1,5433.0,5539.0,-1.91,-1.91
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,-5,1,5400.0,5539.0,-2.51,-2.51
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,-4,1,5389.0,5539.0,-2.71,-2.71
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,-3,1,5521.0,5539.0,-0.32,-0.32
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,-2,1,5538.0,5539.0,-0.02,-0.02
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,-1,1,5806.0,5539.0,4.82,4.82
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,0,1,5193.0,5539.0,-6.25,-6.25
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,1,1,5001.0,5539.0,-9.71,-9.71
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,2,1,5053.0,5539.0,-8.77,-8.77
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,3,1,5441.0,5539.0,-1.77,-1.77
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,4,1,5535.0,5539.0,-0.07,-0.07
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,5,1,5545.0,5539.0,0.11,0.11
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,6,1,5543.0,5539.0,0.07,0.07
+Diwali Laxmi Puja,HYD,Double Toned A2 Buffalo Milk,7,1,5580.0,5539.0,0.74,0.74
+Diwali Laxmi Puja,HYD,Skim Milk,-7,1,2190.0,2121.5,3.23,3.23
+Diwali Laxmi Puja,HYD,Skim Milk,-6,1,2104.0,2121.5,-0.82,-0.82
+Diwali Laxmi Puja,HYD,Skim Milk,-5,1,1999.0,2121.5,-5.77,-5.77
+Diwali Laxmi Puja,HYD,Skim Milk,-4,1,2054.0,2121.5,-3.18,-3.18
+Diwali Laxmi Puja,HYD,Skim Milk,-3,1,2114.0,2121.5,-0.35,-0.35
+Diwali Laxmi Puja,HYD,Skim Milk,-2,1,2053.0,2121.5,-3.23,-3.23
+Diwali Laxmi Puja,HYD,Skim Milk,-1,1,2124.0,2121.5,0.12,0.12
+Diwali Laxmi Puja,HYD,Skim Milk,0,1,1948.0,2121.5,-8.18,-8.18
+Diwali Laxmi Puja,HYD,Skim Milk,1,1,1892.0,2121.5,-10.82,-10.82
+Diwali Laxmi Puja,HYD,Skim Milk,2,1,1901.0,2121.5,-10.39,-10.39
+Diwali Laxmi Puja,HYD,Skim Milk,3,1,2042.0,2121.5,-3.75,-3.75
+Diwali Laxmi Puja,HYD,Skim Milk,4,1,2120.0,2121.5,-0.07,-0.07
+Diwali Laxmi Puja,HYD,Skim Milk,5,1,2140.0,2121.5,0.87,0.87
+Diwali Laxmi Puja,HYD,Skim Milk,6,1,2123.0,2121.5,0.07,0.07
+Diwali Laxmi Puja,HYD,Skim Milk,7,1,2124.0,2121.5,0.12,0.12
+Dussehra,BLR,A2 Buffalo Milk,-7,2,1492.0,1561.5,-6.3,-6.3
+Dussehra,BLR,A2 Buffalo Milk,-6,2,1412.0,1561.5,-10.42,-10.42
+Dussehra,BLR,A2 Buffalo Milk,-5,2,1359.0,1561.5,-13.04,-13.04
+Dussehra,BLR,A2 Buffalo Milk,-4,2,1332.0,1561.5,-13.9,-13.9
+Dussehra,BLR,A2 Buffalo Milk,-3,2,1300.5,1561.5,-15.84,-15.84
+Dussehra,BLR,A2 Buffalo Milk,-2,2,1254.0,1561.5,-18.64,-18.64
+Dussehra,BLR,A2 Buffalo Milk,-1,2,1248.0,1561.5,-18.48,-18.48
+Dussehra,BLR,A2 Buffalo Milk,0,2,1248.5,1561.5,-19.06,-19.06
+Dussehra,BLR,A2 Buffalo Milk,1,2,1221.5,1561.5,-19.85,-19.85
+Dussehra,BLR,A2 Buffalo Milk,2,2,1310.5,1561.5,-12.59,-12.59
+Dussehra,BLR,A2 Buffalo Milk,3,2,1420.5,1561.5,-6.12,-6.12
+Dussehra,BLR,A2 Buffalo Milk,4,2,1635.0,1561.5,6.64,6.64
+Dussehra,BLR,A2 Buffalo Milk,5,2,1682.5,1561.5,8.89,8.89
+Dussehra,BLR,A2 Buffalo Milk,6,2,1691.5,1561.5,9.0,9.0
+Dussehra,BLR,A2 Buffalo Milk,7,2,1732.0,1561.5,10.88,10.88
+Dussehra,BLR,A2 Desi Cow Milk,-7,2,364.5,375.25,-4.5,-4.5
+Dussehra,BLR,A2 Desi Cow Milk,-6,2,363.0,375.25,-4.42,-4.42
+Dussehra,BLR,A2 Desi Cow Milk,-5,2,353.5,375.25,-5.46,-5.46
+Dussehra,BLR,A2 Desi Cow Milk,-4,2,343.5,375.25,-6.92,-6.92
+Dussehra,BLR,A2 Desi Cow Milk,-3,2,353.0,375.25,-6.58,-6.58
+Dussehra,BLR,A2 Desi Cow Milk,-2,2,349.0,375.25,-6.8,-6.8
+Dussehra,BLR,A2 Desi Cow Milk,-1,2,341.5,375.25,-9.39,-9.39
+Dussehra,BLR,A2 Desi Cow Milk,0,2,329.0,375.25,-11.92,-11.92
+Dussehra,BLR,A2 Desi Cow Milk,1,2,324.5,375.25,-12.55,-12.55
+Dussehra,BLR,A2 Desi Cow Milk,2,2,348.5,375.25,-4.77,-4.77
+Dussehra,BLR,A2 Desi Cow Milk,3,2,337.5,375.25,-8.65,-8.65
+Dussehra,BLR,A2 Desi Cow Milk,4,2,395.0,375.25,5.91,5.91
+Dussehra,BLR,A2 Desi Cow Milk,5,2,391.5,375.25,4.78,4.78
+Dussehra,BLR,A2 Desi Cow Milk,6,2,377.5,375.25,0.74,0.74
+Dussehra,BLR,A2 Desi Cow Milk,7,2,377.0,375.25,1.43,1.43
+Dussehra,BLR,Cow Milk,-7,2,1785.0,1815.25,-1.87,-1.87
+Dussehra,BLR,Cow Milk,-6,2,1710.0,1815.25,-6.23,-6.23
+Dussehra,BLR,Cow Milk,-5,2,1688.0,1815.25,-7.33,-7.33
+Dussehra,BLR,Cow Milk,-4,2,1620.0,1815.25,-10.6,-10.6
+Dussehra,BLR,Cow Milk,-3,2,1626.0,1815.25,-10.26,-10.26
+Dussehra,BLR,Cow Milk,-2,2,1621.0,1815.25,-10.48,-10.48
+Dussehra,BLR,Cow Milk,-1,2,1568.0,1815.25,-13.32,-13.32
+Dussehra,BLR,Cow Milk,0,2,1511.0,1815.25,-16.53,-16.53
+Dussehra,BLR,Cow Milk,1,2,1485.5,1815.25,-17.78,-17.78
+Dussehra,BLR,Cow Milk,2,2,1562.5,1815.25,-13.36,-13.36
+Dussehra,BLR,Cow Milk,3,2,1644.0,1815.25,-8.79,-8.79
+Dussehra,BLR,Cow Milk,4,2,1844.5,1815.25,1.86,1.86
+Dussehra,BLR,Cow Milk,5,2,1891.0,1815.25,4.35,4.35
+Dussehra,BLR,Cow Milk,6,2,1919.5,1815.25,5.74,5.74
+Dussehra,BLR,Cow Milk,7,2,1904.5,1815.25,4.88,4.88
+Dussehra,BLR,Curd,-7,2,221.5,222.75,6.85,6.85
+Dussehra,BLR,Curd,-6,2,170.5,222.75,-28.7,-28.7
+Dussehra,BLR,Curd,-5,2,198.5,222.75,-14.72,-14.72
+Dussehra,BLR,Curd,-4,2,166.5,222.75,-21.48,-21.48
+Dussehra,BLR,Curd,-3,2,207.5,222.75,-2.81,-2.81
+Dussehra,BLR,Curd,-2,2,221.0,222.75,6.07,6.07
+Dussehra,BLR,Curd,-1,2,157.0,222.75,-31.78,-31.78
+Dussehra,BLR,Curd,0,2,158.5,222.75,-31.24,-31.24
+Dussehra,BLR,Curd,1,2,189.5,222.75,-9.77,-9.77
+Dussehra,BLR,Curd,2,2,214.5,222.75,4.56,4.56
+Dussehra,BLR,Curd,3,2,156.0,222.75,-31.19,-31.19
+Dussehra,BLR,Curd,4,2,243.5,222.75,8.71,8.71
+Dussehra,BLR,Curd,5,2,195.5,222.75,-16.03,-16.03
+Dussehra,BLR,Curd,6,2,266.0,222.75,23.09,23.09
+Dussehra,BLR,Curd,7,2,263.0,222.75,23.32,23.32
+Dussehra,BLR,Double Toned A2 Buffalo Milk,-7,2,385.0,391.25,-1.2,-1.2
+Dussehra,BLR,Double Toned A2 Buffalo Milk,-6,2,351.0,391.25,-10.45,-10.45
+Dussehra,BLR,Double Toned A2 Buffalo Milk,-5,2,357.0,391.25,-8.2,-8.2
+Dussehra,BLR,Double Toned A2 Buffalo Milk,-4,2,340.5,391.25,-12.07,-12.07
+Dussehra,BLR,Double Toned A2 Buffalo Milk,-3,2,334.5,391.25,-13.88,-13.88
+Dussehra,BLR,Double Toned A2 Buffalo Milk,-2,2,322.5,391.25,-16.68,-16.68
+Dussehra,BLR,Double Toned A2 Buffalo Milk,-1,2,331.5,391.25,-15.74,-15.74
+Dussehra,BLR,Double Toned A2 Buffalo Milk,0,2,313.0,391.25,-19.4,-19.4
+Dussehra,BLR,Double Toned A2 Buffalo Milk,1,2,303.5,391.25,-22.81,-22.81
+Dussehra,BLR,Double Toned A2 Buffalo Milk,2,2,338.5,391.25,-11.98,-11.98
+Dussehra,BLR,Double Toned A2 Buffalo Milk,3,2,363.0,391.25,-5.58,-5.58
+Dussehra,BLR,Double Toned A2 Buffalo Milk,4,2,415.0,391.25,7.02,7.02
+Dussehra,BLR,Double Toned A2 Buffalo Milk,5,2,411.5,391.25,4.11,4.11
+Dussehra,BLR,Double Toned A2 Buffalo Milk,6,2,438.5,391.25,12.28,12.28
+Dussehra,BLR,Double Toned A2 Buffalo Milk,7,2,421.0,391.25,7.2,7.2
+Dussehra,BLR,Skim Milk,-7,2,337.0,352.75,-6.42,-6.42
+Dussehra,BLR,Skim Milk,-6,2,341.5,352.75,-5.74,-5.74
+Dussehra,BLR,Skim Milk,-5,2,351.0,352.75,-2.31,-2.31
+Dussehra,BLR,Skim Milk,-4,2,321.0,352.75,-8.04,-8.04
+Dussehra,BLR,Skim Milk,-3,2,319.5,352.75,-8.14,-8.14
+Dussehra,BLR,Skim Milk,-2,2,313.0,352.75,-9.74,-9.74
+Dussehra,BLR,Skim Milk,-1,2,312.5,352.75,-10.2,-10.2
+Dussehra,BLR,Skim Milk,0,2,325.5,352.75,-6.28,-6.28
+Dussehra,BLR,Skim Milk,1,2,275.5,352.75,-20.49,-20.49
+Dussehra,BLR,Skim Milk,2,2,319.5,352.75,-4.38,-4.38
+Dussehra,BLR,Skim Milk,3,2,310.0,352.75,-8.16,-8.16
+Dussehra,BLR,Skim Milk,4,2,358.0,352.75,6.56,6.56
+Dussehra,BLR,Skim Milk,5,2,364.5,352.75,6.01,6.01
+Dussehra,BLR,Skim Milk,6,2,369.5,352.75,8.4,8.4
+Dussehra,BLR,Skim Milk,7,2,378.0,352.75,6.8,6.8
+Dussehra,BLR,Toned Milk,-7,1,194.0,191.5,1.31,1.31
+Dussehra,BLR,Toned Milk,-6,1,197.0,191.5,2.87,2.87
+Dussehra,BLR,Toned Milk,-5,1,167.0,191.5,-12.79,-12.79
+Dussehra,BLR,Toned Milk,-4,1,162.0,191.5,-15.4,-15.4
+Dussehra,BLR,Toned Milk,-3,1,158.0,191.5,-17.49,-17.49
+Dussehra,BLR,Toned Milk,-2,1,173.0,191.5,-9.66,-9.66
+Dussehra,BLR,Toned Milk,-1,1,173.0,191.5,-9.66,-9.66
+Dussehra,BLR,Toned Milk,0,1,154.0,191.5,-19.58,-19.58
+Dussehra,BLR,Toned Milk,1,1,157.0,191.5,-18.02,-18.02
+Dussehra,BLR,Toned Milk,2,1,172.0,191.5,-10.18,-10.18
+Dussehra,BLR,Toned Milk,3,1,167.0,191.5,-12.79,-12.79
+Dussehra,BLR,Toned Milk,4,1,207.0,191.5,8.09,8.09
+Dussehra,BLR,Toned Milk,5,1,179.0,191.5,-6.53,-6.53
+Dussehra,BLR,Toned Milk,6,1,222.0,191.5,15.93,15.93
+Dussehra,BLR,Toned Milk,7,1,189.0,191.5,-1.31,-1.31
+Dussehra,HYD,A2 Buffalo Milk,-7,2,12986.0,13627.75,-4.84,-4.84
+Dussehra,HYD,A2 Buffalo Milk,-6,2,12560.5,13627.75,-7.99,-7.99
+Dussehra,HYD,A2 Buffalo Milk,-5,2,12248.0,13627.75,-10.2,-10.2
+Dussehra,HYD,A2 Buffalo Milk,-4,2,11934.0,13627.75,-12.38,-12.38
+Dussehra,HYD,A2 Buffalo Milk,-3,2,11874.5,13627.75,-12.8,-12.8
+Dussehra,HYD,A2 Buffalo Milk,-2,2,11791.5,13627.75,-13.41,-13.41
+Dussehra,HYD,A2 Buffalo Milk,-1,2,11676.5,13627.75,-14.26,-14.26
+Dussehra,HYD,A2 Buffalo Milk,0,2,11819.5,13627.75,-13.2,-13.2
+Dussehra,HYD,A2 Buffalo Milk,1,2,11061.5,13627.75,-18.74,-18.74
+Dussehra,HYD,A2 Buffalo Milk,2,2,12100.5,13627.75,-10.89,-10.89
+Dussehra,HYD,A2 Buffalo Milk,3,2,13205.0,13627.75,-2.74,-2.74
+Dussehra,HYD,A2 Buffalo Milk,4,2,14269.5,13627.75,4.84,4.84
+Dussehra,HYD,A2 Buffalo Milk,5,2,14728.0,13627.75,8.08,8.08
+Dussehra,HYD,A2 Buffalo Milk,6,2,15024.0,13627.75,10.32,10.32
+Dussehra,HYD,A2 Buffalo Milk,7,2,15023.0,13627.75,10.26,10.26
+Dussehra,HYD,A2 Desi Cow Milk,-7,2,1339.5,1385.0,-3.29,-3.29
+Dussehra,HYD,A2 Desi Cow Milk,-6,2,1310.0,1385.0,-5.43,-5.43
+Dussehra,HYD,A2 Desi Cow Milk,-5,2,1262.0,1385.0,-8.87,-8.87
+Dussehra,HYD,A2 Desi Cow Milk,-4,2,1289.5,1385.0,-6.87,-6.87
+Dussehra,HYD,A2 Desi Cow Milk,-3,2,1249.0,1385.0,-9.83,-9.83
+Dussehra,HYD,A2 Desi Cow Milk,-2,2,1226.0,1385.0,-11.46,-11.46
+Dussehra,HYD,A2 Desi Cow Milk,-1,2,1299.5,1385.0,-6.14,-6.14
+Dussehra,HYD,A2 Desi Cow Milk,0,2,1303.0,1385.0,-5.92,-5.92
+Dussehra,HYD,A2 Desi Cow Milk,1,2,1164.0,1385.0,-15.94,-15.94
+Dussehra,HYD,A2 Desi Cow Milk,2,2,1253.0,1385.0,-9.46,-9.46
+Dussehra,HYD,A2 Desi Cow Milk,3,2,1344.0,1385.0,-2.93,-2.93
+Dussehra,HYD,A2 Desi Cow Milk,4,2,1446.0,1385.0,4.42,4.42
+Dussehra,HYD,A2 Desi Cow Milk,5,2,1462.0,1385.0,5.55,5.55
+Dussehra,HYD,A2 Desi Cow Milk,6,2,1491.5,1385.0,7.73,7.73
+Dussehra,HYD,A2 Desi Cow Milk,7,2,1490.0,1385.0,7.54,7.54
+Dussehra,HYD,Cow Milk,-7,2,7897.0,8296.5,-4.96,-4.96
+Dussehra,HYD,Cow Milk,-6,2,7770.0,8296.5,-6.52,-6.52
+Dussehra,HYD,Cow Milk,-5,2,7632.5,8296.5,-8.11,-8.11
+Dussehra,HYD,Cow Milk,-4,2,7584.5,8296.5,-8.47,-8.47
+Dussehra,HYD,Cow Milk,-3,2,7558.5,8296.5,-8.88,-8.88
+Dussehra,HYD,Cow Milk,-2,2,7640.0,8296.5,-7.86,-7.86
+Dussehra,HYD,Cow Milk,-1,2,7585.5,8296.5,-8.5,-8.5
+Dussehra,HYD,Cow Milk,0,2,7778.0,8296.5,-6.1,-6.1
+Dussehra,HYD,Cow Milk,1,2,7317.0,8296.5,-11.67,-11.67
+Dussehra,HYD,Cow Milk,2,2,7662.5,8296.5,-7.21,-7.21
+Dussehra,HYD,Cow Milk,3,2,8078.5,8296.5,-2.26,-2.26
+Dussehra,HYD,Cow Milk,4,2,8669.0,8296.5,4.62,4.62
+Dussehra,HYD,Cow Milk,5,2,8777.5,8296.5,5.92,5.92
+Dussehra,HYD,Cow Milk,6,2,8867.5,8296.5,7.02,7.02
+Dussehra,HYD,Cow Milk,7,2,8873.5,8296.5,7.04,7.04
+Dussehra,HYD,Curd,-7,2,1559.5,1015.75,70.56,70.56
+Dussehra,HYD,Curd,-6,2,1434.0,1015.75,55.84,55.84
+Dussehra,HYD,Curd,-5,2,894.0,1015.75,-10.67,-10.67
+Dussehra,HYD,Curd,-4,2,873.0,1015.75,-12.08,-12.08
+Dussehra,HYD,Curd,-3,2,895.0,1015.75,-9.94,-9.94
+Dussehra,HYD,Curd,-2,2,1302.5,1015.75,42.08,42.08
+Dussehra,HYD,Curd,-1,2,952.5,1015.75,-2.22,-2.22
+Dussehra,HYD,Curd,0,2,1057.5,1015.75,8.4,8.4
+Dussehra,HYD,Curd,1,2,908.0,1015.75,-5.24,-5.24
+Dussehra,HYD,Curd,2,2,1295.5,1015.75,39.53,39.53
+Dussehra,HYD,Curd,3,2,1043.5,1015.75,3.46,3.46
+Dussehra,HYD,Curd,4,2,1104.0,1015.75,6.89,6.89
+Dussehra,HYD,Curd,5,2,1110.0,1015.75,7.88,7.88
+Dussehra,HYD,Curd,6,2,1052.0,1015.75,2.26,2.26
+Dussehra,HYD,Curd,7,2,1645.5,1015.75,74.94,74.94
+Dussehra,HYD,Double Toned A2 Buffalo Milk,-7,2,4875.0,5111.25,-4.68,-4.68
+Dussehra,HYD,Double Toned A2 Buffalo Milk,-6,2,4724.5,5111.25,-7.7,-7.7
+Dussehra,HYD,Double Toned A2 Buffalo Milk,-5,2,4663.0,5111.25,-8.84,-8.84
+Dussehra,HYD,Double Toned A2 Buffalo Milk,-4,2,4576.0,5111.25,-10.48,-10.48
+Dussehra,HYD,Double Toned A2 Buffalo Milk,-3,2,4561.0,5111.25,-10.74,-10.74
+Dussehra,HYD,Double Toned A2 Buffalo Milk,-2,2,4458.0,5111.25,-12.8,-12.8
+Dussehra,HYD,Double Toned A2 Buffalo Milk,-1,2,4437.0,5111.25,-13.17,-13.17
+Dussehra,HYD,Double Toned A2 Buffalo Milk,0,2,4499.5,5111.25,-12.0,-12.0
+Dussehra,HYD,Double Toned A2 Buffalo Milk,1,2,4213.0,5111.25,-17.55,-17.55
+Dussehra,HYD,Double Toned A2 Buffalo Milk,2,2,4613.5,5111.25,-9.56,-9.56
+Dussehra,HYD,Double Toned A2 Buffalo Milk,3,2,5040.5,5111.25,-1.15,-1.15
+Dussehra,HYD,Double Toned A2 Buffalo Milk,4,2,5347.5,5111.25,4.68,4.68
+Dussehra,HYD,Double Toned A2 Buffalo Milk,5,2,5492.5,5111.25,7.48,7.48
+Dussehra,HYD,Double Toned A2 Buffalo Milk,6,2,5506.5,5111.25,7.73,7.73
+Dussehra,HYD,Double Toned A2 Buffalo Milk,7,2,5535.5,5111.25,8.26,8.26
+Dussehra,HYD,Skim Milk,-7,2,2208.5,2253.5,-2.32,-2.32
+Dussehra,HYD,Skim Milk,-6,2,2134.5,2253.5,-5.38,-5.38
+Dussehra,HYD,Skim Milk,-5,2,2125.5,2253.5,-5.6,-5.6
+Dussehra,HYD,Skim Milk,-4,2,2029.0,2253.5,-9.54,-9.54
+Dussehra,HYD,Skim Milk,-3,2,2115.5,2253.5,-5.94,-5.94
+Dussehra,HYD,Skim Milk,-2,2,2048.0,2253.5,-9.2,-9.2
+Dussehra,HYD,Skim Milk,-1,2,2076.5,2253.5,-7.74,-7.74
+Dussehra,HYD,Skim Milk,0,2,2026.5,2253.5,-9.86,-9.86
+Dussehra,HYD,Skim Milk,1,2,1990.0,2253.5,-11.67,-11.67
+Dussehra,HYD,Skim Milk,2,2,2038.0,2253.5,-9.1,-9.1
+Dussehra,HYD,Skim Milk,3,2,2201.5,2253.5,-1.8,-1.8
+Dussehra,HYD,Skim Milk,4,2,2296.5,2253.5,2.22,2.22
+Dussehra,HYD,Skim Milk,5,2,2429.5,2253.5,7.64,7.64
+Dussehra,HYD,Skim Milk,6,2,2442.0,2253.5,8.3,8.3
+Dussehra,HYD,Skim Milk,7,2,2468.0,2253.5,9.26,9.26
+Dussehra,HYD,Toned Milk,-7,1,2632.0,2658.0,-0.98,-0.98
+Dussehra,HYD,Toned Milk,-6,1,2528.0,2658.0,-4.89,-4.89
+Dussehra,HYD,Toned Milk,-5,1,2439.0,2658.0,-8.24,-8.24
+Dussehra,HYD,Toned Milk,-4,1,2448.0,2658.0,-7.9,-7.9
+Dussehra,HYD,Toned Milk,-3,1,2433.0,2658.0,-8.47,-8.47
+Dussehra,HYD,Toned Milk,-2,1,2415.0,2658.0,-9.14,-9.14
+Dussehra,HYD,Toned Milk,-1,1,2412.0,2658.0,-9.26,-9.26
+Dussehra,HYD,Toned Milk,0,1,2403.0,2658.0,-9.59,-9.59
+Dussehra,HYD,Toned Milk,1,1,2238.0,2658.0,-15.8,-15.8
+Dussehra,HYD,Toned Milk,2,1,2382.0,2658.0,-10.38,-10.38
+Dussehra,HYD,Toned Milk,3,1,2527.0,2658.0,-4.93,-4.93
+Dussehra,HYD,Toned Milk,4,1,2684.0,2658.0,0.98,0.98
+Dussehra,HYD,Toned Milk,5,1,2921.0,2658.0,9.89,9.89
+Dussehra,HYD,Toned Milk,6,1,2981.0,2658.0,12.15,12.15
+Dussehra,HYD,Toned Milk,7,1,2953.0,2658.0,11.1,11.1
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,-7,2,1690.5,1674.75,0.76,0.76
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,-6,2,1641.5,1674.75,-2.98,-2.98
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,-5,2,1691.0,1674.75,0.8,0.8
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,-4,2,1643.0,1674.75,-1.5,-1.5
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,-3,2,1618.0,1674.75,-2.46,-2.46
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,-2,2,1606.5,1674.75,-3.42,-3.42
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,-1,2,1677.0,1674.75,0.84,0.84
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,0,2,1806.5,1674.75,8.22,8.22
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,1,2,1576.0,1674.75,-5.8,-5.8
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,2,2,1598.5,1674.75,-3.84,-3.84
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,3,2,1574.5,1674.75,-4.71,-4.71
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,4,2,1571.0,1674.75,-4.79,-4.79
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,5,2,1656.0,1674.75,0.1,0.1
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,6,2,1678.0,1674.75,0.4,0.4
+Ganesh Chaturthi,BLR,A2 Buffalo Milk,7,2,1712.0,1674.75,1.46,1.46
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,-7,2,422.5,417.25,-0.12,-0.12
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,-6,2,393.0,417.25,-6.26,-6.26
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,-5,2,427.5,417.25,2.46,2.46
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,-4,2,403.0,417.25,-2.54,-2.54
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,-3,2,412.5,417.25,0.08,0.08
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,-2,2,409.5,417.25,-1.37,-1.37
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,-1,2,407.0,417.25,-2.18,-2.18
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,0,2,428.0,417.25,1.4,1.4
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,1,2,377.0,417.25,-10.86,-10.86
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,2,2,396.5,417.25,-4.72,-4.72
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,3,2,405.0,417.25,-2.76,-2.76
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,4,2,414.0,417.25,0.29,0.29
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,5,2,428.0,417.25,2.89,2.89
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,6,2,412.5,417.25,-1.48,-1.48
+Ganesh Chaturthi,BLR,A2 Desi Cow Milk,7,2,416.5,417.25,-0.31,-0.31
+Ganesh Chaturthi,BLR,Cow Milk,-7,2,1855.0,1856.0,-0.05,-0.05
+Ganesh Chaturthi,BLR,Cow Milk,-6,2,1784.5,1856.0,-4.35,-4.35
+Ganesh Chaturthi,BLR,Cow Milk,-5,2,1857.0,1856.0,0.05,0.05
+Ganesh Chaturthi,BLR,Cow Milk,-4,2,1858.5,1856.0,0.07,0.07
+Ganesh Chaturthi,BLR,Cow Milk,-3,2,1801.5,1856.0,-2.58,-2.58
+Ganesh Chaturthi,BLR,Cow Milk,-2,2,1831.5,1856.0,-1.21,-1.21
+Ganesh Chaturthi,BLR,Cow Milk,-1,2,1817.0,1856.0,-2.17,-2.17
+Ganesh Chaturthi,BLR,Cow Milk,0,2,1955.5,1856.0,5.05,5.05
+Ganesh Chaturthi,BLR,Cow Milk,1,2,1731.0,1856.0,-6.88,-6.88
+Ganesh Chaturthi,BLR,Cow Milk,2,2,1773.0,1856.0,-4.69,-4.69
+Ganesh Chaturthi,BLR,Cow Milk,3,2,1775.0,1856.0,-4.3,-4.3
+Ganesh Chaturthi,BLR,Cow Milk,4,2,1788.5,1856.0,-3.25,-3.25
+Ganesh Chaturthi,BLR,Cow Milk,5,2,1856.5,1856.0,0.36,0.36
+Ganesh Chaturthi,BLR,Cow Milk,6,2,1872.5,1856.0,1.0,1.0
+Ganesh Chaturthi,BLR,Cow Milk,7,2,1862.0,1856.0,0.18,0.18
+Ganesh Chaturthi,BLR,Curd,-7,2,247.0,182.0,30.03,30.03
+Ganesh Chaturthi,BLR,Curd,-6,2,197.0,182.0,4.7,4.7
+Ganesh Chaturthi,BLR,Curd,-5,2,216.5,182.0,27.46,27.46
+Ganesh Chaturthi,BLR,Curd,-4,2,150.0,182.0,-16.97,-16.97
+Ganesh Chaturthi,BLR,Curd,-3,2,202.0,182.0,19.04,19.04
+Ganesh Chaturthi,BLR,Curd,-2,2,145.0,182.0,-20.25,-20.25
+Ganesh Chaturthi,BLR,Curd,-1,2,202.0,182.0,1.35,1.35
+Ganesh Chaturthi,BLR,Curd,0,2,241.0,182.0,31.78,31.78
+Ganesh Chaturthi,BLR,Curd,1,2,135.0,182.0,-18.36,-18.36
+Ganesh Chaturthi,BLR,Curd,2,2,192.5,182.0,8.88,8.88
+Ganesh Chaturthi,BLR,Curd,3,2,169.5,182.0,-12.92,-12.92
+Ganesh Chaturthi,BLR,Curd,4,2,154.5,182.0,-15.1,-15.1
+Ganesh Chaturthi,BLR,Curd,5,2,167.0,182.0,-11.54,-11.54
+Ganesh Chaturthi,BLR,Curd,6,2,223.0,182.0,29.95,29.95
+Ganesh Chaturthi,BLR,Curd,7,2,179.5,182.0,0.47,0.47
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,-7,2,400.0,409.75,-3.05,-3.05
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,-6,2,410.0,409.75,-0.5,-0.5
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,-5,2,400.0,409.75,-2.94,-2.94
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,-4,2,411.5,409.75,0.64,0.64
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,-3,2,398.5,409.75,-2.3,-2.3
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,-2,2,396.0,409.75,-3.28,-3.28
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,-1,2,415.5,409.75,0.72,0.72
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,0,2,431.0,409.75,4.27,4.27
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,1,2,374.5,409.75,-8.94,-8.94
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,2,2,401.5,409.75,-2.43,-2.43
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,3,2,380.0,409.75,-6.94,-6.94
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,4,2,398.5,409.75,-1.89,-1.89
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,5,2,402.0,409.75,-1.7,-1.7
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,6,2,413.5,409.75,0.94,0.94
+Ganesh Chaturthi,BLR,Double Toned A2 Buffalo Milk,7,2,437.5,409.75,5.75,5.75
+Ganesh Chaturthi,BLR,Skim Milk,-7,2,348.5,352.0,2.43,2.43
+Ganesh Chaturthi,BLR,Skim Milk,-6,2,352.5,352.0,0.83,0.83
+Ganesh Chaturthi,BLR,Skim Milk,-5,2,360.0,352.0,3.17,3.17
+Ganesh Chaturthi,BLR,Skim Milk,-4,2,351.0,352.0,-1.1,-1.1
+Ganesh Chaturthi,BLR,Skim Milk,-3,2,349.0,352.0,4.9,4.9
+Ganesh Chaturthi,BLR,Skim Milk,-2,2,347.0,352.0,-2.23,-2.23
+Ganesh Chaturthi,BLR,Skim Milk,-1,2,354.5,352.0,2.3,2.3
+Ganesh Chaturthi,BLR,Skim Milk,0,2,362.0,352.0,-3.2,-3.2
+Ganesh Chaturthi,BLR,Skim Milk,1,2,315.0,352.0,-12.72,-12.72
+Ganesh Chaturthi,BLR,Skim Milk,2,2,335.5,352.0,-5.16,-5.16
+Ganesh Chaturthi,BLR,Skim Milk,3,2,333.0,352.0,-5.82,-5.82
+Ganesh Chaturthi,BLR,Skim Milk,4,2,340.0,352.0,-2.1,-2.1
+Ganesh Chaturthi,BLR,Skim Milk,5,2,369.0,352.0,3.06,3.06
+Ganesh Chaturthi,BLR,Skim Milk,6,2,347.5,352.0,-1.77,-1.77
+Ganesh Chaturthi,BLR,Skim Milk,7,2,367.0,352.0,1.4,1.4
+Ganesh Chaturthi,BLR,Toned Milk,-7,1,170.0,176.5,-3.68,-3.68
+Ganesh Chaturthi,BLR,Toned Milk,-6,1,158.0,176.5,-10.48,-10.48
+Ganesh Chaturthi,BLR,Toned Milk,-5,1,177.0,176.5,0.28,0.28
+Ganesh Chaturthi,BLR,Toned Milk,-4,1,187.0,176.5,5.95,5.95
+Ganesh Chaturthi,BLR,Toned Milk,-3,1,168.0,176.5,-4.82,-4.82
+Ganesh Chaturthi,BLR,Toned Milk,-2,1,156.0,176.5,-11.61,-11.61
+Ganesh Chaturthi,BLR,Toned Milk,-1,1,158.0,176.5,-10.48,-10.48
+Ganesh Chaturthi,BLR,Toned Milk,0,1,191.0,176.5,8.22,8.22
+Ganesh Chaturthi,BLR,Toned Milk,1,1,174.0,176.5,-1.42,-1.42
+Ganesh Chaturthi,BLR,Toned Milk,2,1,167.0,176.5,-5.38,-5.38
+Ganesh Chaturthi,BLR,Toned Milk,3,1,162.0,176.5,-8.22,-8.22
+Ganesh Chaturthi,BLR,Toned Milk,4,1,169.0,176.5,-4.25,-4.25
+Ganesh Chaturthi,BLR,Toned Milk,5,1,181.0,176.5,2.55,2.55
+Ganesh Chaturthi,BLR,Toned Milk,6,1,176.0,176.5,-0.28,-0.28
+Ganesh Chaturthi,BLR,Toned Milk,7,1,203.0,176.5,15.01,15.01
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,-7,2,15042.5,15005.75,0.17,0.17
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,-6,2,14939.0,15005.75,-0.56,-0.56
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,-5,2,15195.0,15005.75,1.2,1.2
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,-4,2,15298.5,15005.75,1.94,1.94
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,-3,2,15148.5,15005.75,1.04,1.04
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,-2,2,15146.0,15005.75,0.98,0.98
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,-1,2,15553.0,15005.75,3.68,3.68
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,0,2,17416.5,15005.75,15.94,15.94
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,1,2,14908.0,15005.75,-0.66,-0.66
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,2,2,14999.0,15005.75,-0.07,-0.07
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,3,2,15008.0,15005.75,0.07,0.07
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,4,2,14870.0,15005.75,-0.8,-0.8
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,5,2,14580.0,15005.75,-2.66,-2.66
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,6,2,14851.0,15005.75,-0.97,-0.97
+Ganesh Chaturthi,HYD,A2 Buffalo Milk,7,2,14832.5,15005.75,-1.14,-1.14
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,-7,2,1481.0,1477.5,0.24,0.24
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,-6,2,1496.0,1477.5,1.2,1.2
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,-5,2,1598.0,1477.5,8.13,8.13
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,-4,2,1486.0,1477.5,0.55,0.55
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,-3,2,1494.0,1477.5,1.14,1.14
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,-2,2,1478.5,1477.5,0.04,0.04
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,-1,2,1585.0,1477.5,7.27,7.27
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,0,2,1940.5,1477.5,31.2,31.2
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,1,2,1472.0,1477.5,-0.38,-0.38
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,2,2,1504.0,1477.5,1.78,1.78
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,3,2,1462.5,1477.5,-1.02,-1.02
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,4,2,1444.0,1477.5,-2.24,-2.24
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,5,2,1439.5,1477.5,-2.53,-2.53
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,6,2,1476.5,1477.5,-0.06,-0.06
+Ganesh Chaturthi,HYD,A2 Desi Cow Milk,7,2,1439.5,1477.5,-2.57,-2.57
+Ganesh Chaturthi,HYD,Cow Milk,-7,2,8905.0,8837.5,0.73,0.73
+Ganesh Chaturthi,HYD,Cow Milk,-6,2,8907.0,8837.5,0.69,0.69
+Ganesh Chaturthi,HYD,Cow Milk,-5,2,9066.5,8837.5,2.48,2.48
+Ganesh Chaturthi,HYD,Cow Milk,-4,2,9016.5,8837.5,1.98,1.98
+Ganesh Chaturthi,HYD,Cow Milk,-3,2,8938.5,8837.5,1.18,1.18
+Ganesh Chaturthi,HYD,Cow Milk,-2,2,8915.5,8837.5,0.92,0.92
+Ganesh Chaturthi,HYD,Cow Milk,-1,2,9271.0,8837.5,4.92,4.92
+Ganesh Chaturthi,HYD,Cow Milk,0,2,11149.0,8837.5,25.94,25.94
+Ganesh Chaturthi,HYD,Cow Milk,1,2,8854.0,8837.5,0.19,0.19
+Ganesh Chaturthi,HYD,Cow Milk,2,2,8914.0,8837.5,0.81,0.81
+Ganesh Chaturthi,HYD,Cow Milk,3,2,8867.5,8837.5,0.34,0.34
+Ganesh Chaturthi,HYD,Cow Milk,4,2,8777.5,8837.5,-0.59,-0.59
+Ganesh Chaturthi,HYD,Cow Milk,5,2,8622.0,8837.5,-2.33,-2.33
+Ganesh Chaturthi,HYD,Cow Milk,6,2,8801.5,8837.5,-0.36,-0.36
+Ganesh Chaturthi,HYD,Cow Milk,7,2,8682.5,8837.5,-1.75,-1.75
+Ganesh Chaturthi,HYD,Curd,-7,2,1219.0,1188.25,-0.16,-0.16
+Ganesh Chaturthi,HYD,Curd,-6,2,1545.5,1188.25,51.32,51.32
+Ganesh Chaturthi,HYD,Curd,-5,2,1240.0,1188.25,3.6,3.6
+Ganesh Chaturthi,HYD,Curd,-4,2,838.0,1188.25,-22.52,-22.52
+Ganesh Chaturthi,HYD,Curd,-3,2,1283.0,1188.25,5.64,5.64
+Ganesh Chaturthi,HYD,Curd,-2,2,859.5,1188.25,-19.46,-19.46
+Ganesh Chaturthi,HYD,Curd,-1,2,988.0,1188.25,-10.59,-10.59
+Ganesh Chaturthi,HYD,Curd,0,2,2128.5,1188.25,103.88,103.88
+Ganesh Chaturthi,HYD,Curd,1,2,1152.5,1188.25,19.78,19.78
+Ganesh Chaturthi,HYD,Curd,2,2,1202.0,1188.25,25.27,25.27
+Ganesh Chaturthi,HYD,Curd,3,2,900.0,1188.25,-18.03,-18.03
+Ganesh Chaturthi,HYD,Curd,4,2,1076.5,1188.25,-7.24,-7.24
+Ganesh Chaturthi,HYD,Curd,5,2,1212.5,1188.25,1.01,1.01
+Ganesh Chaturthi,HYD,Curd,6,2,966.5,1188.25,-9.52,-9.52
+Ganesh Chaturthi,HYD,Curd,7,2,1688.0,1188.25,55.54,55.54
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,-7,2,5538.5,5527.25,0.18,0.18
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,-6,2,5547.0,5527.25,0.27,0.27
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,-5,2,5672.0,5527.25,2.54,2.54
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,-4,2,5631.0,5527.25,1.89,1.89
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,-3,2,5557.5,5527.25,0.6,0.6
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,-2,2,5634.5,5527.25,1.98,1.98
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,-1,2,5687.5,5527.25,2.89,2.89
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,0,2,6357.0,5527.25,14.92,14.92
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,1,2,5426.0,5527.25,-1.91,-1.91
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,2,2,5532.0,5527.25,0.06,0.06
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,3,2,5498.5,5527.25,-0.52,-0.52
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,4,2,5449.5,5527.25,-1.31,-1.31
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,5,2,5358.0,5527.25,-2.96,-2.96
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,6,2,5506.0,5527.25,-0.31,-0.31
+Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,7,2,5457.5,5527.25,-1.27,-1.27
+Ganesh Chaturthi,HYD,Skim Milk,-7,2,2378.0,2381.5,-0.25,-0.25
+Ganesh Chaturthi,HYD,Skim Milk,-6,2,2380.5,2381.5,-0.26,-0.26
+Ganesh Chaturthi,HYD,Skim Milk,-5,2,2458.0,2381.5,3.35,3.35
+Ganesh Chaturthi,HYD,Skim Milk,-4,2,2444.0,2381.5,2.66,2.66
+Ganesh Chaturthi,HYD,Skim Milk,-3,2,2400.5,2381.5,1.03,1.03
+Ganesh Chaturthi,HYD,Skim Milk,-2,2,2385.0,2381.5,0.2,0.2
+Ganesh Chaturthi,HYD,Skim Milk,-1,2,2498.0,2381.5,4.96,4.96
+Ganesh Chaturthi,HYD,Skim Milk,0,2,2613.0,2381.5,9.59,9.59
+Ganesh Chaturthi,HYD,Skim Milk,1,2,2350.0,2381.5,-1.35,-1.35
+Ganesh Chaturthi,HYD,Skim Milk,2,2,2366.0,2381.5,-0.68,-0.68
+Ganesh Chaturthi,HYD,Skim Milk,3,2,2410.5,2381.5,1.2,1.2
+Ganesh Chaturthi,HYD,Skim Milk,4,2,2369.0,2381.5,-0.21,-0.21
+Ganesh Chaturthi,HYD,Skim Milk,5,2,2280.5,2381.5,-3.86,-3.86
+Ganesh Chaturthi,HYD,Skim Milk,6,2,2379.0,2381.5,-0.03,-0.03
+Ganesh Chaturthi,HYD,Skim Milk,7,2,2349.0,2381.5,-1.46,-1.46
+Ganesh Chaturthi,HYD,Toned Milk,-7,1,2479.0,2491.5,-0.5,-0.5
+Ganesh Chaturthi,HYD,Toned Milk,-6,1,2512.0,2491.5,0.82,0.82
+Ganesh Chaturthi,HYD,Toned Milk,-5,1,2532.0,2491.5,1.63,1.63
+Ganesh Chaturthi,HYD,Toned Milk,-4,1,2486.0,2491.5,-0.22,-0.22
+Ganesh Chaturthi,HYD,Toned Milk,-3,1,2429.0,2491.5,-2.51,-2.51
+Ganesh Chaturthi,HYD,Toned Milk,-2,1,2412.0,2491.5,-3.19,-3.19
+Ganesh Chaturthi,HYD,Toned Milk,-1,1,2540.0,2491.5,1.95,1.95
+Ganesh Chaturthi,HYD,Toned Milk,0,1,2961.0,2491.5,18.84,18.84
+Ganesh Chaturthi,HYD,Toned Milk,1,1,2417.0,2491.5,-2.99,-2.99
+Ganesh Chaturthi,HYD,Toned Milk,2,1,2538.0,2491.5,1.87,1.87
+Ganesh Chaturthi,HYD,Toned Milk,3,1,2484.0,2491.5,-0.3,-0.3
+Ganesh Chaturthi,HYD,Toned Milk,4,1,2408.0,2491.5,-3.35,-3.35
+Ganesh Chaturthi,HYD,Toned Milk,5,1,2398.0,2491.5,-3.75,-3.75
+Ganesh Chaturthi,HYD,Toned Milk,6,1,2497.0,2491.5,0.22,0.22
+Ganesh Chaturthi,HYD,Toned Milk,7,1,2559.0,2491.5,2.71,2.71
+Hanuman Jayanti,BLR,A2 Buffalo Milk,-7,3,1877.0,1811.0,3.64,5.07
+Hanuman Jayanti,BLR,A2 Buffalo Milk,-6,3,1863.0,1811.0,7.24,7.2
+Hanuman Jayanti,BLR,A2 Buffalo Milk,-5,3,1810.0,1811.0,-0.06,-0.9
+Hanuman Jayanti,BLR,A2 Buffalo Milk,-4,3,1812.0,1811.0,-0.6,-0.84
+Hanuman Jayanti,BLR,A2 Buffalo Milk,-3,3,1856.0,1811.0,1.68,-0.49
+Hanuman Jayanti,BLR,A2 Buffalo Milk,-2,3,1839.0,1811.0,-0.33,-2.93
+Hanuman Jayanti,BLR,A2 Buffalo Milk,-1,3,1850.0,1811.0,2.15,0.5
+Hanuman Jayanti,BLR,A2 Buffalo Milk,0,3,1735.0,1811.0,-1.26,-0.58
+Hanuman Jayanti,BLR,A2 Buffalo Milk,1,3,1721.0,1811.0,-1.77,-0.47
+Hanuman Jayanti,BLR,A2 Buffalo Milk,2,3,1824.0,1811.0,0.72,-1.93
+Hanuman Jayanti,BLR,A2 Buffalo Milk,3,3,1744.0,1811.0,-3.7,-4.13
+Hanuman Jayanti,BLR,A2 Buffalo Milk,4,3,1861.0,1811.0,-4.32,-2.09
+Hanuman Jayanti,BLR,A2 Buffalo Milk,5,3,1762.0,1811.0,-2.71,-3.37
+Hanuman Jayanti,BLR,A2 Buffalo Milk,6,3,1780.0,1811.0,0.6,1.21
+Hanuman Jayanti,BLR,A2 Buffalo Milk,7,3,1665.0,1811.0,-3.26,-2.82
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,-7,3,335.0,337.5,-0.74,-1.35
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,-6,3,330.0,337.5,-2.22,-3.08
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,-5,3,340.0,337.5,-1.54,-5.67
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,-4,3,353.0,337.5,-5.93,-2.71
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,-3,3,342.0,337.5,1.33,0.02
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,-2,3,345.0,337.5,-1.9,-5.03
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,-1,3,361.0,337.5,5.87,5.2
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,0,3,339.0,337.5,0.44,2.5
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,1,3,301.0,337.5,-6.72,-6.05
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,2,3,342.0,337.5,-6.72,-6.46
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,3,3,329.0,337.5,-2.52,0.07
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,4,3,355.0,337.5,5.19,6.73
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,5,3,342.0,337.5,4.97,4.08
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,6,3,331.0,337.5,-1.17,5.69
+Hanuman Jayanti,BLR,A2 Desi Cow Milk,7,3,308.0,337.5,-1.9,1.59
+Hanuman Jayanti,BLR,Cow Milk,-7,3,1987.0,1856.0,3.37,4.44
+Hanuman Jayanti,BLR,Cow Milk,-6,3,1944.0,1856.0,3.67,2.63
+Hanuman Jayanti,BLR,Cow Milk,-5,3,1894.0,1856.0,-0.13,-1.45
+Hanuman Jayanti,BLR,Cow Milk,-4,3,1793.0,1856.0,-2.88,-1.68
+Hanuman Jayanti,BLR,Cow Milk,-3,3,1892.0,1856.0,1.94,-1.2
+Hanuman Jayanti,BLR,Cow Milk,-2,3,1870.0,1856.0,0.75,-0.59
+Hanuman Jayanti,BLR,Cow Milk,-1,3,1886.0,1856.0,1.62,0.08
+Hanuman Jayanti,BLR,Cow Milk,0,3,1924.0,1856.0,1.09,1.29
+Hanuman Jayanti,BLR,Cow Milk,1,3,1832.0,1856.0,-3.87,-3.34
+Hanuman Jayanti,BLR,Cow Milk,2,3,1746.0,1856.0,0.7,-0.65
+Hanuman Jayanti,BLR,Cow Milk,3,3,1720.0,1856.0,0.28,-2.25
+Hanuman Jayanti,BLR,Cow Milk,4,3,1768.0,1856.0,-4.74,-2.86
+Hanuman Jayanti,BLR,Cow Milk,5,3,1828.0,1856.0,-1.51,-2.88
+Hanuman Jayanti,BLR,Cow Milk,6,3,1853.0,1856.0,0.05,-0.81
+Hanuman Jayanti,BLR,Cow Milk,7,3,1795.0,1856.0,-0.05,-0.97
+Hanuman Jayanti,BLR,Curd,-7,3,202.0,199.5,1.25,-0.52
+Hanuman Jayanti,BLR,Curd,-6,3,172.0,199.5,-3.33,-1.97
+Hanuman Jayanti,BLR,Curd,-5,3,204.0,199.5,2.26,6.73
+Hanuman Jayanti,BLR,Curd,-4,3,197.0,199.5,-1.25,-6.01
+Hanuman Jayanti,BLR,Curd,-3,3,160.0,199.5,-19.8,-11.72
+Hanuman Jayanti,BLR,Curd,-2,3,176.0,199.5,-11.78,-10.08
+Hanuman Jayanti,BLR,Curd,-1,3,181.0,199.5,-9.27,-10.35
+Hanuman Jayanti,BLR,Curd,0,3,172.0,199.5,-11.67,-10.67
+Hanuman Jayanti,BLR,Curd,1,3,119.0,199.5,-1.93,13.13
+Hanuman Jayanti,BLR,Curd,2,3,152.0,199.5,-13.33,-15.85
+Hanuman Jayanti,BLR,Curd,3,3,193.0,199.5,-6.67,-8.59
+Hanuman Jayanti,BLR,Curd,4,3,227.0,199.5,-1.93,-2.16
+Hanuman Jayanti,BLR,Curd,5,3,206.0,199.5,3.26,-2.05
+Hanuman Jayanti,BLR,Curd,6,3,191.0,199.5,0.39,3.15
+Hanuman Jayanti,BLR,Curd,7,3,149.0,199.5,-7.72,5.66
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,-7,3,410.0,409.0,1.89,1.91
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,-6,3,428.0,409.0,2.73,2.01
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,-5,3,417.0,409.0,1.96,-0.25
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,-4,3,406.0,409.0,-2.94,-3.78
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,-3,3,440.0,409.0,-1.47,-0.37
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,-2,3,431.0,409.0,0.63,-1.15
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,-1,3,427.0,409.0,-3.98,-3.91
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,0,3,433.0,409.0,2.7,1.67
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,1,3,401.0,409.0,-1.96,-3.82
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,2,3,415.0,409.0,0.9,-2.35
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,3,3,404.0,409.0,-1.22,-4.89
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,4,3,438.0,409.0,-3.98,-0.92
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,5,3,406.0,409.0,-0.73,0.01
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,6,3,408.0,409.0,1.35,1.0
+Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,7,3,373.0,409.0,-1.89,-1.61
+Hanuman Jayanti,BLR,Skim Milk,-7,3,382.0,376.0,2.21,5.23
+Hanuman Jayanti,BLR,Skim Milk,-6,3,389.0,376.0,3.46,1.2
+Hanuman Jayanti,BLR,Skim Milk,-5,3,389.0,376.0,0.99,1.6
+Hanuman Jayanti,BLR,Skim Milk,-4,3,417.0,376.0,-0.99,-0.96
+Hanuman Jayanti,BLR,Skim Milk,-3,3,392.0,376.0,4.26,-0.18
+Hanuman Jayanti,BLR,Skim Milk,-2,3,400.0,376.0,-2.39,-3.62
+Hanuman Jayanti,BLR,Skim Milk,-1,3,374.0,376.0,-0.53,1.33
+Hanuman Jayanti,BLR,Skim Milk,0,3,364.0,376.0,-2.04,-2.4
+Hanuman Jayanti,BLR,Skim Milk,1,3,367.0,376.0,-2.39,-2.5
+Hanuman Jayanti,BLR,Skim Milk,2,3,365.0,376.0,-2.93,2.16
+Hanuman Jayanti,BLR,Skim Milk,3,3,368.0,376.0,-2.13,-1.69
+Hanuman Jayanti,BLR,Skim Milk,4,3,370.0,376.0,-1.6,-1.97
+Hanuman Jayanti,BLR,Skim Milk,5,3,321.0,376.0,-4.95,-6.7
+Hanuman Jayanti,BLR,Skim Milk,6,3,356.0,376.0,-0.34,1.41
+Hanuman Jayanti,BLR,Skim Milk,7,3,308.0,376.0,0.85,-4.1
+Hanuman Jayanti,BLR,Toned Milk,-7,1,502.0,501.5,0.1,0.1
+Hanuman Jayanti,BLR,Toned Milk,-6,1,501.0,501.5,-0.1,-0.1
+Hanuman Jayanti,BLR,Toned Milk,-5,1,457.0,501.5,-8.87,-8.87
+Hanuman Jayanti,BLR,Toned Milk,-4,1,467.0,501.5,-6.88,-6.88
+Hanuman Jayanti,BLR,Toned Milk,-3,1,495.0,501.5,-1.3,-1.3
+Hanuman Jayanti,BLR,Toned Milk,-2,1,501.0,501.5,-0.1,-0.1
+Hanuman Jayanti,BLR,Toned Milk,-1,1,536.0,501.5,6.88,6.88
+Hanuman Jayanti,BLR,Toned Milk,0,1,480.0,501.5,-4.29,-4.29
+Hanuman Jayanti,BLR,Toned Milk,1,1,443.0,501.5,-11.67,-11.67
+Hanuman Jayanti,BLR,Toned Milk,2,1,467.0,501.5,-6.88,-6.88
+Hanuman Jayanti,BLR,Toned Milk,3,1,441.0,501.5,-12.06,-12.06
+Hanuman Jayanti,BLR,Toned Milk,4,1,517.0,501.5,3.09,3.09
+Hanuman Jayanti,BLR,Toned Milk,5,1,503.0,501.5,0.3,0.3
+Hanuman Jayanti,BLR,Toned Milk,6,1,498.0,501.5,-0.7,-0.7
+Hanuman Jayanti,BLR,Toned Milk,7,1,510.0,501.5,1.69,1.69
+Hanuman Jayanti,HYD,A2 Buffalo Milk,-7,3,15119.0,14985.0,0.89,1.63
+Hanuman Jayanti,HYD,A2 Buffalo Milk,-6,3,14966.0,14985.0,0.21,2.1
+Hanuman Jayanti,HYD,A2 Buffalo Milk,-5,3,14686.0,14985.0,-2.0,-1.13
+Hanuman Jayanti,HYD,A2 Buffalo Milk,-4,3,14847.0,14985.0,0.13,-0.82
+Hanuman Jayanti,HYD,A2 Buffalo Milk,-3,3,15170.0,14985.0,0.7,-0.18
+Hanuman Jayanti,HYD,A2 Buffalo Milk,-2,3,15210.0,14985.0,-2.23,-0.91
+Hanuman Jayanti,HYD,A2 Buffalo Milk,-1,3,15116.0,14985.0,0.71,-0.02
+Hanuman Jayanti,HYD,A2 Buffalo Milk,0,3,14812.0,14985.0,-1.15,-0.77
+Hanuman Jayanti,HYD,A2 Buffalo Milk,1,3,14613.0,14985.0,-1.2,-1.27
+Hanuman Jayanti,HYD,A2 Buffalo Milk,2,3,14688.0,14985.0,-1.98,-1.5
+Hanuman Jayanti,HYD,A2 Buffalo Milk,3,3,14959.0,14985.0,-1.53,-1.5
+Hanuman Jayanti,HYD,A2 Buffalo Milk,4,3,15189.0,14985.0,-0.51,-0.36
+Hanuman Jayanti,HYD,A2 Buffalo Milk,5,3,15008.0,14985.0,0.15,-1.29
+Hanuman Jayanti,HYD,A2 Buffalo Milk,6,3,14801.0,14985.0,-1.23,-0.52
+Hanuman Jayanti,HYD,A2 Buffalo Milk,7,3,14469.0,14985.0,-1.89,-0.86
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,-7,3,1480.0,1445.5,2.39,2.32
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,-6,3,1482.0,1445.5,7.52,6.56
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,-5,3,1463.0,1445.5,1.21,-0.55
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,-4,3,1458.0,1445.5,0.86,-0.08
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,-3,3,1444.0,1445.5,-1.99,-2.73
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,-2,3,1445.0,1445.5,-0.9,-1.66
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,-1,3,1486.0,1445.5,0.32,-0.52
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,0,3,1485.0,1445.5,0.79,0.81
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,1,3,1363.0,1445.5,-1.51,-2.17
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,2,3,1433.0,1445.5,-0.86,-1.93
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,3,3,1374.0,1445.5,-4.76,-4.43
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,4,3,1433.0,1445.5,-0.86,-1.08
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,5,3,1387.0,1445.5,-4.05,-3.09
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,6,3,1410.0,1445.5,-1.91,-1.41
+Hanuman Jayanti,HYD,A2 Desi Cow Milk,7,3,1345.0,1445.5,-5.01,-3.43
+Hanuman Jayanti,HYD,Cow Milk,-7,3,8905.0,8707.0,2.43,2.45
+Hanuman Jayanti,HYD,Cow Milk,-6,3,9032.0,8707.0,3.96,4.97
+Hanuman Jayanti,HYD,Cow Milk,-5,3,8718.0,8707.0,0.96,0.59
+Hanuman Jayanti,HYD,Cow Milk,-4,3,8558.0,8707.0,1.88,-0.06
+Hanuman Jayanti,HYD,Cow Milk,-3,3,8652.0,8707.0,1.21,0.46
+Hanuman Jayanti,HYD,Cow Milk,-2,3,8804.0,8707.0,-1.56,-0.67
+Hanuman Jayanti,HYD,Cow Milk,-1,3,8812.0,8707.0,0.72,0.31
+Hanuman Jayanti,HYD,Cow Milk,0,3,8692.0,8707.0,-0.17,-0.45
+Hanuman Jayanti,HYD,Cow Milk,1,3,8558.0,8707.0,-1.71,-1.36
+Hanuman Jayanti,HYD,Cow Milk,2,3,8712.0,8707.0,-0.3,-0.8
+Hanuman Jayanti,HYD,Cow Milk,3,3,8506.0,8707.0,-1.57,-1.97
+Hanuman Jayanti,HYD,Cow Milk,4,3,8623.0,8707.0,-0.96,-1.32
+Hanuman Jayanti,HYD,Cow Milk,5,3,8452.0,8707.0,-2.93,-2.73
+Hanuman Jayanti,HYD,Cow Milk,6,3,8411.0,8707.0,-3.4,-2.19
+Hanuman Jayanti,HYD,Cow Milk,7,3,8188.0,8707.0,-3.47,-2.69
+Hanuman Jayanti,HYD,Curd,-7,3,1279.0,1350.5,3.54,24.2
+Hanuman Jayanti,HYD,Curd,-6,3,965.0,1350.5,-2.33,-9.52
+Hanuman Jayanti,HYD,Curd,-5,3,1260.0,1350.5,8.92,32.09
+Hanuman Jayanti,HYD,Curd,-4,3,1239.0,1350.5,-8.26,-3.64
+Hanuman Jayanti,HYD,Curd,-3,3,1259.0,1350.5,-6.78,-4.93
+Hanuman Jayanti,HYD,Curd,-2,3,886.0,1350.5,-5.43,-13.97
+Hanuman Jayanti,HYD,Curd,-1,3,1388.0,1350.5,2.78,48.81
+Hanuman Jayanti,HYD,Curd,0,3,1037.0,1350.5,-2.44,-7.83
+Hanuman Jayanti,HYD,Curd,1,3,1331.0,1350.5,-1.44,37.6
+Hanuman Jayanti,HYD,Curd,2,3,1311.0,1350.5,-2.92,-1.36
+Hanuman Jayanti,HYD,Curd,3,3,1319.0,1350.5,-2.33,-14.19
+Hanuman Jayanti,HYD,Curd,4,3,1375.0,1350.5,1.4,0.22
+Hanuman Jayanti,HYD,Curd,5,3,1313.0,1350.5,-2.6,-0.23
+Hanuman Jayanti,HYD,Curd,6,3,1296.0,1350.5,-4.42,-1.26
+Hanuman Jayanti,HYD,Curd,7,3,1352.0,1350.5,9.07,40.14
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,-7,3,5191.0,5192.0,-0.02,1.07
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,-6,3,5174.0,5192.0,-0.35,2.39
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,-5,3,4991.0,5192.0,-2.33,-1.17
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,-4,3,4958.0,5192.0,1.73,-0.18
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,-3,3,4982.0,5192.0,-0.43,-0.83
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,-2,3,5165.0,5192.0,-0.52,-0.15
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,-1,3,5275.0,5192.0,1.18,0.02
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,0,3,5221.0,5192.0,-0.71,-0.7
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,1,3,5114.0,5192.0,-1.5,-2.17
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,2,3,5127.0,5192.0,-1.25,-1.55
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,3,3,5002.0,5192.0,-0.95,-1.0
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,4,3,5255.0,5192.0,1.21,0.68
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,5,3,5193.0,5192.0,0.02,-1.17
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,6,3,5350.0,5192.0,0.19,-0.15
+Hanuman Jayanti,HYD,Double Toned A2 Buffalo Milk,7,3,5257.0,5192.0,-2.39,-1.34
+Hanuman Jayanti,HYD,Skim Milk,-7,3,2357.0,2347.0,0.47,2.06
+Hanuman Jayanti,HYD,Skim Milk,-6,3,2289.0,2347.0,-1.15,0.59
+Hanuman Jayanti,HYD,Skim Milk,-5,3,2243.0,2347.0,-4.43,-2.04
+Hanuman Jayanti,HYD,Skim Milk,-4,3,2278.0,2347.0,-1.49,-1.51
+Hanuman Jayanti,HYD,Skim Milk,-3,3,2247.0,2347.0,-2.64,-2.5
+Hanuman Jayanti,HYD,Skim Milk,-2,3,2338.0,2347.0,-1.74,-1.09
+Hanuman Jayanti,HYD,Skim Milk,-1,3,2366.0,2347.0,0.81,0.41
+Hanuman Jayanti,HYD,Skim Milk,0,3,2295.0,2347.0,-0.36,0.25
+Hanuman Jayanti,HYD,Skim Milk,1,3,2225.0,2347.0,0.61,-1.31
+Hanuman Jayanti,HYD,Skim Milk,2,3,2341.0,2347.0,-0.26,0.22
+Hanuman Jayanti,HYD,Skim Milk,3,3,2316.0,2347.0,0.89,-0.23
+Hanuman Jayanti,HYD,Skim Milk,4,3,2366.0,2347.0,0.81,0.17
+Hanuman Jayanti,HYD,Skim Milk,5,3,2352.0,2347.0,0.21,-0.3
+Hanuman Jayanti,HYD,Skim Milk,6,3,2401.0,2347.0,2.3,1.25
+Hanuman Jayanti,HYD,Skim Milk,7,3,2342.0,2347.0,-0.21,1.31
+Hanuman Jayanti,HYD,Toned Milk,-7,1,8398.0,8465.0,-0.79,-0.79
+Hanuman Jayanti,HYD,Toned Milk,-6,1,8686.0,8465.0,2.61,2.61
+Hanuman Jayanti,HYD,Toned Milk,-5,1,8179.0,8465.0,-3.38,-3.38
+Hanuman Jayanti,HYD,Toned Milk,-4,1,8259.0,8465.0,-2.43,-2.43
+Hanuman Jayanti,HYD,Toned Milk,-3,1,8350.0,8465.0,-1.36,-1.36
+Hanuman Jayanti,HYD,Toned Milk,-2,1,8488.0,8465.0,0.27,0.27
+Hanuman Jayanti,HYD,Toned Milk,-1,1,8420.0,8465.0,-0.53,-0.53
+Hanuman Jayanti,HYD,Toned Milk,0,1,8293.0,8465.0,-2.03,-2.03
+Hanuman Jayanti,HYD,Toned Milk,1,1,8238.0,8465.0,-2.68,-2.68
+Hanuman Jayanti,HYD,Toned Milk,2,1,8251.0,8465.0,-2.53,-2.53
+Hanuman Jayanti,HYD,Toned Milk,3,1,8117.0,8465.0,-4.11,-4.11
+Hanuman Jayanti,HYD,Toned Milk,4,1,8361.0,8465.0,-1.23,-1.23
+Hanuman Jayanti,HYD,Toned Milk,5,1,8532.0,8465.0,0.79,0.79
+Hanuman Jayanti,HYD,Toned Milk,6,1,8730.0,8465.0,3.13,3.13
+Hanuman Jayanti,HYD,Toned Milk,7,1,8634.0,8465.0,2.0,2.0
+Holi,BLR,A2 Buffalo Milk,-7,3,2034.0,2071.5,2.84,1.53
+Holi,BLR,A2 Buffalo Milk,-6,3,2040.0,2071.5,4.76,3.46
+Holi,BLR,A2 Buffalo Milk,-5,3,1915.0,2071.5,3.41,1.32
+Holi,BLR,A2 Buffalo Milk,-4,3,2010.0,2071.5,4.08,1.85
+Holi,BLR,A2 Buffalo Milk,-3,3,2000.0,2071.5,-0.6,-0.22
+Holi,BLR,A2 Buffalo Milk,-2,3,2086.0,2071.5,0.7,-1.05
+Holi,BLR,A2 Buffalo Milk,-1,3,2064.0,2071.5,-0.36,-0.9
+Holi,BLR,A2 Buffalo Milk,0,3,2112.0,2071.5,-1.04,-0.65
+Holi,BLR,A2 Buffalo Milk,1,3,2022.0,2071.5,-2.39,-1.58
+Holi,BLR,A2 Buffalo Milk,2,3,1973.0,2071.5,-4.32,-4.2
+Holi,BLR,A2 Buffalo Milk,3,3,2059.0,2071.5,-0.6,-1.22
+Holi,BLR,A2 Buffalo Milk,4,3,2142.0,2071.5,-2.84,-1.76
+Holi,BLR,A2 Buffalo Milk,5,3,2144.0,2071.5,-6.57,-3.79
+Holi,BLR,A2 Buffalo Milk,6,3,2115.0,2071.5,-3.41,-4.2
+Holi,BLR,A2 Buffalo Milk,7,3,2103.0,2071.5,-6.78,-4.36
+Holi,BLR,A2 Desi Cow Milk,-7,3,351.0,345.5,1.59,4.97
+Holi,BLR,A2 Desi Cow Milk,-6,3,346.0,345.5,5.1,4.8
+Holi,BLR,A2 Desi Cow Milk,-5,3,326.0,345.5,4.38,2.51
+Holi,BLR,A2 Desi Cow Milk,-4,3,332.0,345.5,-1.2,-1.29
+Holi,BLR,A2 Desi Cow Milk,-3,3,339.0,345.5,-1.88,-3.07
+Holi,BLR,A2 Desi Cow Milk,-2,3,363.0,345.5,-6.5,-3.53
+Holi,BLR,A2 Desi Cow Milk,-1,3,324.0,345.5,-6.22,-6.81
+Holi,BLR,A2 Desi Cow Milk,0,3,355.0,345.5,0.0,-2.4
+Holi,BLR,A2 Desi Cow Milk,1,3,333.0,345.5,-3.62,-3.6
+Holi,BLR,A2 Desi Cow Milk,2,3,323.0,345.5,-6.51,-7.07
+Holi,BLR,A2 Desi Cow Milk,3,3,355.0,345.5,2.75,-0.97
+Holi,BLR,A2 Desi Cow Milk,4,3,355.0,345.5,-4.22,-2.75
+Holi,BLR,A2 Desi Cow Milk,5,3,345.0,345.5,-0.14,-0.87
+Holi,BLR,A2 Desi Cow Milk,6,3,349.0,345.5,-1.41,-3.72
+Holi,BLR,A2 Desi Cow Milk,7,3,341.0,345.5,-1.3,-3.9
+Holi,BLR,Cow Milk,-7,3,2169.0,2135.5,-0.98,1.99
+Holi,BLR,Cow Milk,-6,3,2153.0,2135.5,3.66,3.59
+Holi,BLR,Cow Milk,-5,3,2059.0,2135.5,1.99,0.29
+Holi,BLR,Cow Milk,-4,3,2145.0,2135.5,3.66,1.94
+Holi,BLR,Cow Milk,-3,3,2226.0,2135.5,4.52,3.75
+Holi,BLR,Cow Milk,-2,3,2092.0,2135.5,-2.04,-1.17
+Holi,BLR,Cow Milk,-1,3,2108.0,2135.5,0.31,0.69
+Holi,BLR,Cow Milk,0,3,2164.0,2135.5,1.33,1.07
+Holi,BLR,Cow Milk,1,3,2147.0,2135.5,-1.99,-1.18
+Holi,BLR,Cow Milk,2,3,2093.0,2135.5,-1.99,-1.4
+Holi,BLR,Cow Milk,3,3,2095.0,2135.5,-1.9,-1.12
+Holi,BLR,Cow Milk,4,3,2045.0,2135.5,-4.24,-2.46
+Holi,BLR,Cow Milk,5,3,1987.0,2135.5,-4.91,-3.14
+Holi,BLR,Cow Milk,6,3,1996.0,2135.5,-6.53,-5.16
+Holi,BLR,Cow Milk,7,3,2032.0,2135.5,1.78,0.06
+Holi,BLR,Curd,-7,3,187.0,188.5,-0.8,-5.08
+Holi,BLR,Curd,-6,3,202.0,188.5,7.21,12.66
+Holi,BLR,Curd,-5,3,179.0,188.5,-3.51,5.76
+Holi,BLR,Curd,-4,3,185.0,188.5,5.73,7.66
+Holi,BLR,Curd,-3,3,170.0,188.5,-9.81,-15.2
+Holi,BLR,Curd,-2,3,259.0,188.5,3.37,18.72
+Holi,BLR,Curd,-1,3,167.0,188.5,-3.37,-3.51
+Holi,BLR,Curd,0,3,181.0,188.5,0.18,0.61
+Holi,BLR,Curd,1,3,207.0,188.5,9.81,0.25
+Holi,BLR,Curd,2,3,233.0,188.5,10.11,11.06
+Holi,BLR,Curd,3,3,186.0,188.5,-1.33,-0.66
+Holi,BLR,Curd,4,3,190.0,188.5,-3.88,-7.39
+Holi,BLR,Curd,5,3,247.0,188.5,-0.18,9.91
+Holi,BLR,Curd,6,3,180.0,188.5,-4.51,-0.86
+Holi,BLR,Curd,7,3,204.0,188.5,1.12,3.05
+Holi,BLR,Double Toned A2 Buffalo Milk,-7,3,497.0,478.5,3.87,2.47
+Holi,BLR,Double Toned A2 Buffalo Milk,-6,3,466.0,478.5,-1.08,1.29
+Holi,BLR,Double Toned A2 Buffalo Milk,-5,3,440.0,478.5,-1.08,-2.73
+Holi,BLR,Double Toned A2 Buffalo Milk,-4,3,451.0,478.5,-0.49,-1.92
+Holi,BLR,Double Toned A2 Buffalo Milk,-3,3,495.0,478.5,2.83,1.08
+Holi,BLR,Double Toned A2 Buffalo Milk,-2,3,459.0,478.5,-3.42,-2.5
+Holi,BLR,Double Toned A2 Buffalo Milk,-1,3,464.0,478.5,1.47,1.37
+Holi,BLR,Double Toned A2 Buffalo Milk,0,3,482.0,478.5,-0.1,-3.25
+Holi,BLR,Double Toned A2 Buffalo Milk,1,3,474.0,478.5,-2.25,-2.95
+Holi,BLR,Double Toned A2 Buffalo Milk,2,3,471.0,478.5,-4.2,-3.65
+Holi,BLR,Double Toned A2 Buffalo Milk,3,3,484.0,478.5,1.15,1.95
+Holi,BLR,Double Toned A2 Buffalo Milk,4,3,523.0,478.5,5.19,5.97
+Holi,BLR,Double Toned A2 Buffalo Milk,5,3,497.0,478.5,-2.36,0.46
+Holi,BLR,Double Toned A2 Buffalo Milk,6,3,489.0,478.5,2.19,2.18
+Holi,BLR,Double Toned A2 Buffalo Milk,7,3,468.0,478.5,-2.19,-2.45
+Holi,BLR,Skim Milk,-7,3,426.0,417.0,3.83,8.23
+Holi,BLR,Skim Milk,-6,3,408.0,417.0,-2.16,-0.47
+Holi,BLR,Skim Milk,-5,3,403.0,417.0,4.0,2.71
+Holi,BLR,Skim Milk,-4,3,393.0,417.0,-0.93,-1.84
+Holi,BLR,Skim Milk,-3,3,409.0,417.0,-2.33,-4.84
+Holi,BLR,Skim Milk,-2,3,437.0,417.0,-5.83,-5.02
+Holi,BLR,Skim Milk,-1,3,444.0,417.0,2.83,-2.82
+Holi,BLR,Skim Milk,0,3,427.0,417.0,1.17,-3.17
+Holi,BLR,Skim Milk,1,3,402.0,417.0,-0.5,-1.06
+Holi,BLR,Skim Milk,2,3,400.0,417.0,-4.5,-6.29
+Holi,BLR,Skim Milk,3,3,413.0,417.0,-0.96,1.03
+Holi,BLR,Skim Milk,4,3,408.0,417.0,-2.16,-3.08
+Holi,BLR,Skim Milk,5,3,450.0,417.0,0.93,-0.39
+Holi,BLR,Skim Milk,6,3,429.0,417.0,-1.5,-1.1
+Holi,BLR,Skim Milk,7,3,448.0,417.0,-1.17,-1.65
+Holi,BLR,Toned Milk,-7,1,510.0,497.0,2.62,2.62
+Holi,BLR,Toned Milk,-6,1,493.0,497.0,-0.8,-0.8
+Holi,BLR,Toned Milk,-5,1,489.0,497.0,-1.61,-1.61
+Holi,BLR,Toned Milk,-4,1,477.0,497.0,-4.02,-4.02
+Holi,BLR,Toned Milk,-3,1,459.0,497.0,-7.65,-7.65
+Holi,BLR,Toned Milk,-2,1,479.0,497.0,-3.62,-3.62
+Holi,BLR,Toned Milk,-1,1,482.0,497.0,-3.02,-3.02
+Holi,BLR,Toned Milk,0,1,495.0,497.0,-0.4,-0.4
+Holi,BLR,Toned Milk,1,1,527.0,497.0,6.04,6.04
+Holi,BLR,Toned Milk,2,1,487.0,497.0,-2.01,-2.01
+Holi,BLR,Toned Milk,3,1,504.0,497.0,1.41,1.41
+Holi,BLR,Toned Milk,4,1,505.0,497.0,1.61,1.61
+Holi,BLR,Toned Milk,5,1,499.0,497.0,0.4,0.4
+Holi,BLR,Toned Milk,6,1,495.0,497.0,-0.4,-0.4
+Holi,BLR,Toned Milk,7,1,503.0,497.0,1.21,1.21
+Holi,HYD,A2 Buffalo Milk,-7,3,15001.0,14953.5,0.32,0.37
+Holi,HYD,A2 Buffalo Milk,-6,3,14839.0,14953.5,1.72,0.98
+Holi,HYD,A2 Buffalo Milk,-5,3,14472.0,14953.5,1.82,0.27
+Holi,HYD,A2 Buffalo Milk,-4,3,14199.0,14953.5,1.11,-0.61
+Holi,HYD,A2 Buffalo Milk,-3,3,15008.0,14953.5,0.41,0.49
+Holi,HYD,A2 Buffalo Milk,-2,3,15049.0,14953.5,-0.84,-0.54
+Holi,HYD,A2 Buffalo Milk,-1,3,14946.0,14953.5,-1.07,-1.38
+Holi,HYD,A2 Buffalo Milk,0,3,15046.0,14953.5,-1.26,-1.56
+Holi,HYD,A2 Buffalo Milk,1,3,14567.0,14953.5,-2.38,-1.79
+Holi,HYD,A2 Buffalo Milk,2,3,14322.0,14953.5,-2.4,-2.65
+Holi,HYD,A2 Buffalo Milk,3,3,14658.0,14953.5,-1.98,-1.76
+Holi,HYD,A2 Buffalo Milk,4,3,15187.0,14953.5,-2.6,-1.61
+Holi,HYD,A2 Buffalo Milk,5,3,15143.0,14953.5,-4.07,-2.44
+Holi,HYD,A2 Buffalo Milk,6,3,15015.0,14953.5,-2.48,-1.89
+Holi,HYD,A2 Buffalo Milk,7,3,14906.0,14953.5,-0.32,-0.37
+Holi,HYD,A2 Desi Cow Milk,-7,3,1534.0,1465.5,2.81,1.87
+Holi,HYD,A2 Desi Cow Milk,-6,3,1452.0,1465.5,-0.92,-0.8
+Holi,HYD,A2 Desi Cow Milk,-5,3,1397.0,1465.5,-1.3,-0.13
+Holi,HYD,A2 Desi Cow Milk,-4,3,1409.0,1465.5,3.27,1.31
+Holi,HYD,A2 Desi Cow Milk,-3,3,1423.0,1465.5,-1.87,-0.91
+Holi,HYD,A2 Desi Cow Milk,-2,3,1464.0,1465.5,-0.96,-0.94
+Holi,HYD,A2 Desi Cow Milk,-1,3,1458.0,1465.5,-0.73,-1.22
+Holi,HYD,A2 Desi Cow Milk,0,3,1483.0,1465.5,0.98,0.04
+Holi,HYD,A2 Desi Cow Milk,1,3,1418.0,1465.5,-1.73,-0.78
+Holi,HYD,A2 Desi Cow Milk,2,3,1367.0,1465.5,-1.73,-2.45
+Holi,HYD,A2 Desi Cow Milk,3,3,1498.0,1465.5,1.87,1.22
+Holi,HYD,A2 Desi Cow Milk,4,3,1463.0,1465.5,-0.17,-0.88
+Holi,HYD,A2 Desi Cow Milk,5,3,1497.0,1465.5,-1.27,-0.75
+Holi,HYD,A2 Desi Cow Milk,6,3,1512.0,1465.5,3.14,0.11
+Holi,HYD,A2 Desi Cow Milk,7,3,1468.0,1465.5,0.48,0.59
+Holi,HYD,Cow Milk,-7,3,8818.0,8848.0,0.44,0.36
+Holi,HYD,Cow Milk,-6,3,8717.0,8848.0,1.8,1.09
+Holi,HYD,Cow Milk,-5,3,8489.0,8848.0,1.3,0.57
+Holi,HYD,Cow Milk,-4,3,8461.0,8848.0,1.38,-0.18
+Holi,HYD,Cow Milk,-3,3,8715.0,8848.0,0.39,0.44
+Holi,HYD,Cow Milk,-2,3,8757.0,8848.0,-1.03,-1.22
+Holi,HYD,Cow Milk,-1,3,8768.0,8848.0,-0.9,-0.93
+Holi,HYD,Cow Milk,0,3,9083.0,8848.0,0.48,1.07
+Holi,HYD,Cow Milk,1,3,8631.0,8848.0,-0.96,-0.64
+Holi,HYD,Cow Milk,2,3,8352.0,8848.0,-2.28,-3.06
+Holi,HYD,Cow Milk,3,3,8779.0,8848.0,-0.79,-0.88
+Holi,HYD,Cow Milk,4,3,8964.0,8848.0,-0.97,-0.22
+Holi,HYD,Cow Milk,5,3,8816.0,8848.0,-0.79,-1.06
+Holi,HYD,Cow Milk,6,3,8896.0,8848.0,-1.35,-1.12
+Holi,HYD,Cow Milk,7,3,8890.0,8848.0,-0.44,-0.31
+Holi,HYD,Curd,-7,3,1182.0,1195.0,-1.09,1.43
+Holi,HYD,Curd,-6,3,1264.0,1195.0,5.07,5.13
+Holi,HYD,Curd,-5,3,1172.0,1195.0,-1.92,-0.73
+Holi,HYD,Curd,-4,3,922.0,1195.0,-3.1,-17.01
+Holi,HYD,Curd,-3,3,1028.0,1195.0,-7.85,-16.69
+Holi,HYD,Curd,-2,3,1146.0,1195.0,-1.57,-1.47
+Holi,HYD,Curd,-1,3,1023.0,1195.0,-1.92,-14.47
+Holi,HYD,Curd,0,3,1012.0,1195.0,-8.9,-15.79
+Holi,HYD,Curd,1,3,1236.0,1195.0,0.7,-1.27
+Holi,HYD,Curd,2,3,1254.0,1195.0,4.94,7.03
+Holi,HYD,Curd,3,3,1237.0,1195.0,3.51,2.1
+Holi,HYD,Curd,4,3,1208.0,1195.0,1.09,-0.65
+Holi,HYD,Curd,5,3,1163.0,1195.0,-1.75,20.07
+Holi,HYD,Curd,6,3,1216.0,1195.0,1.76,0.95
+Holi,HYD,Curd,7,3,916.0,1195.0,1.75,-12.77
+Holi,HYD,Double Toned A2 Buffalo Milk,-7,3,5285.0,5245.0,0.26,0.33
+Holi,HYD,Double Toned A2 Buffalo Milk,-6,3,5323.0,5245.0,1.49,0.58
+Holi,HYD,Double Toned A2 Buffalo Milk,-5,3,5245.0,5245.0,0.0,-0.77
+Holi,HYD,Double Toned A2 Buffalo Milk,-4,3,5336.0,5245.0,-0.11,-1.25
+Holi,HYD,Double Toned A2 Buffalo Milk,-3,3,5145.0,5245.0,-0.31,-0.48
+Holi,HYD,Double Toned A2 Buffalo Milk,-2,3,5118.0,5245.0,-2.42,-1.58
+Holi,HYD,Double Toned A2 Buffalo Milk,-1,3,5271.0,5245.0,-0.07,-1.72
+Holi,HYD,Double Toned A2 Buffalo Milk,0,3,5236.0,5245.0,-0.17,-0.36
+Holi,HYD,Double Toned A2 Buffalo Milk,1,3,5264.0,5245.0,-0.13,-0.64
+Holi,HYD,Double Toned A2 Buffalo Milk,2,3,5212.0,5245.0,-0.63,-1.65
+Holi,HYD,Double Toned A2 Buffalo Milk,3,3,5185.0,5245.0,-1.95,-1.96
+Holi,HYD,Double Toned A2 Buffalo Milk,4,3,5188.0,5245.0,0.02,0.1
+Holi,HYD,Double Toned A2 Buffalo Milk,5,3,5061.0,5245.0,-3.51,-1.96
+Holi,HYD,Double Toned A2 Buffalo Milk,6,3,5143.0,5245.0,-1.94,-1.48
+Holi,HYD,Double Toned A2 Buffalo Milk,7,3,5245.0,5245.0,0.0,0.32
+Holi,HYD,Skim Milk,-7,3,2254.0,2249.0,0.22,-0.43
+Holi,HYD,Skim Milk,-6,3,2214.0,2249.0,-0.36,-0.6
+Holi,HYD,Skim Milk,-5,3,2146.0,2249.0,0.11,-1.37
+Holi,HYD,Skim Milk,-4,3,2060.0,2249.0,-2.34,-2.78
+Holi,HYD,Skim Milk,-3,3,2214.0,2249.0,-1.56,-1.14
+Holi,HYD,Skim Milk,-2,3,2199.0,2249.0,-2.22,-2.45
+Holi,HYD,Skim Milk,-1,3,2182.0,2249.0,-2.36,-2.03
+Holi,HYD,Skim Milk,0,3,2225.0,2249.0,-1.07,-1.86
+Holi,HYD,Skim Milk,1,3,2162.0,2249.0,-2.62,-2.33
+Holi,HYD,Skim Milk,2,3,2120.0,2249.0,-3.54,-3.26
+Holi,HYD,Skim Milk,3,3,2173.0,2249.0,-1.03,-1.74
+Holi,HYD,Skim Milk,4,3,2244.0,2249.0,-0.98,-1.04
+Holi,HYD,Skim Milk,5,3,2248.0,2249.0,2.52,0.62
+Holi,HYD,Skim Milk,6,3,2278.0,2249.0,-0.11,-0.41
+Holi,HYD,Skim Milk,7,3,2278.0,2249.0,3.59,3.21
+Holi,HYD,Toned Milk,-7,1,7800.0,7966.0,-2.08,-2.08
+Holi,HYD,Toned Milk,-6,1,8081.0,7966.0,1.44,1.44
+Holi,HYD,Toned Milk,-5,1,7825.0,7966.0,-1.77,-1.77
+Holi,HYD,Toned Milk,-4,1,7998.0,7966.0,0.4,0.4
+Holi,HYD,Toned Milk,-3,1,7772.0,7966.0,-2.44,-2.44
+Holi,HYD,Toned Milk,-2,1,7756.0,7966.0,-2.64,-2.64
+Holi,HYD,Toned Milk,-1,1,7819.0,7966.0,-1.85,-1.85
+Holi,HYD,Toned Milk,0,1,8042.0,7966.0,0.95,0.95
+Holi,HYD,Toned Milk,1,1,8024.0,7966.0,0.73,0.73
+Holi,HYD,Toned Milk,2,1,8113.0,7966.0,1.85,1.85
+Holi,HYD,Toned Milk,3,1,7997.0,7966.0,0.39,0.39
+Holi,HYD,Toned Milk,4,1,7967.0,7966.0,0.01,0.01
+Holi,HYD,Toned Milk,5,1,7735.0,7966.0,-2.9,-2.9
+Holi,HYD,Toned Milk,6,1,7965.0,7966.0,-0.01,-0.01
+Holi,HYD,Toned Milk,7,1,8229.0,7966.0,3.3,3.3
+Maha Shivaratri,BLR,A2 Buffalo Milk,-7,3,1937.0,1943.0,-1.9,-1.97
+Maha Shivaratri,BLR,A2 Buffalo Milk,-6,3,1989.0,1943.0,-0.1,-1.23
+Maha Shivaratri,BLR,A2 Buffalo Milk,-5,3,1955.0,1943.0,0.62,-2.46
+Maha Shivaratri,BLR,A2 Buffalo Milk,-4,3,1881.0,1943.0,-3.19,-1.63
+Maha Shivaratri,BLR,A2 Buffalo Milk,-3,3,1829.0,1943.0,-3.12,-3.57
+Maha Shivaratri,BLR,A2 Buffalo Milk,-2,3,1844.0,1943.0,1.76,0.44
+Maha Shivaratri,BLR,A2 Buffalo Milk,-1,3,1928.0,1943.0,-0.21,0.26
+Maha Shivaratri,BLR,A2 Buffalo Milk,0,3,2105.0,1943.0,7.72,6.43
+Maha Shivaratri,BLR,A2 Buffalo Milk,1,3,1993.0,1943.0,1.49,1.73
+Maha Shivaratri,BLR,A2 Buffalo Milk,2,3,2008.0,1943.0,1.25,0.86
+Maha Shivaratri,BLR,A2 Buffalo Milk,3,3,1973.0,1943.0,3.61,3.75
+Maha Shivaratri,BLR,A2 Buffalo Milk,4,3,1841.0,1943.0,0.91,-0.09
+Maha Shivaratri,BLR,A2 Buffalo Milk,5,3,1943.0,1943.0,0.1,2.11
+Maha Shivaratri,BLR,A2 Buffalo Milk,6,3,1943.0,1943.0,0.0,-0.83
+Maha Shivaratri,BLR,A2 Buffalo Milk,7,3,2009.0,1943.0,3.4,1.2
+Maha Shivaratri,BLR,A2 Desi Cow Milk,-7,3,326.0,331.5,-1.66,0.43
+Maha Shivaratri,BLR,A2 Desi Cow Milk,-6,3,332.0,331.5,0.15,-4.76
+Maha Shivaratri,BLR,A2 Desi Cow Milk,-5,3,343.0,331.5,3.47,2.01
+Maha Shivaratri,BLR,A2 Desi Cow Milk,-4,3,346.0,331.5,4.27,-0.76
+Maha Shivaratri,BLR,A2 Desi Cow Milk,-3,3,323.0,331.5,-2.56,-1.95
+Maha Shivaratri,BLR,A2 Desi Cow Milk,-2,3,323.0,331.5,2.6,0.96
+Maha Shivaratri,BLR,A2 Desi Cow Milk,-1,3,324.0,331.5,-2.26,-1.41
+Maha Shivaratri,BLR,A2 Desi Cow Milk,0,3,362.0,331.5,4.11,5.38
+Maha Shivaratri,BLR,A2 Desi Cow Milk,1,3,350.0,331.5,4.78,3.86
+Maha Shivaratri,BLR,A2 Desi Cow Milk,2,3,359.0,331.5,-4.44,-3.17
+Maha Shivaratri,BLR,A2 Desi Cow Milk,3,3,336.0,331.5,1.26,1.28
+Maha Shivaratri,BLR,A2 Desi Cow Milk,4,3,322.0,331.5,-2.87,-1.21
+Maha Shivaratri,BLR,A2 Desi Cow Milk,5,3,331.0,331.5,0.4,0.56
+Maha Shivaratri,BLR,A2 Desi Cow Milk,6,3,320.0,331.5,-1.42,-1.76
+Maha Shivaratri,BLR,A2 Desi Cow Milk,7,3,341.0,331.5,2.87,1.58
+Maha Shivaratri,BLR,Cow Milk,-7,3,2170.0,2242.0,-5.34,-2.77
+Maha Shivaratri,BLR,Cow Milk,-6,3,2267.0,2242.0,-1.11,-1.66
+Maha Shivaratri,BLR,Cow Milk,-5,3,2283.0,2242.0,1.83,-0.58
+Maha Shivaratri,BLR,Cow Milk,-4,3,2259.0,2242.0,0.76,0.92
+Maha Shivaratri,BLR,Cow Milk,-3,3,2139.0,2242.0,-2.81,-1.94
+Maha Shivaratri,BLR,Cow Milk,-2,3,2176.0,2242.0,-2.64,-0.85
+Maha Shivaratri,BLR,Cow Milk,-1,3,2175.0,2242.0,0.11,0.06
+Maha Shivaratri,BLR,Cow Milk,0,3,2357.0,2242.0,9.4,7.33
+Maha Shivaratri,BLR,Cow Milk,1,3,2266.0,2242.0,-1.16,-2.49
+Maha Shivaratri,BLR,Cow Milk,2,3,2209.0,2242.0,-1.47,-2.32
+Maha Shivaratri,BLR,Cow Milk,3,3,2162.0,2242.0,-0.98,0.35
+Maha Shivaratri,BLR,Cow Milk,4,3,2022.0,2242.0,2.9,-0.51
+Maha Shivaratri,BLR,Cow Milk,5,3,2184.0,2242.0,1.03,3.53
+Maha Shivaratri,BLR,Cow Milk,6,3,2166.0,2242.0,-1.03,0.53
+Maha Shivaratri,BLR,Cow Milk,7,3,2225.0,2242.0,-0.76,-0.31
+Maha Shivaratri,BLR,Curd,-7,3,155.0,190.5,-16.61,-12.1
+Maha Shivaratri,BLR,Curd,-6,3,170.0,190.5,-10.76,-8.48
+Maha Shivaratri,BLR,Curd,-5,3,205.0,190.5,3.16,3.22
+Maha Shivaratri,BLR,Curd,-4,3,293.0,190.5,8.12,21.16
+Maha Shivaratri,BLR,Curd,-3,3,245.0,190.5,43.16,53.45
+Maha Shivaratri,BLR,Curd,-2,3,172.0,190.5,-1.48,4.34
+Maha Shivaratri,BLR,Curd,-1,3,168.0,190.5,-11.58,-7.3
+Maha Shivaratri,BLR,Curd,0,3,290.0,190.5,36.84,41.13
+Maha Shivaratri,BLR,Curd,1,3,279.0,190.5,15.79,23.83
+Maha Shivaratri,BLR,Curd,2,3,171.0,190.5,5.54,0.89
+Maha Shivaratri,BLR,Curd,3,3,221.0,190.5,16.01,18.94
+Maha Shivaratri,BLR,Curd,4,3,193.0,190.5,1.31,0.61
+Maha Shivaratri,BLR,Curd,5,3,188.0,190.5,4.43,6.3
+Maha Shivaratri,BLR,Curd,6,3,175.0,190.5,-5.54,-4.21
+Maha Shivaratri,BLR,Curd,7,3,251.0,190.5,1.05,9.83
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,-7,3,464.0,440.5,2.63,2.09
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,-6,3,433.0,440.5,-0.24,0.04
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,-5,3,450.0,440.5,1.46,1.29
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,-4,3,434.0,440.5,-1.48,-2.1
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,-3,3,413.0,440.5,-2.24,-2.43
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,-2,3,424.0,440.5,-0.68,-1.56
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,-1,3,421.0,440.5,-4.43,-2.47
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,0,3,469.0,440.5,5.37,5.15
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,1,3,464.0,440.5,-0.29,-0.17
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,2,3,452.0,440.5,2.61,2.53
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,3,3,445.0,440.5,1.02,1.7
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,4,3,410.0,440.5,-6.92,-6.21
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,5,3,435.0,440.5,-1.25,0.36
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,6,3,446.0,440.5,1.25,0.49
+Maha Shivaratri,BLR,Double Toned A2 Buffalo Milk,7,3,460.0,440.5,4.43,2.57
+Maha Shivaratri,BLR,Skim Milk,-7,3,381.0,380.5,-1.74,-1.2
+Maha Shivaratri,BLR,Skim Milk,-6,3,380.0,380.5,-0.13,-2.5
+Maha Shivaratri,BLR,Skim Milk,-5,3,378.0,380.5,-0.66,-5.06
+Maha Shivaratri,BLR,Skim Milk,-4,3,350.0,380.5,-8.02,-5.72
+Maha Shivaratri,BLR,Skim Milk,-3,3,357.0,380.5,-6.18,-6.47
+Maha Shivaratri,BLR,Skim Milk,-2,3,353.0,380.5,-3.96,-3.47
+Maha Shivaratri,BLR,Skim Milk,-1,3,400.0,380.5,-1.27,-2.35
+Maha Shivaratri,BLR,Skim Milk,0,3,421.0,380.5,4.95,3.14
+Maha Shivaratri,BLR,Skim Milk,1,3,401.0,380.5,0.0,-1.17
+Maha Shivaratri,BLR,Skim Milk,2,3,402.0,380.5,3.8,2.82
+Maha Shivaratri,BLR,Skim Milk,3,3,378.0,380.5,0.79,2.35
+Maha Shivaratri,BLR,Skim Milk,4,3,342.0,380.5,-0.32,-0.18
+Maha Shivaratri,BLR,Skim Milk,5,3,410.0,380.5,5.94,3.98
+Maha Shivaratri,BLR,Skim Milk,6,3,397.0,380.5,4.34,4.02
+Maha Shivaratri,BLR,Skim Milk,7,3,419.0,380.5,1.98,1.44
+Maha Shivaratri,BLR,Toned Milk,-7,1,481.0,483.5,-0.52,-0.52
+Maha Shivaratri,BLR,Toned Milk,-6,1,471.0,483.5,-2.59,-2.59
+Maha Shivaratri,BLR,Toned Milk,-5,1,504.0,483.5,4.24,4.24
+Maha Shivaratri,BLR,Toned Milk,-4,1,486.0,483.5,0.52,0.52
+Maha Shivaratri,BLR,Toned Milk,-3,1,487.0,483.5,0.72,0.72
+Maha Shivaratri,BLR,Toned Milk,-2,1,494.0,483.5,2.17,2.17
+Maha Shivaratri,BLR,Toned Milk,-1,1,432.0,483.5,-10.65,-10.65
+Maha Shivaratri,BLR,Toned Milk,0,1,497.0,483.5,2.79,2.79
+Maha Shivaratri,BLR,Toned Milk,1,1,535.0,483.5,10.65,10.65
+Maha Shivaratri,BLR,Toned Milk,2,1,512.0,483.5,5.89,5.89
+Maha Shivaratri,BLR,Toned Milk,3,1,523.0,483.5,8.17,8.17
+Maha Shivaratri,BLR,Toned Milk,4,1,523.0,483.5,8.17,8.17
+Maha Shivaratri,BLR,Toned Milk,5,1,506.0,483.5,4.65,4.65
+Maha Shivaratri,BLR,Toned Milk,6,1,481.0,483.5,-0.52,-0.52
+Maha Shivaratri,BLR,Toned Milk,7,1,448.0,483.5,-7.34,-7.34
+Maha Shivaratri,HYD,A2 Buffalo Milk,-7,3,15069.0,14934.0,-0.58,-0.92
+Maha Shivaratri,HYD,A2 Buffalo Milk,-6,3,15021.0,14934.0,0.32,-0.2
+Maha Shivaratri,HYD,A2 Buffalo Milk,-5,3,15104.0,14934.0,-0.32,-0.87
+Maha Shivaratri,HYD,A2 Buffalo Milk,-4,3,14835.0,14934.0,-0.66,-0.1
+Maha Shivaratri,HYD,A2 Buffalo Milk,-3,3,14417.0,14934.0,-2.0,-1.34
+Maha Shivaratri,HYD,A2 Buffalo Milk,-2,3,14604.0,14934.0,2.03,0.66
+Maha Shivaratri,HYD,A2 Buffalo Milk,-1,3,14886.0,14934.0,0.13,0.26
+Maha Shivaratri,HYD,A2 Buffalo Milk,0,3,15767.0,14934.0,4.04,4.06
+Maha Shivaratri,HYD,A2 Buffalo Milk,1,3,15131.0,14934.0,1.32,0.71
+Maha Shivaratri,HYD,A2 Buffalo Milk,2,3,14896.0,14934.0,-0.25,-0.2
+Maha Shivaratri,HYD,A2 Buffalo Milk,3,3,14723.0,14934.0,-0.35,0.47
+Maha Shivaratri,HYD,A2 Buffalo Milk,4,3,14432.0,14934.0,0.99,-0.34
+Maha Shivaratri,HYD,A2 Buffalo Milk,5,3,14674.0,14934.0,0.51,0.62
+Maha Shivaratri,HYD,A2 Buffalo Milk,6,3,14922.0,14934.0,-0.08,-0.13
+Maha Shivaratri,HYD,A2 Buffalo Milk,7,3,14946.0,14934.0,0.08,-0.44
+Maha Shivaratri,HYD,A2 Desi Cow Milk,-7,3,1556.0,1490.0,0.03,0.82
+Maha Shivaratri,HYD,A2 Desi Cow Milk,-6,3,1526.0,1490.0,0.03,0.12
+Maha Shivaratri,HYD,A2 Desi Cow Milk,-5,3,1531.0,1490.0,-0.03,0.7
+Maha Shivaratri,HYD,A2 Desi Cow Milk,-4,3,1460.0,1490.0,-2.01,-1.37
+Maha Shivaratri,HYD,A2 Desi Cow Milk,-3,3,1463.0,1490.0,-1.81,-1.99
+Maha Shivaratri,HYD,A2 Desi Cow Milk,-2,3,1451.0,1490.0,2.08,0.71
+Maha Shivaratri,HYD,A2 Desi Cow Milk,-1,3,1518.0,1490.0,1.88,2.76
+Maha Shivaratri,HYD,A2 Desi Cow Milk,0,3,1981.0,1490.0,32.95,33.34
+Maha Shivaratri,HYD,A2 Desi Cow Milk,1,3,1520.0,1490.0,2.01,0.68
+Maha Shivaratri,HYD,A2 Desi Cow Milk,2,3,1468.0,1490.0,-1.48,-1.45
+Maha Shivaratri,HYD,A2 Desi Cow Milk,3,3,1438.0,1490.0,0.47,-0.26
+Maha Shivaratri,HYD,A2 Desi Cow Milk,4,3,1419.0,1490.0,-1.81,-1.99
+Maha Shivaratri,HYD,A2 Desi Cow Milk,5,3,1495.0,1490.0,0.95,1.17
+Maha Shivaratri,HYD,A2 Desi Cow Milk,6,3,1476.0,1490.0,-0.94,-1.02
+Maha Shivaratri,HYD,A2 Desi Cow Milk,7,3,1485.0,1490.0,-0.34,-1.54
+Maha Shivaratri,HYD,Cow Milk,-7,3,8981.0,8841.0,0.45,0.45
+Maha Shivaratri,HYD,Cow Milk,-6,3,8899.0,8841.0,-0.48,-0.26
+Maha Shivaratri,HYD,Cow Milk,-5,3,8888.0,8841.0,0.33,-0.13
+Maha Shivaratri,HYD,Cow Milk,-4,3,8814.0,8841.0,-0.31,-0.15
+Maha Shivaratri,HYD,Cow Milk,-3,3,8730.0,8841.0,-1.26,-0.54
+Maha Shivaratri,HYD,Cow Milk,-2,3,8710.0,8841.0,1.4,0.93
+Maha Shivaratri,HYD,Cow Milk,-1,3,8920.0,8841.0,2.76,2.68
+Maha Shivaratri,HYD,Cow Milk,0,3,10577.0,8841.0,19.64,18.28
+Maha Shivaratri,HYD,Cow Milk,1,3,9121.0,8841.0,3.17,2.57
+Maha Shivaratri,HYD,Cow Milk,2,3,8900.0,8841.0,0.67,0.69
+Maha Shivaratri,HYD,Cow Milk,3,3,8698.0,8841.0,0.05,0.13
+Maha Shivaratri,HYD,Cow Milk,4,3,8424.0,8841.0,1.29,-0.59
+Maha Shivaratri,HYD,Cow Milk,5,3,8720.0,8841.0,-0.45,-0.26
+Maha Shivaratri,HYD,Cow Milk,6,3,8692.0,8841.0,-0.33,-0.37
+Maha Shivaratri,HYD,Cow Milk,7,3,8868.0,8841.0,0.31,-0.28
+Maha Shivaratri,HYD,Curd,-7,3,1169.0,1207.5,-3.19,2.24
+Maha Shivaratri,HYD,Curd,-6,3,1229.0,1207.5,4.59,19.23
+Maha Shivaratri,HYD,Curd,-5,3,916.0,1207.5,-0.29,-3.22
+Maha Shivaratri,HYD,Curd,-4,3,963.0,1207.5,1.95,1.79
+Maha Shivaratri,HYD,Curd,-3,3,1225.0,1207.5,104.46,74.81
+Maha Shivaratri,HYD,Curd,-2,3,867.0,1207.5,3.35,-1.34
+Maha Shivaratri,HYD,Curd,-1,3,873.0,1207.5,-0.7,-5.3
+Maha Shivaratri,HYD,Curd,0,3,1319.0,1207.5,32.31,29.17
+Maha Shivaratri,HYD,Curd,1,3,1242.0,1207.5,9.8,11.03
+Maha Shivaratri,HYD,Curd,2,3,928.0,1207.5,0.62,2.6
+Maha Shivaratri,HYD,Curd,3,3,1208.0,1207.5,9.94,10.32
+Maha Shivaratri,HYD,Curd,4,3,1205.0,1207.5,-0.81,-3.4
+Maha Shivaratri,HYD,Curd,5,3,1028.0,1207.5,-1.17,-8.58
+Maha Shivaratri,HYD,Curd,6,3,1175.0,1207.5,0.81,9.97
+Maha Shivaratri,HYD,Curd,7,3,1134.0,1207.5,-2.07,1.25
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,-7,3,5159.0,5325.0,-2.78,-1.63
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,-6,3,5350.0,5325.0,0.47,-0.12
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,-5,3,5300.0,5325.0,-0.79,-2.31
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,-4,3,5406.0,5325.0,0.05,0.03
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,-3,3,5347.0,5325.0,-0.15,-1.62
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,-2,3,5431.0,5325.0,1.81,0.68
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,-1,3,5304.0,5325.0,-0.37,-0.08
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,0,3,5523.0,5325.0,2.76,3.07
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,1,3,5452.0,5325.0,-0.12,0.44
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,2,3,5454.0,5325.0,-1.06,-0.13
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,3,3,5528.0,5325.0,0.47,0.66
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,4,3,5396.0,5325.0,1.33,-0.71
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,5,3,5393.0,5325.0,1.28,0.88
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,6,3,5281.0,5325.0,-0.05,0.2
+Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,7,3,5146.0,5325.0,0.33,-0.22
+Maha Shivaratri,HYD,Skim Milk,-7,3,2179.0,2177.0,0.09,-0.43
+Maha Shivaratri,HYD,Skim Milk,-6,3,2195.0,2177.0,1.57,1.64
+Maha Shivaratri,HYD,Skim Milk,-5,3,2175.0,2177.0,-0.09,-0.69
+Maha Shivaratri,HYD,Skim Milk,-4,3,2148.0,2177.0,-0.63,-0.73
+Maha Shivaratri,HYD,Skim Milk,-3,3,2071.0,2177.0,0.02,-0.77
+Maha Shivaratri,HYD,Skim Milk,-2,3,2213.0,2177.0,1.65,1.91
+Maha Shivaratri,HYD,Skim Milk,-1,3,2173.0,2177.0,-0.02,0.29
+Maha Shivaratri,HYD,Skim Milk,0,3,2248.0,2177.0,2.04,2.38
+Maha Shivaratri,HYD,Skim Milk,1,3,2201.0,2177.0,-0.8,-0.17
+Maha Shivaratri,HYD,Skim Milk,2,3,2152.0,2177.0,-1.15,-0.87
+Maha Shivaratri,HYD,Skim Milk,3,3,2093.0,2177.0,-3.86,-1.4
+Maha Shivaratri,HYD,Skim Milk,4,3,2120.0,2177.0,0.23,0.17
+Maha Shivaratri,HYD,Skim Milk,5,3,2135.0,2177.0,-1.37,-0.22
+Maha Shivaratri,HYD,Skim Milk,6,3,2203.0,2177.0,0.59,0.27
+Maha Shivaratri,HYD,Skim Milk,7,3,2231.0,2177.0,-0.65,-0.37
+Maha Shivaratri,HYD,Toned Milk,-7,1,7347.0,7708.0,-4.68,-4.68
+Maha Shivaratri,HYD,Toned Milk,-6,1,7693.0,7708.0,-0.19,-0.19
+Maha Shivaratri,HYD,Toned Milk,-5,1,7551.0,7708.0,-2.04,-2.04
+Maha Shivaratri,HYD,Toned Milk,-4,1,7723.0,7708.0,0.19,0.19
+Maha Shivaratri,HYD,Toned Milk,-3,1,7424.0,7708.0,-3.68,-3.68
+Maha Shivaratri,HYD,Toned Milk,-2,1,7897.0,7708.0,2.45,2.45
+Maha Shivaratri,HYD,Toned Milk,-1,1,7942.0,7708.0,3.04,3.04
+Maha Shivaratri,HYD,Toned Milk,0,1,8285.0,7708.0,7.49,7.49
+Maha Shivaratri,HYD,Toned Milk,1,1,7902.0,7708.0,2.52,2.52
+Maha Shivaratri,HYD,Toned Milk,2,1,8013.0,7708.0,3.96,3.96
+Maha Shivaratri,HYD,Toned Milk,3,1,7966.0,7708.0,3.35,3.35
+Maha Shivaratri,HYD,Toned Milk,4,1,8134.0,7708.0,5.53,5.53
+Maha Shivaratri,HYD,Toned Milk,5,1,7931.0,7708.0,2.89,2.89
+Maha Shivaratri,HYD,Toned Milk,6,1,7915.0,7708.0,2.69,2.69
+Maha Shivaratri,HYD,Toned Milk,7,1,7655.0,7708.0,-0.69,-0.69
+Naga Panchami,BLR,A2 Buffalo Milk,-7,3,2207.0,2190.5,0.75,-19.09
+Naga Panchami,BLR,A2 Buffalo Milk,-6,3,2320.0,2190.5,5.91,4.89
+Naga Panchami,BLR,A2 Buffalo Milk,-5,3,2319.0,2190.5,2.3,2.41
+Naga Panchami,BLR,A2 Buffalo Milk,-4,3,2261.0,2190.5,3.22,2.65
+Naga Panchami,BLR,A2 Buffalo Milk,-3,3,2193.0,2190.5,0.11,1.11
+Naga Panchami,BLR,A2 Buffalo Milk,-2,3,2132.0,2190.5,-2.67,-1.16
+Naga Panchami,BLR,A2 Buffalo Milk,-1,3,2125.0,2190.5,-2.99,-1.62
+Naga Panchami,BLR,A2 Buffalo Milk,0,3,2261.0,2190.5,3.22,2.51
+Naga Panchami,BLR,A2 Buffalo Milk,1,2,1636.0,1628.5,0.05,0.05
+Naga Panchami,BLR,A2 Buffalo Milk,2,2,1602.5,1628.5,-2.6,-2.6
+Naga Panchami,BLR,A2 Buffalo Milk,3,2,1637.5,1628.5,0.31,0.31
+Naga Panchami,BLR,A2 Buffalo Milk,4,2,605.0,1628.5,-47.2,-47.2
+Naga Panchami,BLR,A2 Buffalo Milk,5,2,1547.0,1628.5,-3.25,-3.25
+Naga Panchami,BLR,A2 Buffalo Milk,6,2,1573.0,1628.5,-4.8,-4.8
+Naga Panchami,BLR,A2 Buffalo Milk,7,2,1424.5,1628.5,-10.24,-10.24
+Naga Panchami,BLR,A2 Desi Cow Milk,-7,3,512.0,473.0,0.39,-10.99
+Naga Panchami,BLR,A2 Desi Cow Milk,-6,3,476.0,473.0,0.63,2.28
+Naga Panchami,BLR,A2 Desi Cow Milk,-5,3,494.0,473.0,4.44,4.41
+Naga Panchami,BLR,A2 Desi Cow Milk,-4,3,483.0,473.0,2.11,0.35
+Naga Panchami,BLR,A2 Desi Cow Milk,-3,3,476.0,473.0,0.19,-1.09
+Naga Panchami,BLR,A2 Desi Cow Milk,-2,3,453.0,473.0,-0.39,-1.1
+Naga Panchami,BLR,A2 Desi Cow Milk,-1,3,497.0,473.0,5.07,5.57
+Naga Panchami,BLR,A2 Desi Cow Milk,0,3,500.0,473.0,5.95,6.84
+Naga Panchami,BLR,A2 Desi Cow Milk,1,2,393.5,369.25,6.65,6.65
+Naga Panchami,BLR,A2 Desi Cow Milk,2,2,371.0,369.25,0.0,0.0
+Naga Panchami,BLR,A2 Desi Cow Milk,3,2,402.0,369.25,8.86,8.86
+Naga Panchami,BLR,A2 Desi Cow Milk,4,2,153.0,369.25,-45.18,-45.18
+Naga Panchami,BLR,A2 Desi Cow Milk,5,2,355.5,369.25,-3.53,-3.53
+Naga Panchami,BLR,A2 Desi Cow Milk,6,2,355.5,369.25,-4.93,-4.93
+Naga Panchami,BLR,A2 Desi Cow Milk,7,2,327.5,369.25,-9.36,-9.36
+Naga Panchami,BLR,Cow Milk,-7,3,1828.0,1800.0,1.56,-17.91
+Naga Panchami,BLR,Cow Milk,-6,3,1787.0,1800.0,4.33,2.69
+Naga Panchami,BLR,Cow Milk,-5,3,1813.0,1800.0,5.31,3.98
+Naga Panchami,BLR,Cow Milk,-4,3,1773.0,1800.0,2.18,1.1
+Naga Panchami,BLR,Cow Milk,-3,3,1726.0,1800.0,3.84,1.04
+Naga Panchami,BLR,Cow Milk,-2,3,1766.0,1800.0,-1.89,0.55
+Naga Panchami,BLR,Cow Milk,-1,3,1797.0,1800.0,3.5,3.12
+Naga Panchami,BLR,Cow Milk,0,3,1786.0,1800.0,0.66,2.43
+Naga Panchami,BLR,Cow Milk,1,2,1899.0,1848.5,2.63,2.63
+Naga Panchami,BLR,Cow Milk,2,2,1868.0,1848.5,1.04,1.04
+Naga Panchami,BLR,Cow Milk,3,2,1878.5,1848.5,1.5,1.5
+Naga Panchami,BLR,Cow Milk,4,2,871.0,1848.5,-47.79,-47.79
+Naga Panchami,BLR,Cow Milk,5,2,1786.0,1848.5,-3.1,-3.1
+Naga Panchami,BLR,Cow Milk,6,2,1798.5,1848.5,-2.77,-2.77
+Naga Panchami,BLR,Cow Milk,7,2,1596.5,1848.5,-12.68,-12.68
+Naga Panchami,BLR,Curd,-7,3,217.0,208.0,6.43,31.86
+Naga Panchami,BLR,Curd,-6,3,199.0,208.0,-4.27,-1.93
+Naga Panchami,BLR,Curd,-5,3,220.0,208.0,-6.83,-5.57
+Naga Panchami,BLR,Curd,-4,3,158.0,208.0,-2.81,7.01
+Naga Panchami,BLR,Curd,-3,3,226.0,208.0,-9.24,0.66
+Naga Panchami,BLR,Curd,-2,3,207.0,208.0,-0.48,-2.81
+Naga Panchami,BLR,Curd,-1,3,194.0,208.0,-4.82,-2.74
+Naga Panchami,BLR,Curd,0,3,197.0,208.0,-12.05,16.88
+Naga Panchami,BLR,Curd,1,2,106.0,156.75,-28.48,-28.48
+Naga Panchami,BLR,Curd,2,2,174.5,156.75,8.42,8.42
+Naga Panchami,BLR,Curd,3,2,144.5,156.75,-7.17,-7.17
+Naga Panchami,BLR,Curd,4,2,54.5,156.75,-52.54,-52.54
+Naga Panchami,BLR,Curd,5,2,164.5,156.75,4.78,4.78
+Naga Panchami,BLR,Curd,6,2,192.5,156.75,30.15,30.15
+Naga Panchami,BLR,Curd,7,2,132.0,156.75,-19.02,-19.02
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,-7,3,510.0,482.0,2.92,-12.04
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,-6,3,519.0,482.0,1.78,3.18
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,-5,3,498.0,482.0,1.42,1.55
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,-4,3,501.0,482.0,-0.71,0.79
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,-3,3,503.0,482.0,3.91,1.38
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,-2,3,488.0,482.0,1.24,2.85
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,-1,3,479.0,482.0,0.09,4.92
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,0,3,471.0,482.0,6.41,4.23
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,1,2,396.0,381.5,2.86,2.86
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,2,2,374.0,381.5,-1.41,-1.41
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,3,2,405.5,381.5,5.94,5.94
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,4,2,153.5,381.5,-47.68,-47.68
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,5,2,374.5,381.5,-1.3,-1.3
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,6,2,358.0,381.5,-5.84,-5.84
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,7,2,338.0,381.5,-8.8,-8.8
+Naga Panchami,BLR,Skim Milk,-7,3,484.0,489.0,-1.02,-2.27
+Naga Panchami,BLR,Skim Milk,-6,3,470.0,489.0,0.66,-0.79
+Naga Panchami,BLR,Skim Milk,-5,3,496.0,489.0,1.43,-0.55
+Naga Panchami,BLR,Skim Milk,-4,3,494.0,489.0,1.02,4.01
+Naga Panchami,BLR,Skim Milk,-3,3,481.0,489.0,-1.64,-0.04
+Naga Panchami,BLR,Skim Milk,-2,3,448.0,489.0,-4.41,-0.11
+Naga Panchami,BLR,Skim Milk,-1,3,454.0,489.0,-1.78,-2.88
+Naga Panchami,BLR,Skim Milk,0,3,481.0,489.0,1.6,4.91
+Naga Panchami,BLR,Skim Milk,1,2,352.0,352.5,-0.19,-0.19
+Naga Panchami,BLR,Skim Milk,2,2,358.0,352.5,2.31,2.31
+Naga Panchami,BLR,Skim Milk,3,2,358.5,352.5,3.38,3.38
+Naga Panchami,BLR,Skim Milk,4,2,106.0,352.5,-42.86,-42.86
+Naga Panchami,BLR,Skim Milk,5,2,326.5,352.5,-3.61,-3.61
+Naga Panchami,BLR,Skim Milk,6,2,353.0,352.5,-0.2,-0.2
+Naga Panchami,BLR,Skim Milk,7,2,296.5,352.5,-14.14,-14.14
+Naga Panchami,BLR,Toned Milk,-7,2,364.0,351.25,3.6,3.6
+Naga Panchami,BLR,Toned Milk,-6,2,343.0,351.25,-1.2,-1.2
+Naga Panchami,BLR,Toned Milk,-5,2,353.0,351.25,0.05,0.05
+Naga Panchami,BLR,Toned Milk,-4,2,347.5,351.25,-1.46,-1.46
+Naga Panchami,BLR,Toned Milk,-3,2,329.0,351.25,-3.7,-3.7
+Naga Panchami,BLR,Toned Milk,-2,2,326.0,351.25,-9.28,-9.28
+Naga Panchami,BLR,Toned Milk,-1,2,352.0,351.25,1.19,1.19
+Naga Panchami,BLR,Toned Milk,0,2,347.5,351.25,0.66,0.66
+Naga Panchami,BLR,Toned Milk,1,1,160.0,141.0,13.48,13.48
+Naga Panchami,BLR,Toned Milk,2,1,168.0,141.0,19.15,19.15
+Naga Panchami,BLR,Toned Milk,3,1,153.0,141.0,8.51,8.51
+Naga Panchami,BLR,Toned Milk,4,1,21.0,141.0,-85.11,-85.11
+Naga Panchami,BLR,Toned Milk,5,1,154.0,141.0,9.22,9.22
+Naga Panchami,BLR,Toned Milk,6,1,156.0,141.0,10.64,10.64
+Naga Panchami,BLR,Toned Milk,7,1,132.0,141.0,-6.38,-6.38
+Naga Panchami,HYD,A2 Buffalo Milk,-7,3,15879.0,15759.5,0.76,0.63
+Naga Panchami,HYD,A2 Buffalo Milk,-6,3,16339.0,15759.5,1.13,1.52
+Naga Panchami,HYD,A2 Buffalo Milk,-5,3,16208.0,15759.5,-0.42,0.47
+Naga Panchami,HYD,A2 Buffalo Milk,-4,3,16413.0,15759.5,0.61,1.54
+Naga Panchami,HYD,A2 Buffalo Milk,-3,3,16132.0,15759.5,0.89,-0.25
+Naga Panchami,HYD,A2 Buffalo Milk,-2,3,15880.0,15759.5,0.76,0.41
+Naga Panchami,HYD,A2 Buffalo Milk,-1,3,15773.0,15759.5,0.09,-0.34
+Naga Panchami,HYD,A2 Buffalo Milk,0,3,16149.0,15759.5,1.79,1.33
+Naga Panchami,HYD,A2 Buffalo Milk,1,2,15060.0,15034.0,0.09,0.09
+Naga Panchami,HYD,A2 Buffalo Milk,2,2,14915.5,15034.0,-0.91,-0.91
+Naga Panchami,HYD,A2 Buffalo Milk,3,2,15061.0,15034.0,0.07,0.07
+Naga Panchami,HYD,A2 Buffalo Milk,4,2,11390.5,15034.0,-23.12,-23.12
+Naga Panchami,HYD,A2 Buffalo Milk,5,2,14785.5,15034.0,-1.64,-1.64
+Naga Panchami,HYD,A2 Buffalo Milk,6,2,14781.0,15034.0,-1.73,-1.73
+Naga Panchami,HYD,A2 Buffalo Milk,7,2,14799.5,15034.0,-1.38,-1.38
+Naga Panchami,HYD,A2 Desi Cow Milk,-7,3,1531.0,1537.0,0.17,0.2
+Naga Panchami,HYD,A2 Desi Cow Milk,-6,3,1550.0,1537.0,-0.17,-0.45
+Naga Panchami,HYD,A2 Desi Cow Milk,-5,3,1552.0,1537.0,-0.81,-1.14
+Naga Panchami,HYD,A2 Desi Cow Milk,-4,3,1626.0,1537.0,5.79,5.33
+Naga Panchami,HYD,A2 Desi Cow Milk,-3,3,1531.0,1537.0,-0.98,-1.59
+Naga Panchami,HYD,A2 Desi Cow Milk,-2,3,1528.0,1537.0,-0.88,-0.14
+Naga Panchami,HYD,A2 Desi Cow Milk,-1,3,1562.0,1537.0,1.04,0.7
+Naga Panchami,HYD,A2 Desi Cow Milk,0,3,1637.0,1537.0,6.51,6.51
+Naga Panchami,HYD,A2 Desi Cow Milk,1,2,1513.5,1510.75,0.13,0.13
+Naga Panchami,HYD,A2 Desi Cow Milk,2,2,1498.5,1510.75,-0.84,-0.84
+Naga Panchami,HYD,A2 Desi Cow Milk,3,2,1572.0,1510.75,3.96,3.96
+Naga Panchami,HYD,A2 Desi Cow Milk,4,2,1126.5,1510.75,-25.01,-25.01
+Naga Panchami,HYD,A2 Desi Cow Milk,5,2,1474.5,1510.75,-2.43,-2.43
+Naga Panchami,HYD,A2 Desi Cow Milk,6,2,1533.5,1510.75,1.52,1.52
+Naga Panchami,HYD,A2 Desi Cow Milk,7,2,1644.0,1510.75,9.07,9.07
+Naga Panchami,HYD,Cow Milk,-7,3,9211.0,9273.0,-0.67,-0.5
+Naga Panchami,HYD,Cow Milk,-6,3,9423.0,9273.0,0.4,0.79
+Naga Panchami,HYD,Cow Milk,-5,3,9436.0,9273.0,1.19,0.78
+Naga Panchami,HYD,Cow Milk,-4,3,9449.0,9273.0,0.43,2.26
+Naga Panchami,HYD,Cow Milk,-3,3,9125.0,9273.0,0.94,-0.0
+Naga Panchami,HYD,Cow Milk,-2,3,9198.0,9273.0,-0.81,-0.69
+Naga Panchami,HYD,Cow Milk,-1,3,9307.0,9273.0,-0.03,0.43
+Naga Panchami,HYD,Cow Milk,0,3,9472.0,9273.0,5.95,5.09
+Naga Panchami,HYD,Cow Milk,1,2,8910.5,8867.25,0.45,0.45
+Naga Panchami,HYD,Cow Milk,2,2,8814.0,8867.25,-0.72,-0.72
+Naga Panchami,HYD,Cow Milk,3,2,9185.0,8867.25,3.34,3.34
+Naga Panchami,HYD,Cow Milk,4,2,6685.5,8867.25,-23.54,-23.54
+Naga Panchami,HYD,Cow Milk,5,2,8703.0,8867.25,-1.86,-1.86
+Naga Panchami,HYD,Cow Milk,6,2,8853.0,8867.25,-0.2,-0.2
+Naga Panchami,HYD,Cow Milk,7,2,9174.0,8867.25,3.85,3.85
+Naga Panchami,HYD,Curd,-7,3,1495.0,1282.5,16.57,39.31
+Naga Panchami,HYD,Curd,-6,3,963.0,1282.5,-24.91,-18.47
+Naga Panchami,HYD,Curd,-5,3,1411.0,1282.5,-2.39,0.1
+Naga Panchami,HYD,Curd,-4,3,1498.0,1282.5,3.63,21.69
+Naga Panchami,HYD,Curd,-3,3,1080.0,1282.5,-15.79,-17.7
+Naga Panchami,HYD,Curd,-2,3,1100.0,1282.5,-14.23,-12.87
+Naga Panchami,HYD,Curd,-1,3,1060.0,1282.5,-17.35,-16.83
+Naga Panchami,HYD,Curd,0,3,1466.0,1282.5,1.42,39.7
+Naga Panchami,HYD,Curd,1,2,1653.5,1112.0,40.07,40.07
+Naga Panchami,HYD,Curd,2,2,1612.5,1112.0,37.58,37.58
+Naga Panchami,HYD,Curd,3,2,954.0,1112.0,-13.71,-13.71
+Naga Panchami,HYD,Curd,4,2,735.5,1112.0,-30.59,-30.59
+Naga Panchami,HYD,Curd,5,2,1325.0,1112.0,15.42,15.42
+Naga Panchami,HYD,Curd,6,2,1327.5,1112.0,26.77,26.77
+Naga Panchami,HYD,Curd,7,2,1996.0,1112.0,70.12,70.12
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,-7,3,5451.0,5372.5,1.46,1.41
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,-6,3,5366.0,5372.5,-0.12,0.43
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,-5,3,5393.0,5372.5,0.52,1.32
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,-4,3,5383.0,5372.5,0.2,1.57
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,-3,3,5457.0,5372.5,1.57,0.56
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,-2,3,5440.0,5372.5,-0.31,-0.19
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,-1,3,5348.0,5372.5,-0.46,0.17
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,0,3,5398.0,5372.5,0.47,0.59
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,1,2,5586.0,5569.75,0.22,0.22
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,2,2,5501.5,5569.75,-1.32,-1.32
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,3,2,5596.5,5569.75,0.36,0.36
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,4,2,4263.0,5569.75,-22.66,-22.66
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,5,2,5499.5,5569.75,-1.26,-1.26
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,6,2,5460.5,5569.75,-1.99,-1.99
+Naga Panchami,HYD,Double Toned A2 Buffalo Milk,7,2,5372.5,5569.75,-3.45,-3.45
+Naga Panchami,HYD,Skim Milk,-7,3,2350.0,2307.5,1.84,1.78
+Naga Panchami,HYD,Skim Milk,-6,3,2277.0,2307.5,0.26,1.03
+Naga Panchami,HYD,Skim Milk,-5,3,2338.0,2307.5,1.32,1.7
+Naga Panchami,HYD,Skim Milk,-4,3,2257.0,2307.5,3.51,2.02
+Naga Panchami,HYD,Skim Milk,-3,3,2181.0,2307.5,1.47,-1.4
+Naga Panchami,HYD,Skim Milk,-2,3,2239.0,2307.5,-1.88,-0.92
+Naga Panchami,HYD,Skim Milk,-1,3,2248.0,2307.5,0.2,-0.12
+Naga Panchami,HYD,Skim Milk,0,3,2270.0,2307.5,4.12,2.33
+Naga Panchami,HYD,Skim Milk,1,2,2374.5,2350.25,1.08,1.08
+Naga Panchami,HYD,Skim Milk,2,2,2323.0,2350.25,-1.38,-1.38
+Naga Panchami,HYD,Skim Milk,3,2,2335.0,2350.25,-0.74,-0.74
+Naga Panchami,HYD,Skim Milk,4,2,1732.0,2350.25,-24.24,-24.24
+Naga Panchami,HYD,Skim Milk,5,2,2251.0,2350.25,-4.08,-4.08
+Naga Panchami,HYD,Skim Milk,6,2,2296.0,2350.25,-2.34,-2.34
+Naga Panchami,HYD,Skim Milk,7,2,2284.0,2350.25,-2.72,-2.72
+Naga Panchami,HYD,Toned Milk,-7,2,6071.5,6135.25,-3.31,-3.31
+Naga Panchami,HYD,Toned Milk,-6,2,6127.5,6135.25,-0.42,-0.42
+Naga Panchami,HYD,Toned Milk,-5,2,6183.5,6135.25,0.82,0.82
+Naga Panchami,HYD,Toned Milk,-4,2,6130.0,6135.25,2.49,2.49
+Naga Panchami,HYD,Toned Milk,-3,2,5803.5,6135.25,-2.12,-2.12
+Naga Panchami,HYD,Toned Milk,-2,2,5911.5,6135.25,-3.6,-3.6
+Naga Panchami,HYD,Toned Milk,-1,2,5932.0,6135.25,-2.08,-2.08
+Naga Panchami,HYD,Toned Milk,0,2,5988.5,6135.25,-0.79,-0.79
+Naga Panchami,HYD,Toned Milk,1,1,1953.0,1914.5,2.01,2.01
+Naga Panchami,HYD,Toned Milk,2,1,1998.0,1914.5,4.36,4.36
+Naga Panchami,HYD,Toned Milk,3,1,2078.0,1914.5,8.54,8.54
+Naga Panchami,HYD,Toned Milk,4,1,673.0,1914.5,-64.85,-64.85
+Naga Panchami,HYD,Toned Milk,5,1,2006.0,1914.5,4.78,4.78
+Naga Panchami,HYD,Toned Milk,6,1,2027.0,1914.5,5.88,5.88
+Naga Panchami,HYD,Toned Milk,7,1,1700.0,1914.5,-11.2,-11.2
+Nagula Chavithi,BLR,A2 Buffalo Milk,-7,2,1653.0,1715.75,-4.03,-4.03
+Nagula Chavithi,BLR,A2 Buffalo Milk,-6,2,1529.0,1715.75,-10.47,-10.47
+Nagula Chavithi,BLR,A2 Buffalo Milk,-5,2,1624.0,1715.75,-4.56,-4.56
+Nagula Chavithi,BLR,A2 Buffalo Milk,-4,2,1431.5,1715.75,-16.79,-16.79
+Nagula Chavithi,BLR,A2 Buffalo Milk,-3,2,1433.5,1715.75,-17.73,-17.73
+Nagula Chavithi,BLR,A2 Buffalo Milk,-2,2,1456.0,1715.75,-16.37,-16.37
+Nagula Chavithi,BLR,A2 Buffalo Milk,-1,2,1611.0,1715.75,-5.72,-5.72
+Nagula Chavithi,BLR,A2 Buffalo Milk,0,2,1651.0,1715.75,-2.97,-2.97
+Nagula Chavithi,BLR,A2 Buffalo Milk,1,2,1674.0,1715.75,-1.46,-1.46
+Nagula Chavithi,BLR,A2 Buffalo Milk,2,2,1724.5,1715.75,0.86,0.86
+Nagula Chavithi,BLR,A2 Buffalo Milk,3,2,1758.5,1715.75,3.14,3.14
+Nagula Chavithi,BLR,A2 Buffalo Milk,4,2,1767.0,1715.75,2.73,2.73
+Nagula Chavithi,BLR,A2 Buffalo Milk,5,2,1749.5,1715.75,1.82,1.82
+Nagula Chavithi,BLR,A2 Buffalo Milk,6,2,1805.5,1715.75,5.74,5.74
+Nagula Chavithi,BLR,A2 Buffalo Milk,7,2,1775.5,1715.75,3.76,3.76
+Nagula Chavithi,BLR,A2 Desi Cow Milk,-7,2,365.0,375.25,-2.08,-2.08
+Nagula Chavithi,BLR,A2 Desi Cow Milk,-6,2,359.0,375.25,-4.56,-4.56
+Nagula Chavithi,BLR,A2 Desi Cow Milk,-5,2,364.0,375.25,-3.0,-3.0
+Nagula Chavithi,BLR,A2 Desi Cow Milk,-4,2,323.0,375.25,-15.34,-15.34
+Nagula Chavithi,BLR,A2 Desi Cow Milk,-3,2,331.0,375.25,-14.19,-14.19
+Nagula Chavithi,BLR,A2 Desi Cow Milk,-2,2,334.0,375.25,-12.5,-12.5
+Nagula Chavithi,BLR,A2 Desi Cow Milk,-1,2,362.0,375.25,-3.99,-3.99
+Nagula Chavithi,BLR,A2 Desi Cow Milk,0,2,387.0,375.25,3.11,3.11
+Nagula Chavithi,BLR,A2 Desi Cow Milk,1,2,381.5,375.25,2.91,2.91
+Nagula Chavithi,BLR,A2 Desi Cow Milk,2,2,412.5,375.25,10.17,10.17
+Nagula Chavithi,BLR,A2 Desi Cow Milk,3,2,391.0,375.25,4.46,4.46
+Nagula Chavithi,BLR,A2 Desi Cow Milk,4,2,393.0,375.25,4.46,4.46
+Nagula Chavithi,BLR,A2 Desi Cow Milk,5,2,390.0,375.25,3.04,3.04
+Nagula Chavithi,BLR,A2 Desi Cow Milk,6,2,407.5,375.25,7.0,7.0
+Nagula Chavithi,BLR,A2 Desi Cow Milk,7,2,393.5,375.25,5.48,5.48
+Nagula Chavithi,BLR,Cow Milk,-7,2,1698.5,1780.75,-4.51,-4.51
+Nagula Chavithi,BLR,Cow Milk,-6,2,1613.0,1780.75,-9.21,-9.21
+Nagula Chavithi,BLR,Cow Milk,-5,2,1720.5,1780.75,-3.38,-3.38
+Nagula Chavithi,BLR,Cow Milk,-4,2,1537.5,1780.75,-13.87,-13.87
+Nagula Chavithi,BLR,Cow Milk,-3,2,1538.5,1780.75,-13.98,-13.98
+Nagula Chavithi,BLR,Cow Milk,-2,2,1558.5,1780.75,-12.78,-12.78
+Nagula Chavithi,BLR,Cow Milk,-1,2,1714.5,1780.75,-3.68,-3.68
+Nagula Chavithi,BLR,Cow Milk,0,2,1763.5,1780.75,-0.6,-0.6
+Nagula Chavithi,BLR,Cow Milk,1,2,1785.0,1780.75,0.52,0.52
+Nagula Chavithi,BLR,Cow Milk,2,2,1867.5,1780.75,5.05,5.05
+Nagula Chavithi,BLR,Cow Milk,3,2,1888.5,1780.75,6.15,6.15
+Nagula Chavithi,BLR,Cow Milk,4,2,1896.5,1780.75,6.64,6.64
+Nagula Chavithi,BLR,Cow Milk,5,2,1847.0,1780.75,3.68,3.68
+Nagula Chavithi,BLR,Cow Milk,6,2,1882.5,1780.75,5.9,5.9
+Nagula Chavithi,BLR,Cow Milk,7,2,1914.5,1780.75,7.64,7.64
+Nagula Chavithi,BLR,Curd,-7,2,155.0,214.0,-29.12,-29.12
+Nagula Chavithi,BLR,Curd,-6,2,208.0,214.0,0.62,0.62
+Nagula Chavithi,BLR,Curd,-5,2,247.5,214.0,16.56,16.56
+Nagula Chavithi,BLR,Curd,-4,2,186.5,214.0,-14.14,-14.14
+Nagula Chavithi,BLR,Curd,-3,2,217.0,214.0,1.29,1.29
+Nagula Chavithi,BLR,Curd,-2,2,186.0,214.0,-13.04,-13.04
+Nagula Chavithi,BLR,Curd,-1,2,221.0,214.0,-0.61,-0.61
+Nagula Chavithi,BLR,Curd,0,2,215.5,214.0,-3.43,-3.43
+Nagula Chavithi,BLR,Curd,1,2,189.0,214.0,-12.52,-12.52
+Nagula Chavithi,BLR,Curd,2,2,184.0,214.0,-18.88,-18.88
+Nagula Chavithi,BLR,Curd,3,2,185.0,214.0,-16.64,-16.64
+Nagula Chavithi,BLR,Curd,4,2,304.5,214.0,45.64,45.64
+Nagula Chavithi,BLR,Curd,5,2,185.5,214.0,-16.98,-16.98
+Nagula Chavithi,BLR,Curd,6,2,208.0,214.0,-5.77,-5.77
+Nagula Chavithi,BLR,Curd,7,2,209.0,214.0,1.18,1.18
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,-7,2,377.5,398.0,-4.89,-4.89
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,-6,2,345.5,398.0,-12.29,-12.29
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,-5,2,384.5,398.0,-2.75,-2.75
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,-4,2,350.0,398.0,-12.76,-12.76
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,-3,2,352.5,398.0,-13.0,-13.0
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,-2,2,368.0,398.0,-8.53,-8.53
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,-1,2,396.0,398.0,-1.72,-1.72
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,0,2,401.0,398.0,1.12,1.12
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,1,2,424.5,398.0,7.4,7.4
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,2,2,423.5,398.0,7.08,7.08
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,3,2,429.5,398.0,8.2,8.2
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,4,2,424.0,398.0,5.73,5.73
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,5,2,418.5,398.0,5.0,5.0
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,6,2,431.5,398.0,7.98,7.98
+Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,7,2,418.0,398.0,4.09,4.09
+Nagula Chavithi,BLR,Skim Milk,-7,2,313.5,343.25,-8.13,-8.13
+Nagula Chavithi,BLR,Skim Milk,-6,2,318.0,343.25,-4.69,-4.69
+Nagula Chavithi,BLR,Skim Milk,-5,2,321.5,343.25,-8.55,-8.55
+Nagula Chavithi,BLR,Skim Milk,-4,2,293.5,343.25,-14.37,-14.37
+Nagula Chavithi,BLR,Skim Milk,-3,2,291.0,343.25,-17.62,-17.62
+Nagula Chavithi,BLR,Skim Milk,-2,2,307.5,343.25,-10.28,-10.28
+Nagula Chavithi,BLR,Skim Milk,-1,2,331.0,343.25,-2.37,-2.37
+Nagula Chavithi,BLR,Skim Milk,0,2,340.5,343.25,0.85,0.85
+Nagula Chavithi,BLR,Skim Milk,1,2,336.0,343.25,2.34,2.34
+Nagula Chavithi,BLR,Skim Milk,2,2,353.0,343.25,4.84,4.84
+Nagula Chavithi,BLR,Skim Milk,3,2,358.5,343.25,5.91,5.91
+Nagula Chavithi,BLR,Skim Milk,4,2,364.5,343.25,6.28,6.28
+Nagula Chavithi,BLR,Skim Milk,5,2,358.5,343.25,2.76,2.76
+Nagula Chavithi,BLR,Skim Milk,6,2,372.0,343.25,11.48,11.48
+Nagula Chavithi,BLR,Skim Milk,7,2,360.5,343.25,5.9,5.9
+Nagula Chavithi,BLR,Toned Milk,-7,1,204.0,202.0,0.99,0.99
+Nagula Chavithi,BLR,Toned Milk,-6,1,174.0,202.0,-13.86,-13.86
+Nagula Chavithi,BLR,Toned Milk,-5,1,172.0,202.0,-14.85,-14.85
+Nagula Chavithi,BLR,Toned Milk,-4,1,182.0,202.0,-9.9,-9.9
+Nagula Chavithi,BLR,Toned Milk,-3,1,184.0,202.0,-8.91,-8.91
+Nagula Chavithi,BLR,Toned Milk,-2,1,182.0,202.0,-9.9,-9.9
+Nagula Chavithi,BLR,Toned Milk,-1,1,178.0,202.0,-11.88,-11.88
+Nagula Chavithi,BLR,Toned Milk,0,1,187.0,202.0,-7.43,-7.43
+Nagula Chavithi,BLR,Toned Milk,1,1,206.0,202.0,1.98,1.98
+Nagula Chavithi,BLR,Toned Milk,2,1,205.0,202.0,1.49,1.49
+Nagula Chavithi,BLR,Toned Milk,3,1,203.0,202.0,0.5,0.5
+Nagula Chavithi,BLR,Toned Milk,4,1,223.0,202.0,10.4,10.4
+Nagula Chavithi,BLR,Toned Milk,5,1,200.0,202.0,-0.99,-0.99
+Nagula Chavithi,BLR,Toned Milk,6,1,204.0,202.0,0.99,0.99
+Nagula Chavithi,BLR,Toned Milk,7,1,224.0,202.0,10.89,10.89
+Nagula Chavithi,HYD,A2 Buffalo Milk,-7,2,15057.0,15162.5,-0.68,-0.68
+Nagula Chavithi,HYD,A2 Buffalo Milk,-6,2,15050.0,15162.5,-0.65,-0.65
+Nagula Chavithi,HYD,A2 Buffalo Milk,-5,2,15979.0,15162.5,5.43,5.43
+Nagula Chavithi,HYD,A2 Buffalo Milk,-4,2,14504.0,15162.5,-4.34,-4.34
+Nagula Chavithi,HYD,A2 Buffalo Milk,-3,2,14383.5,15162.5,-5.28,-5.28
+Nagula Chavithi,HYD,A2 Buffalo Milk,-2,2,14627.0,15162.5,-3.76,-3.76
+Nagula Chavithi,HYD,A2 Buffalo Milk,-1,2,15089.0,15162.5,-0.54,-0.54
+Nagula Chavithi,HYD,A2 Buffalo Milk,0,2,15197.0,15162.5,0.27,0.27
+Nagula Chavithi,HYD,A2 Buffalo Milk,1,2,15139.0,15162.5,-0.04,-0.04
+Nagula Chavithi,HYD,A2 Buffalo Milk,2,2,15277.5,15162.5,0.82,0.82
+Nagula Chavithi,HYD,A2 Buffalo Milk,3,2,15339.0,15162.5,1.18,1.18
+Nagula Chavithi,HYD,A2 Buffalo Milk,4,2,15271.0,15162.5,0.68,0.68
+Nagula Chavithi,HYD,A2 Buffalo Milk,5,2,15199.5,15162.5,0.13,0.13
+Nagula Chavithi,HYD,A2 Buffalo Milk,6,2,15240.0,15162.5,0.49,0.49
+Nagula Chavithi,HYD,A2 Buffalo Milk,7,2,15152.0,15162.5,-0.01,-0.01
+Nagula Chavithi,HYD,A2 Desi Cow Milk,-7,2,1477.5,1528.75,-3.36,-3.36
+Nagula Chavithi,HYD,A2 Desi Cow Milk,-6,2,1493.5,1528.75,-2.3,-2.3
+Nagula Chavithi,HYD,A2 Desi Cow Milk,-5,2,1663.0,1528.75,8.78,8.78
+Nagula Chavithi,HYD,A2 Desi Cow Milk,-4,2,1436.0,1528.75,-6.06,-6.06
+Nagula Chavithi,HYD,A2 Desi Cow Milk,-3,2,1421.0,1528.75,-7.04,-7.04
+Nagula Chavithi,HYD,A2 Desi Cow Milk,-2,2,1437.5,1528.75,-5.96,-5.96
+Nagula Chavithi,HYD,A2 Desi Cow Milk,-1,2,1546.0,1528.75,1.13,1.13
+Nagula Chavithi,HYD,A2 Desi Cow Milk,0,2,1676.0,1528.75,9.64,9.64
+Nagula Chavithi,HYD,A2 Desi Cow Milk,1,2,1478.5,1528.75,-3.29,-3.29
+Nagula Chavithi,HYD,A2 Desi Cow Milk,2,2,1555.0,1528.75,1.72,1.72
+Nagula Chavithi,HYD,A2 Desi Cow Milk,3,2,1530.5,1528.75,0.11,0.11
+Nagula Chavithi,HYD,A2 Desi Cow Milk,4,2,1546.5,1528.75,1.16,1.16
+Nagula Chavithi,HYD,A2 Desi Cow Milk,5,2,1515.5,1528.75,-0.87,-0.87
+Nagula Chavithi,HYD,A2 Desi Cow Milk,6,2,1574.0,1528.75,2.96,2.96
+Nagula Chavithi,HYD,A2 Desi Cow Milk,7,2,1559.0,1528.75,1.98,1.98
+Nagula Chavithi,HYD,Cow Milk,-7,2,8795.0,8908.75,-1.34,-1.34
+Nagula Chavithi,HYD,Cow Milk,-6,2,8779.0,8908.75,-1.42,-1.42
+Nagula Chavithi,HYD,Cow Milk,-5,2,9769.0,8908.75,9.59,9.59
+Nagula Chavithi,HYD,Cow Milk,-4,2,8548.5,8908.75,-4.06,-4.06
+Nagula Chavithi,HYD,Cow Milk,-3,2,8466.0,8908.75,-5.04,-5.04
+Nagula Chavithi,HYD,Cow Milk,-2,2,8541.5,8908.75,-4.2,-4.2
+Nagula Chavithi,HYD,Cow Milk,-1,2,8886.0,8908.75,-0.24,-0.24
+Nagula Chavithi,HYD,Cow Milk,0,2,10010.5,8908.75,12.3,12.3
+Nagula Chavithi,HYD,Cow Milk,1,2,8953.0,8908.75,0.55,0.55
+Nagula Chavithi,HYD,Cow Milk,2,2,9090.5,8908.75,1.98,1.98
+Nagula Chavithi,HYD,Cow Milk,3,2,8895.5,8908.75,-0.09,-0.09
+Nagula Chavithi,HYD,Cow Milk,4,2,8916.5,8908.75,0.11,0.11
+Nagula Chavithi,HYD,Cow Milk,5,2,8801.0,8908.75,-1.28,-1.28
+Nagula Chavithi,HYD,Cow Milk,6,2,9062.5,8908.75,1.8,1.8
+Nagula Chavithi,HYD,Cow Milk,7,2,9086.5,8908.75,2.06,2.06
+Nagula Chavithi,HYD,Curd,-7,2,1418.5,1224.5,12.64,12.64
+Nagula Chavithi,HYD,Curd,-6,2,1336.0,1224.5,5.99,5.99
+Nagula Chavithi,HYD,Curd,-5,2,2319.5,1224.5,91.41,91.41
+Nagula Chavithi,HYD,Curd,-4,2,1440.5,1224.5,18.26,18.26
+Nagula Chavithi,HYD,Curd,-3,2,1645.5,1224.5,33.34,33.34
+Nagula Chavithi,HYD,Curd,-2,2,1301.0,1224.5,3.38,3.38
+Nagula Chavithi,HYD,Curd,-1,2,1714.0,1224.5,42.06,42.06
+Nagula Chavithi,HYD,Curd,0,2,883.5,1224.5,-28.27,-28.27
+Nagula Chavithi,HYD,Curd,1,2,939.0,1224.5,-23.37,-23.37
+Nagula Chavithi,HYD,Curd,2,2,1336.5,1224.5,6.26,6.26
+Nagula Chavithi,HYD,Curd,3,2,1308.5,1224.5,4.01,4.01
+Nagula Chavithi,HYD,Curd,4,2,1708.0,1224.5,44.1,44.1
+Nagula Chavithi,HYD,Curd,5,2,1404.5,1224.5,17.45,17.45
+Nagula Chavithi,HYD,Curd,6,2,1004.0,1224.5,-18.66,-18.66
+Nagula Chavithi,HYD,Curd,7,2,921.0,1224.5,-25.32,-25.32
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,-7,2,5614.5,5638.0,-0.41,-0.41
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,-6,2,5564.5,5638.0,-1.27,-1.27
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,-5,2,5928.0,5638.0,5.14,5.14
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,-4,2,5383.0,5638.0,-4.55,-4.55
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,-3,2,5388.5,5638.0,-4.52,-4.52
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,-2,2,5430.0,5638.0,-3.78,-3.78
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,-1,2,5628.5,5638.0,-0.2,-0.2
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,0,2,5612.5,5638.0,-0.44,-0.44
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,1,2,5576.0,5638.0,-1.08,-1.08
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,2,2,5653.0,5638.0,0.26,0.26
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,3,2,5660.0,5638.0,0.4,0.4
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,4,2,5689.0,5638.0,0.89,0.89
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,5,2,5546.5,5638.0,-1.68,-1.68
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,6,2,5661.0,5638.0,0.4,0.4
+Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,7,2,5587.0,5638.0,-0.89,-0.89
+Nagula Chavithi,HYD,Skim Milk,-7,2,2413.5,2370.25,1.72,1.72
+Nagula Chavithi,HYD,Skim Milk,-6,2,2340.5,2370.25,-1.35,-1.35
+Nagula Chavithi,HYD,Skim Milk,-5,2,2441.0,2370.25,2.8,2.8
+Nagula Chavithi,HYD,Skim Milk,-4,2,2301.5,2370.25,-3.34,-3.34
+Nagula Chavithi,HYD,Skim Milk,-3,2,2274.5,2370.25,-4.64,-4.64
+Nagula Chavithi,HYD,Skim Milk,-2,2,2340.0,2370.25,-2.11,-2.11
+Nagula Chavithi,HYD,Skim Milk,-1,2,2366.5,2370.25,-0.42,-0.42
+Nagula Chavithi,HYD,Skim Milk,0,2,2419.5,2370.25,1.96,1.96
+Nagula Chavithi,HYD,Skim Milk,1,2,2378.0,2370.25,0.5,0.5
+Nagula Chavithi,HYD,Skim Milk,2,2,2430.5,2370.25,2.4,2.4
+Nagula Chavithi,HYD,Skim Milk,3,2,2437.5,2370.25,2.68,2.68
+Nagula Chavithi,HYD,Skim Milk,4,2,2444.0,2370.25,2.84,2.84
+Nagula Chavithi,HYD,Skim Milk,5,2,2341.0,2370.25,-1.33,-1.33
+Nagula Chavithi,HYD,Skim Milk,6,2,2348.0,2370.25,-0.88,-0.88
+Nagula Chavithi,HYD,Skim Milk,7,2,2359.5,2370.25,0.01,0.01
+Nagula Chavithi,HYD,Toned Milk,-7,1,3120.0,3304.5,-5.58,-5.58
+Nagula Chavithi,HYD,Toned Milk,-6,1,3078.0,3304.5,-6.85,-6.85
+Nagula Chavithi,HYD,Toned Milk,-5,1,3319.0,3304.5,0.44,0.44
+Nagula Chavithi,HYD,Toned Milk,-4,1,2938.0,3304.5,-11.09,-11.09
+Nagula Chavithi,HYD,Toned Milk,-3,1,3168.0,3304.5,-4.13,-4.13
+Nagula Chavithi,HYD,Toned Milk,-2,1,3165.0,3304.5,-4.22,-4.22
+Nagula Chavithi,HYD,Toned Milk,-1,1,3252.0,3304.5,-1.59,-1.59
+Nagula Chavithi,HYD,Toned Milk,0,1,3172.0,3304.5,-4.01,-4.01
+Nagula Chavithi,HYD,Toned Milk,1,1,3171.0,3304.5,-4.04,-4.04
+Nagula Chavithi,HYD,Toned Milk,2,1,3158.0,3304.5,-4.43,-4.43
+Nagula Chavithi,HYD,Toned Milk,3,1,3295.0,3304.5,-0.29,-0.29
+Nagula Chavithi,HYD,Toned Milk,4,1,3290.0,3304.5,-0.44,-0.44
+Nagula Chavithi,HYD,Toned Milk,5,1,3928.0,3304.5,18.87,18.87
+Nagula Chavithi,HYD,Toned Milk,6,1,3864.0,3304.5,16.93,16.93
+Nagula Chavithi,HYD,Toned Milk,7,1,3897.0,3304.5,17.93,17.93
+Ram Navami,BLR,A2 Buffalo Milk,-7,3,1982.0,1834.0,8.07,4.47
+Ram Navami,BLR,A2 Buffalo Milk,-6,3,1770.0,1834.0,0.05,-1.0
+Ram Navami,BLR,A2 Buffalo Milk,-5,3,1829.0,1834.0,-0.15,0.47
+Ram Navami,BLR,A2 Buffalo Milk,-4,3,1854.0,1834.0,0.15,-0.24
+Ram Navami,BLR,A2 Buffalo Milk,-3,3,1865.0,1834.0,1.69,0.8
+Ram Navami,BLR,A2 Buffalo Milk,-2,3,1867.0,1834.0,1.8,2.74
+Ram Navami,BLR,A2 Buffalo Milk,-1,3,1877.0,1834.0,2.34,5.19
+Ram Navami,BLR,A2 Buffalo Milk,0,3,1863.0,1834.0,7.48,5.6
+Ram Navami,BLR,A2 Buffalo Milk,1,3,1810.0,1834.0,-1.31,1.64
+Ram Navami,BLR,A2 Buffalo Milk,2,3,1812.0,1834.0,-1.2,-1.25
+Ram Navami,BLR,A2 Buffalo Milk,3,3,1856.0,1834.0,-2.29,-2.17
+Ram Navami,BLR,A2 Buffalo Milk,4,3,1839.0,1834.0,-0.05,-3.2
+Ram Navami,BLR,A2 Buffalo Milk,5,3,1850.0,1834.0,-2.01,-1.36
+Ram Navami,BLR,A2 Buffalo Milk,6,3,1735.0,1834.0,0.78,-0.22
+Ram Navami,BLR,A2 Buffalo Milk,7,3,1721.0,1834.0,-2.93,-1.17
+Ram Navami,BLR,A2 Desi Cow Milk,-7,3,328.0,333.5,4.68,4.38
+Ram Navami,BLR,A2 Desi Cow Milk,-6,3,309.0,333.5,-6.38,-2.92
+Ram Navami,BLR,A2 Desi Cow Milk,-5,3,329.0,333.5,-1.35,-1.3
+Ram Navami,BLR,A2 Desi Cow Milk,-4,3,338.0,333.5,-3.2,-3.31
+Ram Navami,BLR,A2 Desi Cow Milk,-3,3,325.0,333.5,-2.55,-2.95
+Ram Navami,BLR,A2 Desi Cow Milk,-2,3,356.0,333.5,6.75,3.66
+Ram Navami,BLR,A2 Desi Cow Milk,-1,3,335.0,333.5,0.45,1.44
+Ram Navami,BLR,A2 Desi Cow Milk,0,3,330.0,333.5,-1.05,0.46
+Ram Navami,BLR,A2 Desi Cow Milk,1,3,340.0,333.5,1.95,-1.73
+Ram Navami,BLR,A2 Desi Cow Milk,2,3,353.0,333.5,1.28,1.31
+Ram Navami,BLR,A2 Desi Cow Milk,3,3,342.0,333.5,2.13,-1.22
+Ram Navami,BLR,A2 Desi Cow Milk,4,3,345.0,333.5,2.13,-1.12
+Ram Navami,BLR,A2 Desi Cow Milk,5,3,361.0,333.5,8.25,5.11
+Ram Navami,BLR,A2 Desi Cow Milk,6,3,339.0,333.5,4.09,7.16
+Ram Navami,BLR,A2 Desi Cow Milk,7,3,301.0,333.5,-2.13,-3.82
+Ram Navami,BLR,Cow Milk,-7,3,1992.0,1891.0,0.73,3.44
+Ram Navami,BLR,Cow Milk,-6,3,1895.0,1891.0,-2.92,-1.98
+Ram Navami,BLR,Cow Milk,-5,3,1890.0,1891.0,0.1,0.21
+Ram Navami,BLR,Cow Milk,-4,3,1829.0,1891.0,-1.99,-1.45
+Ram Navami,BLR,Cow Milk,-3,3,1935.0,1891.0,1.22,0.1
+Ram Navami,BLR,Cow Milk,-2,3,1975.0,1891.0,1.99,2.48
+Ram Navami,BLR,Cow Milk,-1,3,2015.0,1891.0,6.56,5.49
+Ram Navami,BLR,Cow Milk,0,3,1960.0,1891.0,5.08,4.0
+Ram Navami,BLR,Cow Milk,1,3,1944.0,1891.0,-1.36,-0.11
+Ram Navami,BLR,Cow Milk,2,3,1894.0,1891.0,0.16,0.64
+Ram Navami,BLR,Cow Milk,3,3,1793.0,1891.0,-4.7,-2.57
+Ram Navami,BLR,Cow Milk,4,3,1892.0,1891.0,0.05,0.19
+Ram Navami,BLR,Cow Milk,5,3,1870.0,1891.0,-0.1,0.25
+Ram Navami,BLR,Cow Milk,6,3,1886.0,1891.0,-0.26,1.15
+Ram Navami,BLR,Cow Milk,7,3,1875.0,1891.0,1.15,-1.17
+Ram Navami,BLR,Curd,-7,3,172.0,172.0,0.0,0.78
+Ram Navami,BLR,Curd,-6,3,151.0,172.0,-12.21,-10.84
+Ram Navami,BLR,Curd,-5,3,172.0,172.0,0.0,-0.67
+Ram Navami,BLR,Curd,-4,3,173.0,172.0,-1.94,-7.98
+Ram Navami,BLR,Curd,-3,3,174.0,172.0,3.23,5.47
+Ram Navami,BLR,Curd,-2,3,181.0,172.0,7.53,8.78
+Ram Navami,BLR,Curd,-1,3,202.0,172.0,17.44,18.18
+Ram Navami,BLR,Curd,0,3,172.0,172.0,4.26,9.66
+Ram Navami,BLR,Curd,1,3,204.0,172.0,18.6,27.64
+Ram Navami,BLR,Curd,2,3,197.0,172.0,5.38,6.64
+Ram Navami,BLR,Curd,3,3,160.0,172.0,1.94,-0.6
+Ram Navami,BLR,Curd,4,3,176.0,172.0,3.23,3.53
+Ram Navami,BLR,Curd,5,3,181.0,172.0,1.94,2.03
+Ram Navami,BLR,Curd,6,3,172.0,172.0,1.94,5.31
+Ram Navami,BLR,Curd,7,3,119.0,172.0,-6.2,32.47
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,-7,3,410.0,416.5,-1.56,2.25
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,-6,3,398.0,416.5,-2.37,-0.81
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,-5,3,421.0,416.5,1.72,1.74
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,-4,3,412.0,416.5,-2.37,-2.12
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,-3,3,404.0,416.5,-3.0,-1.11
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,-2,3,408.0,416.5,-2.04,-1.29
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,-1,3,410.0,416.5,6.88,5.66
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,0,3,428.0,416.5,4.52,4.53
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,1,3,417.0,416.5,1.46,2.32
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,2,3,406.0,416.5,-0.49,0.93
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,3,3,440.0,416.5,0.0,1.74
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,4,3,431.0,416.5,1.08,0.71
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,5,3,427.0,416.5,2.52,0.14
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,6,3,433.0,416.5,3.96,4.38
+Ram Navami,BLR,Double Toned A2 Buffalo Milk,7,3,401.0,416.5,-1.08,0.67
+Ram Navami,BLR,Skim Milk,-7,3,426.0,401.0,3.92,1.96
+Ram Navami,BLR,Skim Milk,-6,3,402.0,401.0,0.25,-1.25
+Ram Navami,BLR,Skim Milk,-5,3,415.0,401.0,-2.18,-0.98
+Ram Navami,BLR,Skim Milk,-4,3,414.0,401.0,-0.09,-2.85
+Ram Navami,BLR,Skim Milk,-3,3,379.0,401.0,-5.49,-3.22
+Ram Navami,BLR,Skim Milk,-2,3,418.0,401.0,4.24,2.69
+Ram Navami,BLR,Skim Milk,-1,3,382.0,401.0,8.27,7.91
+Ram Navami,BLR,Skim Milk,0,3,389.0,401.0,3.19,1.55
+Ram Navami,BLR,Skim Milk,1,3,389.0,401.0,6.35,3.96
+Ram Navami,BLR,Skim Milk,2,3,417.0,401.0,3.99,4.3
+Ram Navami,BLR,Skim Milk,3,3,392.0,401.0,-3.19,-5.44
+Ram Navami,BLR,Skim Milk,4,3,400.0,401.0,-0.25,-0.45
+Ram Navami,BLR,Skim Milk,5,3,374.0,401.0,-0.26,-0.91
+Ram Navami,BLR,Skim Milk,6,3,364.0,401.0,5.32,1.97
+Ram Navami,BLR,Skim Milk,7,3,367.0,401.0,0.09,-0.31
+Ram Navami,BLR,Toned Milk,-7,1,547.0,498.0,9.84,9.84
+Ram Navami,BLR,Toned Milk,-6,1,487.0,498.0,-2.21,-2.21
+Ram Navami,BLR,Toned Milk,-5,1,502.0,498.0,0.8,0.8
+Ram Navami,BLR,Toned Milk,-4,1,461.0,498.0,-7.43,-7.43
+Ram Navami,BLR,Toned Milk,-3,1,503.0,498.0,1.0,1.0
+Ram Navami,BLR,Toned Milk,-2,1,529.0,498.0,6.22,6.22
+Ram Navami,BLR,Toned Milk,-1,1,518.0,498.0,4.02,4.02
+Ram Navami,BLR,Toned Milk,0,1,502.0,498.0,0.8,0.8
+Ram Navami,BLR,Toned Milk,1,1,501.0,498.0,0.6,0.6
+Ram Navami,BLR,Toned Milk,2,1,457.0,498.0,-8.23,-8.23
+Ram Navami,BLR,Toned Milk,3,1,467.0,498.0,-6.22,-6.22
+Ram Navami,BLR,Toned Milk,4,1,495.0,498.0,-0.6,-0.6
+Ram Navami,BLR,Toned Milk,5,1,501.0,498.0,0.6,0.6
+Ram Navami,BLR,Toned Milk,6,1,536.0,498.0,7.63,7.63
+Ram Navami,BLR,Toned Milk,7,1,480.0,498.0,-3.61,-3.61
+Ram Navami,HYD,A2 Buffalo Milk,-7,3,15579.0,14781.0,5.4,4.49
+Ram Navami,HYD,A2 Buffalo Milk,-6,3,14621.0,14781.0,-1.08,0.36
+Ram Navami,HYD,A2 Buffalo Milk,-5,3,14252.0,14781.0,-2.22,-1.77
+Ram Navami,HYD,A2 Buffalo Milk,-4,3,14262.0,14781.0,-0.21,-2.1
+Ram Navami,HYD,A2 Buffalo Milk,-3,3,14957.0,14781.0,-1.65,-0.6
+Ram Navami,HYD,A2 Buffalo Milk,-2,3,15087.0,14781.0,2.07,1.62
+Ram Navami,HYD,A2 Buffalo Milk,-1,3,15119.0,14781.0,3.31,3.12
+Ram Navami,HYD,A2 Buffalo Milk,0,3,14966.0,14781.0,2.29,3.1
+Ram Navami,HYD,A2 Buffalo Milk,1,3,14686.0,14781.0,1.46,1.18
+Ram Navami,HYD,A2 Buffalo Milk,2,3,15004.0,14781.0,1.51,0.8
+Ram Navami,HYD,A2 Buffalo Milk,3,3,14847.0,14781.0,0.28,0.18
+Ram Navami,HYD,A2 Buffalo Milk,4,3,15206.0,14781.0,-0.01,0.22
+Ram Navami,HYD,A2 Buffalo Milk,5,3,15116.0,14781.0,0.01,0.07
+Ram Navami,HYD,A2 Buffalo Milk,6,3,14812.0,14781.0,0.21,1.11
+Ram Navami,HYD,A2 Buffalo Milk,7,3,14613.0,14781.0,-0.55,-0.22
+Ram Navami,HYD,A2 Desi Cow Milk,-7,3,1524.0,1455.5,4.71,7.77
+Ram Navami,HYD,A2 Desi Cow Milk,-6,3,1430.0,1455.5,-1.75,0.24
+Ram Navami,HYD,A2 Desi Cow Milk,-5,3,1400.0,1455.5,-3.81,-3.14
+Ram Navami,HYD,A2 Desi Cow Milk,-4,3,1367.0,1455.5,0.08,-2.86
+Ram Navami,HYD,A2 Desi Cow Milk,-3,3,1486.0,1455.5,1.04,0.93
+Ram Navami,HYD,A2 Desi Cow Milk,-2,3,1539.0,1455.5,2.62,3.61
+Ram Navami,HYD,A2 Desi Cow Milk,-1,3,1480.0,1455.5,2.42,3.18
+Ram Navami,HYD,A2 Desi Cow Milk,0,3,1482.0,1455.5,3.02,5.08
+Ram Navami,HYD,A2 Desi Cow Milk,1,3,1463.0,1455.5,2.64,4.69
+Ram Navami,HYD,A2 Desi Cow Milk,2,3,1458.0,1455.5,0.17,0.35
+Ram Navami,HYD,A2 Desi Cow Milk,3,3,1444.0,1455.5,-0.79,-0.68
+Ram Navami,HYD,A2 Desi Cow Milk,4,3,1445.0,1455.5,-3.15,-2.41
+Ram Navami,HYD,A2 Desi Cow Milk,5,3,1486.0,1455.5,2.1,0.11
+Ram Navami,HYD,A2 Desi Cow Milk,6,3,1485.0,1455.5,2.03,2.34
+Ram Navami,HYD,A2 Desi Cow Milk,7,3,1363.0,1455.5,-0.8,-1.71
+Ram Navami,HYD,Cow Milk,-7,3,9417.0,8683.5,8.38,6.63
+Ram Navami,HYD,Cow Milk,-6,3,8576.0,8683.5,-1.24,0.2
+Ram Navami,HYD,Cow Milk,-5,3,8591.0,8683.5,-0.74,0.03
+Ram Navami,HYD,Cow Milk,-4,3,8320.0,8683.5,-0.1,-0.95
+Ram Navami,HYD,Cow Milk,-3,3,8681.0,8683.5,1.29,1.04
+Ram Navami,HYD,Cow Milk,-2,3,8835.0,8683.5,2.28,2.61
+Ram Navami,HYD,Cow Milk,-1,3,8919.0,8683.5,2.71,2.79
+Ram Navami,HYD,Cow Milk,0,3,8905.0,8683.5,4.01,3.75
+Ram Navami,HYD,Cow Milk,1,3,8791.0,8683.5,1.52,3.05
+Ram Navami,HYD,Cow Milk,2,3,8718.0,8683.5,0.47,0.8
+Ram Navami,HYD,Cow Milk,3,3,8558.0,8683.5,-0.55,0.36
+Ram Navami,HYD,Cow Milk,4,3,8652.0,8683.5,-1.0,-0.97
+Ram Navami,HYD,Cow Milk,5,3,8804.0,8683.5,0.74,-0.17
+Ram Navami,HYD,Cow Milk,6,3,8692.0,8683.5,0.1,0.42
+Ram Navami,HYD,Cow Milk,7,3,8558.0,8683.5,-1.45,-0.83
+Ram Navami,HYD,Curd,-7,3,1402.0,1217.0,8.47,14.01
+Ram Navami,HYD,Curd,-6,3,1120.0,1217.0,-5.34,-5.33
+Ram Navami,HYD,Curd,-5,3,1095.0,1217.0,-3.72,-0.61
+Ram Navami,HYD,Curd,-4,3,1114.0,1217.0,-3.05,-3.84
+Ram Navami,HYD,Curd,-3,3,1008.0,1217.0,-4.53,-8.7
+Ram Navami,HYD,Curd,-2,3,1256.0,1217.0,9.14,15.17
+Ram Navami,HYD,Curd,-1,3,1271.0,1217.0,15.37,33.73
+Ram Navami,HYD,Curd,0,3,965.0,1217.0,-1.04,-3.81
+Ram Navami,HYD,Curd,1,3,1319.0,1217.0,21.36,45.54
+Ram Navami,HYD,Curd,2,3,1203.0,1217.0,-6.43,3.19
+Ram Navami,HYD,Curd,3,3,1239.0,1217.0,-4.14,2.14
+Ram Navami,HYD,Curd,4,3,886.0,1217.0,-2.59,-9.37
+Ram Navami,HYD,Curd,5,3,1326.0,1217.0,2.59,60.7
+Ram Navami,HYD,Curd,6,3,1037.0,1217.0,4.91,-0.83
+Ram Navami,HYD,Curd,7,3,1384.0,1217.0,7.08,49.17
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,-7,3,5408.0,5073.5,2.96,3.47
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,-6,3,4889.0,5073.5,-3.64,-3.21
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,-5,3,4801.0,5073.5,-3.03,-1.97
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,-4,3,4667.0,5073.5,0.47,-2.34
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,-3,3,4980.0,5073.5,0.42,0.41
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,-2,3,5147.0,5073.5,2.71,2.71
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,-1,3,5203.0,5073.5,2.55,2.49
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,0,3,5191.0,5073.5,2.32,3.84
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,1,3,5174.0,5073.5,1.98,1.33
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,2,3,4991.0,5073.5,2.43,1.35
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,3,3,4958.0,5073.5,-0.25,0.33
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,4,3,4982.0,5073.5,-1.8,-0.0
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,5,3,5165.0,5073.5,1.8,0.64
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,6,3,5275.0,5073.5,-0.47,0.99
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,7,3,5221.0,5073.5,-0.77,-0.16
+Ram Navami,HYD,Skim Milk,-7,3,2257.0,2263.5,0.73,0.41
+Ram Navami,HYD,Skim Milk,-6,3,2149.0,2263.5,-4.79,-2.91
+Ram Navami,HYD,Skim Milk,-5,3,2071.0,2263.5,-3.6,-4.17
+Ram Navami,HYD,Skim Milk,-4,3,2084.0,2263.5,0.41,-1.58
+Ram Navami,HYD,Skim Milk,-3,3,2222.0,2263.5,-1.83,-0.83
+Ram Navami,HYD,Skim Milk,-2,3,2310.0,2263.5,2.05,2.22
+Ram Navami,HYD,Skim Milk,-1,3,2288.0,2263.5,3.6,3.11
+Ram Navami,HYD,Skim Milk,0,3,2320.0,2263.5,4.13,3.59
+Ram Navami,HYD,Skim Milk,1,3,2243.0,2263.5,1.13,0.46
+Ram Navami,HYD,Skim Milk,2,3,2252.0,2263.5,-0.51,0.13
+Ram Navami,HYD,Skim Milk,3,3,2278.0,2263.5,0.4,-0.05
+Ram Navami,HYD,Skim Milk,4,3,2247.0,2263.5,-0.73,-0.32
+Ram Navami,HYD,Skim Milk,5,3,2338.0,2263.5,3.29,1.02
+Ram Navami,HYD,Skim Milk,6,3,2295.0,2263.5,1.39,3.41
+Ram Navami,HYD,Skim Milk,7,3,2225.0,2263.5,-1.24,0.42
+Ram Navami,HYD,Toned Milk,-7,1,8744.0,8321.5,5.08,5.08
+Ram Navami,HYD,Toned Milk,-6,1,7737.0,8321.5,-7.02,-7.02
+Ram Navami,HYD,Toned Milk,-5,1,7860.0,8321.5,-5.55,-5.55
+Ram Navami,HYD,Toned Milk,-4,1,7622.0,8321.5,-8.41,-8.41
+Ram Navami,HYD,Toned Milk,-3,1,8019.0,8321.5,-3.64,-3.64
+Ram Navami,HYD,Toned Milk,-2,1,8261.0,8321.5,-0.73,-0.73
+Ram Navami,HYD,Toned Milk,-1,1,8418.0,8321.5,1.16,1.16
+Ram Navami,HYD,Toned Milk,0,1,8398.0,8321.5,0.92,0.92
+Ram Navami,HYD,Toned Milk,1,1,8686.0,8321.5,4.38,4.38
+Ram Navami,HYD,Toned Milk,2,1,8179.0,8321.5,-1.71,-1.71
+Ram Navami,HYD,Toned Milk,3,1,8259.0,8321.5,-0.75,-0.75
+Ram Navami,HYD,Toned Milk,4,1,8350.0,8321.5,0.34,0.34
+Ram Navami,HYD,Toned Milk,5,1,8488.0,8321.5,2.0,2.0
+Ram Navami,HYD,Toned Milk,6,1,8420.0,8321.5,1.18,1.18
+Ram Navami,HYD,Toned Milk,7,1,8293.0,8321.5,-0.34,-0.34
+Ratha Saptami,BLR,A2 Buffalo Milk,-7,3,1716.0,1770.5,-3.08,-5.36
+Ratha Saptami,BLR,A2 Buffalo Milk,-6,3,1782.0,1770.5,0.65,-0.66
+Ratha Saptami,BLR,A2 Buffalo Milk,-5,3,1776.0,1770.5,-1.09,-1.2
+Ratha Saptami,BLR,A2 Buffalo Milk,-4,3,1756.0,1770.5,2.38,1.41
+Ratha Saptami,BLR,A2 Buffalo Milk,-3,3,1720.0,1770.5,-2.85,-1.71
+Ratha Saptami,BLR,A2 Buffalo Milk,-2,3,1618.0,1770.5,-3.43,-3.79
+Ratha Saptami,BLR,A2 Buffalo Milk,-1,3,1735.0,1770.5,-2.36,-2.42
+Ratha Saptami,BLR,A2 Buffalo Milk,0,3,1748.0,1770.5,-1.27,-3.0
+Ratha Saptami,BLR,A2 Buffalo Milk,1,3,1837.0,1770.5,-5.37,-3.21
+Ratha Saptami,BLR,A2 Buffalo Milk,2,3,1808.0,1770.5,-4.65,-2.65
+Ratha Saptami,BLR,A2 Buffalo Milk,3,3,1804.0,1770.5,1.56,-0.35
+Ratha Saptami,BLR,A2 Buffalo Milk,4,3,1765.0,1770.5,-0.31,-0.38
+Ratha Saptami,BLR,A2 Buffalo Milk,5,3,1744.0,1770.5,2.5,1.53
+Ratha Saptami,BLR,A2 Buffalo Milk,6,3,1808.0,1770.5,2.12,0.0
+Ratha Saptami,BLR,A2 Buffalo Milk,7,3,1801.0,1770.5,1.45,0.52
+Ratha Saptami,BLR,A2 Desi Cow Milk,-7,3,312.0,323.0,-3.41,-2.55
+Ratha Saptami,BLR,A2 Desi Cow Milk,-6,3,324.0,323.0,0.45,0.83
+Ratha Saptami,BLR,A2 Desi Cow Milk,-5,3,331.0,323.0,0.69,0.31
+Ratha Saptami,BLR,A2 Desi Cow Milk,-4,3,307.0,323.0,-3.11,1.95
+Ratha Saptami,BLR,A2 Desi Cow Milk,-3,3,305.0,323.0,1.04,-0.16
+Ratha Saptami,BLR,A2 Desi Cow Milk,-2,3,288.0,323.0,3.97,0.25
+Ratha Saptami,BLR,A2 Desi Cow Milk,-1,3,331.0,323.0,-2.76,-1.44
+Ratha Saptami,BLR,A2 Desi Cow Milk,0,3,338.0,323.0,4.64,5.8
+Ratha Saptami,BLR,A2 Desi Cow Milk,1,3,352.0,323.0,-8.12,-3.45
+Ratha Saptami,BLR,A2 Desi Cow Milk,2,3,335.0,323.0,3.14,1.77
+Ratha Saptami,BLR,A2 Desi Cow Milk,3,3,322.0,323.0,-0.31,1.63
+Ratha Saptami,BLR,A2 Desi Cow Milk,4,3,322.0,323.0,-0.31,0.32
+Ratha Saptami,BLR,A2 Desi Cow Milk,5,3,330.0,323.0,2.76,5.08
+Ratha Saptami,BLR,A2 Desi Cow Milk,6,3,316.0,323.0,-2.17,-1.9
+Ratha Saptami,BLR,A2 Desi Cow Milk,7,3,327.0,323.0,-0.69,-1.76
+Ratha Saptami,BLR,Cow Milk,-7,3,1996.0,2192.0,-4.23,-5.18
+Ratha Saptami,BLR,Cow Milk,-6,3,2125.0,2192.0,-3.06,-2.67
+Ratha Saptami,BLR,Cow Milk,-5,3,2196.0,2192.0,-0.05,-2.08
+Ratha Saptami,BLR,Cow Milk,-4,3,2198.0,2192.0,0.05,-1.69
+Ratha Saptami,BLR,Cow Milk,-3,3,2016.0,2192.0,1.32,-0.4
+Ratha Saptami,BLR,Cow Milk,-2,3,1966.0,2192.0,1.28,-2.33
+Ratha Saptami,BLR,Cow Milk,-1,3,2073.0,2192.0,-3.42,-3.85
+Ratha Saptami,BLR,Cow Milk,0,3,2052.0,2192.0,1.32,0.05
+Ratha Saptami,BLR,Cow Milk,1,3,1952.0,2192.0,0.5,-2.54
+Ratha Saptami,BLR,Cow Milk,2,3,2120.0,2192.0,-1.0,-1.02
+Ratha Saptami,BLR,Cow Milk,3,3,2172.0,2192.0,2.32,1.88
+Ratha Saptami,BLR,Cow Milk,4,3,2192.0,2192.0,0.91,3.79
+Ratha Saptami,BLR,Cow Milk,5,3,2123.0,2192.0,3.56,2.39
+Ratha Saptami,BLR,Cow Milk,6,3,2165.0,2192.0,0.0,3.33
+Ratha Saptami,BLR,Cow Milk,7,3,2184.0,2192.0,3.55,2.47
+Ratha Saptami,BLR,Curd,-7,3,134.0,172.5,-24.21,-23.69
+Ratha Saptami,BLR,Curd,-6,3,172.0,172.5,-0.29,1.8
+Ratha Saptami,BLR,Curd,-5,3,154.0,172.5,12.83,8.07
+Ratha Saptami,BLR,Curd,-4,3,165.0,172.5,1.05,2.55
+Ratha Saptami,BLR,Curd,-3,3,285.0,172.5,9.47,50.41
+Ratha Saptami,BLR,Curd,-2,3,217.0,172.5,9.47,12.1
+Ratha Saptami,BLR,Curd,-1,3,141.0,172.5,5.26,-0.94
+Ratha Saptami,BLR,Curd,0,3,135.0,172.5,-20.38,-10.18
+Ratha Saptami,BLR,Curd,1,3,181.0,172.5,3.02,-9.63
+Ratha Saptami,BLR,Curd,2,3,220.0,172.5,9.47,9.82
+Ratha Saptami,BLR,Curd,3,3,145.0,172.5,-13.68,-10.5
+Ratha Saptami,BLR,Curd,4,3,220.0,172.5,20.38,12.82
+Ratha Saptami,BLR,Curd,5,3,219.0,172.5,26.96,26.73
+Ratha Saptami,BLR,Curd,6,3,173.0,172.5,-1.05,-3.27
+Ratha Saptami,BLR,Curd,7,3,216.0,172.5,-3.16,4.46
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,-7,3,436.0,423.5,-4.35,-2.77
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,-6,3,455.0,423.5,-0.5,-0.1
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,-5,3,436.0,423.5,-1.45,-0.46
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,-4,3,417.0,423.5,-1.53,-3.62
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,-3,3,412.0,423.5,-0.7,2.82
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,-2,3,388.0,423.5,2.03,-0.55
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,-1,3,394.0,423.5,-0.29,-1.32
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,0,3,430.0,423.5,-7.08,-4.65
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,1,3,459.0,423.5,-4.29,-1.63
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,2,3,421.0,423.5,-1.1,-4.33
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,3,3,452.0,423.5,6.73,3.86
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,4,3,430.0,423.5,8.87,7.43
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,5,3,393.0,423.5,0.5,0.57
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,6,3,401.0,423.5,2.61,0.66
+Ratha Saptami,BLR,Double Toned A2 Buffalo Milk,7,3,412.0,423.5,-2.72,-3.12
+Ratha Saptami,BLR,Skim Milk,-7,3,312.0,320.0,-8.02,-8.22
+Ratha Saptami,BLR,Skim Milk,-6,3,324.0,320.0,1.25,-4.85
+Ratha Saptami,BLR,Skim Milk,-5,3,290.0,320.0,-0.57,-1.87
+Ratha Saptami,BLR,Skim Milk,-4,3,307.0,320.0,-1.09,-2.01
+Ratha Saptami,BLR,Skim Milk,-3,3,297.0,320.0,-3.26,-3.73
+Ratha Saptami,BLR,Skim Milk,-2,3,274.0,320.0,-0.4,-2.02
+Ratha Saptami,BLR,Skim Milk,-1,3,297.0,320.0,-6.88,-5.41
+Ratha Saptami,BLR,Skim Milk,0,3,308.0,320.0,-3.75,3.63
+Ratha Saptami,BLR,Skim Milk,1,3,354.0,320.0,-3.97,0.41
+Ratha Saptami,BLR,Skim Milk,2,3,335.0,320.0,4.69,1.93
+Ratha Saptami,BLR,Skim Milk,3,3,343.0,320.0,5.43,3.12
+Ratha Saptami,BLR,Skim Milk,4,3,316.0,320.0,2.67,2.65
+Ratha Saptami,BLR,Skim Milk,5,3,327.0,320.0,1.09,1.28
+Ratha Saptami,BLR,Skim Milk,6,3,340.0,320.0,2.67,0.44
+Ratha Saptami,BLR,Skim Milk,7,3,362.0,320.0,3.26,1.28
+Ratha Saptami,BLR,Toned Milk,-7,1,366.0,427.0,-14.29,-14.29
+Ratha Saptami,BLR,Toned Milk,-6,1,417.0,427.0,-2.34,-2.34
+Ratha Saptami,BLR,Toned Milk,-5,1,386.0,427.0,-9.6,-9.6
+Ratha Saptami,BLR,Toned Milk,-4,1,448.0,427.0,4.92,4.92
+Ratha Saptami,BLR,Toned Milk,-3,1,435.0,427.0,1.87,1.87
+Ratha Saptami,BLR,Toned Milk,-2,1,407.0,427.0,-4.68,-4.68
+Ratha Saptami,BLR,Toned Milk,-1,1,381.0,427.0,-10.77,-10.77
+Ratha Saptami,BLR,Toned Milk,0,1,403.0,427.0,-5.62,-5.62
+Ratha Saptami,BLR,Toned Milk,1,1,391.0,427.0,-8.43,-8.43
+Ratha Saptami,BLR,Toned Milk,2,1,417.0,427.0,-2.34,-2.34
+Ratha Saptami,BLR,Toned Milk,3,1,410.0,427.0,-3.98,-3.98
+Ratha Saptami,BLR,Toned Milk,4,1,448.0,427.0,4.92,4.92
+Ratha Saptami,BLR,Toned Milk,5,1,425.0,427.0,-0.47,-0.47
+Ratha Saptami,BLR,Toned Milk,6,1,429.0,427.0,0.47,0.47
+Ratha Saptami,BLR,Toned Milk,7,1,441.0,427.0,3.28,3.28
+Ratha Saptami,HYD,A2 Buffalo Milk,-7,3,13089.0,14718.5,-0.31,-4.99
+Ratha Saptami,HYD,A2 Buffalo Milk,-6,3,14376.0,14718.5,-0.12,-1.54
+Ratha Saptami,HYD,A2 Buffalo Milk,-5,3,14772.0,14718.5,-1.26,-1.48
+Ratha Saptami,HYD,A2 Buffalo Milk,-4,3,14764.0,14718.5,0.31,-0.41
+Ratha Saptami,HYD,A2 Buffalo Milk,-3,3,14463.0,14718.5,-0.56,-0.93
+Ratha Saptami,HYD,A2 Buffalo Milk,-2,3,14255.0,14718.5,0.6,-0.4
+Ratha Saptami,HYD,A2 Buffalo Milk,-1,3,14360.0,14718.5,-0.89,-1.3
+Ratha Saptami,HYD,A2 Buffalo Milk,0,3,14839.0,14718.5,0.46,-0.55
+Ratha Saptami,HYD,A2 Buffalo Milk,1,3,14931.0,14718.5,-1.44,-0.42
+Ratha Saptami,HYD,A2 Buffalo Milk,2,3,15054.0,14718.5,-1.37,-0.58
+Ratha Saptami,HYD,A2 Buffalo Milk,3,3,14872.0,14718.5,1.04,-0.32
+Ratha Saptami,HYD,A2 Buffalo Milk,4,3,12856.0,14718.5,-0.53,-7.65
+Ratha Saptami,HYD,A2 Buffalo Milk,5,3,14276.0,14718.5,0.51,-0.64
+Ratha Saptami,HYD,A2 Buffalo Milk,6,3,14464.0,14718.5,-0.04,-0.55
+Ratha Saptami,HYD,A2 Buffalo Milk,7,3,14820.0,14718.5,0.69,0.5
+Ratha Saptami,HYD,A2 Desi Cow Milk,-7,3,1382.0,1488.5,-1.04,-4.08
+Ratha Saptami,HYD,A2 Desi Cow Milk,-6,3,1419.0,1488.5,-2.96,-4.78
+Ratha Saptami,HYD,A2 Desi Cow Milk,-5,3,1507.0,1488.5,-1.68,-1.04
+Ratha Saptami,HYD,A2 Desi Cow Milk,-4,3,1517.0,1488.5,1.61,0.8
+Ratha Saptami,HYD,A2 Desi Cow Milk,-3,3,1481.0,1488.5,-0.5,-0.03
+Ratha Saptami,HYD,A2 Desi Cow Milk,-2,3,1482.0,1488.5,1.11,0.83
+Ratha Saptami,HYD,A2 Desi Cow Milk,-1,3,1539.0,1488.5,0.71,0.53
+Ratha Saptami,HYD,A2 Desi Cow Milk,0,3,1784.0,1488.5,25.76,23.15
+Ratha Saptami,HYD,A2 Desi Cow Milk,1,3,1562.0,1488.5,-1.3,0.72
+Ratha Saptami,HYD,A2 Desi Cow Milk,2,3,1545.0,1488.5,1.23,1.13
+Ratha Saptami,HYD,A2 Desi Cow Milk,3,3,1549.0,1488.5,1.17,1.71
+Ratha Saptami,HYD,A2 Desi Cow Milk,4,3,1320.0,1488.5,-1.23,-7.27
+Ratha Saptami,HYD,A2 Desi Cow Milk,5,3,1481.0,1488.5,-0.26,0.12
+Ratha Saptami,HYD,A2 Desi Cow Milk,6,3,1496.0,1488.5,0.5,0.64
+Ratha Saptami,HYD,A2 Desi Cow Milk,7,3,1500.0,1488.5,2.36,3.73
+Ratha Saptami,HYD,Cow Milk,-7,3,8129.0,8790.5,0.01,-3.62
+Ratha Saptami,HYD,Cow Milk,-6,3,8790.0,8790.5,-0.1,-1.41
+Ratha Saptami,HYD,Cow Milk,-5,3,8843.0,8790.5,-0.05,0.12
+Ratha Saptami,HYD,Cow Milk,-4,3,8727.0,8790.5,-0.72,-0.78
+Ratha Saptami,HYD,Cow Milk,-3,3,8606.0,8790.5,-0.44,-0.88
+Ratha Saptami,HYD,Cow Milk,-2,3,8623.0,8790.5,0.49,0.19
+Ratha Saptami,HYD,Cow Milk,-1,3,8742.0,8790.5,-0.04,0.22
+Ratha Saptami,HYD,Cow Milk,0,3,10349.0,8790.5,17.23,16.25
+Ratha Saptami,HYD,Cow Milk,1,3,8955.0,8790.5,-0.25,0.08
+Ratha Saptami,HYD,Cow Milk,2,3,9018.0,8790.5,-0.87,0.18
+Ratha Saptami,HYD,Cow Milk,3,3,8991.0,8790.5,-0.93,-0.4
+Ratha Saptami,HYD,Cow Milk,4,3,7629.0,8790.5,-0.46,-6.45
+Ratha Saptami,HYD,Cow Milk,5,3,8757.0,8790.5,0.57,0.33
+Ratha Saptami,HYD,Cow Milk,6,3,8803.0,8790.5,0.1,0.1
+Ratha Saptami,HYD,Cow Milk,7,3,8912.0,8790.5,1.38,1.36
+Ratha Saptami,HYD,Curd,-7,3,844.0,1043.0,-10.3,-7.5
+Ratha Saptami,HYD,Curd,-6,3,892.0,1043.0,-8.66,-7.26
+Ratha Saptami,HYD,Curd,-5,3,1131.0,1043.0,3.53,3.73
+Ratha Saptami,HYD,Curd,-4,3,955.0,1043.0,0.18,-2.33
+Ratha Saptami,HYD,Curd,-3,3,1125.0,1043.0,-3.71,8.98
+Ratha Saptami,HYD,Curd,-2,3,1164.0,1043.0,-0.94,21.24
+Ratha Saptami,HYD,Curd,-1,3,1084.0,1043.0,-3.53,22.61
+Ratha Saptami,HYD,Curd,0,3,940.0,1043.0,-8.43,-4.51
+Ratha Saptami,HYD,Curd,1,3,957.0,1043.0,-6.89,-5.52
+Ratha Saptami,HYD,Curd,2,3,1085.0,1043.0,-2.12,15.53
+Ratha Saptami,HYD,Curd,3,3,995.0,1043.0,-4.6,-6.06
+Ratha Saptami,HYD,Curd,4,3,1184.0,1043.0,0.77,24.65
+Ratha Saptami,HYD,Curd,5,3,1398.0,1043.0,138.73,95.73
+Ratha Saptami,HYD,Curd,6,3,952.0,1043.0,-8.72,-8.56
+Ratha Saptami,HYD,Curd,7,3,1151.0,1043.0,-1.77,6.08
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,-7,3,4593.0,5174.0,0.22,-4.27
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,-6,3,4906.0,5174.0,-1.33,-1.76
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,-5,3,5140.0,5174.0,-0.66,-1.83
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,-4,3,5209.0,5174.0,0.68,-0.28
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,-3,3,5206.0,5174.0,-1.21,-0.71
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,-2,3,5251.0,5174.0,0.24,-0.63
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,-1,3,5166.0,5174.0,-1.11,-1.43
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,0,3,4992.0,5174.0,1.4,-0.06
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,1,3,5061.0,5174.0,-2.18,-0.87
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,2,3,5134.0,5174.0,-0.77,-0.46
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,3,3,5313.0,5174.0,0.16,-0.07
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,4,3,4573.0,5174.0,-0.22,-9.34
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,5,3,5244.0,5174.0,1.07,-0.83
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,6,3,5071.0,5174.0,0.29,-0.06
+Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,7,3,5218.0,5174.0,0.85,0.64
+Ratha Saptami,HYD,Skim Milk,-7,3,1916.0,2101.5,-1.64,-4.97
+Ratha Saptami,HYD,Skim Milk,-6,3,2107.0,2101.5,-2.41,-1.83
+Ratha Saptami,HYD,Skim Milk,-5,3,2103.0,2101.5,-0.43,-1.15
+Ratha Saptami,HYD,Skim Milk,-4,3,2113.0,2101.5,0.11,0.15
+Ratha Saptami,HYD,Skim Milk,-3,3,2068.0,2101.5,2.31,1.17
+Ratha Saptami,HYD,Skim Milk,-2,3,1993.0,2101.5,0.67,-1.25
+Ratha Saptami,HYD,Skim Milk,-1,3,2025.0,2101.5,-1.8,-0.92
+Ratha Saptami,HYD,Skim Milk,0,3,2070.0,2101.5,-0.5,-2.01
+Ratha Saptami,HYD,Skim Milk,1,3,2106.0,2101.5,-0.98,-1.36
+Ratha Saptami,HYD,Skim Milk,2,3,2093.0,2101.5,0.84,0.45
+Ratha Saptami,HYD,Skim Milk,3,3,2086.0,2101.5,-0.67,-0.48
+Ratha Saptami,HYD,Skim Milk,4,3,1973.0,2101.5,1.28,-6.82
+Ratha Saptami,HYD,Skim Milk,5,3,2021.0,2101.5,0.21,-0.81
+Ratha Saptami,HYD,Skim Milk,6,3,2100.0,2101.5,1.84,1.45
+Ratha Saptami,HYD,Skim Milk,7,3,2120.0,2101.5,0.67,0.48
+Ratha Saptami,HYD,Toned Milk,-7,1,5900.0,6899.0,-14.48,-14.48
+Ratha Saptami,HYD,Toned Milk,-6,1,6535.0,6899.0,-5.28,-5.28
+Ratha Saptami,HYD,Toned Milk,-5,1,6811.0,6899.0,-1.28,-1.28
+Ratha Saptami,HYD,Toned Milk,-4,1,6897.0,6899.0,-0.03,-0.03
+Ratha Saptami,HYD,Toned Milk,-3,1,6924.0,6899.0,0.36,0.36
+Ratha Saptami,HYD,Toned Milk,-2,1,7027.0,6899.0,1.86,1.86
+Ratha Saptami,HYD,Toned Milk,-1,1,6790.0,6899.0,-1.58,-1.58
+Ratha Saptami,HYD,Toned Milk,0,1,6592.0,6899.0,-4.45,-4.45
+Ratha Saptami,HYD,Toned Milk,1,1,6442.0,6899.0,-6.62,-6.62
+Ratha Saptami,HYD,Toned Milk,2,1,6725.0,6899.0,-2.52,-2.52
+Ratha Saptami,HYD,Toned Milk,3,1,6996.0,6899.0,1.41,1.41
+Ratha Saptami,HYD,Toned Milk,4,1,6990.0,6899.0,1.32,1.32
+Ratha Saptami,HYD,Toned Milk,5,1,6944.0,6899.0,0.65,0.65
+Ratha Saptami,HYD,Toned Milk,6,1,6920.0,6899.0,0.3,0.3
+Ratha Saptami,HYD,Toned Milk,7,1,6901.0,6899.0,0.03,0.03
+Ugadi,BLR,A2 Buffalo Milk,-7,3,2061.0,1967.5,0.51,1.75
+Ugadi,BLR,A2 Buffalo Milk,-6,3,2058.0,1967.5,3.93,3.18
+Ugadi,BLR,A2 Buffalo Milk,-5,3,2073.0,1967.5,0.68,2.01
+Ugadi,BLR,A2 Buffalo Milk,-4,3,2105.0,1967.5,4.46,2.68
+Ugadi,BLR,A2 Buffalo Milk,-3,3,2050.0,1967.5,0.04,-0.12
+Ugadi,BLR,A2 Buffalo Milk,-2,3,2002.0,1967.5,-0.59,-1.87
+Ugadi,BLR,A2 Buffalo Milk,-1,3,1953.0,1967.5,-0.74,-2.4
+Ugadi,BLR,A2 Buffalo Milk,0,3,1982.0,1967.5,1.44,1.81
+Ugadi,BLR,A2 Buffalo Milk,1,3,1770.0,1967.5,-8.2,-8.61
+Ugadi,BLR,A2 Buffalo Milk,2,3,1829.0,1967.5,-5.96,-4.81
+Ugadi,BLR,A2 Buffalo Milk,3,3,1854.0,1967.5,-5.77,-5.75
+Ugadi,BLR,A2 Buffalo Milk,4,3,1865.0,1967.5,-2.53,-3.16
+Ugadi,BLR,A2 Buffalo Milk,5,3,1867.0,1967.5,-5.11,-4.61
+Ugadi,BLR,A2 Buffalo Milk,6,3,1877.0,1967.5,-1.44,-1.17
+Ugadi,BLR,A2 Buffalo Milk,7,3,1863.0,1967.5,-0.51,-1.84
+Ugadi,BLR,A2 Desi Cow Milk,-7,3,336.0,337.5,-0.44,1.49
+Ugadi,BLR,A2 Desi Cow Milk,-6,3,346.0,337.5,2.52,4.57
+Ugadi,BLR,A2 Desi Cow Milk,-5,3,346.0,337.5,2.52,4.17
+Ugadi,BLR,A2 Desi Cow Milk,-4,3,339.0,337.5,0.44,6.65
+Ugadi,BLR,A2 Desi Cow Milk,-3,3,327.0,337.5,-3.11,-1.83
+Ugadi,BLR,A2 Desi Cow Milk,-2,3,320.0,337.5,0.0,-0.49
+Ugadi,BLR,A2 Desi Cow Milk,-1,3,312.0,337.5,-3.39,-2.86
+Ugadi,BLR,A2 Desi Cow Milk,0,3,328.0,337.5,-2.54,-0.27
+Ugadi,BLR,A2 Desi Cow Milk,1,3,309.0,337.5,-0.34,-1.51
+Ugadi,BLR,A2 Desi Cow Milk,2,3,329.0,337.5,-6.78,-5.46
+Ugadi,BLR,A2 Desi Cow Milk,3,3,338.0,337.5,-0.85,-2.93
+Ugadi,BLR,A2 Desi Cow Milk,4,3,325.0,337.5,-3.7,-5.18
+Ugadi,BLR,A2 Desi Cow Milk,5,3,356.0,337.5,4.22,0.41
+Ugadi,BLR,A2 Desi Cow Milk,6,3,335.0,337.5,-0.74,-0.93
+Ugadi,BLR,A2 Desi Cow Milk,7,3,330.0,337.5,-2.22,-2.15
+Ugadi,BLR,Cow Milk,-7,3,2149.0,2020.5,2.77,3.6
+Ugadi,BLR,Cow Milk,-6,3,2110.0,2020.5,4.43,2.92
+Ugadi,BLR,Cow Milk,-5,3,2096.0,2020.5,6.01,5.82
+Ugadi,BLR,Cow Milk,-4,3,2026.0,2020.5,0.27,0.61
+Ugadi,BLR,Cow Milk,-3,3,2005.0,2020.5,-0.77,-0.69
+Ugadi,BLR,Cow Milk,-2,3,1957.0,2020.5,-3.14,-2.94
+Ugadi,BLR,Cow Milk,-1,3,1970.0,2020.5,-1.41,-1.62
+Ugadi,BLR,Cow Milk,0,3,1992.0,2020.5,3.09,2.24
+Ugadi,BLR,Cow Milk,1,3,1895.0,2020.5,-6.21,-4.25
+Ugadi,BLR,Cow Milk,2,3,1890.0,2020.5,-3.82,-4.54
+Ugadi,BLR,Cow Milk,3,3,1829.0,2020.5,-3.48,-4.32
+Ugadi,BLR,Cow Milk,4,3,1935.0,2020.5,-3.2,-3.17
+Ugadi,BLR,Cow Milk,5,3,1975.0,2020.5,-3.34,-2.99
+Ugadi,BLR,Cow Milk,6,3,2015.0,2020.5,-0.27,-0.39
+Ugadi,BLR,Cow Milk,7,3,1960.0,2020.5,-1.66,0.01
+Ugadi,BLR,Curd,-7,3,183.0,179.0,0.99,0.18
+Ugadi,BLR,Curd,-6,3,234.0,179.0,10.89,14.65
+Ugadi,BLR,Curd,-5,3,177.0,179.0,-2.67,-2.91
+Ugadi,BLR,Curd,-4,3,174.0,179.0,-2.32,-0.05
+Ugadi,BLR,Curd,-3,3,165.0,179.0,-7.82,-4.46
+Ugadi,BLR,Curd,-2,3,171.0,179.0,-4.47,-4.69
+Ugadi,BLR,Curd,-1,3,270.0,179.0,2.67,14.21
+Ugadi,BLR,Curd,0,3,172.0,179.0,-3.91,-9.2
+Ugadi,BLR,Curd,1,3,151.0,179.0,-16.83,-17.42
+Ugadi,BLR,Curd,2,3,172.0,179.0,-10.87,-9.88
+Ugadi,BLR,Curd,3,3,173.0,179.0,-6.93,-6.69
+Ugadi,BLR,Curd,4,3,174.0,179.0,-2.79,-9.49
+Ugadi,BLR,Curd,5,3,181.0,179.0,1.12,0.21
+Ugadi,BLR,Curd,6,3,202.0,179.0,7.31,6.39
+Ugadi,BLR,Curd,7,3,172.0,179.0,-3.91,0.96
+Ugadi,BLR,Double Toned A2 Buffalo Milk,-7,3,451.0,439.5,1.5,1.21
+Ugadi,BLR,Double Toned A2 Buffalo Milk,-6,3,454.0,439.5,7.25,7.27
+Ugadi,BLR,Double Toned A2 Buffalo Milk,-5,3,462.0,439.5,0.9,2.17
+Ugadi,BLR,Double Toned A2 Buffalo Milk,-4,3,453.0,439.5,5.8,4.92
+Ugadi,BLR,Double Toned A2 Buffalo Milk,-3,3,477.0,439.5,0.48,2.84
+Ugadi,BLR,Double Toned A2 Buffalo Milk,-2,3,414.0,439.5,-5.8,-4.72
+Ugadi,BLR,Double Toned A2 Buffalo Milk,-1,3,418.0,439.5,-3.09,-2.34
+Ugadi,BLR,Double Toned A2 Buffalo Milk,0,3,410.0,439.5,3.38,0.98
+Ugadi,BLR,Double Toned A2 Buffalo Milk,1,3,398.0,439.5,-9.44,-8.56
+Ugadi,BLR,Double Toned A2 Buffalo Milk,2,3,421.0,439.5,-4.21,-2.01
+Ugadi,BLR,Double Toned A2 Buffalo Milk,3,3,412.0,439.5,-6.26,-4.6
+Ugadi,BLR,Double Toned A2 Buffalo Milk,4,3,404.0,439.5,-3.38,-4.85
+Ugadi,BLR,Double Toned A2 Buffalo Milk,5,3,408.0,439.5,-5.31,-5.66
+Ugadi,BLR,Double Toned A2 Buffalo Milk,6,3,410.0,439.5,-5.31,-4.31
+Ugadi,BLR,Double Toned A2 Buffalo Milk,7,3,428.0,439.5,-2.62,1.8
+Ugadi,BLR,Skim Milk,-7,3,437.0,423.5,3.19,3.63
+Ugadi,BLR,Skim Milk,-6,3,429.0,423.5,1.3,-0.82
+Ugadi,BLR,Skim Milk,-5,3,467.0,423.5,0.41,1.58
+Ugadi,BLR,Skim Milk,-4,3,458.0,423.5,8.15,4.16
+Ugadi,BLR,Skim Milk,-3,3,463.0,423.5,1.38,0.51
+Ugadi,BLR,Skim Milk,-2,3,448.0,423.5,-2.2,-4.39
+Ugadi,BLR,Skim Milk,-1,3,450.0,423.5,-0.57,-1.17
+Ugadi,BLR,Skim Milk,0,3,426.0,423.5,-2.85,-2.01
+Ugadi,BLR,Skim Milk,1,3,402.0,423.5,-5.08,-7.34
+Ugadi,BLR,Skim Milk,2,3,415.0,423.5,-2.01,-1.53
+Ugadi,BLR,Skim Milk,3,3,414.0,423.5,-2.7,-3.84
+Ugadi,BLR,Skim Milk,4,3,379.0,423.5,-10.27,-6.09
+Ugadi,BLR,Skim Milk,5,3,418.0,423.5,-6.92,-6.88
+Ugadi,BLR,Skim Milk,6,3,382.0,423.5,1.22,-0.88
+Ugadi,BLR,Skim Milk,7,3,389.0,423.5,-2.36,3.88
+Ugadi,BLR,Toned Milk,-7,1,514.0,514.5,-0.1,-0.1
+Ugadi,BLR,Toned Milk,-6,1,536.0,514.5,4.18,4.18
+Ugadi,BLR,Toned Milk,-5,1,515.0,514.5,0.1,0.1
+Ugadi,BLR,Toned Milk,-4,1,485.0,514.5,-5.73,-5.73
+Ugadi,BLR,Toned Milk,-3,1,522.0,514.5,1.46,1.46
+Ugadi,BLR,Toned Milk,-2,1,500.0,514.5,-2.82,-2.82
+Ugadi,BLR,Toned Milk,-1,1,520.0,514.5,1.07,1.07
+Ugadi,BLR,Toned Milk,0,1,547.0,514.5,6.32,6.32
+Ugadi,BLR,Toned Milk,1,1,487.0,514.5,-5.34,-5.34
+Ugadi,BLR,Toned Milk,2,1,502.0,514.5,-2.43,-2.43
+Ugadi,BLR,Toned Milk,3,1,461.0,514.5,-10.4,-10.4
+Ugadi,BLR,Toned Milk,4,1,503.0,514.5,-2.24,-2.24
+Ugadi,BLR,Toned Milk,5,1,529.0,514.5,2.82,2.82
+Ugadi,BLR,Toned Milk,6,1,518.0,514.5,0.68,0.68
+Ugadi,BLR,Toned Milk,7,1,502.0,514.5,-2.43,-2.43
+Ugadi,HYD,A2 Buffalo Milk,-7,3,14321.0,14892.5,0.0,-0.76
+Ugadi,HYD,A2 Buffalo Milk,-6,3,14513.0,14892.5,0.77,-0.22
+Ugadi,HYD,A2 Buffalo Milk,-5,3,14738.0,14892.5,-0.35,-0.3
+Ugadi,HYD,A2 Buffalo Milk,-4,3,14819.0,14892.5,-0.49,-1.01
+Ugadi,HYD,A2 Buffalo Milk,-3,3,14713.0,14892.5,-2.0,-1.74
+Ugadi,HYD,A2 Buffalo Milk,-2,3,14913.0,14892.5,0.01,-0.8
+Ugadi,HYD,A2 Buffalo Milk,-1,3,14562.0,14892.5,-1.83,-1.55
+Ugadi,HYD,A2 Buffalo Milk,0,3,15579.0,14892.5,4.61,4.77
+Ugadi,HYD,A2 Buffalo Milk,1,3,14621.0,14892.5,-1.82,-3.07
+Ugadi,HYD,A2 Buffalo Milk,2,3,14252.0,14892.5,-4.07,-2.05
+Ugadi,HYD,A2 Buffalo Milk,3,3,14262.0,14892.5,-3.04,-4.0
+Ugadi,HYD,A2 Buffalo Milk,4,3,14957.0,14892.5,-3.37,-2.03
+Ugadi,HYD,A2 Buffalo Milk,5,3,15087.0,14892.5,-1.43,-1.75
+Ugadi,HYD,A2 Buffalo Milk,6,3,15119.0,14892.5,1.35,0.53
+Ugadi,HYD,A2 Buffalo Milk,7,3,14966.0,14892.5,0.35,0.32
+Ugadi,HYD,A2 Desi Cow Milk,-7,3,1388.0,1481.0,0.53,-1.19
+Ugadi,HYD,A2 Desi Cow Milk,-6,3,1458.0,1481.0,4.08,3.19
+Ugadi,HYD,A2 Desi Cow Milk,-5,3,1474.0,1481.0,-0.47,0.55
+Ugadi,HYD,A2 Desi Cow Milk,-4,3,1506.0,1481.0,1.36,1.06
+Ugadi,HYD,A2 Desi Cow Milk,-3,3,1496.0,1481.0,-0.91,-0.42
+Ugadi,HYD,A2 Desi Cow Milk,-2,3,1518.0,1481.0,0.45,0.62
+Ugadi,HYD,A2 Desi Cow Milk,-1,3,1482.0,1481.0,0.3,0.62
+Ugadi,HYD,A2 Desi Cow Milk,0,3,1524.0,1481.0,9.74,8.19
+Ugadi,HYD,A2 Desi Cow Milk,1,3,1430.0,1481.0,-3.44,-3.45
+Ugadi,HYD,A2 Desi Cow Milk,2,3,1400.0,1481.0,-5.47,-4.99
+Ugadi,HYD,A2 Desi Cow Milk,3,3,1367.0,1481.0,-5.74,-6.19
+Ugadi,HYD,A2 Desi Cow Milk,4,3,1486.0,1481.0,-3.03,-2.76
+Ugadi,HYD,A2 Desi Cow Milk,5,3,1539.0,1481.0,-0.13,-0.3
+Ugadi,HYD,A2 Desi Cow Milk,6,3,1480.0,1481.0,-0.32,-1.24
+Ugadi,HYD,A2 Desi Cow Milk,7,3,1482.0,1481.0,0.07,-0.07
+Ugadi,HYD,Cow Milk,-7,3,8451.0,8820.0,0.8,-0.75
+Ugadi,HYD,Cow Milk,-6,3,8655.0,8820.0,0.86,0.4
+Ugadi,HYD,Cow Milk,-5,3,8574.0,8820.0,1.7,0.41
+Ugadi,HYD,Cow Milk,-4,3,8739.0,8820.0,-0.92,-0.33
+Ugadi,HYD,Cow Milk,-3,3,8831.0,8820.0,0.0,-0.1
+Ugadi,HYD,Cow Milk,-2,3,8767.0,8820.0,-0.57,-0.56
+Ugadi,HYD,Cow Milk,-1,3,8724.0,8820.0,-1.09,-0.81
+Ugadi,HYD,Cow Milk,0,3,9417.0,8820.0,6.77,7.16
+Ugadi,HYD,Cow Milk,1,3,8576.0,8820.0,-2.77,-2.55
+Ugadi,HYD,Cow Milk,2,3,8591.0,8820.0,-2.6,-2.07
+Ugadi,HYD,Cow Milk,3,3,8320.0,8820.0,-2.39,-3.57
+Ugadi,HYD,Cow Milk,4,3,8681.0,8820.0,-2.27,-1.33
+Ugadi,HYD,Cow Milk,5,3,8835.0,8820.0,-0.91,-0.36
+Ugadi,HYD,Cow Milk,6,3,8919.0,8820.0,0.12,-0.26
+Ugadi,HYD,Cow Milk,7,3,8905.0,8820.0,-0.12,0.47
+Ugadi,HYD,Curd,-7,3,1268.0,1262.0,0.48,10.04
+Ugadi,HYD,Curd,-6,3,1308.0,1262.0,3.65,3.84
+Ugadi,HYD,Curd,-5,3,901.0,1262.0,-1.43,-10.55
+Ugadi,HYD,Curd,-4,3,1203.0,1262.0,-1.61,-1.5
+Ugadi,HYD,Curd,-3,3,939.0,1262.0,-4.01,-13.09
+Ugadi,HYD,Curd,-2,3,1271.0,1262.0,0.71,0.95
+Ugadi,HYD,Curd,-1,3,1263.0,1262.0,-0.48,-1.99
+Ugadi,HYD,Curd,0,3,1402.0,1262.0,15.15,14.53
+Ugadi,HYD,Curd,1,3,1120.0,1262.0,-11.25,-12.47
+Ugadi,HYD,Curd,2,3,1095.0,1262.0,-2.57,-5.35
+Ugadi,HYD,Curd,3,3,1114.0,1262.0,-10.32,-10.24
+Ugadi,HYD,Curd,4,3,1008.0,1262.0,-8.03,-13.25
+Ugadi,HYD,Curd,5,3,1256.0,1262.0,-0.48,2.9
+Ugadi,HYD,Curd,6,3,1271.0,1262.0,0.71,0.82
+Ugadi,HYD,Curd,7,3,1108.0,1262.0,1.35,15.57
+Ugadi,HYD,Double Toned A2 Buffalo Milk,-7,3,5200.0,5169.0,0.6,-1.34
+Ugadi,HYD,Double Toned A2 Buffalo Milk,-6,3,5261.0,5169.0,1.75,0.5
+Ugadi,HYD,Double Toned A2 Buffalo Milk,-5,3,5077.0,5169.0,-0.84,-1.11
+Ugadi,HYD,Double Toned A2 Buffalo Milk,-4,3,5006.0,5169.0,-0.76,-1.28
+Ugadi,HYD,Double Toned A2 Buffalo Milk,-3,3,5117.0,5169.0,-1.01,-1.38
+Ugadi,HYD,Double Toned A2 Buffalo Milk,-2,3,5199.0,5169.0,-1.42,-1.44
+Ugadi,HYD,Double Toned A2 Buffalo Milk,-1,3,5119.0,5169.0,-1.33,-1.63
+Ugadi,HYD,Double Toned A2 Buffalo Milk,0,3,5408.0,5169.0,4.62,4.29
+Ugadi,HYD,Double Toned A2 Buffalo Milk,1,3,4889.0,5169.0,-5.42,-4.92
+Ugadi,HYD,Double Toned A2 Buffalo Milk,2,3,4801.0,5169.0,-3.11,-4.41
+Ugadi,HYD,Double Toned A2 Buffalo Milk,3,3,4753.0,5169.0,-1.14,-3.49
+Ugadi,HYD,Double Toned A2 Buffalo Milk,4,3,4980.0,5169.0,-3.04,-1.38
+Ugadi,HYD,Double Toned A2 Buffalo Milk,5,3,5147.0,5169.0,-0.43,-0.31
+Ugadi,HYD,Double Toned A2 Buffalo Milk,6,3,5203.0,5169.0,0.66,0.72
+Ugadi,HYD,Double Toned A2 Buffalo Milk,7,3,5191.0,5169.0,0.43,0.38
+Ugadi,HYD,Skim Milk,-7,3,2136.0,2278.5,-0.66,-0.93
+Ugadi,HYD,Skim Milk,-6,3,2165.0,2278.5,1.52,-0.18
+Ugadi,HYD,Skim Milk,-5,3,2237.0,2278.5,-0.57,-0.58
+Ugadi,HYD,Skim Milk,-4,3,2224.0,2278.5,-2.39,-1.28
+Ugadi,HYD,Skim Milk,-3,3,2203.0,2278.5,-0.52,-1.04
+Ugadi,HYD,Skim Milk,-2,3,2270.0,2278.5,-0.37,-0.45
+Ugadi,HYD,Skim Milk,-1,3,2222.0,2278.5,-0.3,-0.98
+Ugadi,HYD,Skim Milk,0,3,2257.0,2278.5,-0.83,-0.39
+Ugadi,HYD,Skim Milk,1,3,2149.0,2278.5,-5.68,-4.3
+Ugadi,HYD,Skim Milk,2,3,2071.0,2278.5,-3.71,-4.76
+Ugadi,HYD,Skim Milk,3,3,2084.0,2278.5,-2.68,-3.12
+Ugadi,HYD,Skim Milk,4,3,2222.0,2278.5,-1.87,-0.81
+Ugadi,HYD,Skim Milk,5,3,2310.0,2278.5,0.48,-0.27
+Ugadi,HYD,Skim Milk,6,3,2288.0,2278.5,-0.48,0.26
+Ugadi,HYD,Skim Milk,7,3,2320.0,2278.5,2.27,2.2
+Ugadi,HYD,Toned Milk,-7,1,8224.0,8242.5,-0.22,-0.22
+Ugadi,HYD,Toned Milk,-6,1,8371.0,8242.5,1.56,1.56
+Ugadi,HYD,Toned Milk,-5,1,8173.0,8242.5,-0.84,-0.84
+Ugadi,HYD,Toned Milk,-4,1,8019.0,8242.5,-2.71,-2.71
+Ugadi,HYD,Toned Milk,-3,1,8091.0,8242.5,-1.84,-1.84
+Ugadi,HYD,Toned Milk,-2,1,8212.0,8242.5,-0.37,-0.37
+Ugadi,HYD,Toned Milk,-1,1,8183.0,8242.5,-0.72,-0.72
+Ugadi,HYD,Toned Milk,0,1,8744.0,8242.5,6.08,6.08
+Ugadi,HYD,Toned Milk,1,1,7737.0,8242.5,-6.13,-6.13
+Ugadi,HYD,Toned Milk,2,1,7860.0,8242.5,-4.64,-4.64
+Ugadi,HYD,Toned Milk,3,1,7622.0,8242.5,-7.53,-7.53
+Ugadi,HYD,Toned Milk,4,1,8019.0,8242.5,-2.71,-2.71
+Ugadi,HYD,Toned Milk,5,1,8261.0,8242.5,0.22,0.22
+Ugadi,HYD,Toned Milk,6,1,8418.0,8242.5,2.13,2.13
+Ugadi,HYD,Toned Milk,7,1,8398.0,8242.5,1.89,1.89
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,-7,2,1668.5,1571.75,5.84,5.84
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,-6,2,608.5,1571.75,-46.9,-46.9
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,-5,2,1508.0,1571.75,-4.52,-4.52
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,-4,2,1618.0,1571.75,2.01,2.01
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,-3,2,1434.0,1571.75,-7.21,-7.21
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,-2,2,1679.0,1571.75,5.5,5.5
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,-1,2,1612.5,1571.75,-0.29,-0.29
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,0,2,1669.0,1571.75,3.7,3.7
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,1,2,1484.0,1571.75,-8.78,-8.78
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,2,2,1483.0,1571.75,-6.34,-6.34
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,3,2,1549.5,1571.75,-2.47,-2.47
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,4,2,884.0,1571.75,-34.31,-34.31
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,5,2,1582.5,1571.75,0.75,0.75
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,6,2,1623.0,1571.75,3.56,3.56
+Varalakshmi Vratam,BLR,A2 Buffalo Milk,7,2,1598.0,1571.75,2.7,2.7
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,-7,2,402.0,379.25,4.84,4.84
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,-6,2,159.0,379.25,-47.24,-47.24
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,-5,2,357.0,379.25,-6.6,-6.6
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,-4,2,379.5,379.25,0.06,0.06
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,-3,2,334.0,379.25,-10.76,-10.76
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,-2,2,367.0,379.25,-4.68,-4.68
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,-1,2,373.5,379.25,-4.42,-4.42
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,0,2,404.5,379.25,3.38,3.38
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,1,2,358.0,379.25,-7.26,-7.26
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,2,2,354.5,379.25,-7.2,-7.2
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,3,2,362.5,379.25,-6.23,-6.23
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,4,2,242.5,379.25,-28.53,-28.53
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,5,2,388.5,379.25,1.31,1.31
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,6,2,393.0,379.25,3.72,3.72
+Varalakshmi Vratam,BLR,A2 Desi Cow Milk,7,2,383.5,379.25,1.5,1.5
+Varalakshmi Vratam,BLR,Cow Milk,-7,2,1936.5,1805.5,7.19,7.19
+Varalakshmi Vratam,BLR,Cow Milk,-6,2,880.5,1805.5,-47.62,-47.62
+Varalakshmi Vratam,BLR,Cow Milk,-5,2,1797.5,1805.5,-0.42,-0.42
+Varalakshmi Vratam,BLR,Cow Milk,-4,2,1829.5,1805.5,1.19,1.19
+Varalakshmi Vratam,BLR,Cow Milk,-3,2,1630.5,1805.5,-9.06,-9.06
+Varalakshmi Vratam,BLR,Cow Milk,-2,2,1834.0,1805.5,1.36,1.36
+Varalakshmi Vratam,BLR,Cow Milk,-1,2,1829.0,1805.5,0.91,0.91
+Varalakshmi Vratam,BLR,Cow Milk,0,2,1897.0,1805.5,4.39,4.39
+Varalakshmi Vratam,BLR,Cow Milk,1,2,1742.5,1805.5,-4.08,-4.08
+Varalakshmi Vratam,BLR,Cow Milk,2,2,1717.0,1805.5,-4.91,-4.91
+Varalakshmi Vratam,BLR,Cow Milk,3,2,1817.0,1805.5,0.43,0.43
+Varalakshmi Vratam,BLR,Cow Milk,4,2,1207.5,1805.5,-30.84,-30.84
+Varalakshmi Vratam,BLR,Cow Milk,5,2,1843.0,1805.5,1.94,1.94
+Varalakshmi Vratam,BLR,Cow Milk,6,2,1809.5,1805.5,0.18,0.18
+Varalakshmi Vratam,BLR,Cow Milk,7,2,1775.0,1805.5,-1.47,-1.47
+Varalakshmi Vratam,BLR,Curd,-7,2,193.0,157.0,40.78,40.78
+Varalakshmi Vratam,BLR,Curd,-6,2,53.0,157.0,-52.82,-52.82
+Varalakshmi Vratam,BLR,Curd,-5,2,162.0,157.0,3.0,3.0
+Varalakshmi Vratam,BLR,Curd,-4,2,162.0,157.0,1.74,1.74
+Varalakshmi Vratam,BLR,Curd,-3,2,140.0,157.0,-10.93,-10.93
+Varalakshmi Vratam,BLR,Curd,-2,2,151.0,157.0,-0.95,-0.95
+Varalakshmi Vratam,BLR,Curd,-1,2,180.0,157.0,25.58,25.58
+Varalakshmi Vratam,BLR,Curd,0,2,187.0,157.0,7.27,7.27
+Varalakshmi Vratam,BLR,Curd,1,2,128.5,157.0,-21.14,-21.14
+Varalakshmi Vratam,BLR,Curd,2,2,156.0,157.0,-2.86,-2.86
+Varalakshmi Vratam,BLR,Curd,3,2,130.0,157.0,-14.4,-14.4
+Varalakshmi Vratam,BLR,Curd,4,2,146.5,157.0,12.5,12.5
+Varalakshmi Vratam,BLR,Curd,5,2,180.5,157.0,6.46,6.46
+Varalakshmi Vratam,BLR,Curd,6,2,243.5,157.0,71.45,71.45
+Varalakshmi Vratam,BLR,Curd,7,2,149.5,157.0,-5.44,-5.44
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,-7,2,408.0,366.75,9.91,9.91
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,-6,2,155.0,366.75,-48.16,-48.16
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,-5,2,374.5,366.75,1.4,1.4
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,-4,2,371.0,366.75,1.29,1.29
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,-3,2,334.0,366.75,-8.12,-8.12
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,-2,2,368.0,366.75,-0.05,-0.05
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,-1,2,365.0,366.75,-1.65,-1.65
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,0,2,398.0,366.75,6.75,6.75
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,1,2,331.5,366.75,-10.94,-10.94
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,2,2,346.5,366.75,-3.91,-3.91
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,3,2,363.0,366.75,-0.82,-0.82
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,4,2,228.0,366.75,-31.76,-31.76
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,5,2,375.0,366.75,2.92,2.92
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,6,2,364.5,366.75,-0.84,-0.84
+Varalakshmi Vratam,BLR,Double Toned A2 Buffalo Milk,7,2,369.5,366.75,2.06,2.06
+Varalakshmi Vratam,BLR,Skim Milk,-7,2,365.5,342.0,7.48,7.48
+Varalakshmi Vratam,BLR,Skim Milk,-6,2,97.0,342.0,-50.56,-50.56
+Varalakshmi Vratam,BLR,Skim Milk,-5,2,326.5,342.0,-3.62,-3.62
+Varalakshmi Vratam,BLR,Skim Milk,-4,2,359.5,342.0,3.84,3.84
+Varalakshmi Vratam,BLR,Skim Milk,-3,2,314.5,342.0,-4.08,-4.08
+Varalakshmi Vratam,BLR,Skim Milk,-2,2,385.0,342.0,8.04,8.04
+Varalakshmi Vratam,BLR,Skim Milk,-1,2,364.0,342.0,2.46,2.46
+Varalakshmi Vratam,BLR,Skim Milk,0,2,346.0,342.0,-4.11,-4.11
+Varalakshmi Vratam,BLR,Skim Milk,1,2,321.0,342.0,-7.16,-7.16
+Varalakshmi Vratam,BLR,Skim Milk,2,2,318.0,342.0,-7.94,-7.94
+Varalakshmi Vratam,BLR,Skim Milk,3,2,349.0,342.0,0.87,0.87
+Varalakshmi Vratam,BLR,Skim Milk,4,2,177.5,342.0,-33.12,-33.12
+Varalakshmi Vratam,BLR,Skim Milk,5,2,361.5,342.0,6.51,6.51
+Varalakshmi Vratam,BLR,Skim Milk,6,2,342.0,342.0,-0.7,-0.7
+Varalakshmi Vratam,BLR,Skim Milk,7,2,345.0,342.0,2.35,2.35
+Varalakshmi Vratam,BLR,Toned Milk,-7,1,153.0,145.5,5.15,5.15
+Varalakshmi Vratam,BLR,Toned Milk,-6,1,21.0,145.5,-85.57,-85.57
+Varalakshmi Vratam,BLR,Toned Milk,-5,1,154.0,145.5,5.84,5.84
+Varalakshmi Vratam,BLR,Toned Milk,-4,1,156.0,145.5,7.22,7.22
+Varalakshmi Vratam,BLR,Toned Milk,-3,1,132.0,145.5,-9.28,-9.28
+Varalakshmi Vratam,BLR,Toned Milk,-2,1,152.0,145.5,4.47,4.47
+Varalakshmi Vratam,BLR,Toned Milk,-1,1,160.0,145.5,9.97,9.97
+Varalakshmi Vratam,BLR,Toned Milk,0,1,170.0,145.5,16.84,16.84
+Varalakshmi Vratam,BLR,Toned Milk,1,1,159.0,145.5,9.28,9.28
+Varalakshmi Vratam,BLR,Toned Milk,2,1,138.0,145.5,-5.15,-5.15
+Varalakshmi Vratam,BLR,Toned Milk,3,1,158.0,145.5,8.59,8.59
+Varalakshmi Vratam,BLR,Toned Milk,4,1,56.0,145.5,-61.51,-61.51
+Varalakshmi Vratam,BLR,Toned Milk,5,1,149.0,145.5,2.41,2.41
+Varalakshmi Vratam,BLR,Toned Milk,6,1,128.0,145.5,-12.03,-12.03
+Varalakshmi Vratam,BLR,Toned Milk,7,1,142.0,145.5,-2.41,-2.41
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,-7,2,15346.0,14711.0,4.32,4.32
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,-6,2,11271.0,14711.0,-22.2,-22.2
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,-5,2,14632.0,14711.0,-0.57,-0.57
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,-4,2,14817.5,14711.0,0.7,0.7
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,-3,2,14635.5,14711.0,-0.36,-0.36
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,-2,2,15015.5,14711.0,2.02,2.02
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,-1,2,15021.0,14711.0,1.99,1.99
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,0,2,15929.0,14711.0,8.12,8.12
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,1,2,14293.5,14711.0,-3.0,-3.0
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,2,2,14387.5,14711.0,-2.04,-2.04
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,3,2,14202.5,14711.0,-3.52,-3.52
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,4,2,12654.0,14711.0,-13.48,-13.48
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,5,2,14611.5,14711.0,-0.7,-0.7
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,6,2,14698.5,14711.0,-0.1,-0.1
+Varalakshmi Vratam,HYD,A2 Buffalo Milk,7,2,14933.0,14711.0,1.58,1.58
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,-7,2,1676.5,1494.75,12.23,12.23
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,-6,2,1110.0,1494.75,-25.1,-25.1
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,-5,2,1486.0,1494.75,-0.58,-0.58
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,-4,2,1503.5,1494.75,0.58,0.58
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,-3,2,1465.0,1494.75,-1.9,-1.9
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,-2,2,1475.0,1494.75,-1.34,-1.34
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,-1,2,1585.0,1494.75,6.0,6.0
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,0,2,1982.5,1494.75,32.46,32.46
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,1,2,1423.5,1494.75,-4.92,-4.92
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,2,2,1409.0,1494.75,-5.64,-5.64
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,3,2,1480.0,1494.75,-0.98,-0.98
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,4,2,1276.0,1494.75,-14.4,-14.4
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,5,2,1498.0,1494.75,0.24,0.24
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,6,2,1491.0,1494.75,-0.29,-0.29
+Varalakshmi Vratam,HYD,A2 Desi Cow Milk,7,2,1607.0,1494.75,7.5,7.5
+Varalakshmi Vratam,HYD,Cow Milk,-7,2,9664.0,8797.25,9.9,9.9
+Varalakshmi Vratam,HYD,Cow Milk,-6,2,6686.0,8797.25,-22.82,-22.82
+Varalakshmi Vratam,HYD,Cow Milk,-5,2,8650.0,8797.25,-1.7,-1.7
+Varalakshmi Vratam,HYD,Cow Milk,-4,2,8819.0,8797.25,0.2,0.2
+Varalakshmi Vratam,HYD,Cow Milk,-3,2,8633.0,8797.25,-1.74,-1.74
+Varalakshmi Vratam,HYD,Cow Milk,-2,2,8849.0,8797.25,0.52,0.52
+Varalakshmi Vratam,HYD,Cow Milk,-1,2,9125.5,8797.25,3.56,3.56
+Varalakshmi Vratam,HYD,Cow Milk,0,2,10859.5,8797.25,22.98,22.98
+Varalakshmi Vratam,HYD,Cow Milk,1,2,8693.0,8797.25,-1.44,-1.44
+Varalakshmi Vratam,HYD,Cow Milk,2,2,8567.5,8797.25,-2.54,-2.54
+Varalakshmi Vratam,HYD,Cow Milk,3,2,8495.5,8797.25,-3.5,-3.5
+Varalakshmi Vratam,HYD,Cow Milk,4,2,7508.0,8797.25,-14.17,-14.17
+Varalakshmi Vratam,HYD,Cow Milk,5,2,8687.0,8797.25,-1.3,-1.3
+Varalakshmi Vratam,HYD,Cow Milk,6,2,8842.5,8797.25,0.52,0.52
+Varalakshmi Vratam,HYD,Cow Milk,7,2,9218.0,8797.25,4.7,4.7
+Varalakshmi Vratam,HYD,Curd,-7,2,959.5,1184.0,-13.93,-13.93
+Varalakshmi Vratam,HYD,Curd,-6,2,703.0,1184.0,-32.41,-32.41
+Varalakshmi Vratam,HYD,Curd,-5,2,1316.0,1184.0,8.83,8.83
+Varalakshmi Vratam,HYD,Curd,-4,2,925.5,1184.0,-16.44,-16.44
+Varalakshmi Vratam,HYD,Curd,-3,2,1910.0,1184.0,47.87,47.87
+Varalakshmi Vratam,HYD,Curd,-2,2,1682.0,1184.0,33.12,33.12
+Varalakshmi Vratam,HYD,Curd,-1,2,1301.0,1184.0,30.26,30.26
+Varalakshmi Vratam,HYD,Curd,0,2,1585.5,1184.0,31.54,31.54
+Varalakshmi Vratam,HYD,Curd,1,2,1061.0,1184.0,-11.8,-11.8
+Varalakshmi Vratam,HYD,Curd,2,2,1098.5,1184.0,-5.78,-5.78
+Varalakshmi Vratam,HYD,Curd,3,2,873.0,1184.0,-21.6,-21.6
+Varalakshmi Vratam,HYD,Curd,4,2,1552.5,1184.0,46.5,46.5
+Varalakshmi Vratam,HYD,Curd,5,2,1656.5,1184.0,28.45,28.45
+Varalakshmi Vratam,HYD,Curd,6,2,1205.5,1184.0,0.48,0.48
+Varalakshmi Vratam,HYD,Curd,7,2,1228.5,1184.0,2.64,2.64
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,-7,2,5687.0,5439.0,4.54,4.54
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,-6,2,4209.5,5439.0,-21.54,-21.54
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,-5,2,5429.0,5439.0,-0.2,-0.2
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,-4,2,5457.5,5439.0,0.35,0.35
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,-3,2,5399.5,5439.0,-0.54,-0.54
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,-2,2,5547.5,5439.0,2.0,2.0
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,-1,2,5519.0,5439.0,1.44,1.44
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,0,2,5769.0,5439.0,5.91,5.91
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,1,2,5152.0,5439.0,-5.32,-5.32
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,2,2,5264.5,5439.0,-2.98,-2.98
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,3,2,5182.0,5439.0,-4.79,-4.79
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,4,2,4793.5,5439.0,-11.41,-11.41
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,5,2,5441.0,5439.0,0.01,0.01
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,6,2,5417.5,5439.0,-0.4,-0.4
+Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,7,2,5459.5,5439.0,0.4,0.4
+Varalakshmi Vratam,HYD,Skim Milk,-7,2,2399.5,2304.25,4.27,4.27
+Varalakshmi Vratam,HYD,Skim Milk,-6,2,1749.5,2304.25,-21.96,-21.96
+Varalakshmi Vratam,HYD,Skim Milk,-5,2,2233.5,2304.25,-3.01,-3.01
+Varalakshmi Vratam,HYD,Skim Milk,-4,2,2304.5,2304.25,-0.01,-0.01
+Varalakshmi Vratam,HYD,Skim Milk,-3,2,2300.5,2304.25,-0.01,-0.01
+Varalakshmi Vratam,HYD,Skim Milk,-2,2,2343.0,2304.25,1.5,1.5
+Varalakshmi Vratam,HYD,Skim Milk,-1,2,2334.5,2304.25,1.14,1.14
+Varalakshmi Vratam,HYD,Skim Milk,0,2,2418.5,2304.25,4.59,4.59
+Varalakshmi Vratam,HYD,Skim Milk,1,2,2229.5,2304.25,-3.64,-3.64
+Varalakshmi Vratam,HYD,Skim Milk,2,2,2276.5,2304.25,-0.9,-0.9
+Varalakshmi Vratam,HYD,Skim Milk,3,2,2259.5,2304.25,-2.22,-2.22
+Varalakshmi Vratam,HYD,Skim Milk,4,2,1975.0,2304.25,-13.48,-13.48
+Varalakshmi Vratam,HYD,Skim Milk,5,2,2335.5,2304.25,1.25,1.25
+Varalakshmi Vratam,HYD,Skim Milk,6,2,2322.5,2304.25,0.73,0.73
+Varalakshmi Vratam,HYD,Skim Milk,7,2,2319.5,2304.25,0.74,0.74
+Varalakshmi Vratam,HYD,Toned Milk,-7,1,2078.0,2052.5,1.24,1.24
+Varalakshmi Vratam,HYD,Toned Milk,-6,1,673.0,2052.5,-67.21,-67.21
+Varalakshmi Vratam,HYD,Toned Milk,-5,1,2006.0,2052.5,-2.27,-2.27
+Varalakshmi Vratam,HYD,Toned Milk,-4,1,2027.0,2052.5,-1.24,-1.24
+Varalakshmi Vratam,HYD,Toned Milk,-3,1,1700.0,2052.5,-17.17,-17.17
+Varalakshmi Vratam,HYD,Toned Milk,-2,1,2150.0,2052.5,4.75,4.75
+Varalakshmi Vratam,HYD,Toned Milk,-1,1,2248.0,2052.5,9.52,9.52
+Varalakshmi Vratam,HYD,Toned Milk,0,1,2569.0,2052.5,25.16,25.16
+Varalakshmi Vratam,HYD,Toned Milk,1,1,2160.0,2052.5,5.24,5.24
+Varalakshmi Vratam,HYD,Toned Milk,2,1,2091.0,2052.5,1.88,1.88
+Varalakshmi Vratam,HYD,Toned Milk,3,1,2176.0,2052.5,6.02,6.02
+Varalakshmi Vratam,HYD,Toned Milk,4,1,1222.0,2052.5,-40.46,-40.46
+Varalakshmi Vratam,HYD,Toned Milk,5,1,2318.0,2052.5,12.94,12.94
+Varalakshmi Vratam,HYD,Toned Milk,6,1,2316.0,2052.5,12.84,12.84
+Varalakshmi Vratam,HYD,Toned Milk,7,1,2378.0,2052.5,15.86,15.86

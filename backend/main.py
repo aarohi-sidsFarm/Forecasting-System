@@ -27,6 +27,9 @@ warnings.filterwarnings("ignore")
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(APP_DIR)
 MODEL_DIR = os.path.join(APP_DIR, "ml_models")
+PROCESSED_DIR = os.path.join(PROJECT_DIR, "data", "processed")
+ACCURACY_CACHE_PATH = os.path.join(PROCESSED_DIR, "recent_forecast_backtest.csv")
+FESTIVAL_RECOMMENDATION_PATH = os.path.join(PROCESSED_DIR, "festival_uplift_recommendations.csv")
 
 
 def _load_env_files() -> None:
@@ -112,6 +115,7 @@ BLR_BLEND_PRODUCTS = {
     "Curd",
     "Skim Milk",
 }
+BLR_RECENCY_BLEND_PRODUCTS = {"Curd", "Skim Milk", "Toned Milk"}
 BLR_SEVEN_DAY_PRODUCTS = {"A2 Desi Cow Milk"}
 
 print("Loading model + data at startup...")
@@ -169,6 +173,7 @@ for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
 fest_df = pd.read_csv(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"))
 fest_df["date"] = pd.to_datetime(fest_df["date"], format="mixed", dayfirst=True)
 _festival_set = set(fest_df["date"])
+_festival_name_by_date = fest_df.groupby("date")["festival"].first().to_dict()
 _blr_fest_set = set(fest_df[fest_df["cities"].str.contains("BLR", na=False)]["date"])
 _hyd_vga_fest_set = set(fest_df[fest_df["cities"].str.contains("HYD|VGA", na=False)]["date"])
 _high_impact_dates = set(fest_df[fest_df["impact"] == "HIGH"]["date"])
@@ -178,6 +183,32 @@ _festival_impact_dict = (
     fest_df.groupby("date")["impact_direction"].max().to_dict()
     if "impact_direction" in fest_df.columns else {}
 )
+if os.path.exists(FESTIVAL_RECOMMENDATION_PATH):
+    _festival_reco_df = pd.read_csv(FESTIVAL_RECOMMENDATION_PATH)
+else:
+    _festival_reco_df = pd.DataFrame()
+_festival_guardrail_lookup = {}
+if not _festival_reco_df.empty:
+    _festival_reco_df["city_cd"] = _festival_reco_df["city_cd"].astype(str).str.upper().str.strip()
+    _festival_reco_df["product_name"] = _festival_reco_df["product_name"].apply(lambda x: str(x).strip())
+    _festival_reco_df["festival_name"] = _festival_reco_df["festival_name"].astype(str).str.strip()
+    _festival_reco_df["observed_years"] = pd.to_numeric(_festival_reco_df["observed_years"], errors="coerce").fillna(0).astype(int)
+    _festival_reco_df["recommended_peak_offset"] = pd.to_numeric(_festival_reco_df["recommended_peak_offset"], errors="coerce").fillna(0).astype(int)
+    _festival_reco_df["recommended_peak_uplift_pct"] = pd.to_numeric(
+        _festival_reco_df["recommended_peak_uplift_pct"], errors="coerce"
+    ).fillna(0.0)
+    eligible_recos = _festival_reco_df[
+        (_festival_reco_df["observed_years"] >= 2)
+        & (_festival_reco_df["recommended_peak_uplift_pct"].abs() >= 3)
+    ].copy()
+    for _, row in eligible_recos.iterrows():
+        key = (
+            row["festival_name"],
+            row["city_cd"],
+            row["product_name"],
+            int(row["recommended_peak_offset"]),
+        )
+        _festival_guardrail_lookup[key] = float(row["recommended_peak_uplift_pct"])
 
 print(f"  Models loaded. Plan rows: {len(_lgbm_p)}")
 print(f"  Training data: {len(_train_df)} rows, {len(_train_lookup)} series from {os.path.basename(_train_path)}")
@@ -449,6 +480,99 @@ def _training_data_freshness() -> dict:
     }
 
 
+def _file_status(path: str) -> dict:
+    exists = os.path.exists(path)
+    stat = os.stat(path) if exists else None
+    return {
+        "path": os.path.relpath(path, PROJECT_DIR),
+        "exists": exists,
+        "modified_at": pd.Timestamp(stat.st_mtime, unit="s", tz="UTC").tz_convert("Asia/Kolkata").isoformat()
+        if stat else None,
+        "size_bytes": int(stat.st_size) if stat else 0,
+    }
+
+
+def _accuracy_cache_status() -> dict:
+    base = _file_status(ACCURACY_CACHE_PATH)
+    base.update({"rows": 0, "start_date": None, "end_date": None})
+    if not base["exists"]:
+        return base
+    try:
+        df = pd.read_csv(ACCURACY_CACHE_PATH, usecols=["forecast_date"])
+    except Exception as exc:
+        base["error"] = str(exc)
+        return base
+    if df.empty:
+        return base
+    dates = pd.to_datetime(df["forecast_date"], errors="coerce").dropna()
+    base.update({
+        "rows": int(len(df)),
+        "start_date": str(dates.min().date()) if not dates.empty else None,
+        "end_date": str(dates.max().date()) if not dates.empty else None,
+    })
+    return base
+
+
+def _guardrail_status() -> dict:
+    return {
+        "enabled": True,
+        "mode": "narrow product-city guardrails after model prediction",
+        "rules": [
+            {
+                "name": "HYD recent run-rate floor",
+                "cities": ["HYD"],
+                "products": sorted(HYD_STABLE_MILK_PRODUCTS),
+                "effect": "raises weekday milk forecasts only when model falls below recent lag/rolling demand",
+            },
+            {
+                "name": "HYD Wednesday peak floor",
+                "cities": ["HYD"],
+                "products": sorted(HYD_STABLE_MILK_PRODUCTS),
+                "effect": "protects Wednesday milk peaks using same-weekday history with a recent-demand cap",
+            },
+            {
+                "name": "HYD Sunday same-DOW cap",
+                "cities": ["HYD"],
+                "products": sorted(HYD_STABLE_MILK_PRODUCTS),
+                "effect": "caps Sunday milk forecasts near last Sunday to avoid weekday momentum leakage",
+            },
+            {
+                "name": "HYD toned recency cap",
+                "cities": ["HYD"],
+                "products": ["Toned Milk"],
+                "effect": "caps toned milk over-forecasting using recent run-rate",
+            },
+            {
+                "name": "BLR hybrid recency blend",
+                "cities": ["BLR"],
+                "products": sorted(BLR_BLEND_PRODUCTS | BLR_RECENCY_BLEND_PRODUCTS | BLR_SEVEN_DAY_PRODUCTS),
+                "effect": "uses recent lag blends for BLR products where the global model is weaker",
+            },
+        ],
+    }
+
+
+def _festival_status() -> dict:
+    return {
+        "enabled": True,
+        "calendar_path": os.path.relpath(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"), PROJECT_DIR),
+        "rows": int(len(fest_df)),
+        "start_date": str(fest_df["date"].min().date()) if not fest_df.empty else None,
+        "end_date": str(fest_df["date"].max().date()) if not fest_df.empty else None,
+        "high_impact_dates": int(len(_high_impact_dates)),
+        "guardrail_recommendation_path": os.path.relpath(FESTIVAL_RECOMMENDATION_PATH, PROJECT_DIR),
+        "guardrails_loaded": int(len(_festival_guardrail_lookup)),
+        "guardrail_cap_pct": 5,
+        "features": [
+            "is_festival",
+            "is_city_festival",
+            "is_pre_festival",
+            "is_post_festival",
+            "festival_impact_direction",
+        ],
+    }
+
+
 def _component_dict(df: pd.DataFrame) -> dict[tuple[str, str], float]:
     return {(r["city_cd"], r["product_name"]): float(r["daily_qty"]) for _, r in df.iterrows()}
 
@@ -590,8 +714,17 @@ def _apply_blr_hybrid_forecast(
     roll_7 = float(features.get("roll_7_mean", 0) or 0)
     roll_28 = float(features.get("roll_28_mean", 0) or 0)
     lag_7 = float(features.get("lag_7", 0) or 0)
+    lag_14 = float(features.get("lag_14", 0) or 0)
+    if product in BLR_SEVEN_DAY_PRODUCTS and min(lag_7, lag_14) > 0:
+        same_dow = (0.65 * lag_7) + (0.35 * lag_14)
+        return int(round(same_dow)), "same_dow_lag7_14"
     if product in BLR_SEVEN_DAY_PRODUCTS and roll_7 > 0:
-        return int(round(roll_7)), "recent_7_day"
+        return int(round(roll_7)), "recent_7_day_fallback"
+    if product in BLR_RECENCY_BLEND_PRODUCTS and min(roll_7, lag_7) > 0:
+        lag_1 = float(features.get("lag_1", 0) or 0)
+        if lag_1 > 0:
+            recency_blend = (0.45 * lag_1) + (0.35 * roll_7) + (0.20 * lag_7)
+            return int(round(recency_blend)), "recent_lag1_7_blend"
     if product in BLR_BLEND_PRODUCTS and min(roll_7, roll_28, lag_7) > 0:
         blended = (0.55 * roll_7) + (0.30 * roll_28) + (0.15 * lag_7)
         return int(round(blended)), "recent_blend_7_28_lag7"
@@ -650,12 +783,135 @@ def _apply_hyd_recent_run_rate_guard(
         return prediction, 0, 1.0
 
     # Core HYD milk demand is high-volume and stable. For procurement, prevent
-    # the model from drifting below the recent run-rate when live actual lags
-    # are available; this is a floor only, not a blanket uplift.
+    # weekday forecasts from drifting below the recent run-rate when live
+    # actual lags are available; this is a floor only, not a blanket uplift.
+    # Weekends have a different demand shape and are handled by same-DOW logic.
+    if int(features.get("day_of_week", 0) or 0) >= 5:
+        return prediction, 0, 1.0
+
     floor_qty = int(round((0.60 * lag_1) + (0.25 * roll_7) + (0.15 * lag_7)))
     if floor_qty <= prediction:
         return prediction, floor_qty, 1.0
     return floor_qty, floor_qty, round(floor_qty / max(prediction, 1), 4)
+
+
+def _apply_hyd_sunday_same_dow_cap(
+    prediction: int,
+    city: str,
+    product: str,
+    target_type: str,
+    features: dict,
+) -> tuple[int, int, float]:
+    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
+        return prediction, 0, 1.0
+    if city != "HYD" or product not in HYD_STABLE_MILK_PRODUCTS:
+        return prediction, 0, 1.0
+    if int(features.get("day_of_week", 0) or 0) != 6:
+        return prediction, 0, 1.0
+
+    lag_7 = float(features.get("lag_7", 0) or 0)
+    if lag_7 <= 0:
+        return prediction, 0, 1.0
+
+    # Sunday milk sales consistently run lower than weekday demand. Cap Sunday
+    # forecasts near the latest same-weekday actual to avoid carrying weekday
+    # procurement momentum into Sunday.
+    cap_qty = int(round(lag_7 * 0.995))
+    if prediction <= cap_qty:
+        return prediction, cap_qty, 1.0
+    return cap_qty, cap_qty, round(cap_qty / max(prediction, 1), 4)
+
+
+def _apply_hyd_wednesday_peak_floor(
+    prediction: int,
+    city: str,
+    product: str,
+    target_type: str,
+    features: dict,
+) -> tuple[int, int, float]:
+    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
+        return prediction, 0, 1.0
+    if city != "HYD" or product not in HYD_STABLE_MILK_PRODUCTS:
+        return prediction, 0, 1.0
+    if int(features.get("day_of_week", 0) or 0) != 2:
+        return prediction, 0, 1.0
+
+    lag_7 = float(features.get("lag_7", 0) or 0)
+    lag_14 = float(features.get("lag_14", 0) or 0)
+    lag_1 = float(features.get("lag_1", 0) or 0)
+    roll_7 = float(features.get("roll_7_mean", 0) or 0)
+    if min(lag_1, lag_7, lag_14, roll_7) <= 0:
+        return prediction, 0, 1.0
+
+    # HYD Wednesday is the weekly milk peak. Use same-weekday history as a
+    # conservative floor, capped by yesterday's demand so old Wednesday peaks
+    # do not override a current week-over-week decline.
+    same_dow_floor = (0.50 * lag_7) + (0.30 * lag_14) + (0.20 * roll_7)
+    recency_cap = lag_1 * 1.015
+    floor_qty = int(round(min(same_dow_floor, recency_cap)))
+    if floor_qty <= prediction:
+        return prediction, floor_qty, 1.0
+    return floor_qty, floor_qty, round(floor_qty / max(prediction, 1), 4)
+
+
+def _apply_hyd_toned_recency_cap(
+    prediction: int,
+    city: str,
+    product: str,
+    target_type: str,
+    features: dict,
+) -> tuple[int, int, float]:
+    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
+        return prediction, 0, 1.0
+    if city != "HYD" or product != "Toned Milk":
+        return prediction, 0, 1.0
+
+    lag_1 = float(features.get("lag_1", 0) or 0)
+    roll_7 = float(features.get("roll_7_mean", 0) or 0)
+    if min(lag_1, roll_7) <= 0:
+        return prediction, 0, 1.0
+
+    cap_qty = int(round(max(lag_1 * 1.018, roll_7 * 1.012)))
+    if prediction <= cap_qty:
+        return prediction, cap_qty, 1.0
+    return cap_qty, cap_qty, round(cap_qty / max(prediction, 1), 4)
+
+
+def _apply_festival_guardrail(
+    prediction: int,
+    city: str,
+    product: str,
+    dt: pd.Timestamp,
+    features: dict,
+) -> tuple[int, str | None, float, int]:
+    if not _festival_guardrail_lookup:
+        return prediction, None, 1.0, 0
+    if not (
+        features.get("is_festival", 0)
+        or features.get("is_city_festival", 0)
+        or features.get("is_pre_festival", 0)
+        or features.get("is_post_festival", 0)
+    ):
+        return prediction, None, 1.0, 0
+
+    dt = pd.Timestamp(dt).normalize()
+    candidate_dates = [dt - pd.Timedelta(days=offset) for offset in range(-3, 4)]
+    for festival_date in candidate_dates:
+        festival_name = _festival_name_by_date.get(festival_date)
+        if not festival_name:
+            continue
+        offset = int((dt - festival_date).days)
+        uplift_pct = _festival_guardrail_lookup.get((festival_name, city, product, offset))
+        if uplift_pct is None:
+            continue
+
+        capped_pct = float(np.clip(uplift_pct, -5.0, 5.0))
+        factor = 1.0 + (capped_pct / 100.0)
+        adjusted = int(round(prediction * factor))
+        if adjusted == prediction:
+            return prediction, festival_name, 1.0, offset
+        return max(0, adjusted), festival_name, round(factor, 4), offset
+    return prediction, None, 1.0, 0
 
 
 def _build_model_features(
@@ -821,6 +1077,34 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     target_type,
                     feats,
                 )
+                final_ad_hoc_pred, wednesday_floor_qty, wednesday_floor_factor = _apply_hyd_wednesday_peak_floor(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
+                final_ad_hoc_pred, sunday_cap_qty, sunday_cap_factor = _apply_hyd_sunday_same_dow_cap(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
+                final_ad_hoc_pred, toned_cap_qty, toned_cap_factor = _apply_hyd_toned_recency_cap(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
+                final_ad_hoc_pred, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    pred_dt,
+                    feats,
+                )
                 future_preds[(city, product, pred_dt)] = final_ad_hoc_pred
                 if pred_dt not in forecast_dates:
                     continue
@@ -850,6 +1134,15 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     "momentum_factor": momentum_factor,
                     "run_rate_floor_qty": run_rate_floor_qty,
                     "run_rate_factor": run_rate_factor,
+                    "wednesday_floor_qty": wednesday_floor_qty,
+                    "wednesday_floor_factor": wednesday_floor_factor,
+                    "sunday_cap_qty": sunday_cap_qty,
+                    "sunday_cap_factor": sunday_cap_factor,
+                    "toned_cap_qty": toned_cap_qty,
+                    "toned_cap_factor": toned_cap_factor,
+                    "festival_guardrail_name": festival_guardrail_name,
+                    "festival_guardrail_factor": festival_guardrail_factor,
+                    "festival_guardrail_offset": festival_guardrail_offset,
                 })
 
         process_batch(batch_global, meta_global, _model, FEATURE_ORDER, _model_target_type, False)
@@ -945,6 +1238,34 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     target_type,
                     feats,
                 )
+                model_total_adhoc, wednesday_floor_qty, wednesday_floor_factor = _apply_hyd_wednesday_peak_floor(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
+                model_total_adhoc, sunday_cap_qty, sunday_cap_factor = _apply_hyd_sunday_same_dow_cap(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
+                model_total_adhoc, toned_cap_qty, toned_cap_factor = _apply_hyd_toned_recency_cap(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
+                model_total_adhoc, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    current_dt,
+                    feats,
+                )
                 future_preds[(city, product, current_dt)] = model_total_adhoc
                 if current_dt != dt:
                     continue
@@ -969,6 +1290,15 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     "momentum_factor": momentum_factor,
                     "run_rate_floor_qty": run_rate_floor_qty,
                     "run_rate_factor": run_rate_factor,
+                    "wednesday_floor_qty": wednesday_floor_qty,
+                    "wednesday_floor_factor": wednesday_floor_factor,
+                    "sunday_cap_qty": sunday_cap_qty,
+                    "sunday_cap_factor": sunday_cap_factor,
+                    "toned_cap_qty": toned_cap_qty,
+                    "toned_cap_factor": toned_cap_factor,
+                    "festival_guardrail_name": festival_guardrail_name,
+                    "festival_guardrail_factor": festival_guardrail_factor,
+                    "festival_guardrail_offset": festival_guardrail_offset,
                     "prediction_source": pred_source,
                     "blr_forecast_method": blr_forecast_method,
                     "subscription_qty": int(round(sub_dict.get((city, product), 0))),
@@ -998,6 +1328,154 @@ async def _build_forecast_rows_by_date(forecast_dates, force_refresh: bool = Fal
         day_rows = await run_in_threadpool(build_forecast_for_dates, pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
         rows.extend(day_rows)
     return rows
+
+
+def _forecast_rows_to_quantity_df(rows: list[dict]) -> pd.DataFrame:
+    columns = ["forecast_date", "city", "product_name", "forecast_quantity"]
+    if not rows:
+        return pd.DataFrame(columns=columns)
+    df = pd.DataFrame(rows)
+    pivot = df.pivot_table(
+        index=["forecast_date", "city_cd", "product_name"],
+        columns="method",
+        values="predicted_qty",
+        aggfunc="sum",
+        fill_value=0,
+    ).reset_index()
+    for col in ["subscription", "known_buy_once", "ml_unknown_adhoc"]:
+        if col not in pivot.columns:
+            pivot[col] = 0
+    pivot["forecast_quantity"] = pivot["subscription"] + pivot["known_buy_once"] + pivot["ml_unknown_adhoc"]
+    pivot = pivot.rename(columns={"city_cd": "city"})
+    pivot["forecast_date"] = pd.to_datetime(pivot["forecast_date"]).dt.strftime("%Y-%m-%d")
+    pivot["city"] = pivot["city"].astype(str).str.upper().str.strip()
+    pivot["product_name"] = pivot["product_name"].apply(_normalize_product_name)
+    pivot["forecast_quantity"] = pd.to_numeric(pivot["forecast_quantity"], errors="coerce").fillna(0).round().astype(int)
+    return pivot[columns]
+
+
+def _selected_actuals_to_quantity_df(actual_df: pd.DataFrame, date: str) -> pd.DataFrame:
+    columns = ["forecast_date", "city", "product_name", "actual_quantity", "actual_orders"]
+    if actual_df.empty:
+        return pd.DataFrame(columns=columns)
+    df = actual_df.copy()
+    df["forecast_date"] = date
+    df["city"] = df["city_cd"].astype(str).str.upper().str.strip()
+    df["product_name"] = df["product_name"].apply(_normalize_product_name)
+    df["actual_quantity"] = pd.to_numeric(df["actual_qty"], errors="coerce").fillna(0).round().astype(int)
+    df["actual_orders"] = pd.to_numeric(df.get("actual_orders", 0), errors="coerce").fillna(0).round().astype(int)
+    return (
+        df.groupby(["forecast_date", "city", "product_name"], as_index=False)
+        .agg(actual_quantity=("actual_quantity", "sum"), actual_orders=("actual_orders", "sum"))
+        .reindex(columns=columns)
+    )
+
+
+async def _build_accuracy_report_df(
+    start_date: str,
+    end_date: str,
+    force_refresh: bool = False,
+) -> pd.DataFrame:
+    async def build_one_date(dt: pd.Timestamp, semaphore: asyncio.Semaphore) -> pd.DataFrame:
+        async with semaphore:
+            date = str(pd.Timestamp(dt).date())
+            sub_df, known_df, recent_df, actual_df = await asyncio.gather(
+                fetch_subscription_df_async(date, force_refresh),
+                fetch_known_buy_once_df_async(date, force_refresh),
+                fetch_recent_actuals_df_async(date, force_refresh),
+                fetch_selected_actuals_df_async(date, force_refresh),
+            )
+            rows = await run_in_threadpool(build_forecast_for_dates, pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
+            forecast_df = _forecast_rows_to_quantity_df(rows)
+            actual_qty_df = _selected_actuals_to_quantity_df(actual_df, date)
+            if forecast_df.empty or actual_qty_df.empty:
+                return pd.DataFrame()
+            return forecast_df.merge(
+                actual_qty_df,
+                on=["forecast_date", "city", "product_name"],
+                how="inner",
+            )
+
+    dates = pd.date_range(_parse_forecast_date(start_date), _parse_forecast_date(end_date))
+    semaphore = asyncio.Semaphore(3)
+    output = await asyncio.gather(*(build_one_date(dt, semaphore) for dt in dates))
+    output = [df for df in output if not df.empty]
+
+    # If Redash is slow or selected actuals are unavailable for every date,
+    # return a valid empty report instead of timing out or crashing.
+    if not output:
+        return pd.DataFrame(columns=[
+            "forecast_date",
+            "city",
+            "product_name",
+            "forecast_quantity",
+            "actual_quantity",
+            "difference",
+            "abs_error_pct",
+            "actual_orders",
+        ])
+
+    report = pd.concat(output, ignore_index=True)
+    report = report[
+        report["city"].isin(MILK_EXPORT_CITIES)
+        & report["product_name"].isin(MILK_EXPORT_PRODUCTS)
+    ].copy()
+    report["forecast_quantity"] = pd.to_numeric(report["forecast_quantity"], errors="coerce").fillna(0).round().astype(int)
+    report["actual_quantity"] = pd.to_numeric(report["actual_quantity"], errors="coerce").fillna(0).round().astype(int)
+    report["actual_orders"] = pd.to_numeric(report["actual_orders"], errors="coerce").fillna(0).round().astype(int)
+    report["difference"] = report["forecast_quantity"] - report["actual_quantity"]
+    report["abs_error_pct"] = np.where(
+        report["actual_quantity"] > 0,
+        (report["difference"].abs() / report["actual_quantity"] * 100).round(2),
+        0.0,
+    )
+    return report.sort_values(["forecast_date", "city", "product_name"]).reindex(columns=[
+        "forecast_date",
+        "city",
+        "product_name",
+        "forecast_quantity",
+        "actual_quantity",
+        "difference",
+        "abs_error_pct",
+        "actual_orders",
+    ])
+
+
+def _load_cached_accuracy_report_df(start_date: str, end_date: str) -> pd.DataFrame:
+    columns = [
+        "forecast_date",
+        "city",
+        "product_name",
+        "forecast_quantity",
+        "actual_quantity",
+        "difference",
+        "abs_error_pct",
+        "actual_orders",
+    ]
+    if not os.path.exists(ACCURACY_CACHE_PATH):
+        return pd.DataFrame(columns=columns)
+    try:
+        df = pd.read_csv(ACCURACY_CACHE_PATH)
+    except Exception:
+        return pd.DataFrame(columns=columns)
+    if df.empty or not set(columns).issubset(df.columns):
+        return pd.DataFrame(columns=columns)
+    df["forecast_date"] = pd.to_datetime(df["forecast_date"], errors="coerce").dt.strftime("%Y-%m-%d")
+    start = str(_parse_forecast_date(start_date).date())
+    end = str(_parse_forecast_date(end_date).date())
+    df = df[
+        df["forecast_date"].between(start, end)
+        & df["city"].isin(MILK_EXPORT_CITIES)
+        & df["product_name"].isin(MILK_EXPORT_PRODUCTS)
+    ].copy()
+    return df.sort_values(["forecast_date", "city", "product_name"]).reindex(columns=columns)
+
+
+def _save_accuracy_report_cache(report_df: pd.DataFrame) -> None:
+    if report_df.empty:
+        return
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
+    report_df.to_csv(ACCURACY_CACHE_PATH, index=False)
 
 
 def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame | None = None) -> dict:
@@ -1188,7 +1666,48 @@ def health():
 
 @app.get("/api/status")
 def status():
-    return {"cached": _forecast_cache["forecast_rows"] is not None, "generated_at": _forecast_cache["generated_at"]}
+    query_ids = {
+        "subscription": SUBSCRIPTION_QUERY_ID,
+        "known_buy_once": int(KNOWN_BUY_ONCE_QUERY_ID) if KNOWN_BUY_ONCE_QUERY_ID else None,
+        "recent_actuals": int(RECENT_ACTUALS_QUERY_ID) if RECENT_ACTUALS_QUERY_ID else None,
+        "selected_actuals": int(SELECTED_ACTUALS_QUERY_ID) if SELECTED_ACTUALS_QUERY_ID else None,
+        "procurement_training": int(os.getenv("PROCUREMENT_TRAINING_QUERY_ID"))
+        if os.getenv("PROCUREMENT_TRAINING_QUERY_ID") else None,
+    }
+    return {
+        "status": "ok",
+        "redash": {
+            "base_url": REDASH_BASE_URL,
+            "api_key_configured": bool(QUERY_API_KEY),
+            "query_ids": query_ids,
+            "all_required_queries_configured": all(query_ids[k] for k in (
+                "subscription",
+                "known_buy_once",
+                "recent_actuals",
+                "selected_actuals",
+            )),
+        },
+        "models": {
+            "general_target_type": _model_target_type,
+            "hyd_target_type": _model_hyd_target_type,
+            "general_features": len(FEATURE_ORDER),
+            "hyd_features": len(FEATURE_ORDER_HYD),
+            "artifacts": {
+                "general_model": _file_status(os.path.join(MODEL_DIR, "lgbm_model.pkl")),
+                "hyd_model": _file_status(os.path.join(MODEL_DIR, "lgbm_model_hyd.pkl")),
+                "training_filled": _file_status(_train_path),
+            },
+        },
+        "training_data_freshness": _training_data_freshness(),
+        "accuracy_cache": _accuracy_cache_status(),
+        "guardrails": _guardrail_status(),
+        "festival_calendar": _festival_status(),
+        "forecast_cache": {
+            "cached": _forecast_cache["forecast_rows"] is not None,
+            "generated_at": _forecast_cache["generated_at"],
+            "rows": len(_forecast_cache["forecast_rows"]) if _forecast_cache["forecast_rows"] is not None else 0,
+        },
+    }
 
 
 @app.get("/api/debug/components")
@@ -1315,22 +1834,11 @@ async def export_milk_city_forecast_csv(
 
     columns = ["forecast_date", "city", "product_name", "forecast_quantity"]
     if rows:
-        export_df = pd.DataFrame(rows)
-        export_df["forecast_date"] = pd.to_datetime(export_df["forecast_date"]).dt.strftime("%Y-%m-%d")
-        export_df["city"] = export_df["city_cd"].astype(str).str.upper().str.strip()
-        export_df["product_name"] = export_df["product_name"].apply(_normalize_product_name)
-        export_df["forecast_quantity"] = pd.to_numeric(
-            export_df["predicted_qty"],
-            errors="coerce",
-        ).fillna(0)
+        export_df = _forecast_rows_to_quantity_df(rows)
         export_df = export_df[
             export_df["city"].isin(MILK_EXPORT_CITIES)
             & export_df["product_name"].isin(MILK_EXPORT_PRODUCTS)
         ]
-        export_df = (
-            export_df.groupby(["forecast_date", "city", "product_name"], as_index=False)["forecast_quantity"]
-            .sum()
-        )
     else:
         export_df = pd.DataFrame(columns=columns)
 
@@ -1428,6 +1936,35 @@ async def export_milk_city_forecast_csv(
                 if history_result else {}
             ),
         },
+    )
+
+
+@app.get("/api/export/accuracy_report.csv")
+async def export_accuracy_report_csv(
+    start_date: str = Query(..., description="YYYY-MM-DD"),
+    end_date: str = Query(..., description="YYYY-MM-DD"),
+    refresh: bool = Query(False),
+):
+    start_dt = _parse_forecast_date(start_date)
+    end_dt = _parse_forecast_date(end_date)
+    if end_dt < start_dt:
+        raise HTTPException(status_code=400, detail="end_date must be on or after start_date")
+    if (end_dt - start_dt).days > 31:
+        raise HTTPException(status_code=400, detail="accuracy export supports at most 32 days")
+
+    report_df = _load_cached_accuracy_report_df(start_date, end_date) if not refresh else pd.DataFrame()
+    if report_df.empty:
+        report_df = await _build_accuracy_report_df(start_date, end_date, refresh)
+        _save_accuracy_report_cache(report_df)
+
+    buffer = io.StringIO()
+    report_df.to_csv(buffer, index=False)
+    buffer.seek(0)
+    filename = f"hyd_blr_milk_curd_accuracy_{start_date}_to_{end_date}.csv"
+    return StreamingResponse(
+        iter([buffer.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
 

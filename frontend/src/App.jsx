@@ -4,7 +4,7 @@ import {
   Tooltip, ResponsiveContainer, Legend, Cell,
   ComposedChart,
 } from "recharts";
-import { getForecastDay, getForecastTrend, API_BASE } from "./api";
+import { getForecastDay, getForecastTrend, getStatus, API_BASE } from "./api";
 import "./App.css";
 
 const CITY_COLORS = {
@@ -32,17 +32,10 @@ const tomorrow = () => {
   return d.toISOString().slice(0, 10);
 };
 
-const getDateLabel = (dateStr) => {
-  const today = new Date().toISOString().slice(0, 10);
-  const diff = Math.round(
-    (new Date(dateStr) - new Date(today)) / (1000 * 60 * 60 * 24)
-  );
-  if (diff < -1)  return { label: `${Math.abs(diff)}d ago`, color: "#64748b" };
-  if (diff === -1) return { label: "Yesterday",             color: "#64748b" };
-  if (diff === 0)  return { label: "Today",                 color: "#34d399" };
-  if (diff === 1)  return { label: "Tomorrow",              color: "#818cf8" };
-  if (diff <= 7)   return { label: `D+${diff}`,             color: "#a78bfa" };
-  return             { label: `D+${diff}`,                  color: "#fbbf24" };
+const addDays = (dateStr, days) => {
+  const d = new Date(`${dateStr}T00:00:00`);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
 };
 
 const QUICK_DATES = [
@@ -80,6 +73,7 @@ export default function App() {
 
   const [data, setData]           = useState(null);
   const [trend, setTrend]         = useState([]);
+  const [systemStatus, setSystemStatus] = useState(null);
   const [loading, setLoading]     = useState(true);
   const [error, setError]         = useState(null);
   const [activeTab, setTab]       = useState("overview");
@@ -87,6 +81,7 @@ export default function App() {
   const [prodFilter, setProd]     = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [showComponents, setShowComponents] = useState(false);
+  const [showSystemChecks, setShowSystemChecks] = useState(false);
   const ROWS_PER_PAGE = 20;
   const [selectedDate, _setDate]  = useState(getInitialDate());
   const [trendDays, setTrendDays] = useState(14);
@@ -103,7 +98,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await getForecastDay(dt, false, "issued");
+      const res = await getForecastDay(dt, true);
       setData(res);
     } catch (e) {
       if (e.message.includes("404")) {
@@ -127,10 +122,20 @@ export default function App() {
     }
   }, [trendDays]);
 
+  const loadStatus = useCallback(async () => {
+    try {
+      const res = await getStatus();
+      setSystemStatus(res);
+    } catch {
+      setSystemStatus(null);
+    }
+  }, []);
+
   useEffect(() => {
     loadData(selectedDate);
     loadTrend();
-  }, [selectedDate, trendDays, loadData, loadTrend]);
+    loadStatus();
+  }, [selectedDate, trendDays, loadData, loadTrend, loadStatus]);
 
   const cities   = [...new Set((data?.product_breakdown ?? []).map(r => r.city))].sort();
   const products = [...new Set((data?.product_breakdown ?? []).map(r => r.product_name))].sort();
@@ -163,6 +168,11 @@ export default function App() {
     setCurrentPage(1);
   }, [cityFilter, prodFilter]);
 
+  const filteredForecastQty = filteredProducts.reduce(
+    (sum, r) => sum + Number(r.forecast_quantity ?? r.total_quantity ?? 0),
+    0
+  );
+
   const topProducts = (data?.product_breakdown ?? [])
     .reduce((acc, r) => {
       const ex = acc.find(x => x.product_name === r.product_name);
@@ -186,6 +196,21 @@ export default function App() {
   const totalQty    = meta.total_quantity ?? 0;
   const mlUnknownQty = meta.ml_unknown_adhoc_qty ?? meta.ml_qty;
   const isActualMode = meta.display_mode === "actual";
+  const freshness = meta.training_data_freshness ?? {};
+  const statusFreshness = systemStatus?.training_data_freshness ?? freshness;
+  const redashStatus = systemStatus?.redash ?? {};
+  const accuracyCache = systemStatus?.accuracy_cache ?? {};
+  const guardrails = systemStatus?.guardrails ?? {};
+  const festivalCalendar = systemStatus?.festival_calendar ?? {};
+  const isStatusStale = Boolean(statusFreshness?.is_stale);
+  const isRedashReady = Boolean(redashStatus?.api_key_configured);
+  const hasAccuracyCheck = Boolean(accuracyCache?.rows);
+  const hasFestivalCalendar = Boolean(festivalCalendar?.rows);
+  const statusTone = isStatusStale || !isRedashReady ? "warning" : "ok";
+  const readinessTitle = statusTone === "ok" ? "Ready to share" : "Needs attention";
+  const readinessCopy = statusTone === "ok"
+    ? "Forecast is using recent training data and live Redash inputs."
+    : "Refresh or check Redash before sharing this forecast.";
 
   const statusLabel = (row) => {
     if (!isActualMode) return "Forecast";
@@ -256,11 +281,6 @@ export default function App() {
             onChange={e => setDate(e.target.value)}
           />
 
-          {(() => {
-            const { label, color } = getDateLabel(selectedDate);
-            return <span className="date-badge" style={{ color }}>{label}</span>;
-          })()}
-
           <div className="divider-v" />
 
           <button
@@ -268,6 +288,22 @@ export default function App() {
             onClick={() => window.open(`${API_BASE}/export/milk_city_forecast.csv?date=${selectedDate}&days=7&refresh=true`, "_blank")}
           >
             Export
+          </button>
+
+          <button
+            className="btn"
+            onClick={() => window.open(`${API_BASE}/export/accuracy_report.csv?start_date=${addDays(selectedDate, -6)}&end_date=${selectedDate}&refresh=false`, "_blank")}
+          >
+            Accuracy
+          </button>
+
+          <button
+            className={`icon-btn ${showSystemChecks ? "active" : ""}`}
+            onClick={() => setShowSystemChecks(v => !v)}
+            title="Show forecast system checks"
+            aria-label="Show forecast system checks"
+          >
+            i
           </button>
 
           <span className="live-badge">
@@ -285,6 +321,44 @@ export default function App() {
             <strong>{error}</strong>
             <div style={{ marginTop: 4, fontSize: 12, opacity: 0.8 }}>
               Ensure backend is running: <code>uvicorn main:app --reload --port 8000</code>
+            </div>
+          </div>
+        )}
+
+        {systemStatus && showSystemChecks && (
+          <div className={`status-strip fade-in ${statusTone}`}>
+            <div className="status-summary">
+              <div className="status-summary-top">
+                <span className={`status-dot ${statusTone}`} />
+                <span className="status-label">Forecast Checks</span>
+              </div>
+              <strong>{readinessTitle}</strong>
+              <span>{readinessCopy}</span>
+            </div>
+            <div className={`status-pill ${isStatusStale ? "warn" : "good"}`}>
+              <span className="status-label">Training Data</span>
+              <strong>{isStatusStale ? "Refresh needed" : "Up to date"}</strong>
+              <span>through {statusFreshness?.max_training_date ?? "-"}</span>
+            </div>
+            <div className={`status-pill ${isRedashReady ? "good" : "warn"}`}>
+              <span className="status-label">Live Data</span>
+              <strong>{isRedashReady ? "Connected" : "Not connected"}</strong>
+              <span>{isRedashReady ? "subscriptions and actuals" : "check API key"}</span>
+            </div>
+            <div className={`status-pill ${hasAccuracyCheck ? "good" : "warn"}`}>
+              <span className="status-label">Accuracy</span>
+              <strong>{hasAccuracyCheck ? "Checked" : "Not checked"}</strong>
+              <span>{accuracyCache.start_date && accuracyCache.end_date ? `${accuracyCache.start_date} to ${accuracyCache.end_date}` : "run refresh"}</span>
+            </div>
+            <div className={`status-pill ${hasFestivalCalendar ? "good" : "warn"}`}>
+              <span className="status-label">Festivals</span>
+              <strong>{hasFestivalCalendar ? "Loaded" : "Missing"}</strong>
+              <span>{hasFestivalCalendar ? `${fmt(festivalCalendar.guardrails_loaded ?? 0)} evidence-based rules` : "calendar unavailable"}</span>
+            </div>
+            <div className="status-pill good">
+              <span className="status-label">Safety Rules</span>
+              <strong>{guardrails.rules?.length ?? 0} active</strong>
+              <span>HYD and BLR milk checks</span>
             </div>
           </div>
         )}
@@ -318,7 +392,7 @@ export default function App() {
           </div>
 
           <div className="metric-card fade-in stagger-3">
-            <div className="metric-label">Known Buy Once</div>
+            <div className="metric-label">Placed Buy Once</div>
             <div className="metric-value" style={{ color: "#fbbf24" }}>
               {meta.known_buy_once_qty != null ? fmt(meta.known_buy_once_qty) : "-"}
             </div>
@@ -331,12 +405,12 @@ export default function App() {
           </div>
 
           <div className="metric-card fade-in stagger-4">
-            <div className="metric-label">{isActualMode ? "Forecast Error" : "ML Procurement Gap"}</div>
+            <div className="metric-label">{isActualMode ? "Forecast Error" : "Model Gap to Final Demand"}</div>
             <div className="metric-value" style={{ color: "#a78bfa" }}>
               {isActualMode ? fmt(meta.forecast_error_qty) : (mlUnknownQty != null ? fmt(mlUnknownQty) : "-")}
             </div>
             <div className="metric-sub">
-              {isActualMode ? `${meta.forecast_abs_error_pct ?? 0}% abs error` : "above live known"}
+              {isActualMode ? `${meta.forecast_abs_error_pct ?? 0}% abs error` : "above visible demand"}
               <span className="metric-sub-pill" style={{ background: "#ede9fe", color: "#7c3aed" }}>
                 {isActualMode ? "actual check" : "LGBM"}
               </span>
@@ -417,10 +491,16 @@ export default function App() {
 
             {/* TAB: PRODUCTS TABLE */}
             {activeTab === "overview" && (
-              <div className="card fade-in">
-                <div className="card-title">
-                  <span>Forecast by Product</span>
-                  <div className="card-title-right">
+              <div className="card product-card fade-in">
+                <div className="product-toolbar">
+                  <div>
+                    <div className="card-title compact">Procurement Forecast</div>
+                    <div className="toolbar-subtitle">
+                      {cityFilter === "All" ? "All Cities" : getCityName(cityFilter)} · {fmt(filteredForecastQty)} packets
+                    </div>
+                  </div>
+
+                  <div className="toolbar-actions">
                     <select
                       className="select"
                       value={cityFilter}
@@ -436,17 +516,16 @@ export default function App() {
                       value={prodFilter}
                       onChange={e => setProd(e.target.value)}
                     >
-                      <option value="All">All Products</option>
+                      <option value="All">All SKUs</option>
                       {filteredProductOptions.map(p => (
                         <option key={p} value={p}>{p}</option>
                       ))}
                     </select>
-                    <span className="row-count">{filteredProducts.length} rows</span>
                     <button
                       className={`btn ${showComponents ? "active" : ""}`}
                       onClick={() => setShowComponents(v => !v)}
                     >
-                      Details
+                      Components
                     </button>
                   </div>
                 </div>
@@ -458,11 +537,11 @@ export default function App() {
                         <th>City</th>
                         <th>Product</th>
                         <th>Status</th>
-                        <th style={{ textAlign: "right" }}>Forecast</th>
+                        <th style={{ textAlign: "right" }}>Forecast Packets</th>
                         {isActualMode && <th style={{ textAlign: "right" }}>Actual</th>}
-                        {showComponents && <th style={{ textAlign: "right" }}>Subs</th>}
-                        {showComponents && <th style={{ textAlign: "right" }}>Known</th>}
-                        {showComponents && <th style={{ textAlign: "right" }}>ML Gap</th>}
+                        {showComponents && <th style={{ textAlign: "right" }}>Subscription</th>}
+                        {showComponents && <th style={{ textAlign: "right" }}>Placed Buy Once</th>}
+                        {showComponents && <th style={{ textAlign: "right" }}>Model Gap</th>}
                       </tr>
                     </thead>
                     <tbody>

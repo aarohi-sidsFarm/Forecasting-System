@@ -7,6 +7,7 @@ SUBSCRIPTION_QUERY_ID=<subscription_forecast query id>
 KNOWN_BUY_ONCE_QUERY_ID=<known_buy_once query id>
 RECENT_ACTUALS_QUERY_ID=<recent_adhoc_actuals query id>
 SELECTED_ACTUALS_QUERY_ID=<selected_final_total_actuals query id>
+PROCUREMENT_TRAINING_QUERY_ID=<procurement_final_total_training query id>
 ```
 
 ## Forecast components
@@ -24,7 +25,7 @@ final_forecast = confirmed_subscription_qty + known_buy_once_qty + ml_unknown_ad
 - `subscription_forecast.sql`: confirmed subscription demand after holidays, pauses, validity, and wallet suppression.
 - `known_buy_once.sql`: buy-once orders already placed by 10 PM IST on the day before delivery.
 - `recent_adhoc_actuals.sql`: recent actual buy-once history used to refresh lag features during live inference.
-- `recent_final_total_actuals.sql`: recent final confirmed total demand from `order_item + "order".expected_delivery_date`. Use this for `RECENT_ACTUALS_QUERY_ID` after switching to procurement final-total training.
+- `recent_final_total_actuals.sql`: recent final confirmed total demand from `d2c_order_newfact`. Use this for `RECENT_ACTUALS_QUERY_ID` after switching to procurement final-total training.
 - `selected_final_total_actuals.sql`: selected-date final D2C actual demand from the same actual source. Use this for `SELECTED_ACTUALS_QUERY_ID` so today/past dates can show actual demand and forecast error.
 - `residual_adhoc_training.sql`: model-training export with final ad-hoc, known-at-cutoff, and residual-unknown targets.
 - `procurement_total_training.sql`: procurement-grade training export for total confirmed packet demand.
@@ -86,9 +87,29 @@ Current Redash metadata check found no usable subscription change history in `au
 If historical D-2/D-3 subscription snapshots are required, create a daily snapshot table going forward.
 
 If no new snapshot table can be created, use `procurement_final_total_training.sql`.
-That fallback trains the model to predict final confirmed total demand directly from historical `order_item + "order".expected_delivery_date` actuals.
+That fallback trains the model to predict final confirmed total demand directly from historical `d2c_order_newfact.delivery_date` actuals.
 At serving time, compare the model forecast against live known demand and never forecast below the known confirmed floor.
 
 When the saved model target is `procurement_final_total`, update Redash `RECENT_ACTUALS_QUERY_ID`
 to a query created from `recent_final_total_actuals.sql`. Do not use `recent_adhoc_actuals.sql`,
 because final-total model lags must come from subscription + buy-once actuals together.
+
+## Retrain From Latest Redash Data
+
+Set `PROCUREMENT_TRAINING_QUERY_ID` in `backend/.env` to the query created from
+`procurement_final_total_training.sql`, or pass `--query-id` directly.
+
+Recommended sequence from the project root:
+
+```powershell
+cd D:\ML_Forecasting_Model
+.\venv\Scripts\python.exe scripts\fetch_redash_training_export.py --query-id <QUERY_ID> --start-date 2025-05-01 --end-date 2026-07-28
+.\venv\Scripts\python.exe ml_pipeline\process_all_data.py
+.\venv\Scripts\python.exe ml_pipeline\fill_gaps.py
+.\venv\Scripts\python.exe ml_pipeline\build_features.py
+.\venv\Scripts\python.exe ml_pipeline\train_general_lgbm.py
+.\venv\Scripts\python.exe ml_pipeline\train_hyd_lgbm.py
+```
+
+Use an `end-date` where final actual sales are complete. For daily production
+retraining, this normally means yesterday, not today.
