@@ -1,7 +1,7 @@
 const API = "http://localhost:8000/api";
 
-export const getForecastDay = async (date, refresh = false) => {
-  const res = await fetch(`${API}/forecast_day?date=${date}&refresh=${refresh}`);
+export const getForecastDay = async (date, refresh = false, view = "issued") => {
+  const res = await fetch(`${API}/forecast_day?date=${date}&refresh=${refresh}&view=${view}`);
   if (!res.ok) throw new Error(`${res.status} - ${await res.text()}`);
   return res.json();
 };

@@ -103,7 +103,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await getForecastDay(dt, true);
+      const res = await getForecastDay(dt, false, "issued");
       setData(res);
     } catch (e) {
       if (e.message.includes("404")) {
@@ -270,7 +270,9 @@ export default function App() {
             Export
           </button>
 
-          <span className="live-badge">LIVE</span>
+          <span className="live-badge">
+            {data?.meta?.forecast_view === "issued" ? "ISSUED" : "LIVE"}
+          </span>
         </div>
       </header>
 
