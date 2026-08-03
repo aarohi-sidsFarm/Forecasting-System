@@ -1786,16 +1786,42 @@ async def get_forecast_day(
                     for row in day_df.itertuples()
                 ]
                 day_df = day_df.loc[keep].copy()
-            frozen = issued.rename(columns={"p50_qty": "predicted_qty"}).copy()
-            frozen["predicted_qty"] = frozen.predicted_qty.round().astype(int)
-            frozen["predicted_orders"] = np.maximum(
-                1, (frozen.predicted_qty / 1.15).round().astype(int)
+            frozen = issued.copy()
+            for column in [
+                "p50_qty", "visible_subscription_qty",
+                "visible_buy_once_qty", "visible_orders",
+            ]:
+                frozen[column] = pd.to_numeric(
+                    frozen.get(column, 0), errors="coerce"
+                ).fillna(0)
+            frozen["visible_subscription_qty"] = np.minimum(
+                frozen["visible_subscription_qty"], frozen["p50_qty"]
             )
-            frozen["method"] = "official_issued_snapshot"
-            day_df = pd.concat([day_df, frozen[
-                ["forecast_date", "city_cd", "product_name", "predicted_qty",
-                 "predicted_orders", "method"]
-            ]], ignore_index=True)
+            remaining = frozen["p50_qty"] - frozen["visible_subscription_qty"]
+            frozen["visible_buy_once_qty"] = np.minimum(
+                frozen["visible_buy_once_qty"], remaining
+            )
+            frozen["ml_unknown_adhoc_qty"] = (
+                remaining - frozen["visible_buy_once_qty"]
+            ).clip(lower=0)
+
+            component_frames = []
+            for source_column, method in [
+                ("visible_subscription_qty", "subscription"),
+                ("visible_buy_once_qty", "known_buy_once"),
+                ("ml_unknown_adhoc_qty", "ml_unknown_adhoc"),
+            ]:
+                component = frozen[
+                    ["forecast_date", "city_cd", "product_name", source_column]
+                ].rename(columns={source_column: "predicted_qty"})
+                component["predicted_qty"] = component.predicted_qty.round().astype(int)
+                component = component[component.predicted_qty > 0].copy()
+                component["predicted_orders"] = np.maximum(
+                    1, (component.predicted_qty / 1.15).round().astype(int)
+                )
+                component["method"] = method
+                component_frames.append(component)
+            day_df = pd.concat([day_df, *component_frames], ignore_index=True)
             rows = day_df.to_dict(orient="records")
 
     if _forecast_cache["forecast_rows"] is None:

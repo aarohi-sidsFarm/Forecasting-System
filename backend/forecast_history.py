@@ -238,7 +238,8 @@ def issued_forecast_for_date(
         rows = pd.read_sql_query(
             """
             SELECT forecast_date, city_cd, product_name, p50_qty,
-                   p80_qty, method
+                   p80_qty, method, visible_subscription_qty,
+                   visible_buy_once_qty, visible_orders
             FROM forecast_rows
             WHERE run_id=? AND forecast_date=?
             """,
