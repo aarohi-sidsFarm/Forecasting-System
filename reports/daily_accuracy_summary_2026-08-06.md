@@ -1,65 +1,67 @@
 # Daily Accuracy Summary - 2026-08-06
 
-Backtest window: `2026-08-01` to `2026-08-06`
+Backtest window: `2026-07-31` to `2026-08-06`
 
 ## Executive Signal
 
-- Overall WAPE: `1.29%`
-- Overall bias: `-0.30%`
-- Recommendation: **Share forecast. Accuracy is inside the current operating band.**
+- Overall WAPE: `1.26%`
+- Overall bias: `-0.12%`
+- Packet-limit compliance (< 100): `87.50%`
+- Packet-limit breaches: `7`
+- Recommendation: **Do not share blindly. 7 rows breach the packet-error limit.**
 
 ## City Summary
 
 | city | forecast_quantity | actual_quantity | difference | abs_error | wape_pct | bias_pct |
 | --- | --- | --- | --- | --- | --- | --- |
-| BLR | 40506 | 40720 | -214 | 214 | 0.53 | -0.53 |
-| HYD | 279577 | 280337 | -760 | 760 | 0.27 | -0.27 |
+| BLR | 27026 | 26922 | 104 | 104 | 0.39 | 0.39 |
+| HYD | 185564 | 185919 | -355 | 355 | 0.19 | -0.19 |
 
 ## Product Summary
 
 | city | product_name | forecast_quantity | actual_quantity | difference | abs_error | wape_pct | bias_pct |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| BLR | Double Toned A2 Buffalo Milk | 3151 | 3299 | -148 | 148 | 4.49 | -4.49 |
-| BLR | Curd | 1358 | 1399 | -41 | 41 | 2.93 | -2.93 |
-| BLR | Toned Milk | 3284 | 3354 | -70 | 70 | 2.09 | -2.09 |
-| BLR | A2 Desi Cow Milk | 3850 | 3915 | -65 | 65 | 1.66 | -1.66 |
-| BLR | A2 Buffalo Milk | 15371 | 15122 | 249 | 249 | 1.65 | 1.65 |
-| HYD | Double Toned A2 Buffalo Milk | 31278 | 31650 | -372 | 372 | 1.18 | -1.18 |
-| BLR | Cow Milk | 10665 | 10790 | -125 | 125 | 1.16 | -1.16 |
-| HYD | A2 Desi Cow Milk | 9598 | 9516 | 82 | 82 | 0.86 | 0.86 |
-| HYD | A2 Buffalo Milk | 99736 | 100475 | -739 | 739 | 0.74 | -0.74 |
-| HYD | Skim Milk | 13452 | 13525 | -73 | 73 | 0.54 | -0.54 |
-| BLR | Skim Milk | 2827 | 2841 | -14 | 14 | 0.49 | -0.49 |
-| HYD | Toned Milk | 60351 | 60092 | 259 | 259 | 0.43 | 0.43 |
-| HYD | Curd | 8654 | 8642 | 12 | 12 | 0.14 | 0.14 |
-| HYD | Cow Milk | 56508 | 56437 | 71 | 71 | 0.13 | 0.13 |
+| BLR | A2 Desi Cow Milk | 2536 | 2609 | -73 | 73 | 2.8 | -2.8 |
+| BLR | A2 Buffalo Milk | 10257 | 10012 | 245 | 245 | 2.45 | 2.45 |
+| BLR | Curd | 900 | 919 | -19 | 19 | 2.07 | -2.07 |
+| BLR | Toned Milk | 2165 | 2204 | -39 | 39 | 1.77 | -1.77 |
+| HYD | Skim Milk | 8920 | 8999 | -79 | 79 | 0.88 | -0.88 |
+| HYD | A2 Desi Cow Milk | 6369 | 6326 | 43 | 43 | 0.68 | 0.68 |
+| HYD | Toned Milk | 39995 | 39753 | 242 | 242 | 0.61 | 0.61 |
+| HYD | Curd | 5636 | 5666 | -30 | 30 | 0.53 | -0.53 |
+| HYD | A2 Buffalo Milk | 66342 | 66670 | -328 | 328 | 0.49 | -0.49 |
+| BLR | Double Toned A2 Buffalo Milk | 2185 | 2177 | 8 | 8 | 0.37 | 0.37 |
+| HYD | Cow Milk | 37447 | 37586 | -139 | 139 | 0.37 | -0.37 |
+| HYD | Double Toned A2 Buffalo Milk | 20855 | 20919 | -64 | 64 | 0.31 | -0.31 |
+| BLR | Cow Milk | 7102 | 7121 | -19 | 19 | 0.27 | -0.27 |
+| BLR | Skim Milk | 1881 | 1880 | 1 | 1 | 0.05 | 0.05 |
 
 ## Worst Underpredictions
 
 | forecast_date | city | product_name | forecast_quantity | actual_quantity | difference | abs_error_pct |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2026-08-02 | HYD | Cow Milk | 9079 | 9339 | -260 | 2.78 |
-| 2026-08-02 | HYD | A2 Buffalo Milk | 16121 | 16305 | -184 | 1.13 |
-| 2026-08-01 | HYD | A2 Buffalo Milk | 16566 | 16734 | -168 | 1.0 |
-| 2026-08-05 | HYD | A2 Buffalo Milk | 16863 | 16981 | -118 | 0.69 |
-| 2026-08-06 | HYD | A2 Buffalo Milk | 16893 | 17003 | -110 | 0.65 |
-| 2026-08-03 | HYD | A2 Buffalo Milk | 16529 | 16635 | -106 | 0.64 |
-| 2026-08-01 | HYD | Double Toned A2 Buffalo Milk | 5144 | 5243 | -99 | 1.89 |
-| 2026-08-04 | HYD | Double Toned A2 Buffalo Milk | 5230 | 5328 | -98 | 1.84 |
-| 2026-08-04 | HYD | Curd | 1410 | 1504 | -94 | 6.25 |
-| 2026-08-02 | HYD | Toned Milk | 9594 | 9680 | -86 | 0.89 |
+| 2026-08-02 | HYD | Cow Milk | 9096 | 9357 | -261 | 2.79 |
+| 2026-08-02 | HYD | A2 Buffalo Milk | 16183 | 16342 | -159 | 0.97 |
+| 2026-08-04 | HYD | A2 Buffalo Milk | 16749 | 16857 | -108 | 0.64 |
+| 2026-08-02 | HYD | Toned Milk | 9603 | 9705 | -102 | 1.05 |
+| 2026-08-03 | HYD | A2 Buffalo Milk | 16589 | 16677 | -88 | 0.53 |
+| 2026-08-04 | HYD | Curd | 1429 | 1512 | -83 | 5.49 |
+| 2026-08-02 | HYD | A2 Desi Cow Milk | 1525 | 1598 | -73 | 4.57 |
+| 2026-08-01 | HYD | Double Toned A2 Buffalo Milk | 5205 | 5260 | -55 | 1.05 |
+| 2026-08-03 | HYD | Double Toned A2 Buffalo Milk | 5190 | 5239 | -49 | 0.94 |
+| 2026-08-02 | HYD | Skim Milk | 2134 | 2182 | -48 | 2.2 |
 
 ## Worst Overpredictions
 
 | forecast_date | city | product_name | forecast_quantity | actual_quantity | difference | abs_error_pct |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2026-08-04 | HYD | Toned Milk | 10227 | 9990 | 237 | 2.37 |
-| 2026-08-05 | HYD | Cow Milk | 9606 | 9393 | 213 | 2.27 |
-| 2026-08-02 | BLR | A2 Buffalo Milk | 2563 | 2389 | 174 | 7.28 |
-| 2026-08-01 | HYD | Toned Milk | 10033 | 9870 | 163 | 1.65 |
-| 2026-08-03 | HYD | Cow Milk | 9451 | 9326 | 125 | 1.34 |
-| 2026-08-03 | BLR | A2 Buffalo Milk | 2551 | 2472 | 79 | 3.2 |
-| 2026-08-01 | HYD | Cow Milk | 9420 | 9343 | 77 | 0.82 |
-| 2026-08-01 | HYD | A2 Desi Cow Milk | 1626 | 1570 | 56 | 3.57 |
-| 2026-08-05 | HYD | Skim Milk | 2297 | 2247 | 50 | 2.23 |
-| 2026-08-05 | HYD | Curd | 1546 | 1497 | 49 | 3.27 |
+| 2026-08-04 | HYD | Toned Milk | 10244 | 10025 | 219 | 2.18 |
+| 2026-08-02 | BLR | A2 Buffalo Milk | 2567 | 2394 | 173 | 7.23 |
+| 2026-08-01 | HYD | Toned Milk | 10107 | 9944 | 163 | 1.64 |
+| 2026-08-01 | HYD | Cow Milk | 9464 | 9366 | 98 | 1.05 |
+| 2026-08-03 | BLR | A2 Buffalo Milk | 2551 | 2475 | 76 | 3.07 |
+| 2026-08-02 | HYD | Double Toned A2 Buffalo Milk | 5153 | 5086 | 67 | 1.32 |
+| 2026-08-01 | HYD | A2 Desi Cow Milk | 1633 | 1571 | 62 | 3.95 |
+| 2026-08-03 | HYD | Cow Milk | 9415 | 9355 | 60 | 0.64 |
+| 2026-08-01 | HYD | Curd | 1449 | 1409 | 40 | 2.84 |
+| 2026-08-04 | HYD | A2 Desi Cow Milk | 1602 | 1562 | 40 | 2.56 |

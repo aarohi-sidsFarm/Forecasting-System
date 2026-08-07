@@ -17,6 +17,8 @@ const CITY_COLORS = {
 };
 
 const fmt = (value) => Number(value ?? 0).toLocaleString("en-IN");
+const fmtSigned = (value) => `${Number(value) > 0 ? "+" : ""}${fmt(value)}`;
+const fmtPct = (value) => `${Number(value ?? 0).toFixed(2)}%`;
 const cityName = (city) => CITY_NAMES[city] ?? city;
 const cityColor = (city) => CITY_COLORS[city] ?? "#74787D";
 
@@ -114,6 +116,14 @@ export default function App() {
     0,
   );
   const modelGap = filteredRows.reduce((sum, row) => sum + Number(row.ml_unknown_adhoc_qty), 0);
+  const comparisonAvailable = Boolean(data?.meta?.comparison?.available);
+  const comparedRows = comparisonAvailable
+    ? filteredRows.filter((row) => row.actual_available)
+    : [];
+  const filteredActual = comparedRows.reduce((sum, row) => sum + Number(row.actual_quantity), 0);
+  const filteredDifference = comparedRows.reduce((sum, row) => sum + Number(row.difference), 0);
+  const filteredAbsError = comparedRows.reduce((sum, row) => sum + Math.abs(Number(row.difference)), 0);
+  const filteredWape = filteredActual ? (100 * filteredAbsError) / filteredActual : 0;
   const citySummary = data?.city_summary ?? [];
   const upcomingEvents = systemStatus?.festival_calendar?.upcoming_events ?? [];
   const freshness = data?.meta?.training_data_freshness ?? {};
@@ -127,7 +137,9 @@ export default function App() {
   const downloadFilteredCsv = () => {
     const columns = [
       "issue_date", "forecast_date", "lead_time_days", "city", "product_name",
-      "subscription_qty", "known_buy_once_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
+      "subscription_qty", "confirmed_subscription_qty", "at_risk_subscription_qty",
+      "known_buy_once_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
+      "actual_quantity", "difference", "deviation_pct",
     ];
     const csv = [
       columns.join(","),
@@ -146,9 +158,15 @@ export default function App() {
       `Procurement forecast for ${targetDate}`,
       `Issue dates calculated automatically (HYD/VGA D-2, BLR/PNQ D-3)`,
       `Filtered total: ${fmt(filteredTotal)} packets`,
+      ...(comparisonAvailable ? [
+        `Query 1968 actual: ${fmt(filteredActual)} packets`,
+        `Difference: ${fmtSigned(filteredDifference)} packets | WAPE: ${fmtPct(filteredWape)}`,
+      ] : []),
       "",
       ...filteredRows.map((row) => (
-        `${row.forecast_date} | ${row.city} | ${row.product_name} | ${fmt(row.forecast_quantity)}`
+        comparisonAvailable && row.actual_available
+          ? `${row.forecast_date} | ${row.city} | ${row.product_name} | Forecast ${fmt(row.forecast_quantity)} | Actual ${fmt(row.actual_quantity)} | Error ${fmtPct(row.deviation_pct)}`
+          : `${row.forecast_date} | ${row.city} | ${row.product_name} | ${fmt(row.forecast_quantity)}`
       )),
     ];
     await navigator.clipboard.writeText(lines.join("\n"));
@@ -201,14 +219,14 @@ export default function App() {
             <div className="metric-sub">packets across {filteredRows.length} rows</div>
           </div>
           <div className="metric-card">
-            <div className="metric-label">Visible demand</div>
+            <div className="metric-label">Expected known demand</div>
             <div className="metric-value green">{fmt(visibleDemand)}</div>
-            <div className="metric-sub">subscriptions + placed buy-once</div>
+            <div className="metric-sub">expected subscriptions + placed buy-once</div>
           </div>
           <div className="metric-card">
-            <div className="metric-label">Model gap</div>
+            <div className="metric-label">Remaining forecast</div>
             <div className="metric-value violet">{fmt(modelGap)}</div>
-            <div className="metric-sub">unknown ad-hoc demand</div>
+            <div className="metric-sub">final total less expected known demand</div>
           </div>
           <div className="metric-card">
             <div className="metric-label">Training freshness</div>
@@ -216,6 +234,26 @@ export default function App() {
             <div className="metric-sub">{freshness.is_stale ? "Refresh required" : "Data check passed"}</div>
           </div>
         </section>
+
+        {comparisonAvailable && (
+          <section className="comparison-strip" aria-label="Query 1968 comparison summary">
+            <div>
+              <div className="metric-label">Query 1968 actual</div>
+              <div className="comparison-value">{fmt(filteredActual)}</div>
+            </div>
+            <div>
+              <div className="metric-label">Difference</div>
+              <div className="comparison-value">{fmtSigned(filteredDifference)}</div>
+            </div>
+            <div>
+              <div className="metric-label">WAPE</div>
+              <div className="comparison-value">{fmtPct(filteredWape)}</div>
+            </div>
+            <div className="comparison-note">
+              {comparedRows.length} matched rows - comparison uses the currently reconstructed forecast
+            </div>
+          </section>
+        )}
 
         <section className="city-grid operational-city-grid">
           {citySummary.map((summary) => (
@@ -228,7 +266,7 @@ export default function App() {
             >
               <div>
                 <div className="city-name" style={{ color: cityColor(summary.city) }}>{cityName(summary.city)}</div>
-                <div className="city-detail">D-{summary.lead_time_days} · issue {prettyDate(summary.issue_date)}</div>
+                <div className="city-detail">D-{summary.lead_time_days} - issue {prettyDate(summary.issue_date)}</div>
               </div>
               <div>
                 <div className="city-qty" style={{ color: cityColor(summary.city) }}>{fmt(summary.forecast_quantity)}</div>
@@ -274,25 +312,33 @@ export default function App() {
                   <th>City</th>
                   <th>SKU</th>
                   <th>Lead</th>
-                  {showComponents && <th className="numeric">Subscription</th>}
+                  {showComponents && <th className="numeric">Confirmed subs</th>}
+                  {showComponents && <th className="numeric">At-risk subs</th>}
                   {showComponents && <th className="numeric">Placed buy-once</th>}
-                  {showComponents && <th className="numeric">Model gap</th>}
+                  {showComponents && <th className="numeric">Remaining forecast</th>}
                   <th className="numeric">Final forecast</th>
+                  {comparisonAvailable && <th className="numeric">Actual · Q1968</th>}
+                  {comparisonAvailable && <th className="numeric">Difference</th>}
+                  {comparisonAvailable && <th className="numeric">Deviation</th>}
                 </tr>
               </thead>
               <tbody>
                 {!filteredRows.length ? (
-                  <tr><td colSpan={showComponents ? 8 : 5} className="empty-state">No rows match these filters.</td></tr>
+                  <tr><td colSpan={(showComponents ? 9 : 5) + (comparisonAvailable ? 3 : 0)} className="empty-state">No rows match these filters.</td></tr>
                 ) : filteredRows.map((row) => (
                   <tr key={`${row.forecast_date}-${row.city}-${row.product_name}`}>
                     <td><strong>{prettyDate(row.forecast_date)}</strong></td>
                     <td><span className="city-dot" style={{ background: cityColor(row.city) }} />{cityName(row.city)}</td>
                     <td className="product-name">{row.product_name}</td>
                     <td><span className="lead-badge">D-{row.lead_time_days}</span></td>
-                    {showComponents && <td className="numeric">{fmt(row.subscription_qty)}</td>}
+                    {showComponents && <td className="numeric">{fmt(row.confirmed_subscription_qty)}</td>}
+                    {showComponents && <td className="numeric">{fmt(row.at_risk_subscription_qty)}</td>}
                     {showComponents && <td className="numeric">{fmt(row.known_buy_once_qty)}</td>}
                     {showComponents && <td className="numeric">{fmt(row.ml_unknown_adhoc_qty)}</td>}
                     <td className="qty-value numeric">{fmt(row.forecast_quantity)}</td>
+                    {comparisonAvailable && <td className="numeric">{row.actual_available ? fmt(row.actual_quantity) : "-"}</td>}
+                    {comparisonAvailable && <td className="numeric">{row.actual_available ? fmtSigned(row.difference) : "-"}</td>}
+                    {comparisonAvailable && <td className="numeric">{row.actual_available ? fmtPct(row.deviation_pct) : "-"}</td>}
                   </tr>
                 ))}
               </tbody>

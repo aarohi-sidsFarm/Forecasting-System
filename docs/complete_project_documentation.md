@@ -260,7 +260,6 @@ backend/
     training_features.csv
     test_predictions.csv
     procurement_plan.csv
-    daily_procurement_plan.csv
     festival_list_2024_2026.csv
 ```
 
@@ -744,24 +743,16 @@ Purpose:
 
 This is required for `procurement_final_total` models. Using ad-hoc-only recent actuals would create feature skew.
 
-### Snapshot Training Logic
+### Procurement horizons
 
-SQL file:
+The dashboard applies the operational horizon policy directly:
 
-- `redash_queries/procurement_snapshot_total_training.sql`
+- HYD/VGA: D-2
+- BLR/PNQ: D-3
 
-Purpose:
-
-- Export final demand along with approximate historical visible demand at procurement planning time.
-
-City-specific procurement snapshots:
-
-- HYD/PNQ: D-2 18:00 IST
-- BLR/VGA: D-3 18:00 IST
-
-Known limitation:
-
-- `temp_order_item` appears to be current-state, not full status history. Snapshot quantities are a Redash-only approximation unless a true snapshot/audit table is created.
+The abandoned approximate snapshot-training SQL was removed. Audit-grade
+historical evaluation still requires forecasts to be stored immutably when
+they are issued; a current-state table cannot reconstruct an old cutoff.
 
 ## 8. Authentication & Authorization
 
@@ -944,7 +935,9 @@ Issue:
 
 Fix:
 
-- Align `selected_final_total_actuals.sql`, `recent_final_total_actuals.sql`, and `procurement_final_total_training.sql` to the `order_item + "order"` actual definition.
+- Use Redash Query 1968 as the official comparison source, and align
+  `recent_final_total_actuals.sql` plus `procurement_final_total_training.sql`
+  with that gross-demand definition.
 
 ### Product Mapping Gaps
 

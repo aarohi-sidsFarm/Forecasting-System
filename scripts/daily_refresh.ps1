@@ -10,7 +10,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $ProjectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+$Python = Join-Path $ProjectRoot "venv\Scripts\python.exe"
 
 if (-not (Test-Path $Python)) {
     throw "Python executable not found at $Python. Activate/create venv first."

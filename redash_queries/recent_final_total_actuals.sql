@@ -7,8 +7,8 @@
      target_date, city_cd, product_name, total_qty, total_orders
 
    Important:
-     This uses the same final-actual source as selected_final_total_actuals.sql:
-     d2c_order_newfact.
+     Keep this d2c_order_newfact definition aligned with the official actuals
+     returned by Redash Query 1968.
 */
 
 WITH target AS (

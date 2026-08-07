@@ -7,118 +7,39 @@ RAW_DIR = os.path.join(PROJECT_DIR, "data", "raw")
 PROCESSED_DIR = os.path.join(PROJECT_DIR, "data", "processed")
 MODEL_DIR = os.path.join(PROJECT_DIR, "backend", "ml_models")
 
-input_file = os.path.join(RAW_DIR, "all_data.csv")
 procurement_input_file = os.path.join(RAW_DIR, "redash_exports", "procurement_final_total_training.csv")
-residual_input_file = os.path.join(RAW_DIR, "redash_exports", "residual_adhoc_training.csv")
 output_file = os.path.join(PROCESSED_DIR, "training_clean.csv")
 
-if os.path.exists(procurement_input_file):
-    print(f"Loading procurement final-total training export {procurement_input_file}...")
-    df = pd.read_csv(procurement_input_file)
-    required = {
-        "target_date",
-        "city_cd",
-        "product_name",
-        "final_subscription_qty",
-        "final_buy_once_qty",
-        "final_total_qty",
-        "final_orders",
-    }
-    missing = required.difference(df.columns)
-    if missing:
-        raise ValueError(f"Procurement training CSV missing columns: {sorted(missing)}")
-
-    df["target_date"] = pd.to_datetime(df["target_date"], format="mixed", dayfirst=True)
-    df["city_cd"] = df["city_cd"].astype(str).str.upper().str.strip()
-    df["product_name"] = df["product_name"].astype(str).str.strip()
-    df["total_qty"] = pd.to_numeric(df["final_total_qty"], errors="coerce").fillna(0)
-    df["total_orders"] = pd.to_numeric(df["final_orders"], errors="coerce").fillna(0)
-    df["total_value"] = df["total_qty"] * 80
-    df["final_subscription_qty"] = pd.to_numeric(df["final_subscription_qty"], errors="coerce").fillna(0)
-    df["final_buy_once_qty"] = pd.to_numeric(df["final_buy_once_qty"], errors="coerce").fillna(0)
-    for optional_col in [
-        "snapshot_subscription_qty",
-        "snapshot_buy_once_qty",
-        "snapshot_visible_qty",
-        "snapshot_visible_orders",
-        "eventually_cancelled_snapshot_qty",
-        "final_gap_from_snapshot_qty",
-    ]:
-        if optional_col in df.columns:
-            df[optional_col] = pd.to_numeric(df[optional_col], errors="coerce").fillna(0)
-    snapshot_cols = [
-        "snapshot_subscription_qty",
-        "snapshot_buy_once_qty",
-        "snapshot_visible_qty",
-        "snapshot_visible_orders",
-        "eventually_cancelled_snapshot_qty",
-        "final_gap_from_snapshot_qty",
-    ]
-    snapshot_is_exact = (
-        "snapshot_is_exact" in df.columns
-        and df["snapshot_is_exact"].astype(str).str.lower().isin({"true", "1"}).all()
+if not os.path.exists(procurement_input_file):
+    raise FileNotFoundError(
+        "Production training export is missing. Run "
+        "scripts/fetch_redash_training_export.py before preprocessing: "
+        f"{procurement_input_file}"
     )
-    if not snapshot_is_exact:
-        dropped = [column for column in snapshot_cols if column in df.columns]
-        if dropped:
-            print(
-                "Dropping approximate snapshot fields; component training requires "
-                f"forward-captured as-of rows. Dropped: {dropped}"
-            )
-            df = df.drop(columns=dropped)
-elif os.path.exists(residual_input_file):
-    print(f"Loading residual training export {residual_input_file}...")
-    df = pd.read_csv(residual_input_file)
-    base_required = {
-        "target_date",
-        "city_cd",
-        "product_name",
-        "final_adhoc_qty",
-    }
-    uses_snapshot_target = "remaining_unknown_adhoc_qty" in df.columns
-    if uses_snapshot_target:
-        target_qty_col = "remaining_unknown_adhoc_qty"
-        target_orders_col = "remaining_unknown_orders"
-        known_qty_col = "known_buy_once_qty_at_snapshot"
-        target_label = "remaining_unknown_adhoc_from_snapshot"
-    else:
-        target_qty_col = "residual_unknown_adhoc_qty"
-        target_orders_col = "residual_unknown_orders"
-        known_qty_col = "known_buy_once_qty_at_cutoff"
-        target_label = "residual_unknown_adhoc_after_cutoff"
 
-    required = base_required | {target_qty_col, target_orders_col, known_qty_col}
-    missing = required.difference(df.columns)
-    if missing:
-        raise ValueError(f"Residual training CSV missing columns: {sorted(missing)}")
-    print(f"Training target: {target_label}")
+print(f"Loading procurement final-total training export {procurement_input_file}...")
+df = pd.read_csv(procurement_input_file)
+required = {
+    "target_date",
+    "city_cd",
+    "product_name",
+    "final_subscription_qty",
+    "final_buy_once_qty",
+    "final_total_qty",
+    "final_orders",
+}
+missing = required.difference(df.columns)
+if missing:
+    raise ValueError(f"Procurement training CSV missing columns: {sorted(missing)}")
 
-    df["target_date"] = pd.to_datetime(df["target_date"], format="mixed", dayfirst=True)
-    df["city_cd"] = df["city_cd"].astype(str).str.upper().str.strip()
-    df["product_name"] = df["product_name"].astype(str).str.strip()
-    df["total_qty"] = pd.to_numeric(df[target_qty_col], errors="coerce").fillna(0)
-    df["total_orders"] = pd.to_numeric(df[target_orders_col], errors="coerce").fillna(0)
-    df["total_value"] = df["total_qty"] * 80
-    # Keep this historical feature name for model/backend compatibility. In
-    # snapshot-target mode it means "known buy-once at forecast snapshot".
-    df["known_buy_once_qty_at_cutoff"] = pd.to_numeric(df[known_qty_col], errors="coerce").fillna(0)
-    df["final_adhoc_qty"] = pd.to_numeric(df["final_adhoc_qty"], errors="coerce").fillna(0)
-else:
-    print(f"Loading legacy all_data source {input_file}...")
-    df = pd.read_csv(input_file)
-
-    # 1. Standardize columns
-    df['delivery_date'] = pd.to_datetime(df['delivery_date'])
-    df.rename(columns={
-        'delivery_date': 'target_date',
-        'city': 'city_cd',
-        'total_quantity': 'total_qty'
-    }, inplace=True)
-
-    # 1.1 Filter to only include Adhoc Buy Once from June 2024 onwards
-    # This avoids the early 2024 period where purchase_type was not logged (all NaN)
-    df = df[df['target_date'] >= '2024-06-01']
-    df = df[df['purchase_type'] == 'Adhoc Buy Once']
+df["target_date"] = pd.to_datetime(df["target_date"], format="mixed", dayfirst=True)
+df["city_cd"] = df["city_cd"].astype(str).str.upper().str.strip()
+df["product_name"] = df["product_name"].astype(str).str.strip()
+df["total_qty"] = pd.to_numeric(df["final_total_qty"], errors="coerce").fillna(0)
+df["total_orders"] = pd.to_numeric(df["final_orders"], errors="coerce").fillna(0)
+df["total_value"] = df["total_qty"] * 80
+df["final_subscription_qty"] = pd.to_numeric(df["final_subscription_qty"], errors="coerce").fillna(0)
+df["final_buy_once_qty"] = pd.to_numeric(df["final_buy_once_qty"], errors="coerce").fillna(0)
 
 # 2. Filter out junk/promotional products
 df = df[df['product_name'].notna()]
