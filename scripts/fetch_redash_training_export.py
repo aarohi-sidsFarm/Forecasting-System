@@ -85,7 +85,7 @@ async def fetch_rows(query_id: int, start_date: str, end_date: str, max_age: int
         job_id = body.get("job", {}).get("id")
         if not job_id:
             raise RuntimeError(f"Unexpected Redash response: {body}")
-        for _ in range(60):
+        for _ in range(200):
             await asyncio.sleep(3)
             job_response = await client.get(f"{base_url}/api/jobs/{job_id}", headers=headers)
             job_response.raise_for_status()
@@ -99,7 +99,7 @@ async def fetch_rows(query_id: int, start_date: str, end_date: str, max_age: int
                 return result_response.json()["query_result"]["data"]["rows"]
             if job["status"] == 4:
                 raise RuntimeError(f"Redash job failed: {job}")
-    raise TimeoutError("Redash training export did not finish within 3 minutes.")
+    raise TimeoutError("Redash training export did not finish within 10 minutes.")
 
 
 def write_csv(rows: list[dict], output: Path) -> None:

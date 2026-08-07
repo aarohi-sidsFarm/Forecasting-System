@@ -14,6 +14,14 @@ from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
+try:
+    from backend.forecast_history import (
+        issued_forecast_for_date,
+        record_run as record_forecast_run,
+    )
+except ModuleNotFoundError:
+    from forecast_history import issued_forecast_for_date, record_run as record_forecast_run
+
 warnings.filterwarnings("ignore")
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -1486,10 +1494,16 @@ def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame
         aggfunc="sum",
         fill_value=0,
     ).reset_index()
-    for col in ["subscription", "known_buy_once", "ml_unknown_adhoc"]:
+    for col in [
+        "subscription", "known_buy_once", "ml_unknown_adhoc",
+        "official_issued_snapshot",
+    ]:
         if col not in pivot.columns:
             pivot[col] = 0
-    pivot["total_quantity"] = pivot["subscription"] + pivot["known_buy_once"] + pivot["ml_unknown_adhoc"]
+    pivot["total_quantity"] = (
+        pivot["subscription"] + pivot["known_buy_once"]
+        + pivot["ml_unknown_adhoc"] + pivot["official_issued_snapshot"]
+    )
     orders = day_df.groupby(["city_cd", "product_name"])["predicted_orders"].sum().reset_index()
     product_breakdown = pivot.merge(orders, on=["city_cd", "product_name"], how="left")
     product_breakdown = product_breakdown.rename(columns={
@@ -1498,14 +1512,19 @@ def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame
         "subscription": "subscription_qty",
         "known_buy_once": "known_buy_once_qty",
         "ml_unknown_adhoc": "ml_unknown_adhoc_qty",
+        "official_issued_snapshot": "official_snapshot_qty",
     })
     product_breakdown["method"] = np.where(
-        (product_breakdown["subscription_qty"] > 0).astype(int)
-        + (product_breakdown["known_buy_once_qty"] > 0).astype(int)
-        + (product_breakdown["ml_unknown_adhoc_qty"] > 0).astype(int) > 1,
-        "hybrid",
-        np.where(product_breakdown["subscription_qty"] > 0, "subscription",
-                 np.where(product_breakdown["known_buy_once_qty"] > 0, "known_buy_once", "ml_unknown_adhoc"))
+        product_breakdown["official_snapshot_qty"] > 0,
+        "official_issued_snapshot",
+        np.where(
+            (product_breakdown["subscription_qty"] > 0).astype(int)
+            + (product_breakdown["known_buy_once_qty"] > 0).astype(int)
+            + (product_breakdown["ml_unknown_adhoc_qty"] > 0).astype(int) > 1,
+            "hybrid",
+            np.where(product_breakdown["subscription_qty"] > 0, "subscription",
+                     np.where(product_breakdown["known_buy_once_qty"] > 0, "known_buy_once", "ml_unknown_adhoc"))
+        ),
     )
     product_breakdown["total_order_value"] = None
     product_breakdown["low_balance_customer_count"] = 0
@@ -1514,6 +1533,7 @@ def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame
         "subscription_qty",
         "known_buy_once_qty",
         "ml_unknown_adhoc_qty",
+        "official_snapshot_qty",
         "total_quantity",
         "total_orders",
         "low_balance_customer_count",
@@ -1548,6 +1568,7 @@ def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame
             "subscription_qty",
             "known_buy_once_qty",
             "ml_unknown_adhoc_qty",
+            "official_snapshot_qty",
             "total_quantity",
             "total_orders",
             "actual_qty",
@@ -1741,7 +1762,11 @@ async def get_forecast_raw(refresh: bool = Query(False)):
 
 
 @app.get("/api/forecast_day")
-async def get_forecast_day(date: str = Query(..., description="YYYY-MM-DD"), refresh: bool = Query(False)):
+async def get_forecast_day(
+    date: str = Query(..., description="YYYY-MM-DD"),
+    refresh: bool = Query(False),
+    view: str = Query("issued", pattern="^(issued|live)$"),
+):
     target_dt = pd.DatetimeIndex([_parse_forecast_date(date)])
     sub_df = await fetch_subscription_df_async(date, refresh)
     known_df = await fetch_known_buy_once_df_async(date, refresh)
@@ -1749,6 +1774,55 @@ async def get_forecast_day(date: str = Query(..., description="YYYY-MM-DD"), ref
     actual_df = await fetch_selected_actuals_df_async(date, refresh)
     rows = await run_in_threadpool(build_forecast_for_dates, target_dt, sub_df, known_df, recent_df)
     day_df = pd.DataFrame(rows)
+
+    issued_info = None
+    if view == "issued":
+        issued, issued_info = await run_in_threadpool(issued_forecast_for_date, date)
+        if not issued.empty:
+            keys = set(zip(issued.city_cd, issued.product_name))
+            if not day_df.empty:
+                keep = [
+                    (row.city_cd, row.product_name) not in keys
+                    for row in day_df.itertuples()
+                ]
+                day_df = day_df.loc[keep].copy()
+            frozen = issued.copy()
+            for column in [
+                "p50_qty", "visible_subscription_qty",
+                "visible_buy_once_qty", "visible_orders",
+            ]:
+                frozen[column] = pd.to_numeric(
+                    frozen.get(column, 0), errors="coerce"
+                ).fillna(0)
+            frozen["visible_subscription_qty"] = np.minimum(
+                frozen["visible_subscription_qty"], frozen["p50_qty"]
+            )
+            remaining = frozen["p50_qty"] - frozen["visible_subscription_qty"]
+            frozen["visible_buy_once_qty"] = np.minimum(
+                frozen["visible_buy_once_qty"], remaining
+            )
+            frozen["ml_unknown_adhoc_qty"] = (
+                remaining - frozen["visible_buy_once_qty"]
+            ).clip(lower=0)
+
+            component_frames = []
+            for source_column, method in [
+                ("visible_subscription_qty", "subscription"),
+                ("visible_buy_once_qty", "known_buy_once"),
+                ("ml_unknown_adhoc_qty", "ml_unknown_adhoc"),
+            ]:
+                component = frozen[
+                    ["forecast_date", "city_cd", "product_name", source_column]
+                ].rename(columns={source_column: "predicted_qty"})
+                component["predicted_qty"] = component.predicted_qty.round().astype(int)
+                component = component[component.predicted_qty > 0].copy()
+                component["predicted_orders"] = np.maximum(
+                    1, (component.predicted_qty / 1.15).round().astype(int)
+                )
+                component["method"] = method
+                component_frames.append(component)
+            day_df = pd.concat([day_df, *component_frames], ignore_index=True)
+            rows = day_df.to_dict(orient="records")
 
     if _forecast_cache["forecast_rows"] is None:
         _forecast_cache["forecast_rows"] = rows
@@ -1760,7 +1834,17 @@ async def get_forecast_day(date: str = Query(..., description="YYYY-MM-DD"), ref
             existing = pd.DataFrame()
         _forecast_cache["forecast_rows"] = pd.concat([existing, day_df], ignore_index=True).to_dict(orient="records")
     _forecast_cache["generated_at"] = pd.Timestamp.now().isoformat()
-    return _aggregate_response(day_df, date, actual_df)
+    response = _aggregate_response(day_df, date, actual_df)
+    response["meta"]["forecast_view"] = (
+        "issued" if issued_info else "live"
+    )
+    response["meta"]["issued_run_id"] = (
+        issued_info["run_id"] if issued_info else None
+    )
+    response["meta"]["issued_generated_at"] = (
+        issued_info["generated_at"] if issued_info else None
+    )
+    return response
 
 
 @app.get("/api/export/milk_city_forecast.csv")
@@ -1768,6 +1852,7 @@ async def export_milk_city_forecast_csv(
     date: str = Query(..., description="YYYY-MM-DD"),
     days: int = Query(7, ge=1, le=31),
     refresh: bool = Query(False),
+    record: bool = Query(True),
 ):
     start_dt = _parse_forecast_date(date)
     forecast_dates = pd.date_range(start_dt, periods=days)
@@ -1804,6 +1889,64 @@ async def export_milk_city_forecast_csv(
     )
     export_df = export_df[columns]
 
+    history_result = None
+    if record:
+        history_frame = export_df.rename(
+            columns={"city": "city_cd", "forecast_quantity": "p50_qty"}
+        ).copy()
+        history_frame["p80_qty"] = None
+        history_frame["method"] = "production_export"
+        raw_frame = pd.DataFrame(rows)
+        visible = raw_frame[
+            raw_frame["method"].isin({"subscription", "known_buy_once"})
+        ].copy()
+        if not visible.empty:
+            visible["forecast_date"] = pd.to_datetime(
+                visible["forecast_date"]
+            ).dt.strftime("%Y-%m-%d")
+            visible_qty = visible.pivot_table(
+                index=["forecast_date", "city_cd", "product_name"],
+                columns="method",
+                values="predicted_qty",
+                aggfunc="sum",
+                fill_value=0,
+            ).reset_index()
+            for column in ["subscription", "known_buy_once"]:
+                if column not in visible_qty:
+                    visible_qty[column] = 0
+            visible_orders = visible.groupby(
+                ["forecast_date", "city_cd", "product_name"], as_index=False
+            )["predicted_orders"].sum().rename(
+                columns={"predicted_orders": "visible_orders"}
+            )
+            visible_qty = visible_qty.merge(
+                visible_orders,
+                on=["forecast_date", "city_cd", "product_name"],
+                how="left",
+            ).rename(columns={
+                "subscription": "visible_subscription_qty",
+                "known_buy_once": "visible_buy_once_qty",
+            })
+            history_frame = history_frame.merge(
+                visible_qty[
+                    [
+                        "forecast_date", "city_cd", "product_name",
+                        "visible_subscription_qty", "visible_buy_once_qty",
+                        "visible_orders",
+                    ]
+                ],
+                on=["forecast_date", "city_cd", "product_name"],
+                how="left",
+            )
+        history_result = await run_in_threadpool(
+            record_forecast_run,
+            history_frame,
+            run_kind="official_export",
+            model_version=f"general:{_model_target_type}|hyd:{_model_hyd_target_type}",
+            cutoff_policy="actual_generated_at; live Redash inputs",
+            metadata={"refresh": refresh, "days": days},
+        )
+
     buffer = io.StringIO()
     export_df.to_csv(buffer, index=False)
     buffer.seek(0)
@@ -1812,7 +1955,13 @@ async def export_milk_city_forecast_csv(
     return StreamingResponse(
         iter([buffer.getvalue()]),
         media_type="text/csv",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            **(
+                {"X-Forecast-Run-ID": history_result["run_id"]}
+                if history_result else {}
+            ),
+        },
     )
 
 
