@@ -1,7 +1,7 @@
-import requests
+import httpx
 
 for date, label in [("2026-06-05", "TARGET")]:
-    r = requests.get(f"http://localhost:8000/api/forecast_day?date={date}", timeout=90)
+    r = httpx.get(f"http://localhost:8000/api/forecast_day?date={date}", timeout=90)
     r.raise_for_status()
     d = r.json()
     print(f"\n=== {label} ({date}) ===")
