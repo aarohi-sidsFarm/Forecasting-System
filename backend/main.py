@@ -1435,7 +1435,22 @@ def _operational_target_dates(as_of_date: pd.Timestamp) -> dict[str, str]:
     }
 
 
-def _forecast_rows_to_operational_df(rows: list[dict], as_of_date: pd.Timestamp) -> pd.DataFrame:
+def _target_issue_dates(target_date: pd.Timestamp) -> dict[str, str]:
+    target_date = pd.Timestamp(target_date).normalize()
+    return {
+        city: str((target_date - pd.Timedelta(days=lead_days)).date())
+        for city, lead_days in FORECAST_LEAD_DAYS.items()
+    }
+
+
+def _forecast_rows_to_operational_df(
+    rows: list[dict],
+    as_of_date: pd.Timestamp | None = None,
+    *,
+    target_date: pd.Timestamp | None = None,
+) -> pd.DataFrame:
+    if (as_of_date is None) == (target_date is None):
+        raise ValueError("Provide exactly one of as_of_date or target_date")
     if not rows:
         return pd.DataFrame(columns=OPERATIONAL_FORECAST_COLUMNS)
     df = pd.DataFrame(rows)
@@ -1461,11 +1476,17 @@ def _forecast_rows_to_operational_df(rows: list[dict], as_of_date: pd.Timestamp)
     pivot["lead_time_days"] = pivot["city"].map(FORECAST_LEAD_DAYS)
     pivot = pivot[pivot["lead_time_days"].notna()].copy()
     pivot["lead_time_days"] = pivot["lead_time_days"].astype(int)
-    pivot["issue_date"] = str(pd.Timestamp(as_of_date).date())
-    target_dates = _operational_target_dates(as_of_date)
-    pivot = pivot[pivot.apply(
-        lambda row: row["forecast_date"] == target_dates.get(row["city"]), axis=1
-    )].copy()
+    if target_date is not None:
+        selected_target = str(pd.Timestamp(target_date).date())
+        issue_dates = _target_issue_dates(target_date)
+        pivot = pivot[pivot["forecast_date"] == selected_target].copy()
+        pivot["issue_date"] = pivot["city"].map(issue_dates)
+    else:
+        pivot["issue_date"] = str(pd.Timestamp(as_of_date).date())
+        target_dates = _operational_target_dates(as_of_date)
+        pivot = pivot[pivot.apply(
+            lambda row: row["forecast_date"] == target_dates.get(row["city"]), axis=1
+        )].copy()
     pivot["forecast_quantity"] = (
         pivot["subscription_qty"]
         + pivot["known_buy_once_qty"]
@@ -1494,6 +1515,24 @@ async def _build_operational_forecast_df(
     ))
     rows = [row for batch in batches for row in batch]
     forecast_df = _forecast_rows_to_operational_df(rows, as_of_date)
+    if forecast_df.empty:
+        return forecast_df
+    return forecast_df[
+        forecast_df["city"].isin(MILK_EXPORT_CITIES)
+        & forecast_df["product_name"].isin(MILK_EXPORT_PRODUCTS)
+    ].copy()
+
+
+async def _build_target_forecast_df(
+    target_date: pd.Timestamp,
+    force_refresh: bool = False,
+) -> pd.DataFrame:
+    rows = await _build_forecast_rows_by_date(
+        pd.DatetimeIndex([pd.Timestamp(target_date)]), force_refresh
+    )
+    forecast_df = _forecast_rows_to_operational_df(
+        rows, target_date=target_date
+    )
     if forecast_df.empty:
         return forecast_df
     return forecast_df[
@@ -2011,15 +2050,18 @@ async def get_forecast_day(
 
 @app.get("/api/operational_forecast")
 async def get_operational_forecast(
-    as_of_date: str = Query(..., description="Forecast issue date in YYYY-MM-DD format"),
+    target_date: str = Query(..., description="Forecast target date in YYYY-MM-DD format"),
     refresh: bool = Query(False),
 ):
-    as_of_dt = _parse_forecast_date(as_of_date)
-    forecast_df = await _build_operational_forecast_df(as_of_dt, refresh)
+    target_dt = _parse_forecast_date(target_date)
+    forecast_df = await _build_target_forecast_df(target_dt, refresh)
     city_summary = []
     if not forecast_df.empty:
         city_summary = (
-            forecast_df.groupby(["city", "forecast_date", "lead_time_days"], as_index=False)
+            forecast_df.groupby(
+                ["city", "forecast_date", "issue_date", "lead_time_days"],
+                as_index=False,
+            )
             .agg(
                 forecast_quantity=("forecast_quantity", "sum"),
                 products_count=("product_name", "nunique"),
@@ -2029,7 +2071,7 @@ async def get_operational_forecast(
         )
     return {
         "meta": {
-            "as_of_date": as_of_date,
+            "target_date": target_date,
             "generated_at": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
             "total_quantity": int(forecast_df["forecast_quantity"].sum()) if not forecast_df.empty else 0,
             "total_cities": int(forecast_df["city"].nunique()) if not forecast_df.empty else 0,
@@ -2038,7 +2080,8 @@ async def get_operational_forecast(
                 city: {
                     "lead_time_days": lead_days,
                     "label": f"D-{lead_days}",
-                    "forecast_date": _operational_target_dates(as_of_dt)[city],
+                    "issue_date": _target_issue_dates(target_dt)[city],
+                    "forecast_date": target_date,
                 }
                 for city, lead_days in FORECAST_LEAD_DAYS.items()
             },
