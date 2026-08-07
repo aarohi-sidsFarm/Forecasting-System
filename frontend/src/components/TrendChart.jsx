@@ -1,6 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts';
 
-const CITY_COLORS = { BLR:'#6c63ff', HYD:'#f59e0b', PNQ:'#22c55e', VGA:'#ef4444' };
+const CITY_COLORS = { BLR:'#7075D8', HYD:'#34A77B', PNQ:'#D99A2B', VGA:'#E06C68' };
 
 export default function TrendChart({ data }) {
   if (!data?.length) return <div style={{ color:'#64748b', textAlign:'center', paddingTop:80 }}>No data</div>;

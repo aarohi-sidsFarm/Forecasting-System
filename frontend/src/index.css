@@ -8,24 +8,27 @@
 }
 
 :root {
-  --bg: #f5f6fa;
+  --brand-black: #3F4246;
+  --brand-white: #FFFFFF;
+
+  --bg: var(--brand-white);
   --bg-card: #ffffff;
-  --bg-card-hover: #f9fafb;
-  --bg-surface: #f0f1f5;
-  --border: #e2e5ec;
-  --border-light: #d0d4de;
+  --bg-card-hover: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --border: rgba(0, 0, 0, 0.16);
+  --border-light: rgba(0, 0, 0, 0.30);
 
-  --text-primary: #1a1d26;
-  --text-secondary: #4a5068;
-  --text-muted: #7a8099;
+  --text-primary: #3F4246;
+  --text-secondary: rgba(0, 0, 0, 0.76);
+  --text-muted: rgba(0, 0, 0, 0.58);
 
-  --accent: #FFE162;
-  --accent-dim: #FFE16230;
+  --accent: #FCE099;
+  --accent-dim: rgba(252, 224, 153, 0.24);
 
-  --blr: #6366f1;
-  --hyd: #10b981;
-  --pnq: #f59e0b;
-  --vga: #ef4444;
+  --blr: #7075D8;
+  --hyd: #34A77B;
+  --pnq: #D99A2B;
+  --vga: #E06C68;
 
   --radius: 12px;
   --radius-sm: 8px;
