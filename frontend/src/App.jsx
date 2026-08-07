@@ -1,775 +1,316 @@
-﻿import { useState, useEffect, useCallback } from "react";
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Legend, Cell,
-  ComposedChart,
-} from "recharts";
-import { getForecastDay, getForecastTrend, getStatus, API_BASE } from "./api";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { getOperationalForecast, getStatus } from "./api";
 import "./App.css";
 
-const CITY_COLORS = {
-  BLR: "#818cf8",
-  HYD: "#34d399",
-  PNQ: "#fbbf24",
-  VGA: "#f87171",
-  UNKNOWN: "#64748b",
-};
-
 const CITY_NAMES = {
-  BLR: "Bengaluru",
   HYD: "Hyderabad",
-  PNQ: "Pune",
   VGA: "Vijayawada",
+  BLR: "Bengaluru",
+  PNQ: "Pune",
 };
 
-const getColor = (city) => CITY_COLORS[city] ?? "#818cf8";
-const getCityName = (city) => CITY_NAMES[city] ?? city;
-const fmt = (n) => Number(n ?? 0).toLocaleString("en-IN");
-
-const tomorrow = () => {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10);
+const CITY_COLORS = {
+  HYD: "#34A77B",
+  VGA: "#E06C68",
+  BLR: "#7075D8",
+  PNQ: "#D99A2B",
 };
 
-const addDays = (dateStr, days) => {
-  const d = new Date(`${dateStr}T00:00:00`);
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
-};
+const fmt = (value) => Number(value ?? 0).toLocaleString("en-IN");
+const cityName = (city) => CITY_NAMES[city] ?? city;
+const cityColor = (city) => CITY_COLORS[city] ?? "#74787D";
 
-const QUICK_DATES = [
-  ["D-1",  -1],
-  ["Today", 0],
-  ["D+1", +1],
-  ["D+7", +7],
-  ["D+14", +14],
-  ["D+30", +30],
-];
+const todayInIndia = () => new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Kolkata",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
 
-const CustomTip = ({ active, payload, label }) => {
-  if (!active || !payload?.length) return null;
-  return (
-    <div style={{
-      background: "#ffffff", border: "1px solid #e2e5ec",
-      borderRadius: 8, padding: "10px 14px", fontSize: 12,
-      boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
-    }}>
-      <div style={{ fontWeight: 700, marginBottom: 6, color: "#1a1d26" }}>{label}</div>
-      {payload.map((p, i) => (
-        <div key={i} style={{ color: p.color ?? "#6366f1", marginTop: 2 }}>
-          {p.name}: <strong>{fmt(p.value)}</strong>
-        </div>
-      ))}
-    </div>
-  );
+const prettyDate = (date) => new Intl.DateTimeFormat("en-IN", {
+  weekday: "short",
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+  timeZone: "Asia/Kolkata",
+}).format(new Date(`${date}T12:00:00+05:30`));
+
+const csvCell = (value) => {
+  const text = String(value ?? "");
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 };
 
 export default function App() {
-  const getInitialDate = () => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("date") || tomorrow();
-  };
-
-  const [data, setData]           = useState(null);
-  const [trend, setTrend]         = useState([]);
+  const initialDate = new URLSearchParams(window.location.search).get("as_of") || todayInIndia();
+  const [asOfDate, setAsOfDate] = useState(initialDate);
+  const [data, setData] = useState(null);
   const [systemStatus, setSystemStatus] = useState(null);
-  const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState(null);
-  const [activeTab, setTab]       = useState("overview");
-  const [cityFilter, setCity]     = useState("All");
-  const [prodFilter, setProd]     = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [cityFilter, setCityFilter] = useState("All");
+  const [productFilter, setProductFilter] = useState("All");
+  const [search, setSearch] = useState("");
   const [showComponents, setShowComponents] = useState(false);
-  const [showSystemChecks, setShowSystemChecks] = useState(false);
-  const ROWS_PER_PAGE = 20;
-  const [selectedDate, _setDate]  = useState(getInitialDate());
-  const [trendDays, setTrendDays] = useState(14);
+  const [copied, setCopied] = useState(false);
 
-  const setDate = (d) => {
-    setData(null);
-    _setDate(d);
-    const url = new URL(window.location);
-    url.searchParams.set("date", d);
-    window.history.replaceState({}, "", url);
-  };
-
-  const loadData = useCallback(async (dt) => {
+  const load = useCallback(async (refresh = false) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
-      const res = await getForecastDay(dt, true);
-      setData(res);
-    } catch (e) {
-      if (e.message.includes("404")) {
-        setError(
-          `No forecast cached for ${dt}. The backend will compute it on the fly - try again in a moment.`
-        );
-      } else {
-        setError(`Could not reach backend: ${e.message}`);
-      }
-      setData(null);
+      const [forecast, status] = await Promise.all([
+        getOperationalForecast(asOfDate, refresh),
+        getStatus(),
+      ]);
+      setData(forecast);
+      setSystemStatus(status);
+    } catch (err) {
+      setError(`Could not load the operational forecast: ${err.message}`);
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  const loadTrend = useCallback(async () => {
-    try {
-      const res = await getForecastTrend(trendDays);
-      setTrend(res.trend || []);
-    } catch {
-    }
-  }, [trendDays]);
-
-  const loadStatus = useCallback(async () => {
-    try {
-      const res = await getStatus();
-      setSystemStatus(res);
-    } catch {
-      setSystemStatus(null);
-    }
-  }, []);
+  }, [asOfDate]);
 
   useEffect(() => {
-    loadData(selectedDate);
-    loadTrend();
-    loadStatus();
-  }, [selectedDate, trendDays, loadData, loadTrend, loadStatus]);
+    const url = new URL(window.location);
+    url.searchParams.set("as_of", asOfDate);
+    window.history.replaceState({}, "", url);
+    let active = true;
+    Promise.all([getOperationalForecast(asOfDate, false), getStatus()])
+      .then(([forecast, status]) => {
+        if (!active) return;
+        setData(forecast);
+        setSystemStatus(status);
+        setError("");
+      })
+      .catch((err) => {
+        if (active) setError(`Could not load the operational forecast: ${err.message}`);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => { active = false; };
+  }, [asOfDate]);
 
-  const cities   = [...new Set((data?.product_breakdown ?? []).map(r => r.city))].sort();
-  const products = [...new Set((data?.product_breakdown ?? []).map(r => r.product_name))].sort();
-
-  const EXCLUDED_PRODUCTS = [
-    "abhi eggs gold+",
-    "assorted pack of 3 breakfast cereals",
-    "both choco ragi",
-    "honey and fruit museli",
-    "just laid eggs",
-    "both mango millets",
-  ];
-  const filteredProductOptions = products.filter(
-    p => !EXCLUDED_PRODUCTS.includes(p.toLowerCase())
-  );
-
-  const filteredProducts = (data?.product_breakdown ?? []).filter(r => {
-    if (cityFilter !== "All" && r.city !== cityFilter) return false;
-    if (prodFilter !== "All" && r.product_name !== prodFilter) return false;
+  const rows = useMemo(() => data?.rows ?? [], [data]);
+  const cities = useMemo(() => [...new Set(rows.map((row) => row.city))].sort(), [rows]);
+  const products = useMemo(() => [...new Set(rows.map((row) => row.product_name))].sort(), [rows]);
+  const filteredRows = useMemo(() => rows.filter((row) => {
+    if (cityFilter !== "All" && row.city !== cityFilter) return false;
+    if (productFilter !== "All" && row.product_name !== productFilter) return false;
+    if (search && !`${row.city} ${row.product_name}`.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
-  });
+  }), [rows, cityFilter, productFilter, search]);
 
-  const paginatedProducts = filteredProducts.slice(
-    (currentPage - 1) * ROWS_PER_PAGE,
-    currentPage * ROWS_PER_PAGE
+  const filteredTotal = filteredRows.reduce((sum, row) => sum + Number(row.forecast_quantity), 0);
+  const visibleDemand = filteredRows.reduce(
+    (sum, row) => sum + Number(row.subscription_qty) + Number(row.known_buy_once_qty),
+    0,
   );
-  const totalPages = Math.ceil(filteredProducts.length / ROWS_PER_PAGE);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [cityFilter, prodFilter]);
-
-  const filteredForecastQty = filteredProducts.reduce(
-    (sum, r) => sum + Number(r.forecast_quantity ?? r.total_quantity ?? 0),
-    0
-  );
-
-  const topProducts = (data?.product_breakdown ?? [])
-    .reduce((acc, r) => {
-      const ex = acc.find(x => x.product_name === r.product_name);
-      if (ex) {
-        ex.total_orders   += r.total_orders;
-        ex.total_quantity += r.total_quantity;
-      } else {
-        acc.push({
-          product_name:   r.product_name,
-          total_orders:   r.total_orders,
-          total_quantity: r.total_quantity,
-        });
-      }
-      return acc;
-    }, [])
-    .sort((a, b) => b.total_quantity - a.total_quantity)
-    .slice(0, 10);
-
+  const modelGap = filteredRows.reduce((sum, row) => sum + Number(row.ml_unknown_adhoc_qty), 0);
   const citySummary = data?.city_summary ?? [];
-  const meta        = data?.meta ?? {};
-  const totalQty    = meta.total_quantity ?? 0;
-  const mlUnknownQty = meta.ml_unknown_adhoc_qty ?? meta.ml_qty;
-  const isActualMode = meta.display_mode === "actual";
-  const freshness = meta.training_data_freshness ?? {};
-  const statusFreshness = systemStatus?.training_data_freshness ?? freshness;
-  const redashStatus = systemStatus?.redash ?? {};
-  const accuracyCache = systemStatus?.accuracy_cache ?? {};
-  const guardrails = systemStatus?.guardrails ?? {};
-  const festivalCalendar = systemStatus?.festival_calendar ?? {};
-  const isStatusStale = Boolean(statusFreshness?.is_stale);
-  const isRedashReady = Boolean(redashStatus?.api_key_configured);
-  const hasAccuracyCheck = Boolean(accuracyCache?.rows);
-  const hasFestivalCalendar = Boolean(festivalCalendar?.rows);
-  const statusTone = isStatusStale || !isRedashReady ? "warning" : "ok";
-  const readinessTitle = statusTone === "ok" ? "Ready to share" : "Needs attention";
-  const readinessCopy = statusTone === "ok"
-    ? "Forecast is using recent training data and live Redash inputs."
-    : "Refresh or check Redash before sharing this forecast.";
+  const upcomingEvents = systemStatus?.festival_calendar?.upcoming_events ?? [];
+  const freshness = data?.meta?.training_data_freshness ?? {};
 
-  const statusLabel = (row) => {
-    if (!isActualMode) return "Forecast";
-    const pct = Number(row.forecast_abs_error_pct ?? 0);
-    if (pct <= 1) return "On target";
-    if (pct <= 3) return "Watch";
-    return "High variance";
+  const resetFilters = () => {
+    setCityFilter("All");
+    setProductFilter("All");
+    setSearch("");
   };
 
-  const statusStyle = (row) => {
-    const label = statusLabel(row);
-    if (label === "On target") return { background: "#dcfce7", color: "#16a34a" };
-    if (label === "Watch") return { background: "#fef3c7", color: "#d97706" };
-    if (label === "High variance") return { background: "#fee2e2", color: "#dc2626" };
-    return { background: "#e0e7ff", color: "#4338ca" };
+  const downloadFilteredCsv = () => {
+    const columns = [
+      "issue_date", "forecast_date", "lead_time_days", "city", "product_name",
+      "subscription_qty", "known_buy_once_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
+    ];
+    const csv = [
+      columns.join(","),
+      ...filteredRows.map((row) => columns.map((column) => csvCell(row[column])).join(",")),
+    ].join("\n");
+    const href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.download = `operational_forecast_${asOfDate}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(href);
   };
 
-  if (loading && !data) {
-    return (
-      <div className="app">
-        <div className="loading-screen">
-          <img 
-            src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHU3aWE2NXVqbWdwODMxMHp1N2UyYm5qcGhtdDFiOXVxZGVvYjY5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/M452ElhGUd3byc4HYw/giphy.gif" 
-            alt="Loading..." 
-            style={{ width: "150px", height: "auto", marginBottom: "20px", borderRadius: "12px" }}
-          />
-          <div className="loading-text">Delivering good quality milk to each one of you takes time. Please stay calm and patient, everyone.</div>
-        </div>
-      </div>
-    );
-  }
+  const copyShareSummary = async () => {
+    const lines = [
+      `Procurement forecast issued ${asOfDate}`,
+      `HYD/VGA: D-2 | BLR/PNQ: D-3`,
+      `Filtered total: ${fmt(filteredTotal)} packets`,
+      "",
+      ...filteredRows.map((row) => (
+        `${row.forecast_date} | ${row.city} | ${row.product_name} | ${fmt(row.forecast_quantity)}`
+      )),
+    ];
+    await navigator.clipboard.writeText(lines.join("\n"));
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  };
 
   return (
     <div className="app">
-
-      {/* HEADER */}
       <header className="header">
         <div className="header-left">
-          <div className="logo">S</div>
+          <img className="brand-logo" src="/sids-farm-logo.png" alt="Sid's Farm" />
           <div>
-            <div className="header-title">Sid's Farm Model</div>
-            <div className="header-subtitle">LGBM + Subscription Model</div>
+            <div className="header-title">Sid&apos;s Farm Forecast Desk</div>
+            <div className="header-subtitle">City-aware procurement plan</div>
           </div>
         </div>
-
         <div className="header-controls">
-          {QUICK_DATES.map(([label, offset]) => {
-            const d = new Date();
-            d.setDate(d.getDate() + offset);
-            const val = d.toISOString().slice(0, 10);
-            return (
-              <button
-                key={label}
-                className={`btn ${selectedDate === val ? "active" : ""}`}
-                onClick={() => setDate(val)}
-              >
-                {label}
-              </button>
-            );
-          })}
-
-          <div className="divider-v" />
-
-          <input
-            type="date"
-            className="date-input"
-            value={selectedDate}
-            onChange={e => setDate(e.target.value)}
-          />
-
-          <div className="divider-v" />
-
-          <button
-            className="btn btn-export"
-            onClick={() => window.open(`${API_BASE}/export/milk_city_forecast.csv?date=${selectedDate}&days=7&refresh=true`, "_blank")}
-          >
-            Export
+          <label className="date-control">
+            <span>Issue date</span>
+            <input
+              type="date"
+              className="date-input"
+              value={asOfDate}
+              onChange={(event) => setAsOfDate(event.target.value)}
+            />
+          </label>
+          <button className="btn header-action" onClick={() => load(true)} disabled={loading}>
+            {loading ? "Refreshing..." : "Refresh"}
           </button>
-
-          <button
-            className="btn"
-            onClick={() => window.open(`${API_BASE}/export/accuracy_report.csv?start_date=${addDays(selectedDate, -6)}&end_date=${selectedDate}&refresh=false`, "_blank")}
-          >
-            Accuracy
+          <button className="btn btn-export header-action" onClick={downloadFilteredCsv} disabled={!filteredRows.length}>
+            Download filtered CSV
           </button>
-
-          <button
-            className={`icon-btn ${showSystemChecks ? "active" : ""}`}
-            onClick={() => setShowSystemChecks(v => !v)}
-            title="Show forecast system checks"
-            aria-label="Show forecast system checks"
-          >
-            i
+          <button className="btn btn-primary header-action" onClick={copyShareSummary} disabled={!filteredRows.length}>
+            {copied ? "Copied" : "Copy to share"}
           </button>
-
           <span className="live-badge">LIVE</span>
         </div>
       </header>
 
-      {/* MAIN CONTENT */}
       <main className="main">
+        {error && <div className="error-banner"><strong>{error}</strong></div>}
 
-        {/* Error banner */}
-        {error && (
-          <div className="error-banner fade-in">
-            <strong>{error}</strong>
-            <div style={{ marginTop: 4, fontSize: 12, opacity: 0.8 }}>
-              Ensure backend is running: <code>uvicorn main:app --reload --port 8000</code>
-            </div>
+        <section className="metrics-row compact-metrics">
+          <div className="metric-card">
+            <div className="metric-label">Filtered forecast</div>
+            <div className="metric-value">{fmt(filteredTotal)}</div>
+            <div className="metric-sub">packets across {filteredRows.length} rows</div>
           </div>
-        )}
+          <div className="metric-card">
+            <div className="metric-label">Visible demand</div>
+            <div className="metric-value green">{fmt(visibleDemand)}</div>
+            <div className="metric-sub">subscriptions + placed buy-once</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Model gap</div>
+            <div className="metric-value violet">{fmt(modelGap)}</div>
+            <div className="metric-sub">unknown ad-hoc demand</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Training freshness</div>
+            <div className="metric-value small-value">{freshness.max_training_date ?? "-"}</div>
+            <div className="metric-sub">{freshness.is_stale ? "Refresh required" : "Data check passed"}</div>
+          </div>
+        </section>
 
-        {systemStatus && showSystemChecks && (
-          <div className={`status-strip fade-in ${statusTone}`}>
-            <div className="status-summary">
-              <div className="status-summary-top">
-                <span className={`status-dot ${statusTone}`} />
-                <span className="status-label">Forecast Checks</span>
+        <section className="city-grid operational-city-grid">
+          {citySummary.map((summary) => (
+            <button
+              type="button"
+              key={summary.city}
+              className={`city-card city-filter-card ${cityFilter === summary.city ? "selected" : ""}`}
+              style={{ borderLeftColor: cityColor(summary.city) }}
+              onClick={() => setCityFilter(cityFilter === summary.city ? "All" : summary.city)}
+            >
+              <div>
+                <div className="city-name" style={{ color: cityColor(summary.city) }}>{cityName(summary.city)}</div>
+                <div className="city-detail">D-{summary.lead_time_days} · {prettyDate(summary.forecast_date)}</div>
               </div>
-              <strong>{readinessTitle}</strong>
-              <span>{readinessCopy}</span>
-            </div>
-            <div className={`status-pill ${isStatusStale ? "warn" : "good"}`}>
-              <span className="status-label">Training Data</span>
-              <strong>{isStatusStale ? "Refresh needed" : "Up to date"}</strong>
-              <span>through {statusFreshness?.max_training_date ?? "-"}</span>
-            </div>
-            <div className={`status-pill ${isRedashReady ? "good" : "warn"}`}>
-              <span className="status-label">Live Data</span>
-              <strong>{isRedashReady ? "Connected" : "Not connected"}</strong>
-              <span>{isRedashReady ? "subscriptions and actuals" : "check API key"}</span>
-            </div>
-            <div className={`status-pill ${hasAccuracyCheck ? "good" : "warn"}`}>
-              <span className="status-label">Accuracy</span>
-              <strong>{hasAccuracyCheck ? "Checked" : "Not checked"}</strong>
-              <span>{accuracyCache.start_date && accuracyCache.end_date ? `${accuracyCache.start_date} to ${accuracyCache.end_date}` : "run refresh"}</span>
-            </div>
-            <div className={`status-pill ${hasFestivalCalendar ? "good" : "warn"}`}>
-              <span className="status-label">Festivals</span>
-              <strong>{hasFestivalCalendar ? "Loaded" : "Missing"}</strong>
-              <span>{hasFestivalCalendar ? `${fmt(festivalCalendar.guardrails_loaded ?? 0)} evidence-based rules` : "calendar unavailable"}</span>
-            </div>
-            <div className="status-pill good">
-              <span className="status-label">Safety Rules</span>
-              <strong>{guardrails.rules?.length ?? 0} active</strong>
-              <span>HYD and BLR milk checks</span>
-            </div>
-          </div>
-        )}
-
-        {/* KEY METRICS */}
-        <div className="metrics-row">
-          <div className="metric-card fade-in stagger-1" style={{"--accent-color": "#818cf8"}}>
-            <div className="metric-label">{isActualMode ? "Actual Demand" : "Total Forecast"}</div>
-            <div className="metric-value" style={{ color: "#818cf8" }}>{fmt(totalQty)}</div>
-            <div className="metric-sub">
-              units for {meta.order_date ?? selectedDate}
-              {isActualMode && (
-                <span className="metric-sub-pill" style={{ background: "#e0f2fe", color: "#0369a1" }}>
-                  D2C actual
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="metric-card fade-in stagger-2">
-            <div className="metric-label">Subscription</div>
-            <div className="metric-value" style={{ color: "#34d399" }}>
-              {meta.subscription_pct != null ? `${meta.subscription_pct}%` : "-"}
-            </div>
-            <div className="metric-sub">
-              {meta.subscription_qty != null ? `${fmt(meta.subscription_qty)} units` : "-"}
-              <span className="metric-sub-pill" style={{ background: "#dcfce7", color: "#16a34a" }}>
-                subs
-              </span>
-            </div>
-          </div>
-
-          <div className="metric-card fade-in stagger-3">
-            <div className="metric-label">Placed Buy Once</div>
-            <div className="metric-value" style={{ color: "#fbbf24" }}>
-              {meta.known_buy_once_qty != null ? fmt(meta.known_buy_once_qty) : "-"}
-            </div>
-            <div className="metric-sub">
-              already placed
-              <span className="metric-sub-pill" style={{ background: "#fef3c7", color: "#d97706" }}>
-                orders
-              </span>
-            </div>
-          </div>
-
-          <div className="metric-card fade-in stagger-4">
-            <div className="metric-label">{isActualMode ? "Forecast Error" : "Model Gap to Final Demand"}</div>
-            <div className="metric-value" style={{ color: "#a78bfa" }}>
-              {isActualMode ? fmt(meta.forecast_error_qty) : (mlUnknownQty != null ? fmt(mlUnknownQty) : "-")}
-            </div>
-            <div className="metric-sub">
-              {isActualMode ? `${meta.forecast_abs_error_pct ?? 0}% abs error` : "above visible demand"}
-              <span className="metric-sub-pill" style={{ background: "#ede9fe", color: "#7c3aed" }}>
-                {isActualMode ? "actual check" : "LGBM"}
-              </span>
-            </div>
-          </div>
-
-          <div className="metric-card fade-in stagger-4">
-            <div className="metric-label">Coverage</div>
-            <div className="metric-value" style={{ color: "#f87171" }}>
-              {meta.total_cities ?? "-"} <span style={{ fontSize: 14, color: "#7a8099", fontWeight: 500 }}>cities</span>{" "}
-              · {meta.total_products ?? "-"} <span style={{ fontSize: 14, color: "#7a8099", fontWeight: 500 }}>SKUs</span>
-            </div>
-            <div className="metric-sub">active products across all cities</div>
-          </div>
-        </div>
-
-        {/* CITY BREAKDOWN */}
-        {citySummary.length > 0 && (
-          <div
-            className="city-grid fade-in"
-            style={{ gridTemplateColumns: `repeat(${citySummary.length}, 1fr)` }}
-          >
-            {citySummary.map(c => {
-              const pct = totalQty > 0 ? ((c.total_quantity / totalQty) * 100).toFixed(1) : 0;
-              return (
-                <div
-                  key={c.city}
-                  className="city-card"
-                  style={{ borderLeftColor: getColor(c.city) }}
-                >
-                  <div>
-                    <div className="city-name" style={{ color: getColor(c.city) }}>
-                      {getCityName(c.city)}
-                    </div>
-                    <div className="city-detail">
-                      {c.products_count} products
-                    </div>
-                  </div>
-                  <div>
-                    <div className="city-qty" style={{ color: getColor(c.city) }}>
-                      {fmt(c.total_quantity)}
-                    </div>
-                    <div className="city-pct">{pct}% of total</div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* No data state */}
-        {!loading && !data && !error && (
-          <div className="card empty-state fade-in">
-            <div className="empty-icon">No data</div>
-            No forecast data for <strong>{selectedDate}</strong>.
-            Try a different date or check that the backend is running.
-          </div>
-        )}
-
-        {data && (
-          <>
-            {/* TABS */}
-            <div className="tabs">
-              {[
-                ["overview", "Products"],
-                ["charts",   "Charts"],
-                ["trend",    "Trend"],
-              ].map(([k, l]) => (
-                <button
-                  key={k}
-                  className={`tab ${activeTab === k ? "active" : ""}`}
-                  onClick={() => setTab(k)}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-
-            {/* TAB: PRODUCTS TABLE */}
-            {activeTab === "overview" && (
-              <div className="card product-card fade-in">
-                <div className="product-toolbar">
-                  <div>
-                    <div className="card-title compact">Procurement Forecast</div>
-                    <div className="toolbar-subtitle">
-                      {cityFilter === "All" ? "All Cities" : getCityName(cityFilter)} · {fmt(filteredForecastQty)} packets
-                    </div>
-                  </div>
-
-                  <div className="toolbar-actions">
-                    <select
-                      className="select"
-                      value={cityFilter}
-                      onChange={e => setCity(e.target.value)}
-                    >
-                      <option value="All">All Cities</option>
-                      {cities.map(c => (
-                        <option key={c} value={c}>{getCityName(c)}</option>
-                      ))}
-                    </select>
-                    <select
-                      className="select"
-                      value={prodFilter}
-                      onChange={e => setProd(e.target.value)}
-                    >
-                      <option value="All">All SKUs</option>
-                      {filteredProductOptions.map(p => (
-                        <option key={p} value={p}>{p}</option>
-                      ))}
-                    </select>
-                    <button
-                      className={`btn ${showComponents ? "active" : ""}`}
-                      onClick={() => setShowComponents(v => !v)}
-                    >
-                      Components
-                    </button>
-                  </div>
-                </div>
-
-                <div className="table-wrap">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th>City</th>
-                        <th>Product</th>
-                        <th>Status</th>
-                        <th style={{ textAlign: "right" }}>Forecast Packets</th>
-                        {isActualMode && <th style={{ textAlign: "right" }}>Actual</th>}
-                        {showComponents && <th style={{ textAlign: "right" }}>Subscription</th>}
-                        {showComponents && <th style={{ textAlign: "right" }}>Placed Buy Once</th>}
-                        {showComponents && <th style={{ textAlign: "right" }}>Model Gap</th>}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredProducts.length === 0 ? (
-                        <tr>
-                          <td colSpan={(isActualMode ? 5 : 4) + (showComponents ? 3 : 0)} className="empty-state">
-                            No rows match your filters.
-                          </td>
-                        </tr>
-                      ) : (
-                        paginatedProducts.map((r, i) => (
-                          <tr key={`${selectedDate}-${r.city}-${r.product_name}-${i}`}>
-                            <td>
-                              <span className="city-dot" style={{ background: getColor(r.city) }} />
-                              {getCityName(r.city)}
-                            </td>
-                            <td className="product-name">{r.product_name}</td>
-                            <td>
-                              <span style={{
-                                fontSize: 10, fontWeight: 700, padding: "2px 8px",
-                                borderRadius: 4, ...statusStyle(r)
-                              }}>
-                                {statusLabel(r)}
-                              </span>
-                            </td>
-                            <td className="qty-value" style={{ textAlign: "right" }}>
-                              {fmt(r.forecast_quantity ?? r.total_quantity)}
-                            </td>
-                            {isActualMode && (
-                              <td className="qty-value" style={{ textAlign: "right" }}>
-                                {fmt(r.actual_quantity ?? r.total_quantity)}
-                              </td>
-                            )}
-                            {showComponents && (
-                              <td style={{ textAlign: "right", color: "#4a5068" }}>
-                                {fmt(r.subscription_qty)}
-                              </td>
-                            )}
-                            {showComponents && (
-                              <td style={{ textAlign: "right", color: "#4a5068" }}>
-                                {fmt(r.known_buy_once_qty)}
-                              </td>
-                            )}
-                            {showComponents && (
-                              <td style={{ textAlign: "right", color: "#4a5068" }}>
-                                {fmt(r.ml_unknown_adhoc_qty)}
-                              </td>
-                            )}
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                {totalPages > 1 && (
-                  <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '16px', padding: '16px', borderTop: '1px solid #e2e5ec', background: '#fafbfc', borderRadius: '0 0 12px 12px' }}>
-                    <button 
-                      className="btn" 
-                      disabled={currentPage === 1} 
-                      onClick={() => setCurrentPage(p => p - 1)}>
-                      Prev
-                    </button>
-                    <span style={{ display: 'flex', alignItems: 'center', fontSize: '13px', color: '#5c6379', fontWeight: 500 }}>
-                      Page {currentPage} of {totalPages}
-                    </span>
-                    <button 
-                      className="btn" 
-                      disabled={currentPage === totalPages} 
-                      onClick={() => setCurrentPage(p => p + 1)}>
-                      Next
-                    </button>
-                  </div>
-                )}
+              <div>
+                <div className="city-qty" style={{ color: cityColor(summary.city) }}>{fmt(summary.forecast_quantity)}</div>
+                <div className="city-pct">{summary.products_count} SKUs</div>
               </div>
-            )}
+            </button>
+          ))}
+        </section>
 
-            {/* TAB: CHARTS */}
-            {activeTab === "charts" && (
-              <>
-                <div className="two-col">
-                  <div className="card fade-in stagger-1">
-                    <div className="card-title">Units by City</div>
-                    <ResponsiveContainer width="100%" height={240}>
-                      <BarChart
-                        data={citySummary}
-                        margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e5ec" />
-                        <XAxis
-                          dataKey="city"
-                          tick={{ fontSize: 12, fill: "#8b92a5" }}
-                          tickFormatter={getCityName}
-                        />
-                        <YAxis tick={{ fontSize: 11, fill: "#5c6379" }} tickFormatter={fmt} />
-                        <Tooltip content={<CustomTip />} />
-                        <Bar dataKey="total_quantity" name="Units" radius={[6, 6, 0, 0]}>
-                          {citySummary.map((c, i) => (
-                            <Cell key={i} fill={getColor(c.city)} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
+        <section className="card forecast-workspace">
+          <div className="workspace-heading">
+            <h2>Procurement quantities</h2>
+            <span className="result-count">{filteredRows.length} of {rows.length} rows</span>
+          </div>
 
-                  <div className="card fade-in stagger-2">
-                    <div className="card-title">Orders by City</div>
-                    <ResponsiveContainer width="100%" height={240}>
-                      <BarChart
-                        data={citySummary}
-                        margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e5ec" />
-                        <XAxis
-                          dataKey="city"
-                          tick={{ fontSize: 12, fill: "#8b92a5" }}
-                          tickFormatter={getCityName}
-                        />
-                        <YAxis tick={{ fontSize: 11, fill: "#5c6379" }} tickFormatter={fmt} />
-                        <Tooltip content={<CustomTip />} />
-                        <Bar dataKey="total_orders" name="Orders" radius={[6, 6, 0, 0]}>
-                          {citySummary.map((c, i) => (
-                            <Cell key={i} fill={getColor(c.city)} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
+          <div className="filter-bar">
+            <input
+              className="search-input"
+              type="search"
+              placeholder="Search city or SKU"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+            <select className="select" value={cityFilter} onChange={(event) => setCityFilter(event.target.value)}>
+              <option value="All">All cities</option>
+              {cities.map((city) => <option key={city} value={city}>{cityName(city)}</option>)}
+            </select>
+            <select className="select product-select" value={productFilter} onChange={(event) => setProductFilter(event.target.value)}>
+              <option value="All">All SKUs</option>
+              {products.map((product) => <option key={product} value={product}>{product}</option>)}
+            </select>
+            <button className={`btn ${showComponents ? "active" : ""}`} onClick={() => setShowComponents(!showComponents)}>
+              {showComponents ? "Hide components" : "Show components"}
+            </button>
+            <button className="btn btn-quiet" onClick={resetFilters}>Reset</button>
+          </div>
 
-                <div className="card fade-in stagger-3">
-                  <div className="card-title">Top 10 Products by Forecast</div>
-                  <ResponsiveContainer width="100%" height={topProducts.length * 38 + 32}>
-                    <BarChart
-                      layout="vertical"
-                      data={topProducts}
-                      margin={{ top: 4, right: 32, left: 140, bottom: 4 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e5ec" />
-                      <XAxis type="number" tick={{ fontSize: 11, fill: "#5c6379" }} tickFormatter={fmt} />
-                      <YAxis
-                        type="category"
-                        dataKey="product_name"
-                        tick={{ fontSize: 12, fill: "#8b92a5" }}
-                        width={135}
-                      />
-                      <Tooltip content={<CustomTip />} />
-                      <Bar
-                        dataKey="total_quantity"
-                        name="Forecast Units"
-                        fill="#818cf8"
-                        radius={[0, 6, 6, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </>
-            )}
+          <div className="table-wrap">
+            <table className="table forecast-table">
+              <thead>
+                <tr>
+                  <th>Target date</th>
+                  <th>City</th>
+                  <th>SKU</th>
+                  <th>Lead</th>
+                  {showComponents && <th className="numeric">Subscription</th>}
+                  {showComponents && <th className="numeric">Placed buy-once</th>}
+                  {showComponents && <th className="numeric">Model gap</th>}
+                  <th className="numeric">Final forecast</th>
+                </tr>
+              </thead>
+              <tbody>
+                {!filteredRows.length ? (
+                  <tr><td colSpan={showComponents ? 8 : 5} className="empty-state">No rows match these filters.</td></tr>
+                ) : filteredRows.map((row) => (
+                  <tr key={`${row.forecast_date}-${row.city}-${row.product_name}`}>
+                    <td><strong>{prettyDate(row.forecast_date)}</strong></td>
+                    <td><span className="city-dot" style={{ background: cityColor(row.city) }} />{cityName(row.city)}</td>
+                    <td className="product-name">{row.product_name}</td>
+                    <td><span className="lead-badge">D-{row.lead_time_days}</span></td>
+                    {showComponents && <td className="numeric">{fmt(row.subscription_qty)}</td>}
+                    {showComponents && <td className="numeric">{fmt(row.known_buy_once_qty)}</td>}
+                    {showComponents && <td className="numeric">{fmt(row.ml_unknown_adhoc_qty)}</td>}
+                    <td className="qty-value numeric">{fmt(row.forecast_quantity)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-            {/* TAB: TREND */}
-            {activeTab === "trend" && (
-              <div className="card fade-in">
-                <div className="card-title">
-                  <span>Demand Trend</span>
-                  <select
-                    className="select"
-                    value={trendDays}
-                    onChange={e => setTrendDays(Number(e.target.value))}
-                  >
-                    {[7, 14, 30].map(d => (
-                      <option key={d} value={d}>Next {d} days</option>
-                    ))}
-                  </select>
-                </div>
-
-                {trend.length === 0 ? (
-                  <div className="empty-state">
-                    <div className="empty-icon">No data</div>
-                    No trend data yet. The backend will populate this after the first forecast run.
-                  </div>
-                ) : (
-                  <>
-                    <div className="trend-summary">
-                      <span>
-                        <strong>{trend.length}</strong> days
-                      </span>
-                      <span>
-                        <strong>{trend[0]?.date}</strong> to <strong>{trend[trend.length - 1]?.date}</strong>
-                      </span>
-                      <span>
-                        Total: <strong style={{ color: "#818cf8" }}>
-                          {fmt(trend.reduce((s, r) => s + (r.total_quantity ?? 0), 0))}
-                        </strong> units
-                      </span>
-                    </div>
-
-                    <ResponsiveContainer width="100%" height={280}>
-                      <ComposedChart
-                        data={trend}
-                        margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e5ec" />
-                        <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#5c6379" }} />
-                        <YAxis tick={{ fontSize: 11, fill: "#5c6379" }} tickFormatter={fmt} />
-                        <Tooltip content={<CustomTip />} />
-                        <Legend
-                          wrapperStyle={{ fontSize: 12, color: "#8b92a5" }}
-                        />
-                        <Bar
-                          dataKey="total_quantity"
-                          name="Forecast units"
-                          fill="#818cf8"
-                          radius={[4, 4, 0, 0]}
-                          fillOpacity={0.85}
-                        />
-                      </ComposedChart>
-                    </ResponsiveContainer>
-                  </>
-                )}
+        <section className="card festival-panel">
+          <div className="workspace-heading">
+            <h2>Upcoming festivals</h2>
+            <span className="result-count">{systemStatus?.festival_calendar?.regional_rows ?? 0} regional rows</span>
+          </div>
+          <div className="festival-list">
+            {upcomingEvents.slice(0, 8).map((event) => (
+              <div className="festival-item" key={`${event.date}-${event.festival}-${event.cities}`}>
+                <strong>{event.festival}</strong>
+                <span>{prettyDate(event.date)}</span>
+                <span>{event.cities === "ALL" ? "All cities" : event.cities}</span>
               </div>
-            )}
-          </>
-        )}
+            ))}
+          </div>
+        </section>
 
-        {/* Footer */}
         <footer className="footer">
-          Sid's Farm Forecasting - Built by Aarohi
+          Sid&apos;s Farm Forecasting
         </footer>
       </main>
     </div>
   );
 }
-
