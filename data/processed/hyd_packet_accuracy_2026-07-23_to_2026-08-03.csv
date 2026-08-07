@@ -1,0 +1,85 @@
+forecast_date,city,product_name,forecast_quantity,actual_quantity,difference,absolute_error_packets,packet_error_pass,actual_status
+2026-07-23,HYD,A2 Buffalo Milk,16986,16897,89,89,True,completed
+2026-07-23,HYD,A2 Desi Cow Milk,1616,1556,60,60,True,completed
+2026-07-23,HYD,Cow Milk,9619,9533,86,86,True,completed
+2026-07-23,HYD,Curd,1490,1432,58,58,True,completed
+2026-07-23,HYD,Double Toned A2 Buffalo Milk,5391,5306,85,85,True,completed
+2026-07-23,HYD,Skim Milk,2357,2280,77,77,True,completed
+2026-07-23,HYD,Toned Milk,10319,10380,-61,61,True,completed
+2026-07-24,HYD,A2 Buffalo Milk,16942,16867,75,75,True,completed
+2026-07-24,HYD,A2 Desi Cow Milk,1605,1590,15,15,True,completed
+2026-07-24,HYD,Cow Milk,9560,9604,-44,44,True,completed
+2026-07-24,HYD,Curd,1435,1413,22,22,True,completed
+2026-07-24,HYD,Double Toned A2 Buffalo Milk,5386,5375,11,11,True,completed
+2026-07-24,HYD,Skim Milk,2330,2343,-13,13,True,completed
+2026-07-24,HYD,Toned Milk,10337,10445,-108,108,False,completed
+2026-07-25,HYD,A2 Buffalo Milk,16881,17049,-168,168,False,completed
+2026-07-25,HYD,A2 Desi Cow Milk,1607,1711,-104,104,False,completed
+2026-07-25,HYD,Cow Milk,9647,9467,180,180,False,completed
+2026-07-25,HYD,Curd,1460,1500,-40,40,True,completed
+2026-07-25,HYD,Double Toned A2 Buffalo Milk,5378,5316,62,62,True,completed
+2026-07-25,HYD,Skim Milk,2325,2264,61,61,True,completed
+2026-07-25,HYD,Toned Milk,10350,10248,102,102,False,completed
+2026-07-26,HYD,A2 Buffalo Milk,16767,16263,504,504,False,completed
+2026-07-26,HYD,A2 Desi Cow Milk,1581,1533,48,48,True,completed
+2026-07-26,HYD,Cow Milk,9523,9141,382,382,False,completed
+2026-07-26,HYD,Curd,1440,1324,116,116,False,completed
+2026-07-26,HYD,Double Toned A2 Buffalo Milk,5339,5208,131,131,False,completed
+2026-07-26,HYD,Skim Milk,2318,2145,173,173,False,completed
+2026-07-26,HYD,Toned Milk,10293,9649,644,644,False,completed
+2026-07-27,HYD,A2 Buffalo Milk,16577,16615,-38,38,True,completed
+2026-07-27,HYD,A2 Desi Cow Milk,1566,1589,-23,23,True,completed
+2026-07-27,HYD,Cow Milk,9424,9408,16,16,True,completed
+2026-07-27,HYD,Curd,1407,1436,-29,29,True,completed
+2026-07-27,HYD,Double Toned A2 Buffalo Milk,5292,5270,22,22,True,completed
+2026-07-27,HYD,Skim Milk,2241,2199,42,42,True,completed
+2026-07-27,HYD,Toned Milk,9870,10002,-132,132,False,completed
+2026-07-28,HYD,A2 Buffalo Milk,16822,16676,146,146,False,completed
+2026-07-28,HYD,A2 Desi Cow Milk,1621,1594,27,27,True,completed
+2026-07-28,HYD,Cow Milk,9592,9330,262,262,False,completed
+2026-07-28,HYD,Curd,1542,1411,131,131,False,completed
+2026-07-28,HYD,Double Toned A2 Buffalo Milk,5354,5280,74,74,True,completed
+2026-07-28,HYD,Skim Milk,2363,2248,115,115,False,completed
+2026-07-28,HYD,Toned Milk,10285,9968,317,317,False,completed
+2026-07-29,HYD,A2 Buffalo Milk,16739,16904,-165,165,False,completed
+2026-07-29,HYD,A2 Desi Cow Milk,1599,1612,-13,13,True,completed
+2026-07-29,HYD,Cow Milk,9492,9492,0,0,True,completed
+2026-07-29,HYD,Curd,1524,1472,52,52,True,completed
+2026-07-29,HYD,Double Toned A2 Buffalo Milk,5308,5288,20,20,True,completed
+2026-07-29,HYD,Skim Milk,2266,2276,-10,10,True,completed
+2026-07-29,HYD,Toned Milk,10145,10042,103,103,False,completed
+2026-07-30,HYD,A2 Buffalo Milk,16861,16856,5,5,True,completed
+2026-07-30,HYD,A2 Desi Cow Milk,1600,1546,54,54,True,completed
+2026-07-30,HYD,Cow Milk,9427,9335,92,92,True,completed
+2026-07-30,HYD,Curd,1417,1471,-54,54,True,completed
+2026-07-30,HYD,Double Toned A2 Buffalo Milk,5337,5284,53,53,True,completed
+2026-07-30,HYD,Skim Milk,2273,2272,1,1,True,completed
+2026-07-30,HYD,Toned Milk,10141,10097,44,44,True,completed
+2026-07-31,HYD,A2 Buffalo Milk,16808,16789,19,19,True,completed
+2026-07-31,HYD,A2 Desi Cow Milk,1594,1605,-11,11,True,completed
+2026-07-31,HYD,Cow Milk,9467,9491,-24,24,True,completed
+2026-07-31,HYD,Curd,1373,1429,-56,56,True,completed
+2026-07-31,HYD,Double Toned A2 Buffalo Milk,5294,5271,23,23,True,completed
+2026-07-31,HYD,Skim Milk,2279,2247,32,32,True,completed
+2026-07-31,HYD,Toned Milk,10136,9914,222,222,False,completed
+2026-08-01,HYD,A2 Buffalo Milk,16590,16794,-204,204,False,completed
+2026-08-01,HYD,A2 Desi Cow Milk,1629,1571,58,58,True,completed
+2026-08-01,HYD,Cow Milk,9427,9366,61,61,True,completed
+2026-08-01,HYD,Curd,1441,1409,32,32,True,completed
+2026-08-01,HYD,Double Toned A2 Buffalo Milk,5234,5260,-26,26,True,completed
+2026-08-01,HYD,Skim Milk,2263,2282,-19,19,True,completed
+2026-08-01,HYD,Toned Milk,9904,9944,-40,40,True,completed
+2026-08-02,HYD,A2 Buffalo Milk,16114,16342,-228,228,False,completed
+2026-08-02,HYD,A2 Desi Cow Milk,1523,1598,-75,75,True,completed
+2026-08-02,HYD,Cow Milk,9079,9357,-278,278,False,completed
+2026-08-02,HYD,Curd,1356,1360,-4,4,True,completed
+2026-08-02,HYD,Double Toned A2 Buffalo Milk,5175,5086,89,89,True,completed
+2026-08-02,HYD,Skim Milk,2125,2182,-57,57,True,completed
+2026-08-02,HYD,Toned Milk,9594,9705,-111,111,False,completed
+2026-08-03,HYD,A2 Buffalo Milk,16464,16677,-213,213,False,provisional
+2026-08-03,HYD,A2 Desi Cow Milk,1630,1595,35,35,True,provisional
+2026-08-03,HYD,Cow Milk,9311,9355,-44,44,True,provisional
+2026-08-03,HYD,Curd,1435,1385,50,50,True,provisional
+2026-08-03,HYD,Double Toned A2 Buffalo Milk,5245,5239,6,6,True,provisional
+2026-08-03,HYD,Skim Milk,2242,2238,4,4,True,provisional
+2026-08-03,HYD,Toned Milk,9806,10079,-273,273,False,provisional

@@ -47,6 +47,26 @@ if os.path.exists(procurement_input_file):
     ]:
         if optional_col in df.columns:
             df[optional_col] = pd.to_numeric(df[optional_col], errors="coerce").fillna(0)
+    snapshot_cols = [
+        "snapshot_subscription_qty",
+        "snapshot_buy_once_qty",
+        "snapshot_visible_qty",
+        "snapshot_visible_orders",
+        "eventually_cancelled_snapshot_qty",
+        "final_gap_from_snapshot_qty",
+    ]
+    snapshot_is_exact = (
+        "snapshot_is_exact" in df.columns
+        and df["snapshot_is_exact"].astype(str).str.lower().isin({"true", "1"}).all()
+    )
+    if not snapshot_is_exact:
+        dropped = [column for column in snapshot_cols if column in df.columns]
+        if dropped:
+            print(
+                "Dropping approximate snapshot fields; component training requires "
+                f"forward-captured as-of rows. Dropped: {dropped}"
+            )
+            df = df.drop(columns=dropped)
 elif os.path.exists(residual_input_file):
     print(f"Loading residual training export {residual_input_file}...")
     df = pd.read_csv(residual_input_file)
