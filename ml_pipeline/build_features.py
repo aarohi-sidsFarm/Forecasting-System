@@ -29,26 +29,51 @@ df.loc[(df['city_cd'] != 'HYD') & (df['day_of_week'] == 3), 'is_midweek_peak'] =
 print("Loading festival calendar...")
 fest_df = pd.read_csv(os.path.join(MODEL_DIR, 'festival_list_2024_2026.csv'))
 fest_df['date'] = pd.to_datetime(fest_df['date'], format='mixed', dayfirst=True)
+fest_df['cities'] = fest_df['cities'].fillna('').astype(str).str.upper()
 
-festival_set = set(fest_df['date'])
-blr_fest_set = set(fest_df[fest_df['cities'].str.contains('BLR', na=False)]['date'])
-hyd_vga_fest_set = set(fest_df[fest_df['cities'].str.contains('HYD|VGA', na=False)]['date'])
-high_impact_dates = set(fest_df[fest_df['impact'] == 'HIGH']['date'])
-pre_fest_set = {d - pd.Timedelta(days=1) for d in high_impact_dates}
-post_fest_set = {d + pd.Timedelta(days=1) for d in high_impact_dates}
+def applies_to_city(cities, city):
+    tokens = {token.strip() for token in str(cities).split(',') if token.strip()}
+    return 'ALL' in tokens or city in tokens
+
+
+national_mask = fest_df['cities'].apply(
+    lambda value: 'ALL' in {token.strip() for token in str(value).split(',') if token.strip()}
+)
+national_fest_df = fest_df[national_mask].copy()
+festival_set = set(national_fest_df['date'])
+high_impact_dates = set(national_fest_df[national_fest_df['impact'] == 'HIGH']['date'])
+pre_fest_set = {date - pd.Timedelta(days=1) for date in high_impact_dates}
+post_fest_set = {date + pd.Timedelta(days=1) for date in high_impact_dates}
 festival_impact_dict = (
-    fest_df.groupby('date')['impact_direction'].max().to_dict()
+    national_fest_df.groupby('date')['impact_direction'].max().to_dict()
     if 'impact_direction' in fest_df.columns else {}
 )
 
 df['is_festival'] = df['target_date'].isin(festival_set).astype(int)
 df['is_city_festival'] = 0
-df.loc[(df['city_cd'] == 'BLR') & (df['target_date'].isin(blr_fest_set)), 'is_city_festival'] = 1
-df.loc[(df['city_cd'].isin(['HYD', 'VGA'])) & (df['target_date'].isin(hyd_vga_fest_set)), 'is_city_festival'] = 1
-
 df['is_pre_festival'] = df['target_date'].isin(pre_fest_set).astype(int)
 df['is_post_festival'] = df['target_date'].isin(post_fest_set).astype(int)
 df['festival_impact_direction'] = df['target_date'].map(festival_impact_dict).fillna(0).astype(int)
+
+# Regional events must affect only their configured cities. This also covers PNQ,
+# which the previous hard-coded BLR/HYD/VGA logic omitted entirely.
+for city in sorted(df['city_cd'].dropna().astype(str).str.upper().unique()):
+    city_rows = fest_df[fest_df['cities'].apply(lambda value: applies_to_city(value, city))]
+    regional_rows = city_rows[~city_rows.index.isin(national_fest_df.index)]
+    regional_dates = set(regional_rows['date'])
+    city_high_dates = set(city_rows[city_rows['impact'] == 'HIGH']['date'])
+    city_pre_dates = {date - pd.Timedelta(days=1) for date in city_high_dates}
+    city_post_dates = {date + pd.Timedelta(days=1) for date in city_high_dates}
+    city_mask = df['city_cd'].astype(str).str.upper().eq(city)
+    df.loc[city_mask & df['target_date'].isin(regional_dates), 'is_city_festival'] = 1
+    df.loc[city_mask & df['target_date'].isin(city_pre_dates), 'is_pre_festival'] = 1
+    df.loc[city_mask & df['target_date'].isin(city_post_dates), 'is_post_festival'] = 1
+    if 'impact_direction' in city_rows.columns:
+        impact_by_date = city_rows.groupby('date')['impact_direction'].max().to_dict()
+        scoped_impact = df.loc[city_mask, 'target_date'].map(impact_by_date)
+        df.loc[city_mask, 'festival_impact_direction'] = scoped_impact.fillna(
+            df.loc[city_mask, 'festival_impact_direction']
+        ).astype(int)
 
 # 3. DOW demand ratio
 # Use only prior observations so validation rows cannot see future weekday demand.
