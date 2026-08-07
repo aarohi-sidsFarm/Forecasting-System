@@ -6,6 +6,13 @@ export const getForecastDay = async (date, refresh = false, view = "issued") => 
   return res.json();
 };
 
+export const getOperationalForecast = async (asOfDate, refresh = false) => {
+  const params = new URLSearchParams({ as_of_date: asOfDate, refresh: String(refresh) });
+  const res = await fetch(`${API}/operational_forecast?${params}`);
+  if (!res.ok) throw new Error(`${res.status} - ${await res.text()}`);
+  return res.json();
+};
+
 export const getForecastTrend = async (days = 14) => {
   const res = await fetch(`${API}/forecast_trend?days=${days}`);
   if (!res.ok) throw new Error(`${res.status} - ${await res.text()}`);
