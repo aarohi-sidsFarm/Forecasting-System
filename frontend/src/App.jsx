@@ -40,17 +40,18 @@ const csvCell = (value) => {
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 };
 
-const fetchDashboard = async (asOfDate, refresh) => {
+const fetchDashboard = async (targetDate, refresh) => {
   const [forecast, status] = await Promise.all([
-    getOperationalForecast(asOfDate, refresh),
+    getOperationalForecast(targetDate, refresh),
     getStatus(),
   ]);
   return { forecast, status };
 };
 
 export default function App() {
-  const initialDate = new URLSearchParams(window.location.search).get("as_of") || todayInIndia();
-  const [asOfDate, setAsOfDate] = useState(initialDate);
+  const params = new URLSearchParams(window.location.search);
+  const initialDate = params.get("target") || params.get("as_of") || todayInIndia();
+  const [targetDate, setTargetDate] = useState(initialDate);
   const [data, setData] = useState(null);
   const [systemStatus, setSystemStatus] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -65,7 +66,7 @@ export default function App() {
     setLoading(true);
     setError("");
     try {
-      const { forecast, status } = await fetchDashboard(asOfDate, refresh);
+      const { forecast, status } = await fetchDashboard(targetDate, refresh);
       setData(forecast);
       setSystemStatus(status);
     } catch (err) {
@@ -73,14 +74,15 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, [asOfDate]);
+  }, [targetDate]);
 
   useEffect(() => {
     const url = new URL(window.location);
-    url.searchParams.set("as_of", asOfDate);
+    url.searchParams.delete("as_of");
+    url.searchParams.set("target", targetDate);
     window.history.replaceState({}, "", url);
     let active = true;
-    fetchDashboard(asOfDate, false)
+    fetchDashboard(targetDate, false)
       .then(({ forecast, status }) => {
         if (!active) return;
         setData(forecast);
@@ -94,7 +96,7 @@ export default function App() {
         if (active) setLoading(false);
       });
     return () => { active = false; };
-  }, [asOfDate]);
+  }, [targetDate]);
 
   const rows = useMemo(() => data?.rows ?? [], [data]);
   const cities = useMemo(() => [...new Set(rows.map((row) => row.city))].sort(), [rows]);
@@ -134,15 +136,15 @@ export default function App() {
     const href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
     const anchor = document.createElement("a");
     anchor.href = href;
-    anchor.download = `operational_forecast_${asOfDate}.csv`;
+    anchor.download = `forecast_for_${targetDate}.csv`;
     anchor.click();
     URL.revokeObjectURL(href);
   };
 
   const copyShareSummary = async () => {
     const lines = [
-      `Procurement forecast issued ${asOfDate}`,
-      `HYD/VGA: D-2 | BLR/PNQ: D-3`,
+      `Procurement forecast for ${targetDate}`,
+      `Issue dates calculated automatically (HYD/VGA D-2, BLR/PNQ D-3)`,
       `Filtered total: ${fmt(filteredTotal)} packets`,
       "",
       ...filteredRows.map((row) => (
@@ -166,12 +168,12 @@ export default function App() {
         </div>
         <div className="header-controls">
           <label className="date-control">
-            <span>Issue date</span>
+            <span>Target date</span>
             <input
               type="date"
               className="date-input"
-              value={asOfDate}
-              onChange={(event) => setAsOfDate(event.target.value)}
+              value={targetDate}
+              onChange={(event) => setTargetDate(event.target.value)}
             />
           </label>
           <button className="btn header-action" onClick={() => load(true)} disabled={loading}>
@@ -226,7 +228,7 @@ export default function App() {
             >
               <div>
                 <div className="city-name" style={{ color: cityColor(summary.city) }}>{cityName(summary.city)}</div>
-                <div className="city-detail">D-{summary.lead_time_days} · {prettyDate(summary.forecast_date)}</div>
+                <div className="city-detail">D-{summary.lead_time_days} · issue {prettyDate(summary.issue_date)}</div>
               </div>
               <div>
                 <div className="city-qty" style={{ color: cityColor(summary.city) }}>{fmt(summary.forecast_quantity)}</div>

@@ -6,8 +6,8 @@ const fetchJson = async (path) => {
   return response.json();
 };
 
-export const getOperationalForecast = async (asOfDate, refresh = false) => {
-  const params = new URLSearchParams({ as_of_date: asOfDate, refresh: String(refresh) });
+export const getOperationalForecast = async (targetDate, refresh = false) => {
+  const params = new URLSearchParams({ target_date: targetDate, refresh: String(refresh) });
   return fetchJson(`/operational_forecast?${params}`);
 };
 
