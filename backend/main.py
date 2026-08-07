@@ -66,6 +66,12 @@ SELECTED_ACTUALS_QUERY_ID = os.getenv("SELECTED_ACTUALS_QUERY_ID")
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN")
 
 KNOWN_CITIES = {"BLR", "HYD", "PNQ", "VGA"}
+FORECAST_LEAD_DAYS = {
+    "HYD": 2,
+    "VGA": 2,
+    "BLR": 3,
+    "PNQ": 3,
+}
 JUNK_KEYWORDS = [
     "sample", "test", "demo", "flyer", "newsletter", "letter",
     "pick my plastic", "bag", "potting mix", "vermicompost", "invalid",
@@ -85,7 +91,7 @@ PRIORITY_PRODUCTS = {
     "Tub Curd",
 }
 
-MILK_EXPORT_CITIES = ["HYD", "BLR"]
+MILK_EXPORT_CITIES = ["HYD", "VGA", "BLR", "PNQ"]
 MILK_EXPORT_PRODUCTS = [
     "A2 Buffalo Milk",
     "Double Toned A2 Buffalo Milk",
@@ -172,17 +178,64 @@ for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
 
 fest_df = pd.read_csv(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"))
 fest_df["date"] = pd.to_datetime(fest_df["date"], format="mixed", dayfirst=True)
-_festival_set = set(fest_df["date"])
-_festival_name_by_date = fest_df.groupby("date")["festival"].first().to_dict()
-_blr_fest_set = set(fest_df[fest_df["cities"].str.contains("BLR", na=False)]["date"])
-_hyd_vga_fest_set = set(fest_df[fest_df["cities"].str.contains("HYD|VGA", na=False)]["date"])
-_high_impact_dates = set(fest_df[fest_df["impact"] == "HIGH"]["date"])
+fest_df["cities"] = fest_df["cities"].fillna("").astype(str).str.upper()
+
+
+def _festival_applies_to_city(cities: str, city: str) -> bool:
+    tokens = {token.strip() for token in str(cities).upper().split(",") if token.strip()}
+    return "ALL" in tokens or city.upper() in tokens
+
+
+_national_fest_df = fest_df[fest_df["cities"].apply(lambda value: "ALL" in {
+    token.strip() for token in str(value).split(",") if token.strip()
+})].copy()
+_festival_set = set(_national_fest_df["date"])
+_festival_name_by_date = _national_fest_df.groupby("date")["festival"].first().to_dict()
+_festival_dates_by_city = {}
+_city_high_impact_dates = {}
+_festival_name_by_city_date = {}
+_festival_impact_by_city_date = {}
+for _city in KNOWN_CITIES:
+    _city_rows = fest_df[fest_df["cities"].apply(lambda value: _festival_applies_to_city(value, _city))]
+    _regional_rows = _city_rows[~_city_rows.index.isin(_national_fest_df.index)]
+    _festival_dates_by_city[_city] = set(_regional_rows["date"])
+    _city_high_impact_dates[_city] = set(_city_rows[_city_rows["impact"] == "HIGH"]["date"])
+    _festival_name_by_city_date.update({
+        (_city, date): name
+        for date, name in _city_rows.groupby("date")["festival"].first().to_dict().items()
+    })
+    if "impact_direction" in _city_rows.columns:
+        _festival_impact_by_city_date.update({
+            (_city, date): int(direction)
+            for date, direction in _city_rows.groupby("date")["impact_direction"].max().to_dict().items()
+        })
+
+_blr_fest_set = _festival_dates_by_city["BLR"]
+_hyd_vga_fest_set = _festival_dates_by_city["HYD"] | _festival_dates_by_city["VGA"]
+_pnq_fest_set = _festival_dates_by_city["PNQ"]
+_high_impact_dates = set(_national_fest_df[_national_fest_df["impact"] == "HIGH"]["date"])
 _pre_fest_set = {d - pd.Timedelta(days=1) for d in _high_impact_dates}
 _post_fest_set = {d + pd.Timedelta(days=1) for d in _high_impact_dates}
 _festival_impact_dict = (
-    fest_df.groupby("date")["impact_direction"].max().to_dict()
-    if "impact_direction" in fest_df.columns else {}
+    _national_fest_df.groupby("date")["impact_direction"].max().to_dict()
+    if "impact_direction" in _national_fest_df.columns else {}
 )
+
+
+def _festival_features(city: str, dt: pd.Timestamp) -> dict:
+    city = str(city).upper()
+    dt = pd.Timestamp(dt).normalize()
+    city_dates = _festival_dates_by_city.get(city, set())
+    high_dates = _city_high_impact_dates.get(city, _high_impact_dates)
+    return {
+        "is_festival": int(dt in _festival_set),
+        "is_city_festival": int(dt in city_dates),
+        "is_pre_festival": int(any(dt == date - pd.Timedelta(days=1) for date in high_dates)),
+        "is_post_festival": int(any(dt == date + pd.Timedelta(days=1) for date in high_dates)),
+        "festival_impact_direction": int(
+            _festival_impact_by_city_date.get((city, dt), _festival_impact_dict.get(dt, 0))
+        ),
+    }
 if os.path.exists(FESTIVAL_RECOMMENDATION_PATH):
     _festival_reco_df = pd.read_csv(FESTIVAL_RECOMMENDATION_PATH)
 else:
@@ -553,10 +606,20 @@ def _guardrail_status() -> dict:
 
 
 def _festival_status() -> dict:
+    regional_rows = fest_df[~fest_df.index.isin(_national_fest_df.index)]
+    today = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).normalize()
+    upcoming = fest_df[fest_df["date"] >= today].sort_values(["date", "festival"]).head(12).copy()
+    upcoming["date"] = upcoming["date"].dt.strftime("%Y-%m-%d")
     return {
         "enabled": True,
         "calendar_path": os.path.relpath(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"), PROJECT_DIR),
         "rows": int(len(fest_df)),
+        "national_rows": int(len(_national_fest_df)),
+        "regional_rows": int(len(regional_rows)),
+        "regional_dates_by_city": {
+            city: int(len(dates)) for city, dates in sorted(_festival_dates_by_city.items())
+        },
+        "upcoming_events": upcoming[["date", "festival", "cities", "impact"]].to_dict(orient="records"),
         "start_date": str(fest_df["date"].min().date()) if not fest_df.empty else None,
         "end_date": str(fest_df["date"].max().date()) if not fest_df.empty else None,
         "high_impact_dates": int(len(_high_impact_dates)),
@@ -897,7 +960,7 @@ def _apply_festival_guardrail(
     dt = pd.Timestamp(dt).normalize()
     candidate_dates = [dt - pd.Timedelta(days=offset) for offset in range(-3, 4)]
     for festival_date in candidate_dates:
-        festival_name = _festival_name_by_date.get(festival_date)
+        festival_name = _festival_name_by_city_date.get((city, festival_date))
         if not festival_name:
             continue
         offset = int((dt - festival_date).days)
@@ -940,6 +1003,7 @@ def _build_model_features(
         city_prod_enc = int(_le_city_prod.transform([city_prod])[0]) if _le_city_prod and city_prod in _le_city_prod.classes_ else -1
 
     lf = _get_lag_features(city, product, dt, future_preds, recent_actuals, 0.0)
+    festival_features = _festival_features(city, dt)
     snapshot_visible_qty = float(snapshot_subscription_qty) + float(known_buy_once_qty_at_cutoff)
     return {
         "city_enc": city_enc,
@@ -954,11 +1018,7 @@ def _build_model_features(
         "is_month_end": int(dt.day >= 28),
         "is_midweek_peak": int((city == "HYD" and dt.dayofweek == 2) or (city != "HYD" and dt.dayofweek == 3)),
         "dow_demand_ratio": _dow_ratio_lookup.get((city, product), {}).get(dt.dayofweek, 1.0),
-        "is_festival": int(dt in _festival_set),
-        "is_city_festival": int((city == "BLR" and dt in _blr_fest_set) or (city in ("HYD", "VGA") and dt in _hyd_vga_fest_set)),
-        "is_pre_festival": int(dt in _pre_fest_set),
-        "is_post_festival": int(dt in _post_fest_set),
-        "festival_impact_direction": int(_festival_impact_dict.get(dt, 0)),
+        **festival_features,
         "qty_per_order": round(lf["lag_1"] / (round(lf["lag_1"] / 1.15) + 1), 2) if lf["lag_1"] > 0 else 0.0,
         "known_buy_once_qty_at_cutoff": float(known_buy_once_qty_at_cutoff),
         "snapshot_subscription_qty": float(snapshot_subscription_qty),
@@ -1354,6 +1414,104 @@ def _forecast_rows_to_quantity_df(rows: list[dict]) -> pd.DataFrame:
     return pivot[columns]
 
 
+OPERATIONAL_FORECAST_COLUMNS = [
+    "issue_date",
+    "forecast_date",
+    "lead_time_days",
+    "city",
+    "product_name",
+    "subscription_qty",
+    "known_buy_once_qty",
+    "ml_unknown_adhoc_qty",
+    "forecast_quantity",
+]
+
+
+def _operational_target_dates(as_of_date: pd.Timestamp) -> dict[str, str]:
+    as_of_date = pd.Timestamp(as_of_date).normalize()
+    return {
+        city: str((as_of_date + pd.Timedelta(days=lead_days)).date())
+        for city, lead_days in FORECAST_LEAD_DAYS.items()
+    }
+
+
+def _forecast_rows_to_operational_df(rows: list[dict], as_of_date: pd.Timestamp) -> pd.DataFrame:
+    if not rows:
+        return pd.DataFrame(columns=OPERATIONAL_FORECAST_COLUMNS)
+    df = pd.DataFrame(rows)
+    pivot = df.pivot_table(
+        index=["forecast_date", "city_cd", "product_name"],
+        columns="method",
+        values="predicted_qty",
+        aggfunc="sum",
+        fill_value=0,
+    ).reset_index()
+    for col in ["subscription", "known_buy_once", "ml_unknown_adhoc"]:
+        if col not in pivot.columns:
+            pivot[col] = 0
+    pivot = pivot.rename(columns={
+        "city_cd": "city",
+        "subscription": "subscription_qty",
+        "known_buy_once": "known_buy_once_qty",
+        "ml_unknown_adhoc": "ml_unknown_adhoc_qty",
+    })
+    pivot["city"] = pivot["city"].astype(str).str.upper().str.strip()
+    pivot["product_name"] = pivot["product_name"].apply(_normalize_product_name)
+    pivot["forecast_date"] = pd.to_datetime(pivot["forecast_date"]).dt.strftime("%Y-%m-%d")
+    pivot["lead_time_days"] = pivot["city"].map(FORECAST_LEAD_DAYS)
+    pivot = pivot[pivot["lead_time_days"].notna()].copy()
+    pivot["lead_time_days"] = pivot["lead_time_days"].astype(int)
+    pivot["issue_date"] = str(pd.Timestamp(as_of_date).date())
+    target_dates = _operational_target_dates(as_of_date)
+    pivot = pivot[pivot.apply(
+        lambda row: row["forecast_date"] == target_dates.get(row["city"]), axis=1
+    )].copy()
+    pivot["forecast_quantity"] = (
+        pivot["subscription_qty"]
+        + pivot["known_buy_once_qty"]
+        + pivot["ml_unknown_adhoc_qty"]
+    )
+    for col in [
+        "subscription_qty",
+        "known_buy_once_qty",
+        "ml_unknown_adhoc_qty",
+        "forecast_quantity",
+    ]:
+        pivot[col] = pd.to_numeric(pivot[col], errors="coerce").fillna(0).round().astype(int)
+    return pivot[OPERATIONAL_FORECAST_COLUMNS].sort_values(
+        ["forecast_date", "city", "product_name"]
+    )
+
+
+async def _build_operational_forecast_df(
+    as_of_date: pd.Timestamp,
+    force_refresh: bool = False,
+) -> pd.DataFrame:
+    target_dates = sorted(set(_operational_target_dates(as_of_date).values()))
+    batches = await asyncio.gather(*(
+        _build_forecast_rows_by_date(pd.DatetimeIndex([pd.Timestamp(date)]), force_refresh)
+        for date in target_dates
+    ))
+    rows = [row for batch in batches for row in batch]
+    forecast_df = _forecast_rows_to_operational_df(rows, as_of_date)
+    if forecast_df.empty:
+        return forecast_df
+    return forecast_df[
+        forecast_df["city"].isin(MILK_EXPORT_CITIES)
+        & forecast_df["product_name"].isin(MILK_EXPORT_PRODUCTS)
+    ].copy()
+
+
+def _csv_filter_values(raw_values: str | None, allowed_values: set[str]) -> set[str]:
+    if not raw_values:
+        return set(allowed_values)
+    requested = {value.strip() for value in raw_values.split(",") if value.strip()}
+    unknown = requested.difference(allowed_values)
+    if unknown:
+        raise HTTPException(status_code=400, detail=f"Unsupported filters: {sorted(unknown)}")
+    return requested
+
+
 def _selected_actuals_to_quantity_df(actual_df: pd.DataFrame, date: str) -> pd.DataFrame:
     columns = ["forecast_date", "city", "product_name", "actual_quantity", "actual_orders"]
     if actual_df.empty:
@@ -1702,6 +1860,10 @@ def status():
         "accuracy_cache": _accuracy_cache_status(),
         "guardrails": _guardrail_status(),
         "festival_calendar": _festival_status(),
+        "forecast_horizon_policy": {
+            city: {"lead_time_days": days, "label": f"D-{days}"}
+            for city, days in FORECAST_LEAD_DAYS.items()
+        },
         "forecast_cache": {
             "cached": _forecast_cache["forecast_rows"] is not None,
             "generated_at": _forecast_cache["generated_at"],
@@ -1845,6 +2007,73 @@ async def get_forecast_day(
         issued_info["generated_at"] if issued_info else None
     )
     return response
+
+
+@app.get("/api/operational_forecast")
+async def get_operational_forecast(
+    as_of_date: str = Query(..., description="Forecast issue date in YYYY-MM-DD format"),
+    refresh: bool = Query(False),
+):
+    as_of_dt = _parse_forecast_date(as_of_date)
+    forecast_df = await _build_operational_forecast_df(as_of_dt, refresh)
+    city_summary = []
+    if not forecast_df.empty:
+        city_summary = (
+            forecast_df.groupby(["city", "forecast_date", "lead_time_days"], as_index=False)
+            .agg(
+                forecast_quantity=("forecast_quantity", "sum"),
+                products_count=("product_name", "nunique"),
+            )
+            .sort_values(["lead_time_days", "city"])
+            .to_dict(orient="records")
+        )
+    return {
+        "meta": {
+            "as_of_date": as_of_date,
+            "generated_at": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
+            "total_quantity": int(forecast_df["forecast_quantity"].sum()) if not forecast_df.empty else 0,
+            "total_cities": int(forecast_df["city"].nunique()) if not forecast_df.empty else 0,
+            "total_products": int(forecast_df["product_name"].nunique()) if not forecast_df.empty else 0,
+            "horizon_policy": {
+                city: {
+                    "lead_time_days": lead_days,
+                    "label": f"D-{lead_days}",
+                    "forecast_date": _operational_target_dates(as_of_dt)[city],
+                }
+                for city, lead_days in FORECAST_LEAD_DAYS.items()
+            },
+            "training_data_freshness": _training_data_freshness(),
+        },
+        "city_summary": city_summary,
+        "rows": forecast_df.to_dict(orient="records"),
+    }
+
+
+@app.get("/api/export/operational_forecast.csv")
+async def export_operational_forecast_csv(
+    as_of_date: str = Query(..., description="Forecast issue date in YYYY-MM-DD format"),
+    cities: str | None = Query(None, description="Optional comma-separated city codes"),
+    products: str | None = Query(None, description="Optional comma-separated product names"),
+    refresh: bool = Query(False),
+):
+    as_of_dt = _parse_forecast_date(as_of_date)
+    selected_cities = _csv_filter_values(cities, set(FORECAST_LEAD_DAYS))
+    selected_products = _csv_filter_values(products, set(MILK_EXPORT_PRODUCTS))
+    forecast_df = await _build_operational_forecast_df(as_of_dt, refresh)
+    if not forecast_df.empty:
+        forecast_df = forecast_df[
+            forecast_df["city"].isin(selected_cities)
+            & forecast_df["product_name"].isin(selected_products)
+        ].copy()
+    buffer = io.StringIO()
+    forecast_df.to_csv(buffer, index=False, columns=OPERATIONAL_FORECAST_COLUMNS)
+    buffer.seek(0)
+    filename = f"operational_forecast_issued_{as_of_date}.csv"
+    return StreamingResponse(
+        iter([buffer.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @app.get("/api/export/milk_city_forecast.csv")
