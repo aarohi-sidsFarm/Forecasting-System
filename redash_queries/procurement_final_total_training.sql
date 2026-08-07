@@ -4,14 +4,17 @@
    cannot be stored.
 
    Target:
-     final_total_qty = final confirmed/delivered packet demand
+     final_total_qty = gross comparison demand across all order statuses
+
+   This intentionally matches Redash Query 1968, which is the team's official
+   forecast-comparison source. Do not filter statuses here unless Query 1968 is
+   changed at the same time.
 
    Delivery date:
      d2c_order_newfact.delivery_date
 
-   Keep this query aligned with:
-     - selected_final_total_actuals.sql
-     - recent_final_total_actuals.sql
+   Keep this query aligned with Redash Query 1968 and with
+   recent_final_total_actuals.sql.
 */
 
 WITH params AS (
@@ -50,8 +53,7 @@ row_level AS (
     FROM d2c_order_newfact f
     JOIN params p
         ON f.delivery_date::date BETWEEN p.start_date AND p.end_date
-    WHERE f.status IN ('CONFIRMED', 'DELIVERED')
-      AND COALESCE(f.order_volume, 0) > 0
+    WHERE COALESCE(f.order_volume, 0) > 0
       AND UPPER(TRIM(f.customer_city)) IN ('HYD', 'PNQ', 'BLR', 'VGA')
       AND f.product_name NOT ILIKE '%sample%'
       AND f.product_name NOT ILIKE '%test%'
