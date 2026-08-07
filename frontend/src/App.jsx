@@ -178,7 +178,9 @@ export default function App() {
           <button className="btn btn-primary header-action" onClick={copyShareSummary} disabled={!filteredRows.length}>
             {copied ? "Copied" : "Copy to share"}
           </button>
-          <span className="live-badge">LIVE</span>
+          <span className="live-badge">
+            {data?.meta?.forecast_view === "issued" ? "ISSUED" : "LIVE"}
+          </span>
         </div>
       </header>
 
