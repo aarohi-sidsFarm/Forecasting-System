@@ -40,6 +40,14 @@ const csvCell = (value) => {
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 };
 
+const fetchDashboard = async (asOfDate, refresh) => {
+  const [forecast, status] = await Promise.all([
+    getOperationalForecast(asOfDate, refresh),
+    getStatus(),
+  ]);
+  return { forecast, status };
+};
+
 export default function App() {
   const initialDate = new URLSearchParams(window.location.search).get("as_of") || todayInIndia();
   const [asOfDate, setAsOfDate] = useState(initialDate);
@@ -57,10 +65,7 @@ export default function App() {
     setLoading(true);
     setError("");
     try {
-      const [forecast, status] = await Promise.all([
-        getOperationalForecast(asOfDate, refresh),
-        getStatus(),
-      ]);
+      const { forecast, status } = await fetchDashboard(asOfDate, refresh);
       setData(forecast);
       setSystemStatus(status);
     } catch (err) {
@@ -75,8 +80,8 @@ export default function App() {
     url.searchParams.set("as_of", asOfDate);
     window.history.replaceState({}, "", url);
     let active = true;
-    Promise.all([getOperationalForecast(asOfDate, false), getStatus()])
-      .then(([forecast, status]) => {
+    fetchDashboard(asOfDate, false)
+      .then(({ forecast, status }) => {
         if (!active) return;
         setData(forecast);
         setSystemStatus(status);

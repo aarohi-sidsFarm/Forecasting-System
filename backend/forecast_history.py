@@ -195,26 +195,6 @@ def upsert_actuals(actuals: pd.DataFrame, db_path: str | None = None) -> int:
     return len(frame)
 
 
-def accuracy_by_run(run_id: str, db_path: str | None = None) -> pd.DataFrame:
-    initialize(db_path)
-    with db_connection(db_path) as connection:
-        return pd.read_sql_query(
-            """
-            SELECT f.*, a.actual_qty,
-                   ABS(f.p50_qty-a.actual_qty) AS abs_error,
-                   f.p50_qty-a.actual_qty AS error_qty
-            FROM forecast_rows f
-            JOIN final_actual_rows a
-              ON a.forecast_date=f.forecast_date
-             AND a.city_cd=f.city_cd
-             AND a.product_name=f.product_name
-            WHERE f.run_id=?
-            """,
-            connection,
-            params=(run_id,),
-        )
-
-
 def issued_forecast_for_date(
     forecast_date: str, db_path: str | None = None
 ) -> tuple[pd.DataFrame, dict | None]:

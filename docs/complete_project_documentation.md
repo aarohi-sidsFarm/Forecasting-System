@@ -149,9 +149,8 @@ Location: `frontend/`
 - React `19.2.5`
 - React DOM `19.2.5`
 - Vite `8.0.10`
-- Recharts `3.8.1`
 - ESLint
-- Axios is installed but the current API wrapper uses native `fetch`.
+- Native `fetch` for API calls
 
 ### Folder Structure
 
@@ -166,24 +165,11 @@ frontend/
     App.css
     index.css
     api.js
-    components/
-      CityChart.jsx
-      Filters.jsx
-      ForecastTable.jsx
-      KPICards.jsx
-      MethodChart.jsx
-      ProductChart.jsx
-      TrendChart.jsx
-    assets/
-      hero.png
-      react.svg
-      vite.svg
   public/
-    favicon.svg
-    icons.svg
+    sids-farm-logo.png
 ```
 
-The currently active UI is mostly implemented in `frontend/src/App.jsx`. Several component files exist but are not actively imported by `App.jsx`. This is technical debt and should be cleaned up or the UI should be decomposed into those components.
+The active operational dashboard is implemented in `frontend/src/App.jsx`.
 
 ### `frontend/src/api.js`
 
@@ -195,10 +181,8 @@ const API = "http://localhost:8000/api";
 
 Functions:
 
-- `getForecastDay(date)` calls `GET /api/forecast_day?date=YYYY-MM-DD`
-- `getForecastTrend(days)` calls `GET /api/forecast_trend?days=N`
+- `getOperationalForecast(asOfDate, refresh)` calls `GET /api/operational_forecast`
 - `getStatus()` calls `GET /api/status`
-- `API_BASE` is exported for constructing the raw export link
 
 Important limitation: `API` is hardcoded to localhost. For production, this should use Vite environment variables.
 
@@ -209,19 +193,17 @@ Purpose: complete dashboard UI.
 Major state:
 
 - `data`: forecast response
-- `trend`: trend response
+- `systemStatus`: training and festival-calendar status
 - `loading`, `error`
-- `activeTab`: `overview`, `charts`, or `trend`
-- `cityFilter`, `prodFilter`
-- `selectedDate`
-- pagination state
+- `cityFilter`, `productFilter`, `search`
+- `showComponents`: controls component columns in the table
 
 User flow:
 
 1. User opens dashboard.
-2. Initial date defaults to tomorrow unless `?date=` is present.
-3. `loadData(selectedDate)` calls backend.
-4. Metrics, city summary, product breakdown, and charts update.
+2. Issue date defaults to the current India date unless `?as_of=` is present.
+3. The dashboard requests the operational D-2/D-3 forecast and system status.
+4. KPI totals, city cards, the procurement table, and festival events update.
 5. User can change quick-date buttons, date input, city filter, product filter, tab, or trend range.
 
 Main dashboard features:
@@ -1204,9 +1186,9 @@ Useful script:
 
 ```text
 User opens frontend
--> React App initializes selected date
--> getForecastDay(date)
--> FastAPI /api/forecast_day
+-> React App initializes issue date
+-> getOperationalForecast(asOfDate)
+-> FastAPI /api/operational_forecast
 -> Redash subscription query
 -> Redash known buy-once query
 -> Redash recent actuals query
@@ -1215,8 +1197,8 @@ User opens frontend
 -> General/HYD LightGBM predicts final total demand
 -> Backend applies calibration
 -> Backend subtracts live known demand to produce ML gap
--> Backend aggregates meta/city/product response
--> React renders KPIs, city cards, product table, charts
+-> Backend keeps each city's required D-2 or D-3 target
+-> React renders KPIs, city filters, procurement table, and festivals
 ```
 
 ### Journey: Developer Retrains Models
