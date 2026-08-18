@@ -127,6 +127,10 @@ export default function App() {
   const citySummary = data?.city_summary ?? [];
   const upcomingEvents = systemStatus?.festival_calendar?.upcoming_events ?? [];
   const freshness = data?.meta?.training_data_freshness ?? {};
+  const forecastView = data?.meta?.forecast_view ?? "live_preview";
+  const forecastViewLabel = forecastView === "issued"
+    ? "OFFICIAL"
+    : forecastView === "mixed" ? "MIXED" : "PREVIEW";
 
   const resetFilters = () => {
     setCityFilter("All");
@@ -139,7 +143,8 @@ export default function App() {
       "issue_date", "forecast_date", "lead_time_days", "city", "product_name",
       "subscription_qty", "confirmed_subscription_qty", "at_risk_subscription_qty",
       "known_buy_once_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
-      "actual_quantity", "difference", "deviation_pct",
+      "forecast_status", "forecast_run_id", "actual_quantity", "difference",
+      "deviation_pct",
     ];
     const csv = [
       columns.join(","),
@@ -157,6 +162,7 @@ export default function App() {
     const lines = [
       `Procurement forecast for ${targetDate}`,
       `Issue dates calculated automatically (HYD/VGA D-2, BLR/PNQ D-3)`,
+      `Forecast basis: ${forecastViewLabel}`,
       `Filtered total: ${fmt(filteredTotal)} packets`,
       ...(comparisonAvailable ? [
         `Query 1968 actual: ${fmt(filteredActual)} packets`,
@@ -204,7 +210,7 @@ export default function App() {
             {copied ? "Copied" : "Copy to share"}
           </button>
           <span className="live-badge">
-            {data?.meta?.forecast_view === "issued" ? "ISSUED" : "LIVE"}
+            {forecastViewLabel}
           </span>
         </div>
       </header>
@@ -250,7 +256,9 @@ export default function App() {
               <div className="comparison-value">{fmtPct(filteredWape)}</div>
             </div>
             <div className="comparison-note">
-              {comparedRows.length} matched rows - comparison uses the currently reconstructed forecast
+              {comparedRows.length} matched rows - comparison uses {forecastView === "issued"
+                ? "the frozen D-2/D-3 forecast"
+                : "a live preview for cities not yet frozen"}
             </div>
           </section>
         )}

@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import AsyncMock, patch
 
 import pandas as pd
 
@@ -157,6 +158,63 @@ class OperationalForecastPolicyTests(unittest.TestCase):
         issue_dates = dict(zip(frame["city"], frame["issue_date"]))
         self.assertEqual(issue_dates["HYD"], "2026-08-06")
         self.assertEqual(issue_dates["BLR"], "2026-08-05")
+
+    def test_issuance_recent_actuals_exclude_dates_after_issue_date(self):
+        subscription = pd.DataFrame([
+            {"city_cd": city, "product_name": "Cow Milk", "daily_qty": 10}
+            for city in ("HYD", "VGA")
+        ])
+        known = pd.DataFrame([
+            {"city_cd": "HYD", "product_name": "Cow Milk", "daily_qty": 2}
+        ])
+        recent = pd.DataFrame([
+            {
+                "target_date": date,
+                "city_cd": city,
+                "product_name": "Cow Milk",
+                "total_qty": 100,
+            }
+            for date in ("2026-08-17", "2026-08-18", "2026-08-19")
+            for city in ("HYD", "VGA")
+        ])
+        result = main._validate_issuance_inputs(
+            target_date="2026-08-20",
+            issue_date=pd.Timestamp("2026-08-18"),
+            relevant_cities={"HYD", "VGA"},
+            subscription_df=subscription,
+            known_df=known,
+            recent_df=recent,
+        )
+        self.assertEqual(
+            pd.Timestamp(result["target_date"].max()), pd.Timestamp("2026-08-17")
+        )
+
+
+class AtomicIssuanceCacheTests(unittest.IsolatedAsyncioTestCase):
+    async def test_failed_issuance_restores_the_last_good_redash_cache(self):
+        cache_at_test_start = dict(main._redash_cache)
+        original = {("subscription", 3085, "old"): {"df": "old", "fetched_at": 1}}
+        main._redash_cache.clear()
+        main._redash_cache.update(original)
+
+        async def fail_after_partial_update(*args, **kwargs):
+            main._redash_cache[("subscription", 3085, "new")] = {
+                "df": "partial", "fetched_at": 2,
+            }
+            raise RuntimeError("query failed")
+
+        try:
+            with patch.object(
+                main,
+                "_issue_daily_operational_forecast_once",
+                new=AsyncMock(side_effect=fail_after_partial_update),
+            ):
+                with self.assertRaises(RuntimeError):
+                    await main.issue_daily_operational_forecast("2026-08-18")
+            self.assertEqual(main._redash_cache, original)
+        finally:
+            main._redash_cache.clear()
+            main._redash_cache.update(cache_at_test_start)
 
 
 if __name__ == "__main__":

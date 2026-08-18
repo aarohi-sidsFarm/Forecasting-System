@@ -1,0 +1,15 @@
+city,product_name,forecast_quantity,actual_quantity,difference,abs_error,wape_pct,bias_pct
+BLR,Curd,961,911,50,50,5.49,5.49
+BLR,A2 Desi Cow Milk,2650,2546,104,104,4.08,4.08
+BLR,A2 Buffalo Milk,10129,9785,344,344,3.52,3.52
+BLR,Skim Milk,1961,1896,65,65,3.43,3.43
+HYD,Cow Milk,38428,39230,-802,802,2.04,-2.04
+HYD,A2 Buffalo Milk,67179,66557,622,622,0.93,0.93
+BLR,Double Toned A2 Buffalo Milk,2075,2057,18,18,0.88,0.88
+BLR,Toned Milk,2305,2325,-20,20,0.86,-0.86
+HYD,Curd,5911,5861,50,50,0.85,0.85
+HYD,Double Toned A2 Buffalo Milk,21145,21003,142,142,0.68,0.68
+BLR,Cow Milk,7199,7174,25,25,0.35,0.35
+HYD,A2 Desi Cow Milk,6423,6441,-18,18,0.28,-0.28
+HYD,Skim Milk,8949,8925,24,24,0.27,0.27
+HYD,Toned Milk,40561,40466,95,95,0.23,0.23
