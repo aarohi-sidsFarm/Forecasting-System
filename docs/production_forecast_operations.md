@@ -5,22 +5,37 @@ challengers until completed-day evidence passes the promotion gates.
 
 ## Daily sequence
 
-1. After final sales settle, reconcile yesterday's actuals:
+1. At the agreed daily issue time, create the immutable procurement forecast:
+
+   `scripts\issue_daily_forecasts.ps1`
+
+   The command automatically issues HYD/VGA for D-2 and BLR/PNQ for D-3.
+   It validates all three Redash inputs and writes the run atomically. Re-running
+   the command returns `already_issued`; it never overwrites the successful run.
+
+   To register the Windows scheduled task at 10:05 PM:
+
+   `powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\register_daily_forecast_task.ps1 -DailyAt 22:05`
+
+   Registration is intentionally a separate administrator action. Use
+   `-Replace` only when deliberately changing an existing task.
+
+2. After final sales settle, reconcile yesterday's actuals:
 
    `.venv\Scripts\python.exe scripts\reconcile_forecast_actuals.py --start YYYY-MM-DD --end YYYY-MM-DD`
 
-2. Before sharing the next seven-day report, create a paired shadow run:
+3. Before sharing a challenger report, create a paired shadow run:
 
    `.venv\Scripts\python.exe scripts\run_shadow_forecast.py`
 
-3. Export the official forecast from the API. Every CSV export is stored as an
-   immutable forecast run and returns its run ID in `X-Forecast-Run-ID`.
+4. Open the dashboard and select the target date. It loads frozen D-2/D-3 rows
+   whenever they exist. `LIVE PREVIEW` rows have not yet been issued.
 
-4. Review the gate:
+5. Review the gate:
 
    `.venv\Scripts\python.exe scripts\evaluate_shadow.py --minimum-days 14`
 
-5. Build forecast-versus-actual comparisons by key; never paste values into a
+6. Build forecast-versus-actual comparisons by key; never paste values into a
    separately ordered product list:
 
    `.venv\Scripts\python.exe scripts\build_accuracy_report.py --forecast-csv PATH --through YYYY-MM-DD --output PATH`
