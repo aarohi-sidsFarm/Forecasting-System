@@ -1,7 +1,7 @@
 /* Bulk festival demand history export.
 
    Purpose:
-     Export all major HYD/BLR festival demand windows in one Redash run.
+     Export major city-scoped festival demand windows in one Redash run.
 
    Output:
      festival_name, festival_date, delivery_date, days_from_festival,
@@ -12,59 +12,75 @@
      festival_date - 7 days through festival_date + 7 days.
 
    Notes:
-     - Dates below are curated for the forecasting project calendar.
-     - Confirm Telugu/regional observance dates with business before final
-       production use, especially where local observance differs by city.
+     - Dates below are aligned with the reviewed production festival calendar.
+     - Do not merge state-specific rows into one shared date. HYD/VGA and
+       BLR/PNQ can observe the same named festival on different dates.
 */
 
 WITH festival_dates AS (
     SELECT *
     FROM (VALUES
         /* 2024 */
-        ('Ratha Saptami',        '2024-02-16'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Maha Shivaratri',      '2024-03-08'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Holi',                 '2024-03-25'::date, 'HYD,BLR',     'HIGH', -1),
-        ('Ugadi',                '2024-04-09'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Ram Navami',           '2024-04-17'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Hanuman Jayanti',      '2024-04-23'::date, 'HYD,BLR',     'MED',   0),
-        ('Akshaya Tritiya',      '2024-05-10'::date, 'HYD,BLR',     'HIGH',  0),
-        ('Naga Panchami',        '2024-08-09'::date, 'HYD,BLR',     'MED',   0),
-        ('Varalakshmi Vratam',   '2024-08-16'::date, 'HYD,BLR',     'HIGH',  0),
-        ('Ganesh Chaturthi',     '2024-09-07'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Dussehra',             '2024-10-12'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Diwali',               '2024-10-31'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Diwali Laxmi Puja',    '2024-11-01'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Nagula Chavithi',      '2024-11-05'::date, 'HYD,BLR',     'HIGH',  1),
+        ('Ratha Saptami',        '2024-02-16'::date, 'HYD,VGA,BLR', 'HIGH',  1),
+        ('Maha Shivaratri',      '2024-03-08'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Holi',                 '2024-03-25'::date, 'HYD,VGA,BLR,PNQ', 'HIGH', -1),
+        ('Ugadi',                '2024-04-09'::date, 'HYD,VGA,BLR', 'HIGH',  1),
+        ('Gudi Padwa',           '2024-04-09'::date, 'PNQ',         'HIGH',  0),
+        ('Ram Navami',           '2024-04-17'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Hanuman Jayanti',      '2024-04-23'::date, 'HYD,VGA,BLR,PNQ', 'MED',   0),
+        ('Akshaya Tritiya',      '2024-05-10'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  0),
+        ('Golconda Bonalu',      '2024-07-07'::date, 'HYD',         'HIGH',  0),
+        ('Ujjaini Mahakali Bonalu','2024-07-21'::date, 'HYD',       'HIGH',  0),
+        ('Lal Darwaza Bonalu',   '2024-07-28'::date, 'HYD',         'HIGH',  0),
+        ('Naga Panchami',        '2024-08-09'::date, 'HYD,VGA,BLR,PNQ', 'MED',   0),
+        ('Varalakshmi Vratam',   '2024-08-16'::date, 'HYD,VGA,BLR', 'HIGH',  0),
+        ('Ganesh Chaturthi',     '2024-09-07'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Saddula Bathukamma',   '2024-10-11'::date, 'HYD',         'HIGH',  0),
+        ('Dussehra',             '2024-10-12'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Diwali',               '2024-10-31'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Diwali Laxmi Puja',    '2024-11-01'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Nagula Chavithi',      '2024-11-05'::date, 'HYD,VGA',     'HIGH',  1),
 
         /* 2025 */
-        ('Ratha Saptami',        '2025-02-04'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Maha Shivaratri',      '2025-02-26'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Holi',                 '2025-03-14'::date, 'HYD,BLR',     'HIGH', -1),
-        ('Ugadi',                '2025-03-30'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Ram Navami',           '2025-04-06'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Hanuman Jayanti',      '2025-04-12'::date, 'HYD,BLR',     'MED',   0),
-        ('Akshaya Tritiya',      '2025-04-30'::date, 'HYD,BLR',     'HIGH',  0),
-        ('Naga Panchami',        '2025-07-29'::date, 'HYD,BLR',     'MED',   0),
-        ('Varalakshmi Vratam',   '2025-08-08'::date, 'HYD,BLR',     'HIGH',  0),
-        ('Ganesh Chaturthi',     '2025-08-27'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Dussehra',             '2025-10-02'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Diwali',               '2025-10-20'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Nagula Chavithi',      '2025-10-25'::date, 'HYD,BLR',     'HIGH',  1),
+        ('Ratha Saptami',        '2025-02-04'::date, 'HYD,VGA,BLR', 'HIGH',  1),
+        ('Maha Shivaratri',      '2025-02-26'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Holi',                 '2025-03-14'::date, 'HYD,VGA,BLR,PNQ', 'HIGH', -1),
+        ('Ugadi',                '2025-03-30'::date, 'HYD,VGA,BLR', 'HIGH',  1),
+        ('Gudi Padwa',           '2025-03-30'::date, 'PNQ',         'HIGH',  0),
+        ('Ram Navami',           '2025-04-06'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Hanuman Jayanti',      '2025-04-12'::date, 'HYD,VGA,BLR,PNQ', 'MED',   0),
+        ('Akshaya Tritiya',      '2025-04-30'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  0),
+        ('Ujjaini Mahakali Bonalu','2025-07-13'::date, 'HYD',       'HIGH',  0),
+        ('Lal Darwaza Bonalu',   '2025-07-20'::date, 'HYD',         'HIGH',  0),
+        ('Naga Panchami',        '2025-07-29'::date, 'HYD,VGA,BLR,PNQ', 'MED',   0),
+        ('Varalakshmi Vratam',   '2025-08-08'::date, 'HYD,VGA,BLR', 'HIGH',  0),
+        ('Ganesh Chaturthi',     '2025-08-27'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Saddula Bathukamma',   '2025-09-30'::date, 'HYD',         'HIGH',  0),
+        ('Dussehra',             '2025-10-02'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Diwali',               '2025-10-20'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Nagula Chavithi',      '2025-10-25'::date, 'HYD,VGA',     'HIGH',  1),
 
         /* 2026 */
-        ('Ratha Saptami',        '2026-01-25'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Maha Shivaratri',      '2026-02-15'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Holi',                 '2026-03-03'::date, 'HYD,BLR',     'HIGH', -1),
-        ('Ugadi',                '2026-03-19'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Ram Navami',           '2026-03-26'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Hanuman Jayanti',      '2026-04-02'::date, 'HYD,BLR',     'MED',   0),
-        ('Akshaya Tritiya',      '2026-04-19'::date, 'HYD,BLR',     'HIGH',  0),
-        ('Naga Panchami',        '2026-07-29'::date, 'HYD,BLR',     'MED',   0),
-        ('Varalakshmi Vratam',   '2026-08-28'::date, 'HYD,BLR',     'HIGH',  0),
-        ('Ganesh Chaturthi',     '2026-09-14'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Dussehra',             '2026-10-20'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Diwali',               '2026-11-08'::date, 'HYD,BLR',     'HIGH',  1),
-        ('Nagula Chavithi',      '2026-11-13'::date, 'HYD,BLR',     'HIGH',  1)
+        ('Ratha Saptami',        '2026-01-25'::date, 'HYD,VGA,BLR', 'HIGH',  1),
+        ('Maha Shivaratri',      '2026-02-15'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Holi',                 '2026-03-03'::date, 'HYD,VGA,PNQ', 'HIGH', -1),
+        ('Holi',                 '2026-03-04'::date, 'BLR',         'HIGH', -1),
+        ('Ugadi',                '2026-03-19'::date, 'HYD,VGA,BLR', 'HIGH',  1),
+        ('Gudi Padwa',           '2026-03-19'::date, 'PNQ',         'HIGH',  0),
+        ('Ram Navami',           '2026-03-26'::date, 'BLR,PNQ',     'HIGH',  1),
+        ('Ram Navami',           '2026-03-27'::date, 'HYD,VGA',     'HIGH',  1),
+        ('Hanuman Jayanti',      '2026-04-02'::date, 'HYD,VGA,BLR,PNQ', 'MED',   0),
+        ('Akshaya Tritiya',      '2026-04-19'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  0),
+        ('Ujjaini Mahakali Bonalu','2026-08-02'::date, 'HYD',       'HIGH',  0),
+        ('Lal Darwaza Bonalu',   '2026-08-09'::date, 'HYD',         'HIGH',  0),
+        ('Naga Panchami',        '2026-08-17'::date, 'HYD,VGA,BLR,PNQ', 'MED',   0),
+        ('Varalakshmi Vratam',   '2026-08-21'::date, 'HYD,VGA',     'HIGH',  0),
+        ('Varamahalakshmi Vrata','2026-08-28'::date, 'BLR',         'HIGH',  0),
+        ('Ganesh Chaturthi',     '2026-09-14'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Saddula Bathukamma',   '2026-10-18'::date, 'HYD',         'HIGH',  0),
+        ('Dussehra',             '2026-10-20'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Diwali',               '2026-11-08'::date, 'HYD,VGA,BLR,PNQ', 'HIGH',  1),
+        ('Nagula Chavithi',      '2026-11-13'::date, 'HYD,VGA',     'HIGH',  1)
     ) AS v(festival_name, festival_date, festival_cities, impact, impact_direction)
 ),
 

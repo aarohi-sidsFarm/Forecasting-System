@@ -1,0 +1,8 @@
+"issue_date","target_date","city","product_name","champion_forecast","challenger_forecast","challenger_method","lag_1_source","recursive_days","is_festival","is_pre_festival"
+"2026-08-25","2026-08-28","BLR","A2 Buffalo Milk","2432","2582","blr_d3_direct:seasonal_7","recursive_prediction","3","1","0"
+"2026-08-25","2026-08-28","BLR","A2 Desi Cow Milk","710","733","blr_d3_direct:seasonal_7","recursive_prediction","3","1","0"
+"2026-08-25","2026-08-28","BLR","Cow Milk","1794","1798","blr_d3_direct:model","recursive_prediction","3","1","0"
+"2026-08-25","2026-08-28","BLR","Curd","243","231","blr_d3_direct:recent_mean","recursive_prediction","3","1","0"
+"2026-08-25","2026-08-28","BLR","Double Toned A2 Buffalo Milk","482","496","blr_d3_direct:model","recursive_prediction","3","1","0"
+"2026-08-25","2026-08-28","BLR","Skim Milk","454","484","blr_d3_direct:same_dow_median","recursive_prediction","3","1","0"
+"2026-08-25","2026-08-28","BLR","Toned Milk","582","574","blr_d3_direct:recent_mean","recursive_prediction","3","1","0"

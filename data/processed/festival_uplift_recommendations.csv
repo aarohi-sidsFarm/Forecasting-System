@@ -40,13 +40,13 @@ Hanuman Jayanti,BLR,Curd,3,5,3.26,199.5,Consider festival uplift guardrail
 Hanuman Jayanti,BLR,Double Toned A2 Buffalo Milk,3,-6,2.73,409.0,No manual adjustment recommended
 Hanuman Jayanti,BLR,Skim Milk,3,-3,4.26,376.0,Consider festival uplift guardrail
 Hanuman Jayanti,BLR,Toned Milk,1,-1,6.88,501.5,Use caution: only one observed year
-Holi,BLR,A2 Buffalo Milk,3,-6,4.76,2071.5,Consider festival uplift guardrail
-Holi,BLR,A2 Desi Cow Milk,3,-6,5.1,345.5,Consider festival uplift guardrail
-Holi,BLR,Cow Milk,3,-3,4.52,2135.5,Consider festival uplift guardrail
+Holi,BLR,A2 Buffalo Milk,3,-5,4.01,2071.5,Consider festival uplift guardrail
+Holi,BLR,A2 Desi Cow Milk,3,-6,8.31,345.5,Consider festival uplift guardrail
+Holi,BLR,Cow Milk,3,-6,3.66,2129.0,Consider festival uplift guardrail
 Holi,BLR,Curd,3,2,10.11,188.5,Consider festival uplift guardrail
-Holi,BLR,Double Toned A2 Buffalo Milk,3,4,5.19,478.5,Consider festival uplift guardrail
-Holi,BLR,Skim Milk,3,-5,4.0,417.0,Consider festival uplift guardrail
-Holi,BLR,Toned Milk,1,1,6.04,497.0,Use caution: only one observed year
+Holi,BLR,Double Toned A2 Buffalo Milk,3,5,6.58,478.5,Consider festival uplift guardrail
+Holi,BLR,Skim Milk,3,-7,4.5,417.0,Consider festival uplift guardrail
+Holi,BLR,Toned Milk,1,0,6.68,494.0,Use caution: only one observed year
 Maha Shivaratri,BLR,A2 Buffalo Milk,3,0,7.72,1943.0,Consider festival uplift guardrail
 Maha Shivaratri,BLR,A2 Desi Cow Milk,3,1,4.78,331.5,Consider festival uplift guardrail
 Maha Shivaratri,BLR,Cow Milk,3,0,9.4,2242.0,Consider festival uplift guardrail
@@ -56,18 +56,11 @@ Maha Shivaratri,BLR,Skim Milk,3,5,5.94,380.5,Consider festival uplift guardrail
 Maha Shivaratri,BLR,Toned Milk,1,1,10.65,483.5,Use caution: only one observed year
 Naga Panchami,BLR,A2 Buffalo Milk,3,-6,5.91,2190.5,Consider festival uplift guardrail
 Naga Panchami,BLR,A2 Desi Cow Milk,2,3,8.86,369.25,Consider festival uplift guardrail
-Naga Panchami,BLR,Cow Milk,3,-5,5.31,1800.0,Consider festival uplift guardrail
+Naga Panchami,BLR,Cow Milk,3,-5,5.31,1816.0,Consider festival uplift guardrail
 Naga Panchami,BLR,Curd,2,6,30.15,156.75,Consider festival uplift guardrail
-Naga Panchami,BLR,Double Toned A2 Buffalo Milk,3,0,6.41,482.0,Consider festival uplift guardrail
+Naga Panchami,BLR,Double Toned A2 Buffalo Milk,2,3,5.94,381.5,Consider festival uplift guardrail
 Naga Panchami,BLR,Skim Milk,2,3,3.38,352.5,Consider festival uplift guardrail
-Naga Panchami,BLR,Toned Milk,1,2,19.15,141.0,Use caution: only one observed year
-Nagula Chavithi,BLR,A2 Buffalo Milk,2,6,5.74,1715.75,Consider festival uplift guardrail
-Nagula Chavithi,BLR,A2 Desi Cow Milk,2,2,10.17,375.25,Consider festival uplift guardrail
-Nagula Chavithi,BLR,Cow Milk,2,7,7.64,1780.75,Consider festival uplift guardrail
-Nagula Chavithi,BLR,Curd,2,4,45.64,214.0,Consider festival uplift guardrail
-Nagula Chavithi,BLR,Double Toned A2 Buffalo Milk,2,3,8.2,398.0,Consider festival uplift guardrail
-Nagula Chavithi,BLR,Skim Milk,2,6,11.48,343.25,Consider festival uplift guardrail
-Nagula Chavithi,BLR,Toned Milk,1,7,10.89,202.0,Use caution: only one observed year
+Naga Panchami,BLR,Toned Milk,1,6,10.64,141.0,Use caution: only one observed year
 Ram Navami,BLR,A2 Buffalo Milk,3,-7,8.07,1834.0,Consider festival uplift guardrail
 Ram Navami,BLR,A2 Desi Cow Milk,3,5,8.25,333.5,Consider festival uplift guardrail
 Ram Navami,BLR,Cow Milk,3,-1,6.56,1891.0,Consider festival uplift guardrail
@@ -130,6 +123,12 @@ Ganesh Chaturthi,HYD,Curd,2,0,103.88,1188.25,Consider festival uplift guardrail
 Ganesh Chaturthi,HYD,Double Toned A2 Buffalo Milk,2,0,14.92,5527.25,Consider festival uplift guardrail
 Ganesh Chaturthi,HYD,Skim Milk,2,0,9.59,2381.5,Consider festival uplift guardrail
 Ganesh Chaturthi,HYD,Toned Milk,1,0,18.84,2491.5,Use caution: only one observed year
+Golconda Bonalu,HYD,A2 Buffalo Milk,1,5,2.94,14404.0,Use caution: only one observed year
+Golconda Bonalu,HYD,A2 Desi Cow Milk,1,1,4.19,1478.0,Use caution: only one observed year
+Golconda Bonalu,HYD,Cow Milk,1,-3,1.8,8286.5,Use caution: only one observed year
+Golconda Bonalu,HYD,Curd,1,-4,90.61,820.0,Use caution: only one observed year
+Golconda Bonalu,HYD,Double Toned A2 Buffalo Milk,1,4,3.18,5342.0,Use caution: only one observed year
+Golconda Bonalu,HYD,Skim Milk,1,5,4.05,2182.5,Use caution: only one observed year
 Hanuman Jayanti,HYD,A2 Buffalo Milk,3,-7,0.89,14985.0,No manual adjustment recommended
 Hanuman Jayanti,HYD,A2 Desi Cow Milk,3,-6,7.52,1445.5,Consider festival uplift guardrail
 Hanuman Jayanti,HYD,Cow Milk,3,-6,3.96,8707.0,Consider festival uplift guardrail
@@ -144,6 +143,13 @@ Holi,HYD,Curd,3,-6,5.07,1195.0,Consider festival uplift guardrail
 Holi,HYD,Double Toned A2 Buffalo Milk,3,-6,1.49,5245.0,No manual adjustment recommended
 Holi,HYD,Skim Milk,3,7,3.59,2249.0,Consider festival uplift guardrail
 Holi,HYD,Toned Milk,1,7,3.3,7966.0,Use caution: only one observed year
+Lal Darwaza Bonalu,HYD,A2 Buffalo Milk,3,-4,1.52,16170.0,No manual adjustment recommended
+Lal Darwaza Bonalu,HYD,A2 Desi Cow Milk,3,3,2.08,1535.0,No manual adjustment recommended
+Lal Darwaza Bonalu,HYD,Cow Milk,3,5,5.61,9368.5,Consider festival uplift guardrail
+Lal Darwaza Bonalu,HYD,Curd,3,-7,5.5,1477.0,Consider festival uplift guardrail
+Lal Darwaza Bonalu,HYD,Double Toned A2 Buffalo Milk,3,-4,1.1,5412.5,No manual adjustment recommended
+Lal Darwaza Bonalu,HYD,Skim Milk,3,-3,2.83,2240.5,No manual adjustment recommended
+Lal Darwaza Bonalu,HYD,Toned Milk,2,5,8.79,5903.0,Consider festival uplift guardrail
 Maha Shivaratri,HYD,A2 Buffalo Milk,3,0,4.04,14934.0,Consider festival uplift guardrail
 Maha Shivaratri,HYD,A2 Desi Cow Milk,3,0,32.95,1490.0,Consider festival uplift guardrail
 Maha Shivaratri,HYD,Cow Milk,3,0,19.64,8841.0,Consider festival uplift guardrail
@@ -151,12 +157,12 @@ Maha Shivaratri,HYD,Curd,3,-3,104.46,1207.5,Consider festival uplift guardrail
 Maha Shivaratri,HYD,Double Toned A2 Buffalo Milk,3,0,2.76,5325.0,No manual adjustment recommended
 Maha Shivaratri,HYD,Skim Milk,3,0,2.04,2177.0,No manual adjustment recommended
 Maha Shivaratri,HYD,Toned Milk,1,0,7.49,7708.0,Use caution: only one observed year
-Naga Panchami,HYD,A2 Buffalo Milk,3,0,1.79,15759.5,No manual adjustment recommended
+Naga Panchami,HYD,A2 Buffalo Milk,3,-3,2.36,15759.5,No manual adjustment recommended
 Naga Panchami,HYD,A2 Desi Cow Milk,2,7,9.07,1510.75,Consider festival uplift guardrail
 Naga Panchami,HYD,Cow Milk,3,0,5.95,9273.0,Consider festival uplift guardrail
 Naga Panchami,HYD,Curd,2,7,70.12,1112.0,Consider festival uplift guardrail
 Naga Panchami,HYD,Double Toned A2 Buffalo Milk,3,-3,1.57,5372.5,No manual adjustment recommended
-Naga Panchami,HYD,Skim Milk,3,0,4.12,2307.5,Consider festival uplift guardrail
+Naga Panchami,HYD,Skim Milk,3,0,4.12,2297.5,Consider festival uplift guardrail
 Naga Panchami,HYD,Toned Milk,1,3,8.54,1914.5,Use caution: only one observed year
 Nagula Chavithi,HYD,A2 Buffalo Milk,2,-5,5.43,15162.5,Consider festival uplift guardrail
 Nagula Chavithi,HYD,A2 Desi Cow Milk,2,0,9.64,1528.75,Consider festival uplift guardrail
@@ -165,13 +171,13 @@ Nagula Chavithi,HYD,Curd,2,-5,91.41,1224.5,Consider festival uplift guardrail
 Nagula Chavithi,HYD,Double Toned A2 Buffalo Milk,2,-5,5.14,5638.0,Consider festival uplift guardrail
 Nagula Chavithi,HYD,Skim Milk,2,4,2.84,2370.25,No manual adjustment recommended
 Nagula Chavithi,HYD,Toned Milk,1,5,18.87,3304.5,Use caution: only one observed year
-Ram Navami,HYD,A2 Buffalo Milk,3,-7,5.4,14781.0,Consider festival uplift guardrail
-Ram Navami,HYD,A2 Desi Cow Milk,3,-7,4.71,1455.5,Consider festival uplift guardrail
-Ram Navami,HYD,Cow Milk,3,-7,8.38,8683.5,Consider festival uplift guardrail
+Ram Navami,HYD,A2 Buffalo Milk,3,0,3.57,14781.0,Consider festival uplift guardrail
+Ram Navami,HYD,A2 Desi Cow Milk,3,0,9.99,1455.5,Consider festival uplift guardrail
+Ram Navami,HYD,Cow Milk,3,0,5.34,8683.5,Consider festival uplift guardrail
 Ram Navami,HYD,Curd,3,1,21.36,1217.0,Consider festival uplift guardrail
-Ram Navami,HYD,Double Toned A2 Buffalo Milk,3,-7,2.96,5073.5,No manual adjustment recommended
-Ram Navami,HYD,Skim Milk,3,0,4.13,2263.5,Consider festival uplift guardrail
-Ram Navami,HYD,Toned Milk,1,-7,5.08,8321.5,Use caution: only one observed year
+Ram Navami,HYD,Double Toned A2 Buffalo Milk,3,-2,3.09,5047.0,Consider festival uplift guardrail
+Ram Navami,HYD,Skim Milk,3,5,3.95,2276.0,Consider festival uplift guardrail
+Ram Navami,HYD,Toned Milk,1,0,6.86,8128.5,Use caution: only one observed year
 Ratha Saptami,HYD,A2 Buffalo Milk,3,3,1.04,14718.5,No manual adjustment recommended
 Ratha Saptami,HYD,A2 Desi Cow Milk,3,0,25.76,1488.5,Consider festival uplift guardrail
 Ratha Saptami,HYD,Cow Milk,3,0,17.23,8790.5,Consider festival uplift guardrail
@@ -179,6 +185,13 @@ Ratha Saptami,HYD,Curd,3,5,138.73,1043.0,Consider festival uplift guardrail
 Ratha Saptami,HYD,Double Toned A2 Buffalo Milk,3,0,1.4,5174.0,No manual adjustment recommended
 Ratha Saptami,HYD,Skim Milk,3,-3,2.31,2101.5,No manual adjustment recommended
 Ratha Saptami,HYD,Toned Milk,1,-2,1.86,6899.0,Use caution: only one observed year
+Saddula Bathukamma,HYD,A2 Buffalo Milk,2,7,10.12,13572.25,Consider festival uplift guardrail
+Saddula Bathukamma,HYD,A2 Desi Cow Milk,2,7,9.52,1373.75,Consider festival uplift guardrail
+Saddula Bathukamma,HYD,Cow Milk,2,7,7.38,8229.0,Consider festival uplift guardrail
+Saddula Bathukamma,HYD,Curd,2,-6,74.24,998.5,Consider festival uplift guardrail
+Saddula Bathukamma,HYD,Double Toned A2 Buffalo Milk,2,7,7.28,5114.25,Consider festival uplift guardrail
+Saddula Bathukamma,HYD,Skim Milk,2,7,7.54,2269.75,Consider festival uplift guardrail
+Saddula Bathukamma,HYD,Toned Milk,1,7,9.89,2658.0,Use caution: only one observed year
 Ugadi,HYD,A2 Buffalo Milk,3,0,4.61,14892.5,Consider festival uplift guardrail
 Ugadi,HYD,A2 Desi Cow Milk,3,0,9.74,1481.0,Consider festival uplift guardrail
 Ugadi,HYD,Cow Milk,3,0,6.77,8820.0,Consider festival uplift guardrail
@@ -186,10 +199,17 @@ Ugadi,HYD,Curd,3,0,15.15,1262.0,Consider festival uplift guardrail
 Ugadi,HYD,Double Toned A2 Buffalo Milk,3,0,4.62,5169.0,Consider festival uplift guardrail
 Ugadi,HYD,Skim Milk,3,7,2.27,2278.5,No manual adjustment recommended
 Ugadi,HYD,Toned Milk,1,0,6.08,8242.5,Use caution: only one observed year
+Ujjaini Mahakali Bonalu,HYD,A2 Buffalo Milk,3,3,2.37,15815.5,No manual adjustment recommended
+Ujjaini Mahakali Bonalu,HYD,A2 Desi Cow Milk,3,-4,2.44,1496.5,No manual adjustment recommended
+Ujjaini Mahakali Bonalu,HYD,Cow Milk,3,-2,1.93,9233.0,No manual adjustment recommended
+Ujjaini Mahakali Bonalu,HYD,Curd,3,2,4.84,1353.0,Consider festival uplift guardrail
+Ujjaini Mahakali Bonalu,HYD,Double Toned A2 Buffalo Milk,3,3,2.36,5387.0,No manual adjustment recommended
+Ujjaini Mahakali Bonalu,HYD,Skim Milk,3,4,3.55,2225.0,Consider festival uplift guardrail
+Ujjaini Mahakali Bonalu,HYD,Toned Milk,2,5,5.96,5799.5,Consider festival uplift guardrail
 Varalakshmi Vratam,HYD,A2 Buffalo Milk,2,0,8.12,14711.0,Consider festival uplift guardrail
 Varalakshmi Vratam,HYD,A2 Desi Cow Milk,2,0,32.46,1494.75,Consider festival uplift guardrail
 Varalakshmi Vratam,HYD,Cow Milk,2,0,22.98,8797.25,Consider festival uplift guardrail
-Varalakshmi Vratam,HYD,Curd,2,-3,47.87,1184.0,Consider festival uplift guardrail
+Varalakshmi Vratam,HYD,Curd,2,4,46.5,1184.0,Consider festival uplift guardrail
 Varalakshmi Vratam,HYD,Double Toned A2 Buffalo Milk,2,0,5.91,5439.0,Consider festival uplift guardrail
 Varalakshmi Vratam,HYD,Skim Milk,2,0,4.59,2304.25,Consider festival uplift guardrail
 Varalakshmi Vratam,HYD,Toned Milk,1,0,25.16,2052.5,Use caution: only one observed year

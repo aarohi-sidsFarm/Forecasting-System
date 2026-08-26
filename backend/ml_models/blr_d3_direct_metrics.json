@@ -1,0 +1,18 @@
+{
+  "lead_days": 3,
+  "completed_actual_gap_days": 4,
+  "cutoff": "2026-05-22",
+  "end": "2026-08-19",
+  "model_wape": 4.101882536467973,
+  "selected_wape": 3.391601382253961,
+  "bias_pct": -0.7808378706733676,
+  "selector": {
+    "A2 Buffalo Milk": "seasonal_7",
+    "A2 Desi Cow Milk": "seasonal_7",
+    "Cow Milk": "model",
+    "Curd": "recent_mean",
+    "Double Toned A2 Buffalo Milk": "model",
+    "Skim Milk": "same_dow_median",
+    "Toned Milk": "recent_mean"
+  }
+}

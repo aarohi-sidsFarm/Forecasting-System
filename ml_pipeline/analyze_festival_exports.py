@@ -8,8 +8,10 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW_DIR = os.path.join(PROJECT_DIR, "data", "raw", "festival_exports")
 PROCESSED_DIR = os.path.join(PROJECT_DIR, "data", "processed")
 REPORT_DIR = os.path.join(PROJECT_DIR, "reports")
+MODEL_DIR = os.path.join(PROJECT_DIR, "backend", "ml_models")
 
 INPUT_FILE = os.path.join(RAW_DIR, "festival_demand_windows_combined.csv")
+CALENDAR_FILE = os.path.join(MODEL_DIR, "festival_list_2024_2026.csv")
 SUMMARY_FILE = os.path.join(PROCESSED_DIR, "festival_demand_summary.csv")
 IMPACT_FILE = os.path.join(PROCESSED_DIR, "festival_impact_by_day.csv")
 RECOMMENDATION_FILE = os.path.join(PROCESSED_DIR, "festival_uplift_recommendations.csv")
@@ -23,7 +25,57 @@ PRIORITY_PRODUCTS = {
     "Toned Milk",
     "Curd",
 }
-PRIORITY_CITIES = {"HYD", "BLR"}
+PRIORITY_CITIES = {"HYD", "VGA", "BLR", "PNQ"}
+
+
+def normalize_festival(raw: object) -> str:
+    text = " ".join(str(raw).lower().replace("-", " ").replace("/", " ").split())
+    aliases = (
+        (("diwali", "laxmi"), "diwali_laxmi"),
+        (("dev", "diwali"), "dev_diwali"),
+        (("naraka", "chatur"), "diwali"),
+        (("narak", "chatur"), "diwali"),
+        (("ratha", "saptami"), "ratha_saptami"),
+        (("maha", "shivaratri"), "maha_shivaratri"),
+        (("mahashivratri",), "maha_shivaratri"),
+        (("maha", "shivratri"), "maha_shivaratri"),
+        (("holika", "dahan"), "holika_dahan"),
+        (("holi",), "holi"),
+        (("ugadi",), "ugadi"),
+        (("gudi", "padwa"), "gudi_padwa"),
+        (("ram", "navami"), "ram_navami"),
+        (("hanuman", "jayanti"), "hanuman_jayanti"),
+        (("akshaya", "tritiya"), "akshaya_tritiya"),
+        (("bonalu", "festival", "begins"), "golconda_bonalu"),
+        (("golconda", "bonalu"), "golconda_bonalu"),
+        (("naga", "panchami"), "naga_panchami"),
+        (("nag", "panchami"), "naga_panchami"),
+        (("varamahalakshmi",), "varalakshmi"),
+        (("varalakshmi",), "varalakshmi"),
+        (("ganesh", "chaturthi"), "ganesh_chaturthi"),
+        (("dussehra",), "dussehra"),
+        (("vijayadashami",), "dussehra"),
+        (("nagula", "chavithi"), "nagula_chavithi"),
+        (("diwali",), "diwali"),
+    )
+    for needles, canonical in aliases:
+        if all(needle in text for needle in needles):
+            return canonical
+    return "_".join(text.split())
+
+
+def _calendar_scope_keys() -> set[tuple[str, pd.Timestamp, str]]:
+    calendar = pd.read_csv(CALENDAR_FILE)
+    calendar["date"] = pd.to_datetime(calendar["date"], format="%d-%m-%Y", errors="raise")
+    keys: set[tuple[str, pd.Timestamp, str]] = set()
+    for _, row in calendar.iterrows():
+        cities = {token.strip().upper() for token in str(row["cities"]).split(",") if token.strip()}
+        if "ALL" in cities:
+            cities = PRIORITY_CITIES
+        festival_key = normalize_festival(row["festival"])
+        for city in cities:
+            keys.add((festival_key, pd.Timestamp(row["date"]), city))
+    return keys
 
 
 def normalize_product(raw: str) -> str:
@@ -75,11 +127,15 @@ def load_daily() -> pd.DataFrame:
         df = df.rename(columns={"expected_delivery_date": "delivery_date"})
     if "product_name" not in df.columns and "product" in df.columns:
         df = df.rename(columns={"product": "product_name"})
-    df["delivery_date"] = pd.to_datetime(df["delivery_date"], errors="coerce")
+    df["delivery_date"] = pd.to_datetime(
+        df["delivery_date"], errors="coerce", format="mixed", dayfirst=True
+    )
     if "delivery_year" not in df.columns:
         df["delivery_year"] = df["delivery_date"].dt.year
     if "festival_date" in df.columns:
-        df["festival_date"] = pd.to_datetime(df["festival_date"], errors="coerce")
+        df["festival_date"] = pd.to_datetime(
+            df["festival_date"], errors="coerce", format="mixed", dayfirst=True
+        )
     else:
         # Older exports did not include the true festival date. Use the midpoint
         # of each exported window as an approximation so historical files remain analyzable.
@@ -96,6 +152,25 @@ def load_daily() -> pd.DataFrame:
         df["days_from_festival"] = pd.to_numeric(df["days_from_festival"], errors="coerce").fillna(0).astype(int)
     else:
         df["days_from_festival"] = (df["delivery_date"] - df["festival_date"]).dt.days.astype(int)
+
+    calendar_keys = _calendar_scope_keys()
+    df["_festival_key"] = df["festival_name"].map(normalize_festival)
+    valid_scope = pd.Series(
+        [
+            (festival_key, festival_date, city) in calendar_keys
+            for festival_key, festival_date, city in zip(
+                df["_festival_key"], df["festival_date"], df["city_cd"]
+            )
+        ],
+        index=df.index,
+    )
+    excluded = int((~valid_scope).sum())
+    if excluded:
+        print(
+            f"Excluded {excluded} rows whose festival date/city does not match "
+            "the reviewed production calendar"
+        )
+    df = df[valid_scope].drop(columns=["_festival_key"])
 
     daily = (
         df.groupby(
@@ -291,8 +366,8 @@ def write_markdown_report(summary: pd.DataFrame, recommendations: pd.DataFrame) 
         markdown_table(summary.head(80)),
         "",
     ]
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        f.write("\r\n".join(lines))
     print(f"Saved {path}")
 
 
@@ -303,9 +378,9 @@ def main() -> None:
     by_day, recommendations = build_recommendations(enriched)
 
     os.makedirs(PROCESSED_DIR, exist_ok=True)
-    summary.to_csv(SUMMARY_FILE, index=False)
-    by_day.to_csv(IMPACT_FILE, index=False)
-    recommendations.to_csv(RECOMMENDATION_FILE, index=False)
+    summary.to_csv(SUMMARY_FILE, index=False, lineterminator="\r\n")
+    by_day.to_csv(IMPACT_FILE, index=False, lineterminator="\r\n")
+    recommendations.to_csv(RECOMMENDATION_FILE, index=False, lineterminator="\r\n")
     write_markdown_report(summary, recommendations)
 
     print(f"Saved {SUMMARY_FILE}")
