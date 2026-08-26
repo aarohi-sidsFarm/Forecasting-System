@@ -35,6 +35,34 @@ MODEL_DIR = os.path.join(APP_DIR, "ml_models")
 PROCESSED_DIR = os.path.join(PROJECT_DIR, "data", "processed")
 ACCURACY_CACHE_PATH = os.path.join(PROCESSED_DIR, "recent_forecast_backtest.csv")
 FESTIVAL_RECOMMENDATION_PATH = os.path.join(PROCESSED_DIR, "festival_uplift_recommendations.csv")
+DEFAULT_FESTIVAL_GUARDRAIL_CAP_PCT = 5.0
+
+# Conservative overrides derived from the 2024 and 2025 HYD Varalakshmi
+# windows. Historical festival-day uplift was materially above the default 5%
+# cap. These values deliberately shrink the observed uplift rather than apply
+# the full historical peaks. VGA uses a 5% proxy until it has local history.
+VARALAKSHMI_DAY0_UPLIFT_PCT = {
+    "HYD": {
+        "A2 Buffalo Milk": 8.0,
+        "A2 Desi Cow Milk": 10.0,
+        "Cow Milk": 10.0,
+        "Curd": 10.0,
+        "Double Toned A2 Buffalo Milk": 5.9,
+        "Skim Milk": 4.6,
+        "Toned Milk": 5.0,
+    },
+    "VGA": {
+        product: 5.0 for product in [
+            "A2 Buffalo Milk",
+            "A2 Desi Cow Milk",
+            "Cow Milk",
+            "Curd",
+            "Double Toned A2 Buffalo Milk",
+            "Skim Milk",
+            "Toned Milk",
+        ]
+    },
+}
 
 
 def _load_env_files() -> None:
@@ -63,7 +91,9 @@ app.add_middleware(
 REDASH_BASE_URL = os.getenv("REDASH_BASE_URL", "https://analytics.sidsfarm.in")
 QUERY_API_KEY = os.getenv("QUERY_API_KEY")
 REDASH_HTTP_TIMEOUT_SECONDS = float(os.getenv("REDASH_HTTP_TIMEOUT_SECONDS", "90"))
-REDASH_JOB_POLL_ATTEMPTS = int(os.getenv("REDASH_JOB_POLL_ATTEMPTS", "80"))
+# Query 3085 can take 10-12 minutes during peak load. Poll for up to 15 minutes
+# by default; each interval is three seconds. This remains environment-tunable.
+REDASH_JOB_POLL_ATTEMPTS = int(os.getenv("REDASH_JOB_POLL_ATTEMPTS", "300"))
 
 # Backward-compatible default: old QUERY_ID is treated as subscription query.
 SUBSCRIPTION_QUERY_ID = int(os.getenv("SUBSCRIPTION_QUERY_ID", os.getenv("QUERY_ID", "3085")))
@@ -149,6 +179,26 @@ _le_product_hyd = _saved_hyd["le_product"]
 _model_hyd_target_type = _saved_hyd.get("target_type", "total_adhoc")
 _model_hyd_calibration = _saved_hyd.get("calibration", {})
 _model_hyd_dow_calibration = _saved_hyd.get("dow_calibration", {})
+
+BLR_D3_DIRECT_PATH = os.path.join(MODEL_DIR, "blr_d3_direct.pkl")
+BLR_D3_DIRECT_ENABLED = os.getenv("BLR_D3_DIRECT_ENABLED", "false").lower() in {
+    "1", "true", "yes", "on",
+}
+if os.path.exists(BLR_D3_DIRECT_PATH):
+    with open(BLR_D3_DIRECT_PATH, "rb") as f:
+        _blr_d3_direct = pickle.load(f)
+else:
+    _blr_d3_direct = None
+
+HYD_D2_DIRECT_PATH = os.path.join(MODEL_DIR, "hyd_d2_direct.pkl")
+HYD_D2_DIRECT_ENABLED = os.getenv("HYD_D2_DIRECT_ENABLED", "false").lower() in {
+    "1", "true", "yes", "on",
+}
+if os.path.exists(HYD_D2_DIRECT_PATH):
+    with open(HYD_D2_DIRECT_PATH, "rb") as f:
+        _hyd_d2_direct = pickle.load(f)
+else:
+    _hyd_d2_direct = None
 
 FEATURE_ORDER = _model.feature_name()
 FEATURE_ORDER_HYD = _model_hyd.feature_name()
@@ -276,6 +326,8 @@ print("Startup complete.")
 
 _forecast_cache = {"forecast_rows": None, "generated_at": None}
 _redash_cache = {}
+_redash_failure_cache = {}
+_redash_health = {"last_success": None, "last_failure": None, "last_error": None}
 _missing_key_warned = False
 DIRECT_UNKNOWN_TARGET_TYPES = {"residual_unknown_adhoc", "remaining_unknown_adhoc"}
 PROCUREMENT_TOTAL_TARGET_TYPES = {"procurement_final_total"}
@@ -339,6 +391,20 @@ def _normalize_product_name(raw_name: str) -> str:
     return mapping.get(key, name)
 
 
+def _normalize_city_code(raw_city: str) -> str:
+    """Return the canonical operational city code used by every data source."""
+    city = str(raw_city).strip().upper()
+    aliases = {
+        "BANGALORE": "BLR",
+        "BENGALURU": "BLR",
+        "CAM": "BLR",  # Legacy comparison-sheet alias.
+        "HYDERABAD": "HYD",
+        "PUNE": "PNQ",
+        "VIJAYAWADA": "VGA",
+    }
+    return aliases.get(city, city)
+
+
 async def _fetch_redash_rows(
     query_id: int,
     target_date_str: str,
@@ -355,6 +421,15 @@ async def _fetch_redash_rows(
         if (time.time() - entry["fetched_at"]) / 60 < 60:
             if not strict or not entry["df"].empty:
                 return entry["df"]
+    if not force_refresh and key in _redash_failure_cache:
+        failure = _redash_failure_cache[key]
+        if time.time() - failure["failed_at"] < 60:
+            if strict:
+                raise RuntimeError(
+                    f"Redash {cache_key} is in a 60-second retry cooldown: "
+                    f"{failure['error']}"
+                )
+            return pd.DataFrame()
 
     if not QUERY_API_KEY:
         if not _missing_key_warned:
@@ -376,7 +451,10 @@ async def _fetch_redash_rows(
             resp = await client.post(
                 f"{REDASH_BASE_URL}/api/queries/{query_id}/results",
                 headers=headers,
-                json={"parameters": params, "max_age": 0},
+                # Normal dashboard reads may reuse Redash's parameter-aware
+                # one-hour result cache. Scheduled issuance/explicit refresh
+                # still sets max_age=0 and obtains a fresh immutable input.
+                json={"parameters": params, "max_age": 0 if force_refresh else 3600},
             )
             if resp.status_code not in (200, 201):
                 raise RuntimeError(f"Redash HTTP {resp.status_code}: {resp.text[:300]}")
@@ -386,32 +464,73 @@ async def _fetch_redash_rows(
                 rows = data["query_result"]["data"]["rows"]
             elif "job" in data:
                 job_id = data["job"]["id"]
+                last_job_status = data["job"].get("status")
+                last_job_error = data["job"].get("error")
                 for _ in range(REDASH_JOB_POLL_ATTEMPTS):
                     await asyncio.sleep(3)
                     job_resp = await client.get(f"{REDASH_BASE_URL}/api/jobs/{job_id}", headers=headers)
+                    job_resp.raise_for_status()
                     job_data = job_resp.json()
-                    if job_data["job"]["status"] == 3:
+                    job = job_data.get("job", {})
+                    last_job_status = job.get("status")
+                    last_job_error = job.get("error")
+                    if last_job_status == 3:
                         result_id = job_data["job"]["query_result_id"]
                         result_resp = await client.get(
                             f"{REDASH_BASE_URL}/api/query_results/{result_id}",
                             headers=headers,
                         )
+                        result_resp.raise_for_status()
                         rows = result_resp.json()["query_result"]["data"]["rows"]
                         break
-                    if job_data["job"]["status"] == 4:
-                        raise RuntimeError(f"Redash job failed: {job_data}")
+                    if last_job_status in (4, 5):
+                        terminal_state = "failed" if last_job_status == 4 else "cancelled"
+                        raise RuntimeError(
+                            f"Redash job {terminal_state}: job_id={job_id}, "
+                            f"error={last_job_error or 'none'}"
+                        )
             if rows is None:
-                raise RuntimeError("Redash job timed out or returned unexpected response")
+                detail = (
+                    f"job_id={job_id}, last_status={last_job_status}, "
+                    f"job_error={last_job_error or 'none'}, "
+                    f"waited_seconds={REDASH_JOB_POLL_ATTEMPTS * 3}"
+                    if "job_id" in locals()
+                    else f"response_keys={sorted(data.keys())}"
+                )
+                raise RuntimeError(
+                    f"Redash job timed out or returned unexpected response ({detail})"
+                )
             df = pd.DataFrame(rows)
             if strict and df.empty:
                 raise RuntimeError(
                     f"Redash {cache_key} returned no rows for {target_date_str}"
                 )
             _redash_cache[key] = {"df": df, "fetched_at": time.time()}
+            _redash_failure_cache.pop(key, None)
+            _redash_health.update({
+                "last_success": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
+                "last_failure": _redash_health.get("last_failure"),
+                "last_error": None,
+            })
             print(f"Redash {cache_key} ({target_date_str}) -> {len(df)} raw rows")
             return df
     except Exception as exc:
         print(f"Redash {cache_key} failed for {target_date_str}: {exc}")
+        _redash_failure_cache[key] = {
+            "failed_at": time.time(), "error": str(exc),
+        }
+        _redash_health.update({
+            "last_success": _redash_health.get("last_success"),
+            "last_failure": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
+            "last_error": f"{cache_key} {target_date_str}: {exc}",
+        })
+        stale = _redash_cache.get(key)
+        if stale is not None and not stale["df"].empty:
+            print(
+                f"Using last successful Redash {cache_key} snapshot for "
+                f"{target_date_str} after refresh failure"
+            )
+            return stale["df"]
         if strict:
             raise RuntimeError(
                 f"Required Redash input {cache_key} failed for {target_date_str}: {exc}"
@@ -435,7 +554,7 @@ def _process_quantity_rows(
         return _empty_component_df()
 
     df = df[df["city_cd"].notna() & df["product_name"].notna()]
-    df["city_cd"] = df["city_cd"].astype(str).str.upper().str.strip()
+    df["city_cd"] = df["city_cd"].apply(_normalize_city_code)
     df = df[df["city_cd"].isin(KNOWN_CITIES)]
 
     if "subscription_type" in df.columns and allowed_types is not None:
@@ -453,7 +572,9 @@ def _process_quantity_rows(
 
     order_col = next((c for c in order_candidates if c in df.columns), None)
     detail_qty_columns = [
-        column for column in ("confirmed_qty", "expected_qty", "at_risk_qty")
+        column for column in (
+            "confirmed_qty", "expected_qty", "at_risk_qty", "wallet_unknown_qty"
+        )
         if column in df.columns
     ]
     for column in set([qty_col, *detail_qty_columns]):
@@ -467,11 +588,21 @@ def _process_quantity_rows(
     if order_col:
         agg[order_col] = "sum"
     out = df.groupby(["city_cd", "product_name"]).agg(agg).reset_index()
-    out = out.rename(columns={qty_col: "daily_qty"})
+    if qty_col in detail_qty_columns:
+        # Preserve component diagnostics when one of them is also selected as
+        # the operational quantity (for example confirmed_qty for subscriptions).
+        out["daily_qty"] = out[qty_col]
+    else:
+        out = out.rename(columns={qty_col: "daily_qty"})
     if order_col:
         out = out.rename(columns={order_col: "daily_orders"})
     else:
         out["daily_orders"] = 0
+    if {"expected_qty", "confirmed_qty"}.issubset(out.columns):
+        out["unconfirmed_qty"] = (
+            pd.to_numeric(out["expected_qty"], errors="coerce").fillna(0)
+            - pd.to_numeric(out["confirmed_qty"], errors="coerce").fillna(0)
+        ).clip(lower=0)
     out["daily_qty"] = pd.to_numeric(out["daily_qty"], errors="coerce").fillna(0).round().astype(int)
     out["daily_orders"] = pd.to_numeric(out["daily_orders"], errors="coerce").fillna(0).round().astype(int)
     return out[out["daily_qty"] > 0]
@@ -486,7 +617,10 @@ async def fetch_subscription_df_async(
     )
     result = _process_quantity_rows(
         raw,
-        qty_candidates=["expected_qty", "confirmed_qty", "daily_qty"],
+        # Only wallet-backed demand is a guaranteed procurement floor. Keep
+        # expected_qty and at_risk_qty as diagnostics; the ML remainder covers
+        # demand that may materialize after the issue-time snapshot.
+        qty_candidates=["confirmed_qty", "expected_qty", "daily_qty"],
         order_candidates=["confirmed_orders", "daily_orders", "total_orders"],
         allowed_types={"daily", "alternate", "custom"},
     )
@@ -544,7 +678,7 @@ async def fetch_recent_actuals_df_async(
         return pd.DataFrame(columns=["target_date", "city_cd", "product_name", "total_qty"])
 
     df["target_date"] = pd.to_datetime(df["target_date"], errors="coerce").dt.normalize()
-    df["city_cd"] = df["city_cd"].astype(str).str.upper().str.strip()
+    df["city_cd"] = df["city_cd"].apply(_normalize_city_code)
     df["product_name"] = df["product_name"].apply(_normalize_product_name)
     df["total_qty"] = pd.to_numeric(df["total_qty"], errors="coerce").fillna(0)
     df = df[
@@ -700,7 +834,10 @@ def _festival_status() -> dict:
         "high_impact_dates": int(len(_high_impact_dates)),
         "guardrail_recommendation_path": os.path.relpath(FESTIVAL_RECOMMENDATION_PATH, PROJECT_DIR),
         "guardrails_loaded": int(len(_festival_guardrail_lookup)),
-        "guardrail_cap_pct": 5,
+        "guardrail_cap_pct": DEFAULT_FESTIVAL_GUARDRAIL_CAP_PCT,
+        "festival_specific_guardrails": {
+            "Varalakshmi Vratam": VARALAKSHMI_DAY0_UPLIFT_PCT,
+        },
         "features": [
             "is_festival",
             "is_city_festival",
@@ -737,6 +874,7 @@ def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals
         recent_actuals = {}
     key = (city, product)
     vals = []
+    sources = []
     data = _train_lookup.get(key)
     dates = data["dates"] if data else np.array([])
     qty = data["qty"] if data else np.array([])
@@ -746,18 +884,29 @@ def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals
         pred_key = (city, product, target_dt)
         if pred_key in recent_actuals:
             vals.append(float(recent_actuals[pred_key]))
+            sources.append("recent_actual")
             continue
         if pred_key in future_preds:
             vals.append(float(future_preds[pred_key]))
+            sources.append("recursive_prediction")
             continue
         if len(dates):
             idx = np.where(dates == np.datetime64(target_dt))[0]
-            vals.append(float(qty[idx[0]]) if len(idx) else fallback_val)
+            if len(idx):
+                vals.append(float(qty[idx[0]]))
+                sources.append("training_actual")
+            else:
+                vals.append(fallback_val)
+                sources.append("missing_fallback")
         else:
             vals.append(fallback_val)
+            sources.append("missing_fallback")
 
     def lag(n):
         return vals[-n] if n <= len(vals) else 0.0
+
+    def lag_source(n):
+        return sources[-n] if n <= len(sources) else "missing_fallback"
 
     r7 = float(np.mean(vals[-7:])) if len(vals) >= 7 else 0.0
     r28 = float(np.mean(vals)) if vals else 0.0
@@ -770,6 +919,18 @@ def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals
         "lag_7": lag(7),
         "lag_14": lag(14),
         "lag_28": lag(28),
+        # Diagnostic provenance only. These fields are excluded when the
+        # dataframe is reindexed to the saved model's numeric feature list.
+        "lag_1_source": lag_source(1),
+        "lag_7_source": lag_source(7),
+        "lag_14_source": lag_source(14),
+        "lag_28_source": lag_source(28),
+        "recursive_days_in_roll_7": int(sum(
+            source == "recursive_prediction" for source in sources[-7:]
+        )),
+        "recursive_days_in_roll_28": int(sum(
+            source == "recursive_prediction" for source in sources
+        )),
         "roll_7_mean": r7,
         "roll_7_std": float(np.std(vals[-7:])) if len(vals) >= 7 else 0.0,
         "roll_14_mean": float(np.mean(vals[-14:])) if len(vals) >= 14 else 0.0,
@@ -933,6 +1094,62 @@ def _apply_hyd_recent_run_rate_guard(
     return floor_qty, floor_qty, round(floor_qty / max(prediction, 1), 4)
 
 
+def _apply_hyd_cow_lag_spike_cap(
+    prediction: int,
+    city: str,
+    product: str,
+    target_type: str,
+    features: dict,
+) -> tuple[int, int, float]:
+    """Stop one abnormal prior weekday from becoming the next forecast.
+
+    The cap is deliberately narrow: HYD Cow Milk on a normal weekday, when
+    D-7 was a known event or is at least 4% above clean older same-weekday
+    anchors. The 0.5% allowance preserves gradual growth while shrinking
+    festival/buy-once spikes such as 17 August before forecasting 24 August.
+    """
+    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
+        return prediction, 0, 1.0
+    if city != "HYD" or product != "Cow Milk":
+        return prediction, 0, 1.0
+    if int(features.get("day_of_week", 0) or 0) >= 5:
+        return prediction, 0, 1.0
+    if int(features.get("is_festival", 0) or 0) or int(
+        features.get("is_city_festival", 0) or 0
+    ):
+        return prediction, 0, 1.0
+
+    lag_7 = float(features.get("lag_7", 0) or 0)
+    lag_14 = float(features.get("lag_14", 0) or 0)
+    lag_28 = float(features.get("lag_28", 0) or 0)
+    roll_28 = float(features.get("roll_28_mean", 0) or 0)
+    if min(lag_7, lag_14, lag_28, roll_28) <= 0:
+        return prediction, 0, 1.0
+
+    clean_older_lags = [
+        value
+        for value, is_event in (
+            (lag_14, int(features.get("lag_14_is_event", 0) or 0)),
+            (lag_28, int(features.get("lag_28_is_event", 0) or 0)),
+        )
+        if value > 0 and not is_event
+    ]
+    if not clean_older_lags:
+        return prediction, 0, 1.0
+    older_same_dow = float(np.mean(clean_older_lags))
+    lag_7_is_event = bool(int(features.get("lag_7_is_event", 0) or 0))
+    if not lag_7_is_event and lag_7 <= older_same_dow * 1.04:
+        return prediction, 0, 1.0
+
+    # The rolling mean itself contains D-7. Do not use it as the anchor when
+    # that observation came from a festival or regional event.
+    cap_anchor = older_same_dow if lag_7_is_event else max(older_same_dow, roll_28)
+    cap_qty = int(round(cap_anchor * 1.005))
+    if prediction <= cap_qty:
+        return prediction, cap_qty, 1.0
+    return cap_qty, cap_qty, round(cap_qty / max(prediction, 1), 4)
+
+
 def _apply_hyd_a2_saturday_floor(
     prediction: int,
     city: str,
@@ -1066,11 +1283,23 @@ def _apply_festival_guardrail(
         if not festival_name:
             continue
         offset = int((dt - festival_date).days)
-        uplift_pct = _festival_guardrail_lookup.get((festival_name, city, product, offset))
+        uplift_override = None
+        if festival_name == "Varalakshmi Vratam" and offset == 0:
+            uplift_override = VARALAKSHMI_DAY0_UPLIFT_PCT.get(city, {}).get(product)
+        uplift_pct = (
+            uplift_override
+            if uplift_override is not None
+            else _festival_guardrail_lookup.get((festival_name, city, product, offset))
+        )
         if uplift_pct is None:
             continue
 
-        capped_pct = float(np.clip(uplift_pct, -5.0, 5.0))
+        cap_pct = (
+            abs(float(uplift_override))
+            if uplift_override is not None
+            else DEFAULT_FESTIVAL_GUARDRAIL_CAP_PCT
+        )
+        capped_pct = float(np.clip(uplift_pct, -cap_pct, cap_pct))
         factor = 1.0 + (capped_pct / 100.0)
         adjusted = int(round(prediction * factor))
         if adjusted == prediction:
@@ -1106,6 +1335,9 @@ def _build_model_features(
 
     lf = _get_lag_features(city, product, dt, future_preds, recent_actuals, 0.0)
     festival_features = _festival_features(city, dt)
+    lag_7_event = _festival_features(city, dt - pd.Timedelta(days=7))
+    lag_14_event = _festival_features(city, dt - pd.Timedelta(days=14))
+    lag_28_event = _festival_features(city, dt - pd.Timedelta(days=28))
     snapshot_visible_qty = float(snapshot_subscription_qty) + float(known_buy_once_qty_at_cutoff)
     return {
         "city_enc": city_enc,
@@ -1127,8 +1359,135 @@ def _build_model_features(
         "snapshot_buy_once_qty": float(known_buy_once_qty_at_cutoff),
         "snapshot_visible_qty": snapshot_visible_qty,
         "snapshot_visible_orders": float(snapshot_visible_orders),
+        # Diagnostic-only provenance. Saved LightGBM artifacts ignore these
+        # extra keys; the post-model guard uses them to prevent a festival lag
+        # from being copied into a normal target day.
+        "lag_7_is_event": int(
+            lag_7_event["is_festival"] or lag_7_event["is_city_festival"]
+        ),
+        "lag_14_is_event": int(
+            lag_14_event["is_festival"] or lag_14_event["is_city_festival"]
+        ),
+        "lag_28_is_event": int(
+            lag_28_event["is_festival"] or lag_28_event["is_city_festival"]
+        ),
         **lf,
     }
+
+
+def _historical_actual_value(
+    city: str,
+    product: str,
+    date: pd.Timestamp,
+    recent_actuals: dict,
+) -> float:
+    normalized = pd.Timestamp(date).normalize()
+    recent_key = (city, product, normalized)
+    if recent_key in recent_actuals:
+        return float(recent_actuals[recent_key])
+    data = _train_lookup.get((city, product))
+    if not data:
+        return 0.0
+    indices = np.where(data["dates"] == np.datetime64(normalized))[0]
+    return float(data["qty"][indices[0]]) if len(indices) else 0.0
+
+
+def _predict_city_direct(
+    artifact: dict | None,
+    city: str,
+    product: str,
+    target_date: pd.Timestamp,
+    recent_actuals: dict,
+) -> tuple[int, str] | None:
+    """Predict directly using only data completed at the real issue cutoff."""
+    if artifact is None or product not in artifact["product_encoder"].classes_:
+        return None
+    target = pd.Timestamp(target_date).normalize()
+    completed_gap = int(artifact["completed_actual_gap_days"])
+    cutoff = target - pd.Timedelta(days=completed_gap)
+    history = np.array([
+        _historical_actual_value(city, product, cutoff - pd.Timedelta(days=offset), recent_actuals)
+        for offset in range(27, -1, -1)
+    ], dtype=float)
+    if len(history) < 28 or np.any(history <= 0):
+        return None
+    target_lags = {
+        days: _historical_actual_value(
+            city, product, target - pd.Timedelta(days=days), recent_actuals
+        )
+        for days in (7, 14, 21, 28)
+    }
+    if min(target_lags.values()) <= 0:
+        return None
+    lag_events = {
+        days: int(any(_festival_features(
+            city, target - pd.Timedelta(days=days)
+        )[key] for key in ("is_festival", "is_city_festival")))
+        for days in (7, 14, 21, 28)
+    }
+    target_event = _festival_features(city, target)
+    roll_7 = float(np.mean(history[-7:]))
+    roll_28 = float(np.mean(history))
+    clean_same_dow = [
+        target_lags[days] for days in (7, 14, 21, 28)
+        if not lag_events[days]
+    ] or list(target_lags.values())
+    row = {
+        "product_enc": int(artifact["product_encoder"].transform([product])[0]),
+        "day_of_week": target.dayofweek,
+        "day_of_month": target.day,
+        "month": target.month,
+        "week_of_year": int(target.isocalendar().week),
+        "is_weekend": int(target.dayofweek >= 5),
+        "last_actual": float(history[-1]),
+        **{f"target_lag_{days}": value for days, value in target_lags.items()},
+        "roll_7_mean": roll_7,
+        "roll_7_std": float(np.std(history[-7:])),
+        "roll_14_mean": float(np.mean(history[-14:])),
+        "roll_28_mean": roll_28,
+        "trend_ratio_7_28": roll_7 / (roll_28 + 1),
+        "demand_slope_28d": float(np.polyfit(np.arange(28), history, 1)[0]),
+        **target_event,
+        **{f"lag_{days}_is_event": lag_events[days] for days in (7, 14, 21, 28)},
+        "same_dow_median": float(np.median(clean_same_dow)),
+        "seasonal_7": target_lags[7],
+        "recent_mean": roll_7,
+    }
+    frame = pd.DataFrame([row])
+    model_prediction = float(
+        artifact["model"].predict(frame[artifact["features"]])[0]
+    )
+    method = artifact["selector"].get(product, "model")
+    # D-7 is one of the strongest predictors. On a normal target, never let a
+    # festival-contaminated D-7 value drive either the ML or seasonal selector;
+    # use the median of clean same-weekday observations instead.
+    if lag_events[7] and not any(
+        target_event[key] for key in ("is_festival", "is_city_festival")
+    ):
+        method = "same_dow_median"
+    prediction = model_prediction if method == "model" else float(row[method])
+    prefix = f"{city.lower()}_d{int(artifact['lead_days'])}_direct"
+    return int(max(0, round(prediction))), f"{prefix}:{method}"
+
+
+def _predict_blr_d3_direct(
+    product: str,
+    target_date: pd.Timestamp,
+    recent_actuals: dict,
+) -> tuple[int, str] | None:
+    return _predict_city_direct(
+        _blr_d3_direct, "BLR", product, target_date, recent_actuals
+    )
+
+
+def _predict_hyd_d2_direct(
+    product: str,
+    target_date: pd.Timestamp,
+    recent_actuals: dict,
+) -> tuple[int, str] | None:
+    return _predict_city_direct(
+        _hyd_d2_direct, "HYD", product, target_date, recent_actuals
+    )
 
 
 def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -> list[dict]:
@@ -1142,16 +1501,25 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
     sub_rows = []
     for _, row in sub_df.iterrows():
         for dt in forecast_dates:
-            expected_qty = int(row["daily_qty"])
-            confirmed_qty = int(round(row.get("confirmed_qty", expected_qty)))
-            at_risk_qty = int(round(row.get(
-                "at_risk_qty", max(0, expected_qty - confirmed_qty)
+            visible_subscription_qty = int(row["daily_qty"])
+            confirmed_qty = int(round(row.get(
+                "confirmed_qty", visible_subscription_qty
+            )))
+            scheduled_qty = int(round(row.get(
+                "expected_qty", visible_subscription_qty
+            )))
+            # Query 3085 separates low-wallet and unknown-wallet quantities.
+            # Both are unconfirmed at issue time and must be visible in the
+            # diagnostic column, while only the confirmed floor contributes to
+            # the procurement decomposition for the current total-target model.
+            unconfirmed_qty = int(round(row.get(
+                "unconfirmed_qty", max(0, scheduled_qty - confirmed_qty)
             )))
             sub_rows.append({
                 "forecast_date": str(dt.date()),
                 "city_cd": row["city_cd"],
                 "product_name": row["product_name"],
-                "predicted_qty": expected_qty,
+                "predicted_qty": visible_subscription_qty,
                 "predicted_orders": int(row.get("daily_orders", 0)),
                 "method": "subscription",
             })
@@ -1168,7 +1536,7 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     "forecast_date": str(dt.date()),
                     "city_cd": row["city_cd"],
                     "product_name": row["product_name"],
-                    "predicted_qty": at_risk_qty,
+                    "predicted_qty": unconfirmed_qty,
                     "predicted_orders": 0,
                     "method": "subscription_at_risk_info",
                 },
@@ -1297,6 +1665,13 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     pred_dt,
                     feats,
                 )
+                final_ad_hoc_pred, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
                 future_preds[(city, product, pred_dt)] = final_ad_hoc_pred
                 if pred_dt not in forecast_dates:
                     continue
@@ -1337,10 +1712,52 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     "festival_guardrail_name": festival_guardrail_name,
                     "festival_guardrail_factor": festival_guardrail_factor,
                     "festival_guardrail_offset": festival_guardrail_offset,
+                    "cow_spike_cap_qty": cow_spike_cap_qty,
+                    "cow_spike_cap_factor": cow_spike_cap_factor,
                 })
 
         process_batch(batch_global, meta_global, _model, FEATURE_ORDER, _model_target_type, False)
         process_batch(batch_hyd, meta_hyd, _model_hyd, FEATURE_ORDER_HYD, _model_hyd_target_type, True)
+
+    direct_routes = []
+    if BLR_D3_DIRECT_ENABLED and _blr_d3_direct is not None:
+        direct_routes.append(("BLR", _predict_blr_d3_direct))
+    if HYD_D2_DIRECT_ENABLED and _hyd_d2_direct is not None:
+        direct_routes.append(("HYD", _predict_hyd_d2_direct))
+    if direct_routes:
+        requested_dates = {pd.Timestamp(date).normalize() for date in forecast_dates}
+        replacements = []
+        replaced_keys = set()
+        for city, predictor in direct_routes:
+            for target_date in requested_dates:
+                for product in MILK_EXPORT_PRODUCTS:
+                    direct = predictor(product, target_date, recent_actuals)
+                    if direct is None:
+                        continue
+                    total_prediction, direct_method = direct
+                    key = (city, product, str(target_date.date()))
+                    visible = int(round(
+                        sub_dict.get((city, product), 0)
+                        + known_dict.get((city, product), 0)
+                    ))
+                    unknown = max(0, total_prediction - visible)
+                    replaced_keys.add(key)
+                    if unknown > 0:
+                        replacements.append({
+                            "forecast_date": str(target_date.date()),
+                            "city_cd": city,
+                            "product_name": product,
+                            "predicted_qty": unknown,
+                            "predicted_orders": max(1, round(unknown / 1.15)),
+                            "method": "ml_unknown_adhoc",
+                            "prediction_source": direct_method,
+                            "blr_forecast_method": direct_method,
+                        })
+        ml_rows = [
+            row for row in ml_rows
+            if (row["city_cd"], row["product_name"], row["forecast_date"])
+            not in replaced_keys
+        ] + replacements
 
     return sub_rows + known_rows + ml_rows
 
@@ -1467,6 +1884,13 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     current_dt,
                     feats,
                 )
+                model_total_adhoc, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    target_type,
+                    feats,
+                )
                 future_preds[(city, product, current_dt)] = model_total_adhoc
                 if current_dt != dt:
                     continue
@@ -1478,6 +1902,13 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     ml_unknown_qty = max(0, model_total_adhoc - live_known_total)
                 else:
                     ml_unknown_qty = max(0, model_total_adhoc - known_qty)
+                direct_challenger = (
+                    _predict_hyd_d2_direct(product, current_dt, recent_actuals)
+                    if city == "HYD"
+                    else _predict_blr_d3_direct(product, current_dt, recent_actuals)
+                    if city == "BLR"
+                    else None
+                )
                 diagnostics.append({
                     "city": city,
                     "product_name": product,
@@ -1485,6 +1916,12 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     "raw_lgbm_total_adhoc_pred": raw_model_pred,
                     "baseline_total_adhoc_pred": baseline_pred,
                     "model_total_adhoc_pred": model_total_adhoc,
+                    "direct_horizon_challenger_qty": (
+                        direct_challenger[0] if direct_challenger else None
+                    ),
+                    "direct_horizon_challenger_method": (
+                        direct_challenger[1] if direct_challenger else None
+                    ),
                     "calibration_factor": calibration_factor,
                     "dow_calibration_factor": dow_calibration_factor,
                     "momentum_floor_qty": momentum_floor_qty,
@@ -1502,6 +1939,8 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     "festival_guardrail_name": festival_guardrail_name,
                     "festival_guardrail_factor": festival_guardrail_factor,
                     "festival_guardrail_offset": festival_guardrail_offset,
+                    "cow_spike_cap_qty": cow_spike_cap_qty,
+                    "cow_spike_cap_factor": cow_spike_cap_factor,
                     "prediction_source": pred_source,
                     "blr_forecast_method": blr_forecast_method,
                     "subscription_qty": int(round(sub_dict.get((city, product), 0))),
@@ -1511,6 +1950,19 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     "lag_7": round(float(feats.get("lag_7", 0)), 2),
                     "lag_14": round(float(feats.get("lag_14", 0)), 2),
                     "lag_28": round(float(feats.get("lag_28", 0)), 2),
+                    "lag_1_source": feats.get("lag_1_source"),
+                    "lag_7_source": feats.get("lag_7_source"),
+                    "lag_14_source": feats.get("lag_14_source"),
+                    "lag_28_source": feats.get("lag_28_source"),
+                    "recursive_days_in_roll_7": int(feats.get("recursive_days_in_roll_7", 0)),
+                    "recursive_days_in_roll_28": int(feats.get("recursive_days_in_roll_28", 0)),
+                    "is_festival": int(feats.get("is_festival", 0)),
+                    "is_city_festival": int(feats.get("is_city_festival", 0)),
+                    "is_pre_festival": int(feats.get("is_pre_festival", 0)),
+                    "is_post_festival": int(feats.get("is_post_festival", 0)),
+                    "lag_7_is_event": int(feats.get("lag_7_is_event", 0)),
+                    "lag_14_is_event": int(feats.get("lag_14_is_event", 0)),
+                    "lag_28_is_event": int(feats.get("lag_28_is_event", 0)),
                     "roll_7_mean": round(float(feats.get("roll_7_mean", 0)), 2),
                     "roll_28_mean": round(float(feats.get("roll_28_mean", 0)), 2),
                 })
@@ -1578,6 +2030,7 @@ OPERATIONAL_FORECAST_COLUMNS = [
     "confirmed_subscription_qty",
     "at_risk_subscription_qty",
     "known_buy_once_qty",
+    "remaining_model_gap_qty",
     "ml_unknown_adhoc_qty",
     "forecast_quantity",
 ]
@@ -1637,7 +2090,7 @@ def _forecast_rows_to_operational_df(
         "known_buy_once": "known_buy_once_qty",
         "ml_unknown_adhoc": "ml_unknown_adhoc_qty",
     })
-    pivot["city"] = pivot["city"].astype(str).str.upper().str.strip()
+    pivot["city"] = pivot["city"].apply(_normalize_city_code)
     pivot["product_name"] = pivot["product_name"].apply(_normalize_product_name)
     pivot["forecast_date"] = pd.to_datetime(pivot["forecast_date"]).dt.strftime("%Y-%m-%d")
     pivot["lead_time_days"] = pivot["city"].map(FORECAST_LEAD_DAYS)
@@ -1659,11 +2112,15 @@ def _forecast_rows_to_operational_df(
         + pivot["known_buy_once_qty"]
         + pivot["ml_unknown_adhoc_qty"]
     )
+    # Explicit public name; retain ml_unknown_adhoc_qty for compatibility with
+    # already stored history and existing API consumers.
+    pivot["remaining_model_gap_qty"] = pivot["ml_unknown_adhoc_qty"]
     for col in [
         "subscription_qty",
         "confirmed_subscription_qty",
         "at_risk_subscription_qty",
         "known_buy_once_qty",
+        "remaining_model_gap_qty",
         "ml_unknown_adhoc_qty",
         "forecast_quantity",
     ]:
@@ -1954,6 +2411,8 @@ def _issued_rows_to_operational_df(
         "visible_subscription_qty": "subscription_qty",
         "visible_buy_once_qty": "known_buy_once_qty",
     })
+    frame["city"] = frame["city"].apply(_normalize_city_code)
+    frame["product_name"] = frame["product_name"].apply(_normalize_product_name)
     issue_dates = _target_issue_dates(target_date)
     frame["issue_date"] = frame.apply(
         lambda row: row["issue_date"]
@@ -1980,10 +2439,11 @@ def _issued_rows_to_operational_df(
         - pd.to_numeric(frame["subscription_qty"], errors="coerce").fillna(0)
         - pd.to_numeric(frame["known_buy_once_qty"], errors="coerce").fillna(0)
     ).clip(lower=0)
+    frame["remaining_model_gap_qty"] = frame["ml_unknown_adhoc_qty"]
     for column in [
         "subscription_qty", "confirmed_subscription_qty",
         "at_risk_subscription_qty", "known_buy_once_qty",
-        "ml_unknown_adhoc_qty", "forecast_quantity",
+        "remaining_model_gap_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
     ]:
         frame[column] = pd.to_numeric(
             frame[column], errors="coerce"
@@ -2013,7 +2473,7 @@ def _attach_actual_comparison(
             "city_cd": "city",
             "actual_qty": "actual_quantity",
         }).copy()
-        actual["city"] = actual["city"].astype(str).str.upper().str.strip()
+        actual["city"] = actual["city"].apply(_normalize_city_code)
         actual["product_name"] = actual["product_name"].apply(_normalize_product_name)
         actual["actual_quantity"] = pd.to_numeric(
             actual["actual_quantity"], errors="coerce"
@@ -2040,12 +2500,53 @@ def _attach_actual_comparison(
         100 * result["difference"] / result["actual_quantity"],
         np.nan,
     )
+    result["absolute_error_pct"] = np.where(
+        result["actual_available"] & result["actual_quantity"].gt(0),
+        100 * result["difference"].abs() / result["actual_quantity"],
+        np.nan,
+    )
     for column in ("actual_quantity", "difference"):
         result[column] = pd.to_numeric(result[column], errors="coerce").round()
     result["deviation_pct"] = pd.to_numeric(
         result["deviation_pct"], errors="coerce"
     ).round(2)
+    result["absolute_error_pct"] = pd.to_numeric(
+        result["absolute_error_pct"], errors="coerce"
+    ).round(2)
     return result
+
+
+def _is_complete_official_forecast(forecast_df: pd.DataFrame) -> bool:
+    """Only immutable D-2/D-3 rows are eligible for accuracy comparison."""
+    required = {
+        "city", "product_name", "forecast_status", "forecast_run_id",
+        "issue_date", "forecast_date", "lead_time_days",
+    }
+    if forecast_df.empty or not required.issubset(forecast_df.columns):
+        return False
+    if set(forecast_df["city"]) != set(FORECAST_LEAD_DAYS):
+        return False
+    if not forecast_df["forecast_status"].eq("official_issued").all():
+        return False
+    if forecast_df[["forecast_run_id", "issue_date", "lead_time_days"]].isna().any().any():
+        return False
+    if forecast_df.duplicated(["city", "product_name"]).any():
+        return False
+    expected_products = set(MILK_EXPORT_PRODUCTS)
+    if any(
+        set(group["product_name"]) != expected_products
+        for _, group in forecast_df.groupby("city")
+    ):
+        return False
+    expected_leads = forecast_df["city"].map(FORECAST_LEAD_DAYS)
+    actual_leads = pd.to_numeric(forecast_df["lead_time_days"], errors="coerce")
+    if not actual_leads.eq(expected_leads).all():
+        return False
+    target_dates = pd.to_datetime(forecast_df["forecast_date"], errors="coerce")
+    issue_dates = pd.to_datetime(forecast_df["issue_date"], errors="coerce")
+    if target_dates.isna().any() or issue_dates.isna().any():
+        return False
+    return (target_dates - issue_dates).dt.days.eq(expected_leads).all()
 
 
 def _csv_filter_values(raw_values: str | None, allowed_values: set[str]) -> set[str]:
@@ -2064,7 +2565,7 @@ def _selected_actuals_to_quantity_df(actual_df: pd.DataFrame, date: str) -> pd.D
         return pd.DataFrame(columns=columns)
     df = actual_df.copy()
     df["forecast_date"] = date
-    df["city"] = df["city_cd"].astype(str).str.upper().str.strip()
+    df["city"] = df["city_cd"].apply(_normalize_city_code)
     df["product_name"] = df["product_name"].apply(_normalize_product_name)
     df["actual_quantity"] = pd.to_numeric(df["actual_qty"], errors="coerce").fillna(0).round().astype(int)
     df["actual_orders"] = pd.to_numeric(df.get("actual_orders", 0), errors="coerce").fillna(0).round().astype(int)
@@ -2379,8 +2880,9 @@ def status():
         if os.getenv("PROCUREMENT_TRAINING_QUERY_ID") else None,
     }
     today_issue = issued_run_for_issue_date(str(_today_ist().date()))
+    redash_degraded = bool(_redash_health.get("last_error"))
     return {
-        "status": "ok",
+        "status": "degraded" if redash_degraded else "ok",
         "redash": {
             "base_url": REDASH_BASE_URL,
             "api_key_configured": bool(QUERY_API_KEY),
@@ -2391,10 +2893,26 @@ def status():
                 "recent_actuals",
                 "selected_actuals",
             )),
+            "state": "degraded" if redash_degraded else "not_checked_or_healthy",
+            **_redash_health,
         },
         "models": {
             "general_target_type": _model_target_type,
             "hyd_target_type": _model_hyd_target_type,
+            "blr_d3_direct_available": _blr_d3_direct is not None,
+            "blr_d3_direct_enabled": (
+                BLR_D3_DIRECT_ENABLED and _blr_d3_direct is not None
+            ),
+            "blr_d3_direct_metrics": (
+                _blr_d3_direct.get("metrics") if _blr_d3_direct else None
+            ),
+            "hyd_d2_direct_available": _hyd_d2_direct is not None,
+            "hyd_d2_direct_enabled": (
+                HYD_D2_DIRECT_ENABLED and _hyd_d2_direct is not None
+            ),
+            "hyd_d2_direct_metrics": (
+                _hyd_d2_direct.get("metrics") if _hyd_d2_direct else None
+            ),
             "general_features": len(FEATURE_ORDER),
             "hyd_features": len(FEATURE_ORDER_HYD),
             "artifacts": {
@@ -2463,6 +2981,45 @@ async def debug_components(
         "hyd_priority_model_diagnostics": priority_diag,
         "recent_actual_rows": len(recent_df),
         "raw_component_rows": rows,
+    }
+
+
+@app.get("/api/debug/model_features")
+async def debug_model_features(
+    date: str = Query(..., description="YYYY-MM-DD"),
+    city: str | None = Query(None),
+    product: str | None = Query(None),
+    refresh: bool = Query(False),
+    x_admin_token: str | None = Header(default=None),
+):
+    """Inspect time/event features without depending on slow component queries."""
+    if ADMIN_TOKEN and x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(status_code=403, detail="Admin token required")
+    target = _parse_forecast_date(date)
+    recent_df = await fetch_recent_actuals_df_async(date, refresh, strict=True)
+    empty_components = pd.DataFrame(columns=[
+        "city_cd", "product_name", "daily_qty", "daily_orders",
+    ])
+    diagnostics = await run_in_threadpool(
+        build_model_diagnostics_for_date,
+        target,
+        empty_components,
+        empty_components,
+        recent_df,
+    )
+    if city:
+        city_code = _normalize_city_code(city)
+        diagnostics = [row for row in diagnostics if row["city"] == city_code]
+    if product:
+        product_name = _normalize_product_name(product)
+        diagnostics = [
+            row for row in diagnostics if row["product_name"] == product_name
+        ]
+    return {
+        "date": date,
+        "recent_actual_rows": len(recent_df),
+        "training_data_freshness": _training_data_freshness(),
+        "diagnostics": diagnostics,
     }
 
 
@@ -2576,19 +3133,26 @@ async def get_operational_forecast(
     frozen_cities = set(frozen_df["city"]) if not frozen_df.empty else set()
     missing_cities = set(FORECAST_LEAD_DAYS).difference(frozen_cities)
     live_df = pd.DataFrame()
+    availability_warning = None
     if missing_cities:
         try:
             live_df = await _build_target_forecast_df(
                 target_dt, refresh, strict_inputs=True
             )
         except Exception as exc:
-            raise HTTPException(
-                status_code=503,
-                detail=(
-                    "Forecast refresh failed validation; no partial inputs were "
-                    f"published. Last frozen rows remain unchanged. Cause: {exc}"
-                ),
-            ) from exc
+            if frozen_df.empty:
+                raise HTTPException(
+                    status_code=503,
+                    detail=(
+                        "Forecast refresh failed validation and no frozen forecast "
+                        f"is available. Cause: {exc}"
+                    ),
+                ) from exc
+            availability_warning = (
+                "Live refresh failed; showing immutable frozen rows only. "
+                f"Unavailable cities: {', '.join(sorted(missing_cities))}. "
+                f"Cause: {exc}"
+            )
         live_df = live_df[live_df["city"].isin(missing_cities)].copy()
         live_df["forecast_status"] = "live_preview"
         live_df["forecast_run_id"] = None
@@ -2600,16 +3164,19 @@ async def get_operational_forecast(
     else:
         forecast_view = "live_preview"
     comparison_status = "not_completed"
+    comparison_eligible = _is_complete_official_forecast(forecast_df)
     comparison_summary = {
         "available": False,
+        "eligible": comparison_eligible,
         "source_query_id": int(SELECTED_ACTUALS_QUERY_ID) if SELECTED_ACTUALS_QUERY_ID else None,
         "forecast_basis": forecast_view,
+        "requirement": "complete immutable official D-2/D-3 forecast",
         "matched_rows": 0,
         "actual_quantity": None,
         "difference": None,
         "wape_pct": None,
     }
-    if target_dt < _today_ist():
+    if target_dt < _today_ist() and comparison_eligible:
         actual_df = await fetch_selected_actuals_df_async(target_date, refresh)
         forecast_df = _attach_actual_comparison(forecast_df, actual_df)
         matched = forecast_df[forecast_df["actual_available"]].copy()
@@ -2627,6 +3194,8 @@ async def get_operational_forecast(
             })
         else:
             comparison_status = "actuals_unavailable"
+    elif target_dt < _today_ist():
+        comparison_status = "official_forecast_unavailable"
     city_summary = []
     if not forecast_df.empty:
         city_summary = (
@@ -2650,6 +3219,10 @@ async def get_operational_forecast(
             "issued_generated_at": issued_info.get("generated_at") if issued_info else None,
             "frozen_cities": sorted(frozen_cities),
             "live_preview_cities": sorted(missing_cities),
+            "unavailable_cities": (
+                sorted(missing_cities) if availability_warning else []
+            ),
+            "availability_warning": availability_warning,
             "total_quantity": int(forecast_df["forecast_quantity"].sum()) if not forecast_df.empty else 0,
             "total_cities": int(forecast_df["city"].nunique()) if not forecast_df.empty else 0,
             "total_products": int(forecast_df["product_name"].nunique()) if not forecast_df.empty else 0,

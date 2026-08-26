@@ -1,4 +1,4 @@
-/* Recent final confirmed/delivered total packet demand.
+/* Recent final all-status total packet demand.
 
    Use this for RECENT_ACTUALS_QUERY_ID when model target_type is
    procurement_final_total.
@@ -42,7 +42,6 @@ row_level AS (
     CROSS JOIN target t
     WHERE f.delivery_date::date >= t.target_date - INTERVAL '90 days'
       AND f.delivery_date::date < t.target_date
-      AND f.status IN ('CONFIRMED', 'DELIVERED')
       AND COALESCE(f.order_volume, 0) > 0
       AND UPPER(TRIM(f.customer_city)) IN ('HYD', 'PNQ', 'BLR', 'VGA')
       AND f.product_name NOT ILIKE '%sample%'

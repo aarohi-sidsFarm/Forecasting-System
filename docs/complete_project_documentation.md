@@ -724,7 +724,7 @@ Purpose:
 Important filters:
 
 - `order_date = target_date`
-- `created_at <= D-1 22:00 IST`
+- query result captured and frozen at the actual issuance time
 - status in `DRAFT`, `PROCESSED_TO_ORDER`
 - `free_product = false`
 - purchase type buy-once-like

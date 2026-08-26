@@ -1,23 +1,38 @@
 WITH target AS (
-    SELECT
-        '{{target_date}}'::date AS target_date,
-        ('{{target_date}}'::date - INTERVAL '1 day' + TIME '22:00') AS cutoff_ts_ist
+    SELECT '{{target_date}}'::date AS target_date
 ),
 
-row_level AS (
+normalized_orders AS (
     SELECT
+        t.target_date,
         toi.customer_id,
         toi.quantity::numeric AS qty,
-        COALESCE(ship_ca.city_cd, ca.city_cd, 'UNKNOWN') AS city_cd,
+        toi.created_at AT TIME ZONE 'Asia/Kolkata' AS created_at_ist,
         CASE
-            WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN ('double toned a2 buffalo milk', 'a2 buffalo milk double toned')
-                THEN 'Double Toned A2 Buffalo Milk'
-            WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN ('a2 buffalo milk', 'buffalo_milk', 'buffalo milk')
-                THEN 'A2 Buffalo Milk'
+            WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('HYD', 'HYDERABAD')
+                THEN 'HYD'
+            WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('VGA', 'VIJAYAWADA')
+                THEN 'VGA'
+            WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('BLR', 'BANGALORE', 'BENGALURU', 'CAM')
+                THEN 'BLR'
+            WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('PNQ', 'PUNE')
+                THEN 'PNQ'
+            ELSE 'UNKNOWN'
+        END AS city_cd,
+        CASE
+            WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN (
+                'double toned a2 buffalo milk',
+                'a2 buffalo milk double toned',
+                'double toned milk'
+            ) THEN 'Double Toned A2 Buffalo Milk'
+            WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN (
+                'a2 buffalo milk', 'buffalo_milk', 'buffalo milk'
+            ) THEN 'A2 Buffalo Milk'
             WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN ('cow_milk', 'cow milk')
                 THEN 'Cow Milk'
-            WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN ('a2 desi cow milk', 'a2 cow milk', 'desi cow milk')
-                THEN 'A2 Desi Cow Milk'
+            WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN (
+                'a2 desi cow milk', 'a2 cow milk', 'desi cow milk'
+            ) THEN 'A2 Desi Cow Milk'
             WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN ('skim_milk', 'skim milk')
                 THEN 'Skim Milk'
             WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN ('toned_milk', 'toned milk')
@@ -40,32 +55,56 @@ row_level AS (
             city_cd
         FROM customer_address
         WHERE is_active = true
-        ORDER BY cust_id, updated_at DESC
+        ORDER BY cust_id, updated_at DESC NULLS LAST, id DESC
     ) ca
         ON ca.cust_id = toi.customer_id
     WHERE toi.order_date::date = t.target_date
-      AND (toi.created_at AT TIME ZONE 'Asia/Kolkata') <= t.cutoff_ts_ist
-      AND toi.status IN ('DRAFT', 'PROCESSED_TO_ORDER')
+      AND UPPER(TRIM(COALESCE(toi.status, ''))) IN ('DRAFT', 'PROCESSED_TO_ORDER')
       AND COALESCE(toi.quantity, 0) > 0
       AND COALESCE(toi.free_product, false) = false
       AND (
-            toi.purchase_type IN ('Buy Once', 'Adhoc Buy Once', 'FIRST_X_ORDER')
+            LOWER(TRIM(COALESCE(toi.purchase_type, ''))) IN (
+                'buy once', 'adhoc buy once', 'first_x_order'
+            )
             OR toi.purchase_type ILIKE '%buy once%'
           )
+),
+
+row_level AS (
+    SELECT n.*
+    FROM normalized_orders n
+    WHERE n.city_cd IN ('HYD', 'VGA', 'BLR', 'PNQ')
+      AND n.product_name IN (
+          'A2 Buffalo Milk',
+          'A2 Desi Cow Milk',
+          'Cow Milk',
+          'Double Toned A2 Buffalo Milk',
+          'Skim Milk',
+          'Toned Milk',
+          'Curd'
+      )
+      AND n.created_at_ist <= (
+          n.target_date
+          - CASE
+                WHEN n.city_cd IN ('HYD', 'VGA') THEN 2
+                WHEN n.city_cd IN ('BLR', 'PNQ') THEN 3
+            END
+          + TIME '22:05'
+      )
 )
 
 SELECT
-    t.target_date,
-    r.city_cd,
-    r.product_name,
-    SUM(r.qty) AS known_buy_once_qty,
-    COUNT(DISTINCT r.customer_id) AS known_buy_once_orders
-FROM row_level r
-CROSS JOIN target t
+    target_date,
+    city_cd,
+    product_name,
+    SUM(qty) AS known_buy_once_qty,
+    COUNT(DISTINCT customer_id) AS known_buy_once_orders,
+    COUNT(DISTINCT customer_id) AS known_buy_once_customers
+FROM row_level
 GROUP BY
-    t.target_date,
-    r.city_cd,
-    r.product_name
+    target_date,
+    city_cd,
+    product_name
 ORDER BY
-    r.city_cd,
+    city_cd,
     known_buy_once_qty DESC;

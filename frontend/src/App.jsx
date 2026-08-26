@@ -115,7 +115,10 @@ export default function App() {
     (sum, row) => sum + Number(row.subscription_qty) + Number(row.known_buy_once_qty),
     0,
   );
-  const modelGap = filteredRows.reduce((sum, row) => sum + Number(row.ml_unknown_adhoc_qty), 0);
+  const remainingModelGap = (row) => Number(
+    row.remaining_model_gap_qty ?? row.ml_unknown_adhoc_qty ?? 0,
+  );
+  const modelGap = filteredRows.reduce((sum, row) => sum + remainingModelGap(row), 0);
   const comparisonAvailable = Boolean(data?.meta?.comparison?.available);
   const comparedRows = comparisonAvailable
     ? filteredRows.filter((row) => row.actual_available)
@@ -128,6 +131,7 @@ export default function App() {
   const upcomingEvents = systemStatus?.festival_calendar?.upcoming_events ?? [];
   const freshness = data?.meta?.training_data_freshness ?? {};
   const forecastView = data?.meta?.forecast_view ?? "live_preview";
+  const availabilityWarning = data?.meta?.availability_warning ?? "";
   const forecastViewLabel = forecastView === "issued"
     ? "OFFICIAL"
     : forecastView === "mixed" ? "MIXED" : "PREVIEW";
@@ -142,9 +146,9 @@ export default function App() {
     const columns = [
       "issue_date", "forecast_date", "lead_time_days", "city", "product_name",
       "subscription_qty", "confirmed_subscription_qty", "at_risk_subscription_qty",
-      "known_buy_once_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
+      "known_buy_once_qty", "remaining_model_gap_qty", "forecast_quantity",
       "forecast_status", "forecast_run_id", "actual_quantity", "difference",
-      "deviation_pct",
+      "deviation_pct", "absolute_error_pct",
     ];
     const csv = [
       columns.join(","),
@@ -171,7 +175,7 @@ export default function App() {
       "",
       ...filteredRows.map((row) => (
         comparisonAvailable && row.actual_available
-          ? `${row.forecast_date} | ${row.city} | ${row.product_name} | Forecast ${fmt(row.forecast_quantity)} | Actual ${fmt(row.actual_quantity)} | Error ${fmtPct(row.deviation_pct)}`
+          ? `${row.forecast_date} | ${row.city} | ${row.product_name} | Forecast ${fmt(row.forecast_quantity)} | Actual ${fmt(row.actual_quantity)} | Absolute error ${fmtPct(row.absolute_error_pct)}`
           : `${row.forecast_date} | ${row.city} | ${row.product_name} | ${fmt(row.forecast_quantity)}`
       )),
     ];
@@ -186,8 +190,8 @@ export default function App() {
         <div className="header-left">
           <img className="brand-logo" src="/sids-farm-logo.png" alt="Sid's Farm" />
           <div>
-            <div className="header-title">Sid&apos;s Farm Forecast Desk</div>
-            <div className="header-subtitle">City-aware procurement plan</div>
+            <div className="header-title">Sid's Farm Forecast</div>
+            <div className="header-subtitle">City-level procurement plan</div>
           </div>
         </div>
         <div className="header-controls">
@@ -217,6 +221,9 @@ export default function App() {
 
       <main className="main">
         {error && <div className="error-banner"><strong>{error}</strong></div>}
+        {availabilityWarning && (
+          <div className="warning-banner"><strong>{availabilityWarning}</strong></div>
+        )}
 
         <section className="metrics-row compact-metrics">
           <div className="metric-card">
@@ -227,12 +234,12 @@ export default function App() {
           <div className="metric-card">
             <div className="metric-label">Expected known demand</div>
             <div className="metric-value green">{fmt(visibleDemand)}</div>
-            <div className="metric-sub">expected subscriptions + placed buy-once</div>
+            <div className="metric-sub">confirmed subscription floor + cutoff buy-once</div>
           </div>
           <div className="metric-card">
-            <div className="metric-label">Remaining forecast</div>
+            <div className="metric-label">Remaining model gap</div>
             <div className="metric-value violet">{fmt(modelGap)}</div>
-            <div className="metric-sub">final total less expected known demand</div>
+            <div className="metric-sub">model total less visible confirmed demand</div>
           </div>
           <div className="metric-card">
             <div className="metric-label">Training freshness</div>
@@ -321,13 +328,13 @@ export default function App() {
                   <th>SKU</th>
                   <th>Lead</th>
                   {showComponents && <th className="numeric">Confirmed subs</th>}
-                  {showComponents && <th className="numeric">At-risk subs</th>}
+                  {showComponents && <th className="numeric">Unconfirmed subs</th>}
                   {showComponents && <th className="numeric">Placed buy-once</th>}
-                  {showComponents && <th className="numeric">Remaining forecast</th>}
+                  {showComponents && <th className="numeric">Remaining model gap</th>}
                   <th className="numeric">Final forecast</th>
                   {comparisonAvailable && <th className="numeric">Actual · Q1968</th>}
                   {comparisonAvailable && <th className="numeric">Difference</th>}
-                  {comparisonAvailable && <th className="numeric">Deviation</th>}
+                  {comparisonAvailable && <th className="numeric">Absolute error</th>}
                 </tr>
               </thead>
               <tbody>
@@ -342,11 +349,11 @@ export default function App() {
                     {showComponents && <td className="numeric">{fmt(row.confirmed_subscription_qty)}</td>}
                     {showComponents && <td className="numeric">{fmt(row.at_risk_subscription_qty)}</td>}
                     {showComponents && <td className="numeric">{fmt(row.known_buy_once_qty)}</td>}
-                    {showComponents && <td className="numeric">{fmt(row.ml_unknown_adhoc_qty)}</td>}
+                    {showComponents && <td className="numeric">{fmt(remainingModelGap(row))}</td>}
                     <td className="qty-value numeric">{fmt(row.forecast_quantity)}</td>
                     {comparisonAvailable && <td className="numeric">{row.actual_available ? fmt(row.actual_quantity) : "-"}</td>}
                     {comparisonAvailable && <td className="numeric">{row.actual_available ? fmtSigned(row.difference) : "-"}</td>}
-                    {comparisonAvailable && <td className="numeric">{row.actual_available ? fmtPct(row.deviation_pct) : "-"}</td>}
+                    {comparisonAvailable && <td className="numeric">{row.actual_available ? fmtPct(row.absolute_error_pct) : "-"}</td>}
                   </tr>
                 ))}
               </tbody>

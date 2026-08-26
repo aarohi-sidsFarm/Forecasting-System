@@ -8,6 +8,21 @@ This folder stores raw festival-demand exports from Redash.
 - `festival_demand_windows_2026_partial.csv`: copied from the 2026 Redash export. This is currently partial because it contains fewer festivals than 2025.
 - `festival_demand_windows_combined.csv`: normalized combined copy of both exports.
 
+## Known stale rows found on 20 August 2026
+
+The existing combined export was produced before the calendar re-audit. It
+contains incorrect city/date combinations for 2026 Naga Panchami, HYD Ram
+Navami, BLR Holi, and BLR Nagula Chavithi rows from 2024/2025. The analyzer now
+excludes those rows rather than allowing them into uplift recommendations.
+
+Re-run `redash_queries/festival_demand_history_bulk.sql` after Redash
+connectivity is restored, replace the combined export, and run the historical
+audit below. Do not manually rewrite the raw CSV because it is source evidence.
+
+```powershell
+python scripts\audit_historical_festival_data.py
+```
+
 ## Current Raw Columns
 
 - `city_cd`
