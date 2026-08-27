@@ -54,6 +54,17 @@ def arguments() -> argparse.Namespace:
     parser.add_argument("--end-date", default=yesterday.isoformat())
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     parser.add_argument("--max-age", type=int, default=0)
+    parser.add_argument(
+        "--append",
+        action="store_true",
+        help="Merge the fetched window into the existing CSV by date/city/product.",
+    )
+    parser.add_argument(
+        "--maximum-overlap-wape",
+        type=float,
+        default=30.0,
+        help="Reject the merge when changed overlapping totals exceed this WAPE.",
+    )
     return parser.parse_args()
 
 
@@ -102,19 +113,77 @@ async def fetch_rows(query_id: int, start_date: str, end_date: str, max_age: int
     raise TimeoutError("Redash training export did not finish within 10 minutes.")
 
 
-def write_csv(rows: list[dict], output: Path) -> None:
+def _row_key(row: dict) -> tuple[str, str, str]:
+    return (
+        str(row["target_date"]),
+        str(row["city_cd"]),
+        str(row["product_name"]),
+    )
+
+
+def _read_existing(output: Path) -> list[dict]:
+    if not output.exists():
+        return []
+    with output.open(newline="", encoding="utf-8-sig") as f:
+        return list(csv.DictReader(f))
+
+
+def write_csv(
+    rows: list[dict],
+    output: Path,
+    *,
+    append: bool = False,
+    maximum_overlap_wape: float = 30.0,
+) -> None:
     if not rows:
         raise RuntimeError("Redash returned zero rows; not overwriting training CSV.")
     missing = REQUIRED_COLUMNS.difference(rows[0].keys())
     if missing:
         raise RuntimeError(f"Training export missing required columns: {sorted(missing)}")
 
+    existing = _read_existing(output) if append else []
+    if existing:
+        existing_missing = REQUIRED_COLUMNS.difference(existing[0].keys())
+        if existing_missing:
+            raise RuntimeError(
+                f"Existing training export is missing columns: {sorted(existing_missing)}"
+            )
+        existing_by_key = {_row_key(row): row for row in existing}
+        incoming_by_key = {_row_key(row): row for row in rows}
+        overlap_keys = existing_by_key.keys() & incoming_by_key.keys()
+        if overlap_keys:
+            absolute_change = sum(
+                abs(
+                    float(incoming_by_key[key]["final_total_qty"] or 0)
+                    - float(existing_by_key[key]["final_total_qty"] or 0)
+                )
+                for key in overlap_keys
+            )
+            existing_total = sum(
+                abs(float(existing_by_key[key]["final_total_qty"] or 0))
+                for key in overlap_keys
+            )
+            overlap_wape = 100 * absolute_change / existing_total if existing_total else 0.0
+            print(
+                f"Overlap audit: {len(overlap_keys)} keys, "
+                f"historical-change WAPE {overlap_wape:.2f}%"
+            )
+            if overlap_wape > maximum_overlap_wape:
+                raise RuntimeError(
+                    f"Historical overlap changed by {overlap_wape:.2f}% "
+                    f"(limit {maximum_overlap_wape:.2f}%); export not overwritten"
+                )
+        existing_by_key.update(incoming_by_key)
+        rows = [existing_by_key[key] for key in sorted(existing_by_key)]
+
     output.parent.mkdir(parents=True, exist_ok=True)
     columns = list(rows[0].keys())
-    with output.open("w", newline="", encoding="utf-8") as f:
+    temporary = output.with_suffix(output.suffix + ".tmp")
+    with temporary.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=columns)
         writer.writeheader()
         writer.writerows(rows)
+    temporary.replace(output)
 
 
 def main() -> None:
@@ -123,7 +192,12 @@ def main() -> None:
     args = arguments()
     rows = asyncio.run(fetch_rows(args.query_id, args.start_date, args.end_date, args.max_age))
     output = Path(args.output)
-    write_csv(rows, output)
+    write_csv(
+        rows,
+        output,
+        append=args.append,
+        maximum_overlap_wape=args.maximum_overlap_wape,
+    )
     print(f"Saved {len(rows)} rows to {output}")
     print(f"Date window: {args.start_date} -> {args.end_date}")
 

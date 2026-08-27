@@ -181,7 +181,7 @@ _model_hyd_calibration = _saved_hyd.get("calibration", {})
 _model_hyd_dow_calibration = _saved_hyd.get("dow_calibration", {})
 
 BLR_D3_DIRECT_PATH = os.path.join(MODEL_DIR, "blr_d3_direct.pkl")
-BLR_D3_DIRECT_ENABLED = os.getenv("BLR_D3_DIRECT_ENABLED", "false").lower() in {
+BLR_D3_DIRECT_ENABLED = os.getenv("BLR_D3_DIRECT_ENABLED", "true").lower() in {
     "1", "true", "yes", "on",
 }
 if os.path.exists(BLR_D3_DIRECT_PATH):
@@ -191,7 +191,7 @@ else:
     _blr_d3_direct = None
 
 HYD_D2_DIRECT_PATH = os.path.join(MODEL_DIR, "hyd_d2_direct.pkl")
-HYD_D2_DIRECT_ENABLED = os.getenv("HYD_D2_DIRECT_ENABLED", "false").lower() in {
+HYD_D2_DIRECT_ENABLED = os.getenv("HYD_D2_DIRECT_ENABLED", "true").lower() in {
     "1", "true", "yes", "on",
 }
 if os.path.exists(HYD_D2_DIRECT_PATH):
@@ -527,7 +527,7 @@ async def _fetch_redash_rows(
         stale = _redash_cache.get(key)
         if stale is not None and not stale["df"].empty:
             print(
-                f"Using last successful Redash {cache_key} snapshot for "
+                f"Using last successful Redash {cache_key} snapshot for"
                 f"{target_date_str} after refresh failure"
             )
             return stale["df"]
@@ -3134,7 +3134,13 @@ async def get_operational_forecast(
     missing_cities = set(FORECAST_LEAD_DAYS).difference(frozen_cities)
     live_df = pd.DataFrame()
     availability_warning = None
-    if missing_cities:
+    if missing_cities and not refresh and not frozen_df.empty:
+        availability_warning = (
+            "Showing immutable frozen rows only. "
+            f"Unavailable cities: {', '.join(sorted(missing_cities))}. "
+            "Use Refresh to retry the live Redash inputs."
+        )
+    elif missing_cities:
         try:
             live_df = await _build_target_forecast_df(
                 target_dt, refresh, strict_inputs=True
@@ -3157,10 +3163,13 @@ async def get_operational_forecast(
         live_df["forecast_status"] = "live_preview"
         live_df["forecast_run_id"] = None
     forecast_df = pd.concat([frozen_df, live_df], ignore_index=True, sort=False)
+    live_cities = set(live_df["city"]) if not live_df.empty else set()
     if frozen_cities == set(FORECAST_LEAD_DAYS):
         forecast_view = "issued"
-    elif frozen_cities:
+    elif frozen_cities and live_cities:
         forecast_view = "mixed"
+    elif frozen_cities:
+        forecast_view = "partial_issued"
     else:
         forecast_view = "live_preview"
     comparison_status = "not_completed"
@@ -3218,7 +3227,7 @@ async def get_operational_forecast(
             "issued_run_ids": issued_info.get("run_ids", []) if issued_info else [],
             "issued_generated_at": issued_info.get("generated_at") if issued_info else None,
             "frozen_cities": sorted(frozen_cities),
-            "live_preview_cities": sorted(missing_cities),
+            "live_preview_cities": sorted(live_cities),
             "unavailable_cities": (
                 sorted(missing_cities) if availability_warning else []
             ),

@@ -1,7 +1,9 @@
 param(
     [int]$TrainingQueryId = 3269,
-    [string]$StartDate = "2025-05-01",
+    [string]$StartDate = "",
     [string]$EndDate = "",
+    [int]$OverlapDays = 7,
+    [double]$MaximumOverlapWape = 30,
     [int]$BacktestDays = 7,
     [switch]$SkipTraining,
     [switch]$SkipBacktest
@@ -18,6 +20,28 @@ if (-not (Test-Path $Python)) {
 
 if ([string]::IsNullOrWhiteSpace($EndDate)) {
     $EndDate = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
+}
+
+$TrainingExport = Join-Path $ProjectRoot "data\raw\redash_exports\procurement_final_total_training.csv"
+$LatestTrainingDate = $null
+if ([string]::IsNullOrWhiteSpace($StartDate)) {
+    if (Test-Path $TrainingExport) {
+        $latestRow = Import-Csv $TrainingExport |
+            Sort-Object { [datetime]::ParseExact($_.target_date, "yyyy-MM-dd", $null) } -Descending |
+            Select-Object -First 1
+        if ($latestRow) {
+            $LatestTrainingDate = [datetime]::ParseExact($latestRow.target_date, "yyyy-MM-dd", $null)
+            $StartDate = $LatestTrainingDate.AddDays(-1 * ([math]::Max(1, $OverlapDays) - 1)).ToString("yyyy-MM-dd")
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($StartDate)) {
+        $StartDate = "2025-05-01"
+        Write-Host "No existing training export found; using full bootstrap window." -ForegroundColor Yellow
+    }
+}
+
+if ([datetime]::ParseExact($StartDate, "yyyy-MM-dd", $null) -gt [datetime]::ParseExact($EndDate, "yyyy-MM-dd", $null)) {
+    $StartDate = $EndDate
 }
 
 $BacktestStartDate = ([datetime]::ParseExact($EndDate, "yyyy-MM-dd", $null)).AddDays(-1 * ($BacktestDays - 1)).ToString("yyyy-MM-dd")
@@ -46,7 +70,10 @@ Set-Location $ProjectRoot
 Write-Host "Daily refresh starting..." -ForegroundColor Green
 Write-Host "Project root       : $ProjectRoot"
 Write-Host "Training query ID  : $TrainingQueryId"
-Write-Host "Training window    : $StartDate -> $EndDate"
+if ($LatestTrainingDate) {
+    Write-Host "Latest stored date : $($LatestTrainingDate.ToString('yyyy-MM-dd'))"
+}
+Write-Host "Incremental window : $StartDate -> $EndDate"
 Write-Host "Backtest window    : $BacktestStartDate -> $EndDate"
 
 if (-not $SkipTraining) {
@@ -55,7 +82,9 @@ if (-not $SkipTraining) {
         "scripts\fetch_redash_training_export.py",
         "--query-id", "$TrainingQueryId",
         "--start-date", "$StartDate",
-        "--end-date", "$EndDate"
+        "--end-date", "$EndDate",
+        "--append",
+        "--maximum-overlap-wape", "$MaximumOverlapWape"
     )
 
     Invoke-Step "Process raw training data" @($Python, "ml_pipeline\process_all_data.py")
@@ -63,11 +92,32 @@ if (-not $SkipTraining) {
     Invoke-Step "Build features" @($Python, "ml_pipeline\build_features.py")
     Invoke-Step "Train general model" @($Python, "ml_pipeline\train_general_lgbm.py")
     Invoke-Step "Train HYD model" @($Python, "ml_pipeline\train_hyd_lgbm.py")
+    Invoke-Step "Train cutoff-safe HYD D-2 model" @(
+        $Python,
+        "ml_pipeline\train_city_direct.py",
+        "--city", "HYD",
+        "--lead-days", "2",
+        "--holdout-days", "90"
+    )
+    Invoke-Step "Train cutoff-safe BLR D-3 model" @(
+        $Python,
+        "ml_pipeline\train_city_direct.py",
+        "--city", "BLR",
+        "--lead-days", "3",
+        "--holdout-days", "90"
+    )
 } else {
     Write-Host "Skipping training stages." -ForegroundColor Yellow
 }
 
 if (-not $SkipBacktest) {
+    Invoke-Step "Reconcile completed Query 1968 actuals" @(
+        $Python,
+        "scripts\reconcile_forecast_actuals.py",
+        "--start", "$BacktestStartDate",
+        "--end", "$EndDate"
+    )
+
     Invoke-Step "Refresh accuracy cache" @(
         $Python,
         "scripts\backtest_recent_forecasts.py",
