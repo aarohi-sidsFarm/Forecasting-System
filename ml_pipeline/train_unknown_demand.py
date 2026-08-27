@@ -38,7 +38,7 @@ def main():
               ON a.forecast_date=f.forecast_date
              AND a.city_cd=f.city_cd
              AND a.product_name=f.product_name
-            WHERE r.run_kind='official_export'
+            WHERE r.run_kind IN ('official_issued', 'official_export')
               AND f.city_cd=?
               AND f.visible_subscription_qty IS NOT NULL
             """,

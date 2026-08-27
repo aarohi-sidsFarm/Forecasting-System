@@ -134,7 +134,9 @@ export default function App() {
   const availabilityWarning = data?.meta?.availability_warning ?? "";
   const forecastViewLabel = forecastView === "issued"
     ? "OFFICIAL"
-    : forecastView === "mixed" ? "MIXED" : "PREVIEW";
+    : forecastView === "mixed"
+      ? "MIXED"
+      : forecastView === "partial_issued" ? "PARTIAL" : "PREVIEW";
 
   const resetFilters = () => {
     setCityFilter("All");
