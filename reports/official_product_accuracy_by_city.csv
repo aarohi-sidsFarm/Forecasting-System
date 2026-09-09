@@ -1,0 +1,5 @@
+city_cd,completed_days,matched_rows,forecast_quantity,actual_quantity,absolute_error,signed_error,expected_rows,actual_coverage_pct,wape_pct,accuracy_pct,bias_pct,minimum_days_pass,wape_pass,actual_coverage_pass
+BLR,1,7,6760.0,7167.0,429.0,-407.0,14,50.0,5.99,94.01,-5.68,False,False,False
+HYD,2,14,95910.0,95031.0,2583.0,879.0,14,100.0,2.72,97.28,0.92,False,False,True
+PNQ,1,4,1200.0,1194.0,22.0,6.0,14,28.57,1.84,98.16,0.5,False,False,False
+VGA,2,14,906.0,875.0,79.0,31.0,14,100.0,9.03,90.97,3.54,False,False,True

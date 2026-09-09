@@ -26,7 +26,18 @@ class SubscriptionQueryTests(unittest.TestCase):
 
     def test_city_and_address_fallbacks_are_deterministic(self):
         self.assertIn("'blr', 'bangalore', 'bengaluru', 'cam'", self.sql)
-        self.assertIn("updated_at desc nulls last, id desc", self.sql)
+        self.assertIn(
+            "ca.updated_at desc nulls last, ca.id desc", self.sql
+        )
+
+    def test_latest_address_scan_is_limited_to_relevant_customers(self):
+        self.assertIn("latest_customer_address as", self.sql)
+        self.assertIn("join relevant_customers rc", self.sql)
+        self.assertIn("on rc.customer_id = ca.cust_id", self.sql)
+
+    def test_product_joins_are_limited_to_operational_variants(self):
+        self.assertIn("operational_variants as", self.sql)
+        self.assertIn("join operational_variants ov", self.sql)
 
     def test_query_is_scoped_to_operational_products(self):
         self.assertIn("'double toned a2 buffalo milk'", self.sql)

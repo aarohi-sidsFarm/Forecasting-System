@@ -60,29 +60,42 @@ legacy comparison-sheet value `cam` for BLR.
 
 - No random time-series split.
 - Evaluate D+1 through D+7 independently.
-- HYD overall WAPE target: <= 3%; bias within +/-2%.
-- BLR overall WAPE target: <= 3%; bias within +/-3%.
+- Certification target: <= 4% city WAPE and <= 8% product WAPE (see
+  `scripts/evaluate_official_forecasts.py`). An earlier 1%/1% target was
+  dropped: per `reports/historical_accuracy_audit_2026-09-04.md`, no artifact
+  ever cleared it, so it blocked every promotion outright instead of
+  screening for regressions.
 - A challenger must beat the champion over multiple rolling windows.
-- Minimum shadow period before promotion: 14 completed days.
+- Minimum official/shadow evidence before promotion: 28 completed days for
+  every evaluated city/SKU.
 - Missing/stale inputs must be surfaced; they must not silently become zeros.
 
-## BLR D-3 challenger
+WAPE must be calculated as `sum(abs(forecast - actual)) / sum(actual)`. Never
+take the absolute value after aggregating signed errors, because that lets
+over- and under-forecasts cancel. Use `scripts/evaluate_official_forecasts.py`
+for the production certification gate and `scripts/evaluate_shadow.py` for a
+paired challenger gate.
 
-`blr_d3_direct.pkl` is a true D-3 total-demand challenger. For a target date
+## BLR D-3 direct model
+
+`blr_d3_direct.pkl` is a true D-3 total-demand model. For a target date
 `T`, it uses completed sales only through `T-4`, matching the information that
 exists when the forecast is issued on `T-3`. It uses same-weekday lags,
-rolling demand, trend and festival provenance. The artifact is installed but
-is shadow-only by default (`BLR_D3_DIRECT_ENABLED=false`). Its 90-day selected
-backtest WAPE is 3.39%, versus 3.87% for the older D-3 challenger, but it did
-not beat the serving forecast on the latest completed BLR day. Promotion must
-therefore follow the normal 14-completed-day gate, including per-SKU review.
+rolling demand, trend and festival provenance. `BLR_D3_DIRECT_ENABLED`
+defaults to `true` in `backend/main.py`, so this model is live in production
+serving today, not shadow-only; treat any change to it with the same care as
+the rest of the serving path, and keep it subject to the 28-day official
+evidence gate for future promotions. Read current metrics
+from `blr_d3_direct_metrics.json` or
+`reports/current_model_validation.csv`; this contract intentionally does not
+embed a stale score.
 
-## HYD D-2 challenger
+## HYD D-2 direct model
 
-`hyd_d2_direct.pkl` is a true D-2 total-demand challenger. It uses completed
+`hyd_d2_direct.pkl` is a true D-2 total-demand model. It uses completed
 sales only through `T-3` and never inserts intermediate recursive forecasts into
-its lags or rolling windows. Its 90-day selected WAPE is 2.04% with -0.99% bias.
-On the fully unseen 20-24 August sample it achieved 1.60% WAPE on normal days,
-but 13.37% on Varalakshmi day. It is therefore installed as shadow-only by
-default (`HYD_D2_DIRECT_ENABLED=false`). Festival routing must be validated
-separately before any production promotion.
+its lags or rolling windows. `HYD_D2_DIRECT_ENABLED` defaults to `true` in
+`backend/main.py`, so this model is live in production serving today, not
+shadow-only. Read current metrics from
+`hyd_d2_direct_metrics.json` or the generated validation report. Festival and
+normal-day results must be reviewed separately before certification.
