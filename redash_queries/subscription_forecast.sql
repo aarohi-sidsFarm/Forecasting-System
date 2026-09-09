@@ -96,25 +96,10 @@
         WHERE qty > 0
     ),
 
-    row_level AS (
+    operational_variants AS (
         SELECT
-            so.customer_id,
-            so.subscription_type,
-            so.qty,
-            pv.price_override_amount::numeric AS selling_price,
-            (pv.price_override_amount IS NULL) AS missing_price_flag,
-            so.qty * COALESCE(pv.price_override_amount, 0) AS row_value,
-            CASE
-                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('HYD', 'HYDERABAD')
-                    THEN 'HYD'
-                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('VGA', 'VIJAYAWADA')
-                    THEN 'VGA'
-                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('BLR', 'BANGALORE', 'BENGALURU', 'CAM')
-                    THEN 'BLR'
-                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('PNQ', 'PUNE')
-                    THEN 'PNQ'
-                ELSE 'UNKNOWN'
-            END AS city_cd,
+            pv.id AS variant_id,
+            pv.price_override_amount,
             CASE
                 WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN (
                     'double toned a2 buffalo milk',
@@ -134,23 +119,74 @@
                     THEN 'Toned Milk'
                 WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) = 'curd'
                     THEN 'Curd'
-                ELSE TRIM(REPLACE(pp.name, E'\t', ''))
             END AS product_name
-        FROM subscription_orders so
-        JOIN product_productvariant pv
-            ON pv.id = so.variant_id
+        FROM product_productvariant pv
         JOIN product_product pp
             ON pp.id = pv.product_id
+        WHERE LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) IN (
+            'double toned a2 buffalo milk',
+            'a2 buffalo milk double toned',
+            'double toned milk',
+            'a2 buffalo milk',
+            'buffalo_milk',
+            'buffalo milk',
+            'cow_milk',
+            'cow milk',
+            'a2 desi cow milk',
+            'a2 cow milk',
+            'desi cow milk',
+            'skim_milk',
+            'skim milk',
+            'toned_milk',
+            'toned milk',
+            'curd'
+        )
+    ),
+
+    relevant_customers AS (
+        SELECT DISTINCT so.customer_id
+        FROM subscription_orders so
+        JOIN operational_variants ov
+            ON ov.variant_id = so.variant_id
+    ),
+
+    latest_customer_address AS (
+        SELECT DISTINCT ON (ca.cust_id)
+            ca.cust_id,
+            ca.city_cd
+        FROM customer_address ca
+        JOIN relevant_customers rc
+            ON rc.customer_id = ca.cust_id
+        WHERE ca.is_active = true
+        ORDER BY ca.cust_id, ca.updated_at DESC NULLS LAST, ca.id DESC
+    ),
+
+    row_level AS (
+        SELECT
+            so.customer_id,
+            so.subscription_type,
+            so.qty,
+            ov.price_override_amount::numeric AS selling_price,
+            (ov.price_override_amount IS NULL) AS missing_price_flag,
+            so.qty * COALESCE(ov.price_override_amount, 0) AS row_value,
+            CASE
+                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('HYD', 'HYDERABAD')
+                    THEN 'HYD'
+                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('VGA', 'VIJAYAWADA')
+                    THEN 'VGA'
+                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('BLR', 'BANGALORE', 'BENGALURU', 'CAM')
+                    THEN 'BLR'
+                WHEN UPPER(TRIM(COALESCE(ship_ca.city_cd, ca.city_cd, ''))) IN ('PNQ', 'PUNE')
+                    THEN 'PNQ'
+                ELSE 'UNKNOWN'
+            END AS city_cd,
+            ov.product_name
+        FROM subscription_orders so
+        JOIN operational_variants ov
+            ON ov.variant_id = so.variant_id
         LEFT JOIN customer_address ship_ca
             ON ship_ca.id = so.shipping_address_id
-        LEFT JOIN (
-            SELECT DISTINCT ON (cust_id)
-                cust_id,
-                city_cd
-            FROM customer_address
-            WHERE is_active = true
-            ORDER BY cust_id, updated_at DESC NULLS LAST, id DESC
-        ) ca
+        LEFT JOIN latest_customer_address ca
             ON ca.cust_id = so.customer_id
     ),
 

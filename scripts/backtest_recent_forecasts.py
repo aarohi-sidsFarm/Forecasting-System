@@ -130,12 +130,17 @@ def aggregate_summary(df: pd.DataFrame, group_cols: list[str]) -> pd.DataFrame:
         return pd.DataFrame(columns=group_cols + [
             "forecast_quantity", "actual_quantity", "difference", "abs_error", "wape_pct", "bias_pct"
         ])
-    grouped = df.groupby(group_cols, as_index=False).agg(
+    source = df.copy()
+    # WAPE must sum each row's absolute error before aggregation. Taking the
+    # absolute value after summing signed errors lets over/under forecasts
+    # cancel and materially overstates product/city accuracy.
+    source["_row_absolute_error"] = source["difference"].abs()
+    grouped = source.groupby(group_cols, as_index=False).agg(
         forecast_quantity=("forecast_quantity", "sum"),
         actual_quantity=("actual_quantity", "sum"),
         difference=("difference", "sum"),
+        abs_error=("_row_absolute_error", "sum"),
     )
-    grouped["abs_error"] = (grouped["forecast_quantity"] - grouped["actual_quantity"]).abs()
     grouped["wape_pct"] = (
         grouped["abs_error"] / grouped["actual_quantity"].where(grouped["actual_quantity"] > 0) * 100
     ).fillna(0).round(2)

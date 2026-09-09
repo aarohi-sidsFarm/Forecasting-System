@@ -1,3 +1,4 @@
+import copy
 import unittest
 from unittest.mock import AsyncMock, patch
 
@@ -43,6 +44,39 @@ class OperationalForecastPolicyTests(unittest.TestCase):
             result = main.status()
             self.assertEqual(result["status"], "degraded")
             self.assertEqual(result["redash"]["state"], "degraded")
+        finally:
+            main._redash_health.clear()
+            main._redash_health.update(previous)
+
+    def test_successful_query_does_not_hide_another_query_failure(self):
+        previous = copy.deepcopy(main._redash_health)
+        try:
+            main._redash_health.clear()
+            main._redash_health.update({
+                "last_success": None,
+                "last_failure": None,
+                "last_error": None,
+                "queries": {},
+            })
+            main._redash_health_event(
+                "subscription",
+                3085,
+                "failed",
+                target_date="2026-08-26",
+                error="timeout",
+            )
+            main._redash_health_event(
+                "recent_actuals",
+                3269,
+                "healthy",
+                target_date="2026-08-26",
+            )
+            result = main.status()
+            self.assertEqual(result["redash"]["state"], "degraded")
+            self.assertIn("subscription", result["redash"]["last_error"])
+            self.assertIsNone(
+                result["redash"]["queries"]["recent_actuals"]["last_error"]
+            )
         finally:
             main._redash_health.clear()
             main._redash_health.update(previous)
@@ -127,7 +161,7 @@ class OperationalForecastPolicyTests(unittest.TestCase):
         official.loc[official["city"] == "BLR", "forecast_status"] = "live_preview"
         self.assertFalse(main._is_complete_official_forecast(official))
 
-    def test_query_1968_contract_filters_requested_day_and_maps_columns(self):
+    def test_query_1968_month_extract_preserves_dates_and_maps_columns(self):
         raw = pd.DataFrame([
             {
                 "date": "05/08/2026", "city": "HYD",
@@ -145,17 +179,13 @@ class OperationalForecastPolicyTests(unittest.TestCase):
                 "customer_count": 5, "status": "REFUNDED",
             },
         ])
-        raw["date"] = pd.to_datetime(raw["date"], dayfirst=True).dt.normalize()
-        selected = raw[raw["date"] == pd.Timestamp("2026-08-06")].rename(columns={
-            "city": "city_cd", "quantity": "actual_qty",
-            "customer_count": "actual_orders",
+        result = main._process_selected_actuals_period(raw)
+        self.assertEqual(set(result["forecast_date"]), {
+            pd.Timestamp("2026-08-05"), pd.Timestamp("2026-08-06")
         })
-        result = main._process_quantity_rows(
-            selected,
-            qty_candidates=["actual_qty"],
-            order_candidates=["actual_orders"],
-        )
-        self.assertEqual(int(result.iloc[0]["daily_qty"]), 100)
+        selected = result[result["forecast_date"] == pd.Timestamp("2026-08-06")]
+        self.assertEqual(int(selected.iloc[0]["actual_qty"]), 100)
+        self.assertEqual(int(selected.iloc[0]["actual_orders"]), 60)
 
     def test_subscription_processing_uses_confirmed_as_procurement_floor(self):
         raw = pd.DataFrame([{

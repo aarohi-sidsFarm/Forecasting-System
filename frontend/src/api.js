@@ -3,8 +3,19 @@ const pendingRequests = new Map();
 
 const fetchJson = async (path) => {
   const response = await fetch(`${API}${path}`);
-  if (!response.ok) throw new Error(`${response.status} - ${await response.text()}`);
-  return response.json();
+  const payload = await response.json().catch(() => null);
+  if (response.status === 202 && payload?.status === "refresh_in_progress") {
+    const error = new Error(
+      `${payload.detail}. Retry in about ${payload.retry_after_seconds ?? 15} seconds; any frozen forecast remains unchanged.`,
+    );
+    error.code = "refresh_in_progress";
+    throw error;
+  }
+  if (!response.ok) {
+    const detail = payload?.detail ?? JSON.stringify(payload);
+    throw new Error(`${response.status} - ${detail}`);
+  }
+  return payload;
 };
 
 export const getOperationalForecast = async (targetDate, refresh = false) => {

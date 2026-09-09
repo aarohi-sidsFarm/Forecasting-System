@@ -12,11 +12,15 @@ pipeline or by festival analysis. The live Redash query IDs are configured in
 | `known_buy_once.sql` | 3086 | Buy-once demand created by the city-specific D-2/D-3 issue cutoff. |
 | `recent_final_total_actuals.sql` | 3101 | Latest completed all-status total demand used to refresh inference lags. |
 | `procurement_final_total_training.sql` | 3269 | Historical final-total target used for model training. |
+| Existing shared Query 1968 | 1968 | Month-wide completed actuals used only for official comparison and reconciliation. |
 
-Query **1968** is the team's official actual-sales and forecast-comparison
-source. Its SQL is maintained directly in Redash, so there is no duplicate
-local SQL file for it. The backend reads it through
-`SELECTED_ACTUALS_QUERY_ID=1968`.
+Query **1968** is the team's unchanged official actual-sales and
+forecast-comparison source. The backend accepts its legacy `date`, `city`,
+`product_name`, `quantity`, and `customer_count` columns, fetches the month-wide
+result once, filters target dates locally for dashboard comparison, and archives
+all completed rows into SQLite during daily reconciliation. Run reconciliation
+daily because Query 1968 cannot recover a previous month after rollover unless
+that month was already archived or exported.
 
 ## Festival analysis
 

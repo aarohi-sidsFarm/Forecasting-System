@@ -1,0 +1,26 @@
+city_cd,product_name,completed_days,matched_rows,forecast_quantity,actual_quantity,absolute_error,signed_error,expected_rows,actual_coverage_pct,wape_pct,accuracy_pct,bias_pct,minimum_days_pass,wape_pass,actual_coverage_pass
+BLR,A2 Buffalo Milk,1,1,2481.0,2584.0,103.0,-103.0,2,50.0,3.99,96.01,-3.99,False,False,False
+BLR,A2 Desi Cow Milk,1,1,678.0,736.0,58.0,-58.0,2,50.0,7.88,92.12,-7.88,False,False,False
+BLR,Cow Milk,1,1,1792.0,1920.0,128.0,-128.0,2,50.0,6.67,93.33,-6.67,False,False,False
+BLR,Curd,1,1,239.0,293.0,54.0,-54.0,2,50.0,18.43,81.57,-18.43,False,False,False
+BLR,Double Toned A2 Buffalo Milk,1,1,503.0,535.0,32.0,-32.0,2,50.0,5.98,94.02,-5.98,False,False,False
+BLR,Skim Milk,1,1,487.0,476.0,11.0,11.0,2,50.0,2.31,97.69,2.31,False,False,False
+BLR,Toned Milk,1,1,580.0,623.0,43.0,-43.0,2,50.0,6.9,93.1,-6.9,False,False,False
+HYD,A2 Buffalo Milk,2,2,33699.0,33419.0,554.0,280.0,2,100.0,1.66,98.34,0.84,False,False,True
+HYD,A2 Desi Cow Milk,2,2,3291.0,3167.0,124.0,124.0,2,100.0,3.92,96.08,3.92,False,False,True
+HYD,Cow Milk,2,2,19917.0,19559.0,1052.0,358.0,2,100.0,5.38,94.62,1.83,False,False,True
+HYD,Curd,2,2,2957.0,2928.0,63.0,29.0,2,100.0,2.15,97.85,0.99,False,False,True
+HYD,Double Toned A2 Buffalo Milk,2,2,10752.0,10576.0,176.0,176.0,2,100.0,1.66,98.34,1.66,False,False,True
+HYD,Skim Milk,2,2,4590.0,4484.0,106.0,106.0,2,100.0,2.36,97.64,2.36,False,False,True
+HYD,Toned Milk,2,2,20704.0,20898.0,508.0,-194.0,2,100.0,2.43,97.57,-0.93,False,False,True
+PNQ,A2 Buffalo Milk,1,1,231.0,231.0,0.0,0.0,2,50.0,0.0,100.0,0.0,False,True,False
+PNQ,A2 Desi Cow Milk,1,1,505.0,498.0,7.0,7.0,2,50.0,1.41,98.59,1.41,False,False,False
+PNQ,Cow Milk,1,1,441.0,434.0,7.0,7.0,2,50.0,1.61,98.39,1.61,False,False,False
+PNQ,Curd,1,1,23.0,31.0,8.0,-8.0,2,50.0,25.81,74.19,-25.81,False,False,False
+VGA,A2 Buffalo Milk,2,2,273.0,284.0,15.0,-11.0,2,100.0,5.28,94.72,-3.87,False,False,True
+VGA,A2 Desi Cow Milk,2,2,43.0,38.0,7.0,5.0,2,100.0,18.42,81.58,13.16,False,False,True
+VGA,Cow Milk,2,2,122.0,113.0,9.0,9.0,2,100.0,7.96,92.04,7.96,False,False,True
+VGA,Curd,2,2,22.0,26.0,4.0,-4.0,2,100.0,15.38,84.62,-15.38,False,False,True
+VGA,Double Toned A2 Buffalo Milk,2,2,111.0,107.0,16.0,4.0,2,100.0,14.95,85.05,3.74,False,False,True
+VGA,Skim Milk,2,2,37.0,32.0,5.0,5.0,2,100.0,15.62,84.38,15.62,False,False,True
+VGA,Toned Milk,2,2,298.0,275.0,23.0,23.0,2,100.0,8.36,91.64,8.36,False,False,True
