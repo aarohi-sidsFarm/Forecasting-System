@@ -106,6 +106,10 @@ if (-not $SkipTraining) {
         "--lead-days", "3",
         "--holdout-days", "90"
     )
+    Invoke-Step "Export model-versus-baseline validation" @(
+        $Python,
+        "scripts\export_model_validation.py"
+    )
 } else {
     Write-Host "Skipping training stages." -ForegroundColor Yellow
 }
@@ -124,6 +128,14 @@ if (-not $SkipBacktest) {
         "--start-date", "$BacktestStartDate",
         "--end-date", "$EndDate",
         "--refresh"
+    )
+
+    Invoke-Step "Evaluate immutable official accuracy gate" @(
+        $Python,
+        "scripts\evaluate_official_forecasts.py",
+        "--minimum-days", "28",
+        "--maximum-city-wape", "4",
+        "--maximum-product-wape", "8"
     )
 } else {
     Write-Host "Skipping backtest cache refresh." -ForegroundColor Yellow

@@ -146,6 +146,18 @@ def main() -> None:
 
     age_days = (train.target_date - train.target_date.min()).dt.days.astype(float)
     weights = 0.5 + 0.5 * age_days / max(age_days.max(), 1)
+    # A single L1 (MAE) objective on raw quantity, shared across products with
+    # very different volumes (e.g. BLR Curd ~240/day vs A2 Buffalo Milk
+    # ~2200/day), lets a leaf fit mostly on high-volume rows assign an
+    # absolute value to a low-volume product's rows that lands outside
+    # anything that product has ever actually sold (observed: BLR A2 Desi Cow
+    # Milk predicted 950-1340 against a 304-736 historical range). Training on
+    # the ratio of actual demand to each row's own trailing 28-day mean keeps
+    # the regression target dimensionless and comparable across products; the
+    # prediction is rescaled back to units using that same trailing mean, so
+    # a leaf can only output a multiple of a product's own recent level.
+    train_scale = train["roll_28_mean"].clip(lower=1.0)
+    valid_scale = valid["roll_28_mean"].clip(lower=1.0)
     model = lgb.train(
         {
             "objective": "regression_l1", "metric": "mae",
@@ -156,12 +168,12 @@ def main() -> None:
             "verbose": -1, "seed": 42, "deterministic": True,
             "force_col_wise": True,
         },
-        lgb.Dataset(train[FEATURES], label=train.actual_qty, weight=weights),
+        lgb.Dataset(train[FEATURES], label=train.actual_qty / train_scale, weight=weights),
         num_boost_round=1800,
-        valid_sets=[lgb.Dataset(valid[FEATURES], label=valid.actual_qty)],
+        valid_sets=[lgb.Dataset(valid[FEATURES], label=valid.actual_qty / valid_scale)],
         callbacks=[lgb.early_stopping(100, verbose=False)],
     )
-    valid["model"] = model.predict(valid[FEATURES]).clip(0)
+    valid["model"] = np.clip(model.predict(valid[FEATURES]), 0, None) * valid_scale.to_numpy()
     selector = {}
     product_metrics = {}
     for product, group in valid.groupby("product_name"):

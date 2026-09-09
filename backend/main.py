@@ -12,7 +12,7 @@ import pandas as pd
 from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 try:
     from backend.forecast_history import (
@@ -92,8 +92,21 @@ REDASH_BASE_URL = os.getenv("REDASH_BASE_URL", "https://analytics.sidsfarm.in")
 QUERY_API_KEY = os.getenv("QUERY_API_KEY")
 REDASH_HTTP_TIMEOUT_SECONDS = float(os.getenv("REDASH_HTTP_TIMEOUT_SECONDS", "90"))
 # Query 3085 can take 10-12 minutes during peak load. Poll for up to 15 minutes
-# by default; each interval is three seconds. This remains environment-tunable.
+# only for scheduled issuance; interactive API requests have a short bound.
+REDASH_JOB_POLL_INTERVAL_SECONDS = int(
+    os.getenv("REDASH_JOB_POLL_INTERVAL_SECONDS", "3")
+)
 REDASH_JOB_POLL_ATTEMPTS = int(os.getenv("REDASH_JOB_POLL_ATTEMPTS", "300"))
+INTERACTIVE_REDASH_WAIT_SECONDS = int(
+    os.getenv("INTERACTIVE_REDASH_WAIT_SECONDS", "45")
+)
+INTERACTIVE_FORECAST_TIMEOUT_SECONDS = int(
+    os.getenv("INTERACTIVE_FORECAST_TIMEOUT_SECONDS", "60")
+)
+INTERACTIVE_REDASH_JOB_POLL_ATTEMPTS = max(
+    1,
+    INTERACTIVE_REDASH_WAIT_SECONDS // REDASH_JOB_POLL_INTERVAL_SECONDS,
+)
 
 # Backward-compatible default: old QUERY_ID is treated as subscription query.
 SUBSCRIPTION_QUERY_ID = int(os.getenv("SUBSCRIPTION_QUERY_ID", os.getenv("QUERY_ID", "3085")))
@@ -319,6 +332,14 @@ if not _festival_reco_df.empty:
             int(row["recommended_peak_offset"]),
         )
         _festival_guardrail_lookup[key] = float(row["recommended_peak_uplift_pct"])
+# The guardrail scan window must cover every recommended_peak_offset actually
+# present, or the lookup above is populated but never reachable. Many of the
+# largest recommendations (Curd around several festivals, most BLR products
+# for Varalakshmi/Varamahalakshmi) peak 4-7 days from the festival date, not
+# within +/-3, so a fixed +/-3 window silently drops most high-impact rows.
+_festival_guardrail_offsets = [key[3] for key in _festival_guardrail_lookup]
+_FESTIVAL_GUARDRAIL_MIN_OFFSET = min(_festival_guardrail_offsets, default=-3)
+_FESTIVAL_GUARDRAIL_MAX_OFFSET = max(_festival_guardrail_offsets, default=3)
 
 print(f"  Models loaded. Plan rows: {len(_lgbm_p)}")
 print(f"  Training data: {len(_train_df)} rows, {len(_train_lookup)} series from {os.path.basename(_train_path)}")
@@ -327,10 +348,98 @@ print("Startup complete.")
 _forecast_cache = {"forecast_rows": None, "generated_at": None}
 _redash_cache = {}
 _redash_failure_cache = {}
-_redash_health = {"last_success": None, "last_failure": None, "last_error": None}
+_redash_pending_jobs = {}
+_redash_health = {
+    "last_success": None,
+    "last_failure": None,
+    "last_error": None,
+    "queries": {},
+}
 _missing_key_warned = False
 DIRECT_UNKNOWN_TARGET_TYPES = {"residual_unknown_adhoc", "remaining_unknown_adhoc"}
 PROCUREMENT_TOTAL_TARGET_TYPES = {"procurement_final_total"}
+
+
+class RedashRefreshInProgress(RuntimeError):
+    """Raised when a browser request reaches its bounded Redash wait time."""
+
+    def __init__(self, cache_key: str, target_date: str, job_id: str | None):
+        self.cache_key = cache_key
+        self.target_date = target_date
+        self.job_id = job_id
+        super().__init__(
+            f"Redash {cache_key} refresh is still running for {target_date}"
+        )
+
+    def response(self) -> dict:
+        return {
+            "status": "refresh_in_progress",
+            "detail": str(self),
+            "query": self.cache_key,
+            "target_date": self.target_date,
+            "job_id": self.job_id,
+            "retry_after_seconds": 15,
+        }
+
+
+def _redash_health_event(
+    cache_key: str,
+    query_id: int,
+    state: str,
+    *,
+    target_date: str,
+    error: str | None = None,
+    job_id: str | None = None,
+) -> None:
+    """Track each Redash dependency without hiding one failure with another success."""
+    now = pd.Timestamp.now(tz="Asia/Kolkata").isoformat()
+    queries = _redash_health.setdefault("queries", {})
+    entry = queries.setdefault(cache_key, {"query_id": int(query_id)})
+    entry.update({
+        "query_id": int(query_id),
+        "state": state,
+        "target_date": target_date,
+        "job_id": job_id,
+    })
+    if state == "healthy":
+        entry.update({"last_success": now, "last_error": None})
+    elif state == "failed":
+        entry.update({"last_failure": now, "last_error": error})
+    elif state == "refresh_in_progress":
+        entry["last_started"] = now
+
+    failures = [
+        f"{name} {item.get('target_date')}: {item.get('last_error')}"
+        for name, item in queries.items()
+        if item.get("last_error")
+    ]
+    successes = [
+        item.get("last_success") for item in queries.values()
+        if item.get("last_success")
+    ]
+    failure_times = [
+        item.get("last_failure") for item in queries.values()
+        if item.get("last_failure")
+    ]
+    _redash_health["last_success"] = max(successes) if successes else None
+    _redash_health["last_failure"] = max(failure_times) if failure_times else None
+    _redash_health["last_error"] = "; ".join(failures) if failures else None
+
+
+def _redash_progress_for_date(target_date: str) -> RedashRefreshInProgress:
+    for key, value in _redash_pending_jobs.items():
+        if key[2] == target_date:
+            return RedashRefreshInProgress(key[0], target_date, value["job_id"])
+    return RedashRefreshInProgress("required_inputs", target_date, None)
+
+
+@app.exception_handler(RedashRefreshInProgress)
+async def _redash_refresh_in_progress_response(_request, exc):
+    return JSONResponse(
+        status_code=202,
+        content=exc.response(),
+        headers={"Retry-After": "15"},
+    )
 
 
 def _empty_component_df() -> pd.DataFrame:
@@ -412,6 +521,7 @@ async def _fetch_redash_rows(
     force_refresh: bool = False,
     *,
     strict: bool = False,
+    wait_mode: str = "interactive",
 ) -> pd.DataFrame:
     global _missing_key_warned
     _parse_forecast_date(target_date_str)
@@ -446,19 +556,36 @@ async def _fetch_redash_rows(
     # Sending extra undeclared parameters makes Redash reject the request with
     # "parameter values are incompatible with their definitions".
     params = {"target_date": target_date_str}
+    if wait_mode not in {"interactive", "issuance"}:
+        raise ValueError(f"Unsupported Redash wait mode: {wait_mode}")
+    poll_attempts = (
+        REDASH_JOB_POLL_ATTEMPTS
+        if wait_mode == "issuance"
+        else INTERACTIVE_REDASH_JOB_POLL_ATTEMPTS
+    )
+    job_id = None
     try:
-        async with httpx.AsyncClient(timeout=REDASH_HTTP_TIMEOUT_SECONDS) as client:
-            resp = await client.post(
-                f"{REDASH_BASE_URL}/api/queries/{query_id}/results",
-                headers=headers,
-                # Normal dashboard reads may reuse Redash's parameter-aware
-                # one-hour result cache. Scheduled issuance/explicit refresh
-                # still sets max_age=0 and obtains a fresh immutable input.
-                json={"parameters": params, "max_age": 0 if force_refresh else 3600},
-            )
-            if resp.status_code not in (200, 201):
-                raise RuntimeError(f"Redash HTTP {resp.status_code}: {resp.text[:300]}")
-            data = resp.json()
+        request_timeout = (
+            REDASH_HTTP_TIMEOUT_SECONDS
+            if wait_mode == "issuance"
+            else min(REDASH_HTTP_TIMEOUT_SECONDS, INTERACTIVE_REDASH_WAIT_SECONDS)
+        )
+        async with httpx.AsyncClient(timeout=request_timeout) as client:
+            pending = _redash_pending_jobs.get(key)
+            if pending:
+                data = {"job": {"id": pending["job_id"]}}
+            else:
+                resp = await client.post(
+                    f"{REDASH_BASE_URL}/api/queries/{query_id}/results",
+                    headers=headers,
+                    # Normal dashboard reads may reuse Redash's parameter-aware
+                    # one-hour result cache. Scheduled issuance/explicit refresh
+                    # still sets max_age=0 and obtains a fresh immutable input.
+                    json={"parameters": params, "max_age": 0 if force_refresh else 3600},
+                )
+                if resp.status_code not in (200, 201):
+                    raise RuntimeError(f"Redash HTTP {resp.status_code}: {resp.text[:300]}")
+                data = resp.json()
             rows = None
             if "query_result" in data:
                 rows = data["query_result"]["data"]["rows"]
@@ -466,8 +593,20 @@ async def _fetch_redash_rows(
                 job_id = data["job"]["id"]
                 last_job_status = data["job"].get("status")
                 last_job_error = data["job"].get("error")
-                for _ in range(REDASH_JOB_POLL_ATTEMPTS):
-                    await asyncio.sleep(3)
+                _redash_pending_jobs[key] = {
+                    "job_id": job_id,
+                    "started_at": pending.get("started_at", time.time())
+                    if pending else time.time(),
+                }
+                _redash_health_event(
+                    cache_key,
+                    query_id,
+                    "refresh_in_progress",
+                    target_date=target_date_str,
+                    job_id=job_id,
+                )
+                for _ in range(poll_attempts):
+                    await asyncio.sleep(REDASH_JOB_POLL_INTERVAL_SECONDS)
                     job_resp = await client.get(f"{REDASH_BASE_URL}/api/jobs/{job_id}", headers=headers)
                     job_resp.raise_for_status()
                     job_data = job_resp.json()
@@ -482,19 +621,25 @@ async def _fetch_redash_rows(
                         )
                         result_resp.raise_for_status()
                         rows = result_resp.json()["query_result"]["data"]["rows"]
+                        _redash_pending_jobs.pop(key, None)
                         break
                     if last_job_status in (4, 5):
+                        _redash_pending_jobs.pop(key, None)
                         terminal_state = "failed" if last_job_status == 4 else "cancelled"
                         raise RuntimeError(
                             f"Redash job {terminal_state}: job_id={job_id}, "
                             f"error={last_job_error or 'none'}"
                         )
             if rows is None:
+                if wait_mode == "interactive" and job_id:
+                    raise RedashRefreshInProgress(
+                        cache_key, target_date_str, job_id
+                    )
                 detail = (
                     f"job_id={job_id}, last_status={last_job_status}, "
                     f"job_error={last_job_error or 'none'}, "
-                    f"waited_seconds={REDASH_JOB_POLL_ATTEMPTS * 3}"
-                    if "job_id" in locals()
+                    f"waited_seconds={poll_attempts * REDASH_JOB_POLL_INTERVAL_SECONDS}"
+                    if job_id
                     else f"response_keys={sorted(data.keys())}"
                 )
                 raise RuntimeError(
@@ -507,23 +652,31 @@ async def _fetch_redash_rows(
                 )
             _redash_cache[key] = {"df": df, "fetched_at": time.time()}
             _redash_failure_cache.pop(key, None)
-            _redash_health.update({
-                "last_success": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
-                "last_failure": _redash_health.get("last_failure"),
-                "last_error": None,
-            })
+            _redash_health_event(
+                cache_key,
+                query_id,
+                "healthy",
+                target_date=target_date_str,
+            )
             print(f"Redash {cache_key} ({target_date_str}) -> {len(df)} raw rows")
             return df
+    except RedashRefreshInProgress:
+        # This is an expected browser response, not a failed dependency. The
+        # Redash job remains available for the next request to resume polling.
+        raise
     except Exception as exc:
         print(f"Redash {cache_key} failed for {target_date_str}: {exc}")
         _redash_failure_cache[key] = {
             "failed_at": time.time(), "error": str(exc),
         }
-        _redash_health.update({
-            "last_success": _redash_health.get("last_success"),
-            "last_failure": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
-            "last_error": f"{cache_key} {target_date_str}: {exc}",
-        })
+        _redash_health_event(
+            cache_key,
+            query_id,
+            "failed",
+            target_date=target_date_str,
+            error=str(exc),
+            job_id=job_id,
+        )
         stale = _redash_cache.get(key)
         if stale is not None and not stale["df"].empty:
             print(
@@ -609,11 +762,15 @@ def _process_quantity_rows(
 
 
 async def fetch_subscription_df_async(
-    target_date_str: str, force_refresh: bool = False, *, strict: bool = False
+    target_date_str: str,
+    force_refresh: bool = False,
+    *,
+    strict: bool = False,
+    wait_mode: str = "interactive",
 ) -> pd.DataFrame:
     raw = await _fetch_redash_rows(
         SUBSCRIPTION_QUERY_ID, target_date_str, "subscription", force_refresh,
-        strict=strict,
+        strict=strict, wait_mode=wait_mode,
     )
     result = _process_quantity_rows(
         raw,
@@ -630,7 +787,11 @@ async def fetch_subscription_df_async(
 
 
 async def fetch_known_buy_once_df_async(
-    target_date_str: str, force_refresh: bool = False, *, strict: bool = False
+    target_date_str: str,
+    force_refresh: bool = False,
+    *,
+    strict: bool = False,
+    wait_mode: str = "interactive",
 ) -> pd.DataFrame:
     if not KNOWN_BUY_ONCE_QUERY_ID:
         if strict:
@@ -638,7 +799,7 @@ async def fetch_known_buy_once_df_async(
         return _empty_component_df()
     raw = await _fetch_redash_rows(
         int(KNOWN_BUY_ONCE_QUERY_ID), target_date_str, "known_buy_once",
-        force_refresh, strict=strict,
+        force_refresh, strict=strict, wait_mode=wait_mode,
     )
     result = _process_quantity_rows(
         raw,
@@ -652,7 +813,11 @@ async def fetch_known_buy_once_df_async(
 
 
 async def fetch_recent_actuals_df_async(
-    target_date_str: str, force_refresh: bool = False, *, strict: bool = False
+    target_date_str: str,
+    force_refresh: bool = False,
+    *,
+    strict: bool = False,
+    wait_mode: str = "interactive",
 ) -> pd.DataFrame:
     if not RECENT_ACTUALS_QUERY_ID:
         if strict:
@@ -660,7 +825,7 @@ async def fetch_recent_actuals_df_async(
         return pd.DataFrame(columns=["target_date", "city_cd", "product_name", "total_qty"])
     raw = await _fetch_redash_rows(
         int(RECENT_ACTUALS_QUERY_ID), target_date_str, "recent_actuals",
-        force_refresh, strict=strict,
+        force_refresh, strict=strict, wait_mode=wait_mode,
     )
     if raw.empty:
         if strict:
@@ -697,31 +862,92 @@ async def fetch_recent_actuals_df_async(
     return result
 
 
-async def fetch_selected_actuals_df_async(target_date_str: str, force_refresh: bool = False) -> pd.DataFrame:
-    if not SELECTED_ACTUALS_QUERY_ID:
-        return _empty_actuals_df()
-    raw = await _fetch_redash_rows(int(SELECTED_ACTUALS_QUERY_ID), target_date_str, "selected_actuals", force_refresh)
-    # Query 1968 returns a month-wide comparison extract with legacy column
-    # names. Preserve its gross-demand definition (all statuses) and select
-    # only the requested day before aggregating city/SKU quantities.
-    if {"date", "city", "quantity"}.issubset(raw.columns):
-        raw = raw.copy()
-        raw["date"] = pd.to_datetime(raw["date"], errors="coerce", dayfirst=True).dt.normalize()
-        raw = raw[raw["date"] == _parse_forecast_date(target_date_str)].copy()
-        raw = raw.rename(columns={
-            "city": "city_cd",
-            "quantity": "actual_qty",
-            "customer_count": "actual_orders",
-        })
-    actuals = _process_quantity_rows(
-        raw,
-        qty_candidates=["actual_qty", "total_qty", "total_quantity", "quantity", "daily_qty"],
-        order_candidates=["actual_orders", "total_orders", "customer_count", "daily_orders"],
-        allowed_types=None,
+async def fetch_selected_actuals_df_async(
+    target_date_str: str,
+    force_refresh: bool = False,
+    *,
+    wait_mode: str = "interactive",
+) -> pd.DataFrame:
+    period = await fetch_selected_actuals_period_df_async(
+        target_date_str,
+        force_refresh,
+        wait_mode=wait_mode,
     )
+    if period.empty:
+        return _empty_actuals_df()
+    target = _parse_forecast_date(target_date_str)
+    actuals = period[period["forecast_date"] == target].copy()
     if actuals.empty:
         return _empty_actuals_df()
-    return actuals.rename(columns={"daily_qty": "actual_qty", "daily_orders": "actual_orders"})
+    return actuals.drop(columns=["forecast_date"])
+
+
+def _process_selected_actuals_period(raw: pd.DataFrame) -> pd.DataFrame:
+    """Normalize either Query 1968's month extract or an exact-date result."""
+    empty = pd.DataFrame(columns=[
+        "forecast_date", "city_cd", "product_name", "actual_qty", "actual_orders"
+    ])
+    if raw.empty:
+        return empty
+
+    frame = raw.copy()
+    date_col = next(
+        (column for column in ("date", "target_date", "forecast_date") if column in frame),
+        None,
+    )
+    if date_col is None:
+        print(f"Query 1968 rows have no date column; got {frame.columns.tolist()}")
+        return empty
+    frame["forecast_date"] = pd.to_datetime(
+        frame[date_col], errors="coerce", dayfirst=(date_col == "date")
+    ).dt.normalize()
+    frame = frame.rename(columns={
+        "city": "city_cd",
+        "quantity": "actual_qty",
+        "actual_quantity": "actual_qty",
+        "customer_count": "actual_orders",
+    })
+    frame = frame[frame["forecast_date"].notna()].copy()
+
+    rows = []
+    for forecast_date, dated_rows in frame.groupby("forecast_date"):
+        actuals = _process_quantity_rows(
+            dated_rows,
+            qty_candidates=["actual_qty", "total_qty", "total_quantity", "quantity", "daily_qty"],
+            order_candidates=["actual_orders", "total_orders", "customer_count", "daily_orders"],
+            allowed_types=None,
+        )
+        if actuals.empty:
+            continue
+        actuals = actuals.rename(columns={
+            "daily_qty": "actual_qty", "daily_orders": "actual_orders"
+        })
+        actuals.insert(0, "forecast_date", pd.Timestamp(forecast_date).normalize())
+        rows.append(actuals[[
+            "forecast_date", "city_cd", "product_name", "actual_qty", "actual_orders"
+        ]])
+    return pd.concat(rows, ignore_index=True) if rows else empty
+
+
+async def fetch_selected_actuals_period_df_async(
+    target_date_str: str,
+    force_refresh: bool = False,
+    *,
+    wait_mode: str = "interactive",
+) -> pd.DataFrame:
+    """Fetch and preserve every completed date returned by Query 1968."""
+    if not SELECTED_ACTUALS_QUERY_ID:
+        return pd.DataFrame(columns=[
+            "forecast_date", "city_cd", "product_name", "actual_qty", "actual_orders"
+        ])
+    raw = await _fetch_redash_rows(
+        int(SELECTED_ACTUALS_QUERY_ID),
+        target_date_str,
+        "selected_actuals",
+        force_refresh,
+        wait_mode=wait_mode,
+    )
+    return _process_selected_actuals_period(raw)
 
 
 def _today_ist() -> pd.Timestamp:
@@ -1268,16 +1494,18 @@ def _apply_festival_guardrail(
 ) -> tuple[int, str | None, float, int]:
     if not _festival_guardrail_lookup:
         return prediction, None, 1.0, 0
-    if not (
-        features.get("is_festival", 0)
-        or features.get("is_city_festival", 0)
-        or features.get("is_pre_festival", 0)
-        or features.get("is_post_festival", 0)
-    ):
-        return prediction, None, 1.0, 0
-
+    # Do not gate on the is_festival/is_pre_festival/is_post_festival ML
+    # features here: those are fixed +/-1 day booleans used for model
+    # training, but recommended_peak_offset for several city/product/festival
+    # combinations (mostly Curd, and most BLR products for
+    # Varalakshmi/Varamahalakshmi) is 4-7 days out. Gating on those flags
+    # silently skipped the loop below for every one of those cases even
+    # before the scan window itself was widened to reach them.
     dt = pd.Timestamp(dt).normalize()
-    candidate_dates = [dt - pd.Timedelta(days=offset) for offset in range(-3, 4)]
+    candidate_dates = [
+        dt - pd.Timedelta(days=offset)
+        for offset in range(_FESTIVAL_GUARDRAIL_MIN_OFFSET, _FESTIVAL_GUARDRAIL_MAX_OFFSET + 1)
+    ]
     for festival_date in candidate_dates:
         festival_name = _festival_name_by_city_date.get((city, festival_date))
         if not festival_name:
@@ -1454,9 +1682,13 @@ def _predict_city_direct(
         "recent_mean": roll_7,
     }
     frame = pd.DataFrame([row])
-    model_prediction = float(
+    # The model is trained on qty / roll_28_mean (see ml_pipeline/train_city_direct.py)
+    # so a leaf can only ever output a multiple of this row's own recent level,
+    # not an absolute value borrowed from a differently-scaled product.
+    ratio_prediction = float(
         artifact["model"].predict(frame[artifact["features"]])[0]
     )
+    model_prediction = max(0.0, ratio_prediction) * roll_28
     method = artifact["selector"].get(product, "model")
     # D-7 is one of the strongest predictors. On a normal target, never let a
     # festival-contaminated D-7 value drive either the ML or seasonal selector;
@@ -2278,13 +2510,13 @@ async def _issue_daily_operational_forecast_once(
             if city_target == target_date
         }
         subscription_df = await fetch_subscription_df_async(
-            target_date, force_refresh, strict=True
+            target_date, force_refresh, strict=True, wait_mode="issuance"
         )
         known_df = await fetch_known_buy_once_df_async(
-            target_date, force_refresh, strict=True
+            target_date, force_refresh, strict=True, wait_mode="issuance"
         )
         recent_df = await fetch_recent_actuals_df_async(
-            target_date, force_refresh, strict=True
+            target_date, force_refresh, strict=True, wait_mode="issuance"
         )
         recent_df = _validate_issuance_inputs(
             target_date=target_date,
@@ -2881,6 +3113,21 @@ def status():
     }
     today_issue = issued_run_for_issue_date(str(_today_ist().date()))
     redash_degraded = bool(_redash_health.get("last_error"))
+    pending_jobs = [
+        {
+            "query": key[0],
+            "query_id": key[1],
+            "target_date": key[2],
+            "job_id": value["job_id"],
+            "age_seconds": int(max(0, time.time() - value["started_at"])),
+        }
+        for key, value in _redash_pending_jobs.items()
+    ]
+    redash_state = (
+        "degraded" if redash_degraded
+        else "refresh_in_progress" if pending_jobs
+        else "not_checked_or_healthy"
+    )
     return {
         "status": "degraded" if redash_degraded else "ok",
         "redash": {
@@ -2893,7 +3140,8 @@ def status():
                 "recent_actuals",
                 "selected_actuals",
             )),
-            "state": "degraded" if redash_degraded else "not_checked_or_healthy",
+            "state": redash_state,
+            "pending_jobs": pending_jobs,
             **_redash_health,
         },
         "models": {
@@ -3142,11 +3390,25 @@ async def get_operational_forecast(
         )
     elif missing_cities:
         try:
-            live_df = await _build_target_forecast_df(
-                target_dt, refresh, strict_inputs=True
-            )
+            try:
+                async with asyncio.timeout(INTERACTIVE_FORECAST_TIMEOUT_SECONDS):
+                    live_df = await _build_target_forecast_df(
+                        target_dt, refresh, strict_inputs=True
+                    )
+            except TimeoutError as timeout_exc:
+                raise _redash_progress_for_date(target_date) from timeout_exc
         except Exception as exc:
             if frozen_df.empty:
+                if isinstance(exc, RedashRefreshInProgress):
+                    return JSONResponse(
+                        status_code=202,
+                        content={
+                            **exc.response(),
+                            "target_date": target_date,
+                            "frozen_rows_available": False,
+                        },
+                        headers={"Retry-After": "15"},
+                    )
                 raise HTTPException(
                     status_code=503,
                     detail=(
@@ -3154,11 +3416,18 @@ async def get_operational_forecast(
                         f"is available. Cause: {exc}"
                     ),
                 ) from exc
-            availability_warning = (
-                "Live refresh failed; showing immutable frozen rows only. "
-                f"Unavailable cities: {', '.join(sorted(missing_cities))}. "
-                f"Cause: {exc}"
-            )
+            if isinstance(exc, RedashRefreshInProgress):
+                availability_warning = (
+                    "Live refresh is still running; showing immutable frozen "
+                    f"rows only. Unavailable cities: "
+                    f"{', '.join(sorted(missing_cities))}. Retry shortly."
+                )
+            else:
+                availability_warning = (
+                    "Live refresh failed; showing immutable frozen rows only. "
+                    f"Unavailable cities: {', '.join(sorted(missing_cities))}. "
+                    f"Cause: {exc}"
+                )
         live_df = live_df[live_df["city"].isin(missing_cities)].copy()
         live_df["forecast_status"] = "live_preview"
         live_df["forecast_run_id"] = None
