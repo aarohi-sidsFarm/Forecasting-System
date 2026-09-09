@@ -2,15 +2,15 @@
   "city": "BLR",
   "lead_days": 3,
   "completed_actual_gap_days": 4,
-  "cutoff": "2026-06-06",
-  "end": "2026-09-03",
-  "model_wape": 3.015387673882614,
-  "selected_wape": 3.008483769701493,
-  "bias_pct": 1.031904455305175,
+  "cutoff": "2026-06-11",
+  "end": "2026-09-08",
+  "model_wape": 3.0693779578985305,
+  "selected_wape": 2.971788805632535,
+  "bias_pct": 0.8170479748749471,
   "selector": {
     "A2 Buffalo Milk": "model",
     "A2 Desi Cow Milk": "model",
-    "Cow Milk": "model",
+    "Cow Milk": "seasonal_7",
     "Curd": "model",
     "Double Toned A2 Buffalo Milk": "model",
     "Skim Milk": "recent_mean",
@@ -18,60 +18,60 @@
   },
   "product_metrics": {
     "A2 Buffalo Milk": {
-      "model_wape": 2.637870654404785,
-      "same_dow_median_wape": 5.417512578338776,
-      "seasonal_7_wape": 2.985700414864507,
-      "recent_mean_wape": 3.2282511380401764,
+      "model_wape": 2.5594891228294623,
+      "same_dow_median_wape": 4.703859873858006,
+      "seasonal_7_wape": 2.7692526665065427,
+      "recent_mean_wape": 3.0827014160792303,
       "selected_method": "model",
-      "selected_wape": 2.637870654404785
+      "selected_wape": 2.5594891228294623
     },
     "A2 Desi Cow Milk": {
-      "model_wape": 3.0076701033867304,
-      "same_dow_median_wape": 4.290722666572707,
-      "seasonal_7_wape": 3.627426799619464,
-      "recent_mean_wape": 3.5343061504930366,
+      "model_wape": 3.0964534658570297,
+      "same_dow_median_wape": 4.086504580690627,
+      "seasonal_7_wape": 3.5817477096546866,
+      "recent_mean_wape": 3.569415081042989,
       "selected_method": "model",
-      "selected_wape": 3.0076701033867304
+      "selected_wape": 3.0964534658570297
     },
     "Cow Milk": {
-      "model_wape": 2.6023969466896317,
-      "same_dow_median_wape": 3.8808724730016992,
-      "seasonal_7_wape": 2.661152292952119,
-      "recent_mean_wape": 2.9081853295963684,
-      "selected_method": "model",
-      "selected_wape": 2.6023969466896317
+      "model_wape": 2.716358415263796,
+      "same_dow_median_wape": 3.5431594990228734,
+      "seasonal_7_wape": 2.420692961000971,
+      "recent_mean_wape": 2.7464018387187963,
+      "selected_method": "seasonal_7",
+      "selected_wape": 2.420692961000971
     },
     "Curd": {
-      "model_wape": 5.781798866897571,
-      "same_dow_median_wape": 6.532817439720662,
-      "seasonal_7_wape": 7.186335110649742,
-      "recent_mean_wape": 6.281723749755646,
+      "model_wape": 6.11089892272536,
+      "same_dow_median_wape": 6.232200493639643,
+      "seasonal_7_wape": 7.13878868426049,
+      "recent_mean_wape": 6.518348748270904,
       "selected_method": "model",
-      "selected_wape": 5.781798866897571
+      "selected_wape": 6.11089892272536
     },
     "Double Toned A2 Buffalo Milk": {
-      "model_wape": 3.9632446693022314,
-      "same_dow_median_wape": 6.574240683330804,
-      "seasonal_7_wape": 5.3309341600364215,
-      "recent_mean_wape": 4.425359798568548,
+      "model_wape": 3.94217286788529,
+      "same_dow_median_wape": 6.223785389723873,
+      "seasonal_7_wape": 5.111849003844809,
+      "recent_mean_wape": 4.215871074050032,
       "selected_method": "model",
-      "selected_wape": 3.9632446693022314
+      "selected_wape": 3.94217286788529
     },
     "Skim Milk": {
-      "model_wape": 4.528478904715212,
-      "same_dow_median_wape": 4.798222014270675,
-      "seasonal_7_wape": 4.786524739735642,
-      "recent_mean_wape": 4.430259178182912,
+      "model_wape": 4.734930443870336,
+      "same_dow_median_wape": 4.788865298419439,
+      "seasonal_7_wape": 4.590705355036565,
+      "recent_mean_wape": 4.479493141913523,
       "selected_method": "recent_mean",
-      "selected_wape": 4.430259178182912
+      "selected_wape": 4.479493141913523
     },
     "Toned Milk": {
-      "model_wape": 2.753238175008748,
-      "same_dow_median_wape": 3.9664793414595536,
-      "seasonal_7_wape": 3.8922748139939847,
-      "recent_mean_wape": 3.3418892331350776,
+      "model_wape": 2.9882233299652023,
+      "same_dow_median_wape": 3.638094860248755,
+      "seasonal_7_wape": 3.892007696732856,
+      "recent_mean_wape": 3.4221555952924105,
       "selected_method": "model",
-      "selected_wape": 2.753238175008748
+      "selected_wape": 2.9882233299652023
     }
   }
 }

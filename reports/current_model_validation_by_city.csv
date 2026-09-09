@@ -1,3 +1,3 @@
 city,lead_days,validation_start,validation_end,raw_model_wape_pct,selected_wape_pct,selected_accuracy_pct,bias_pct,below_1pct_wape
-HYD,2,2026-06-06,2026-09-03,1.749,1.749,98.251,-0.428,False
-BLR,3,2026-06-06,2026-09-03,3.015,3.008,96.992,1.032,False
+HYD,2,2026-06-11,2026-09-08,1.88,1.88,98.12,-0.534,False
+BLR,3,2026-06-11,2026-09-08,3.069,2.972,97.028,0.817,False
