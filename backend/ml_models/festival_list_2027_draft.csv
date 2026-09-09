@@ -1,0 +1,51 @@
+date,festival,cities,impact,year,impact_direction,confidence,source_note
+01-01-2027,New Year Day,ALL,HIGH,2027,0,fixed,Gregorian fixed date
+14-01-2027,Bhogi,"HYD,VGA",HIGH,2027,0,estimate,One day before Makar Sankranti per 2026 pattern; Telangana state holiday list also shows Jan 14
+14-01-2027,Makara Sankranthi,BLR,HIGH,2027,0,estimate,Same day as Bhogi per 2026 pattern; verify against Karnataka govt calendar
+15-01-2027,Sankranti / Pongal,"HYD,VGA",HIGH,2027,0,sourced-conflict,drikpanchang.com gives Jan 15 (tithi-precise); Telangana state holiday list gives Jan 14 for the combined Bhogi/Sankranti holiday; confirm which day Query 1968 history actually shows as the demand peak
+16-01-2027,Kanuma,"HYD,VGA",HIGH,2027,0,estimate,One day after Sankranti per 2026 pattern
+26-01-2027,Republic Day,ALL,MED,2027,-1,fixed,Gregorian fixed date
+13-02-2027,Ratha Saptami,"HYD,VGA,BLR",HIGH,2027,1,sourced,dekhopanchang.com
+19-02-2027,Chhatrapati Shivaji Maharaj Jayanti,PNQ,HIGH,2027,0,fixed,Gregorian fixed date
+06-03-2027,Maha Shivaratri,ALL,HIGH,2027,1,sourced,Confirmed by 2 sources: drikpanchang.com and Telangana state holiday list
+10-03-2027,Eid ul-Fitr,ALL,HIGH,2027,0,sourced-lowconf,Telangana state holiday list; Islamic calendar dates depend on moon sighting and can shift +/-1 day from prediction; reconfirm close to the date
+21-03-2027,Holika Dahan,"HYD,VGA,PNQ,BLR",MED,2027,-1,sourced,"Confirmed by 2 sources; 2026 had BLR one day later than other cities; could not verify whether that regional split repeats in 2027, so this draft uses one date for all cities"
+22-03-2027,Holi,"HYD,VGA,PNQ,BLR",HIGH,2027,-1,sourced,Confirmed by 2 sources; same regional-split caveat as Holika Dahan above
+26-03-2027,Good Friday,ALL,MED,2027,-1,computed,Derived from the 2027 Easter Sunday date (28 Mar 2027); also matches Telangana state holiday list
+07-04-2027,Ugadi / Telugu New Year,"HYD,VGA,BLR",HIGH,2027,1,sourced,"Confirmed by 2 sources: drikpanchang.com, dekhopanchang.com; Telangana state holiday list says Apr 8 (1-day discrepancy, unresolved)"
+07-04-2027,Gudi Padwa,PNQ,HIGH,2027,0,sourced,Same day as Ugadi
+14-04-2027,Dr. B.R. Ambedkar Jayanti,ALL,MED,2027,0,fixed,Gregorian fixed date
+15-04-2027,Ram Navami,"HYD,VGA,BLR,PNQ",HIGH,2027,1,sourced,"Confirmed by 2 sources; 2026 had a 1-day regional split (BLR/PNQ vs HYD/VGA) that could not be verified for 2027, so this draft uses one date for all cities"
+20-04-2027,Hanuman Jayanti,ALL,MED,2027,0,sourced,dekhopanchang.com
+08-05-2027,Akshaya Tritiya,ALL,HIGH,2027,0,sourced,dekhopanchang.com
+01-05-2027,Maharashtra Day,PNQ,HIGH,2027,-1,fixed,Gregorian fixed date
+20-05-2027,Buddha Purnima,ALL,MED,2027,0,sourced,Confirmed by 2 sources
+17-05-2027,Eid al-Adha / Bakrid,ALL,HIGH,2027,0,sourced-lowconf,Confirmed by 2 sources but Islamic calendar dates depend on moon sighting; reconfirm close to the date
+02-06-2027,Telangana Formation Day,HYD,HIGH,2027,0,fixed,Gregorian fixed date
+15-06-2027,Moharram / Shahadat Imam Hussain,ALL,MED,2027,0,sourced-lowconf,"Telangana state holiday list; Islamic calendar date, reconfirm close to the date"
+18-07-2027,Guru Purnima,ALL,MED,2027,0,sourced,dekhopanchang.com
+15-08-2027,Independence Day,ALL,HIGH,2027,-1,fixed,Gregorian fixed date
+15-08-2027,Eid Miladun Nabi,"VGA,HYD,BLR,PNQ",MED,2027,0,sourced-lowconf,"Telangana state holiday list shows this coinciding with Independence Day in 2027; Islamic calendar date, reconfirm close to the date"
+06-08-2027,Naga Panchami,ALL,MED,2027,0,sourced,dekhopanchang.com
+13-08-2027,Varalakshmi Vratam,"HYD,VGA",HIGH,2027,0,sourced,astrosight.ai
+17-08-2027,Sravana Purnima / Raksha Bandhan,ALL,HIGH,2027,1,sourced,Confirmed by 2 sources
+25-08-2027,Krishna Janmashtami,ALL,HIGH,2027,1,sourced,Confirmed by 2 sources
+26-08-2027,Dahi Handi,PNQ,HIGH,2027,0,estimate,One day after Krishna Janmashtami per 2026 pattern
+12-09-2027,Onam,BLR,MED,2027,0,sourced-lowconf,"dekhopanchang.com only (single source); this festival's date can vary by region/tradition, verify"
+04-09-2027,Ganesh Chaturthi,ALL,HIGH,2027,1,sourced,Confirmed by 3 independent sources; high confidence
+30-09-2027,Navratri Begins,ALL,HIGH,2027,0,sourced,dekhopanchang.com
+07-10-2027,Durgashtami,VGA,HIGH,2027,0,sourced,Telangana state holiday list
+09-10-2027,Dussehra / Vijayadashami,ALL,HIGH,2027,1,sourced-conflict,"dekhopanchang.com gives Oct 9; Telangana state holiday list gives Oct 10; 1-day discrepancy, unresolved"
+02-10-2027,Gandhi Jayanti,ALL,MED,2027,0,fixed,Gregorian fixed date
+27-10-2027,Dhanteras,ALL,HIGH,2027,0,estimate,Two days before Diwali per 2026 pattern
+29-10-2027,Diwali,ALL,HIGH,2027,1,sourced,Confirmed by 3 independent sources; high confidence
+30-10-2027,Govardhan Puja,ALL,HIGH,2027,0,sourced,dekhopanchang.com
+31-10-2027,Diwali Bali Pratipada,PNQ,HIGH,2027,0,estimate,"One day after Govardhan Puja per 2026 pattern; may coincide with Bhai Dooj, verify"
+31-10-2027,Bhai Dooj,ALL,MED,2027,0,sourced,dekhopanchang.com
+03-11-2027,Nagula Chavithi,"HYD,VGA",HIGH,2027,1,estimate,"Five days after Diwali per 2026 pattern; low confidence, this Telugu-specific date was not found in any source"
+14-09-2027,Anant Chaturdashi,PNQ,HIGH,2027,0,estimate,Ten days after Ganesh Chaturthi (immersion day) per typical pattern; not directly sourced
+01-11-2027,Andhra Pradesh Formation Day,VGA,HIGH,2027,0,fixed,Gregorian fixed date
+01-11-2027,Karnataka Rajyotsava,BLR,HIGH,2027,-1,fixed,Gregorian fixed date
+14-11-2027,Kartik Purnima / Guru Nanak Jayanti,ALL,MED,2027,0,sourced,dekhopanchang.com
+16-12-2027,Dhanu Sankranti,ALL,MED,2027,1,sourced,"dekhopanchang.com; matches 2026's exact date (Dec 16), consistent with this being a stable solar transit"
+25-12-2027,Christmas,ALL,HIGH,2027,1,fixed,Gregorian fixed date
