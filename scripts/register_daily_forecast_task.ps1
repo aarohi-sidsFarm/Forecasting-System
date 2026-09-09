@@ -26,8 +26,18 @@ $action = New-ScheduledTaskAction `
     -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$IssueScript`"" `
     -WorkingDirectory $ProjectRoot
 $trigger = New-ScheduledTaskTrigger -Daily -At $runAt
+# This runs on a personal laptop, not a server: without these three flags the
+# task silently no-ops on any night the machine is asleep, off, or unplugged
+# at $DailyAt, and -StartWhenAvailable only helps if it's turned back on
+# again before the next trigger. That produced repeated gaps in daily
+# issuance (e.g. 2026-08-28, 08-31, 09-02, 09-03, 09-05, 09-07 were all
+# missed), which is why the accuracy gates keep seeing incomplete actual
+# coverage for BLR/PNQ.
 $settings = New-ScheduledTaskSettingsSet `
     -StartWhenAvailable `
+    -WakeToRun `
+    -DontStopIfGoingOnBatteries `
+    -AllowStartIfOnBatteries `
     -ExecutionTimeLimit (New-TimeSpan -Minutes 90)
 
 Register-ScheduledTask `

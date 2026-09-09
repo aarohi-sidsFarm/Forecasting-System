@@ -11,7 +11,21 @@ challengers until completed-day evidence passes the promotion gates.
 
    The command automatically issues HYD/VGA for D-2 and BLR/PNQ for D-3.
    It first validates the festival calendar and prints the next 45 days of
-   events, then validates all three Redash inputs and writes the run atomically.
+   events, reconciles yesterday's Query 1968 actuals, then validates all three
+   forecast inputs and writes the run atomically. Failure to load yesterday's
+    actuals does not corrupt or block today's forecast; it leaves the accuracy
+    gate incomplete and prints a warning.
+
+Query 1968 remains month-wide and does not need to be changed. Daily
+reconciliation archives every completed row it returns. To backfill a month
+from an existing Redash export, run:
+
+```powershell
+python scripts\reconcile_forecast_actuals.py --start 2026-08-01 --end 2026-08-31 --csv "C:\path\query_1968_august.csv" --completed-through 2026-08-23
+```
+
+`--completed-through` must reflect when the export was taken; this prevents
+future placeholder rows in a month-wide extract from being stored as actuals.
    A malformed calendar stops the run before Redash is called. Re-running the
    command returns `already_issued`; it never overwrites the successful run.
 
@@ -39,19 +53,50 @@ challengers until completed-day evidence passes the promotion gates.
    failed query enters a 60-second retry cooldown instead of launching the
    same expensive job repeatedly.
 
-   As Query 3085 has been observed to run for 10-12 minutes, asynchronous jobs
-   are polled for up to 15 minutes by default. Override this only when necessary
-   with `REDASH_JOB_POLL_ATTEMPTS`; one attempt represents three seconds.
+   Interactive requests poll each Redash job for at most 45 seconds and the
+   whole operational-forecast request is capped at 60 seconds. If Redash is
+   still working, the API returns HTTP `202` with
+   `status=refresh_in_progress`; retrying resumes the remembered Redash job
+   instead of deliberately waiting for 15 minutes in the dashboard. Configure
+   these bounds with `INTERACTIVE_REDASH_WAIT_SECONDS` and
+   `INTERACTIVE_FORECAST_TIMEOUT_SECONDS`.
 
-   `GET /api/status` reports `degraded` after a Redash failure. A `200` health
+   Scheduled issuance is the only path that uses the long polling allowance.
+   As Query 3085 can take 10-12 minutes during peak load, issuance polls it for
+   up to 15 minutes by default. Override this with
+   `REDASH_JOB_POLL_ATTEMPTS`; the interval is controlled by
+   `REDASH_JOB_POLL_INTERVAL_SECONDS` and defaults to three seconds.
+
+   `GET /api/status` reports each query independently under
+   `redash.queries`, plus any `redash.pending_jobs`. One query succeeding does
+   not clear a different query's failure. A `200` health
    response only proves that FastAPI and the model artifacts are loaded; it
    does not prove that Redash completed the subscription query. If no frozen
    forecast and no successful same-target input snapshot exist, the forecast
    endpoint intentionally returns `503` rather than publishing partial demand.
 
-5. Review the gate:
+   The optimized local definition for Query 3085 is
+   `redash_queries/subscription_forecast.sql`. It limits latest-address scans
+   to customers in the target subscription set and product joins to the seven
+   operational SKUs. Redash does not update from Git automatically: paste this
+   SQL into Query 3085, run it for a known target date, compare city/SKU totals
+   with the old result, and save only after the totals reconcile.
 
-   `venv\Scripts\python.exe scripts\evaluate_shadow.py --minimum-days 14`
+5. Review the paired challenger gate:
+
+   `venv\Scripts\python.exe scripts\evaluate_shadow.py --minimum-days 28 --maximum-city-wape 4 --maximum-product-wape 8`
+
+   Review the immutable production gate:
+
+   `venv\Scripts\python.exe scripts\evaluate_official_forecasts.py --minimum-days 28 --maximum-city-wape 4 --maximum-product-wape 8`
+
+   These thresholds (4% city / 8% product) replace an earlier 1%/1% gate that
+   no artifact ever cleared (see `reports/historical_accuracy_audit_2026-09-04.md`)
+   and so never actually screened anything. They sit above current measured
+   performance and below anything that would indicate a broken model.
+
+   Both gates use row-level absolute error before aggregation. The official
+   gate also rejects wrong D-2/D-3 horizons and incomplete actual coverage.
 
 6. Build forecast-versus-actual comparisons by key; never paste values into a
    separately ordered product list:
@@ -71,10 +116,15 @@ Refresh final-demand training data only through the latest completed date, then
 rebuild features and retrain challenger artifacts. Never overwrite serving
 champion filenames during routine challenger training.
 
+The refresh exports `reports/current_model_validation.csv`, which compares the
+selected method for every city/SKU against the raw model, same-day-of-week
+median, seasonal-7, and recent-mean baselines.
+
 ## Promotion gate
 
-A challenger may enter manual promotion review only after at least 14 completed
-shadow days and lower aggregate WAPE than the champion in both HYD and BLR.
+A challenger may enter manual promotion review only after at least 28 completed
+days for every city/SKU, lower aggregate WAPE than the champion in both HYD and
+BLR, and compliance with the configured city and product WAPE limits.
 Before promotion, also verify every product and D+1 through D+7 horizon, demand
 bias, P80 coverage, and procurement capacity constraints.
 
