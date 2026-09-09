@@ -1,15 +1,15 @@
 city,lead_days,product_name,selected_method,selected_wape_pct,selected_accuracy_pct,raw_model_wape_pct,same_dow_median_wape_pct,seasonal_7_wape_pct,recent_mean_wape_pct,best_baseline_wape_pct,selected_beats_or_equals_best_baseline,below_1pct_wape,validation_end
-HYD,2,A2 Buffalo Milk,model,1.529,98.471,1.529,3.505,2.307,2.515,2.307,True,False,2026-09-03
-HYD,2,A2 Desi Cow Milk,model,2.492,97.508,2.492,4.359,3.769,3.299,3.299,True,False,2026-09-03
-HYD,2,Cow Milk,model,2.172,97.828,2.172,4.196,3.155,2.962,2.962,True,False,2026-09-03
-HYD,2,Curd,model,3.557,96.443,3.557,3.796,4.471,4.434,3.796,True,False,2026-09-03
-HYD,2,Double Toned A2 Buffalo Milk,model,1.415,98.585,1.415,2.759,2.202,2.164,2.164,True,False,2026-09-03
-HYD,2,Skim Milk,model,1.615,98.385,1.615,2.546,2.232,2.399,2.232,True,False,2026-09-03
-HYD,2,Toned Milk,model,1.536,98.464,1.536,3.544,2.695,2.803,2.695,True,False,2026-09-03
-BLR,3,A2 Buffalo Milk,model,2.638,97.362,2.638,5.418,2.986,3.228,2.986,True,False,2026-09-03
-BLR,3,A2 Desi Cow Milk,model,3.008,96.992,3.008,4.291,3.627,3.534,3.534,True,False,2026-09-03
-BLR,3,Cow Milk,model,2.602,97.398,2.602,3.881,2.661,2.908,2.661,True,False,2026-09-03
-BLR,3,Curd,model,5.782,94.218,5.782,6.533,7.186,6.282,6.282,True,False,2026-09-03
-BLR,3,Double Toned A2 Buffalo Milk,model,3.963,96.037,3.963,6.574,5.331,4.425,4.425,True,False,2026-09-03
-BLR,3,Skim Milk,recent_mean,4.43,95.57,4.528,4.798,4.787,4.43,4.43,True,False,2026-09-03
-BLR,3,Toned Milk,model,2.753,97.247,2.753,3.966,3.892,3.342,3.342,True,False,2026-09-03
+HYD,2,A2 Buffalo Milk,model,1.724,98.276,1.724,3.241,2.221,2.421,2.221,True,False,2026-09-08
+HYD,2,A2 Desi Cow Milk,model,2.569,97.431,2.569,4.229,3.694,3.304,3.304,True,False,2026-09-08
+HYD,2,Cow Milk,model,2.221,97.779,2.221,3.804,2.994,2.87,2.87,True,False,2026-09-08
+HYD,2,Curd,model,3.761,96.239,3.761,3.927,4.541,4.731,3.927,True,False,2026-09-08
+HYD,2,Double Toned A2 Buffalo Milk,model,1.583,98.417,1.583,2.612,2.16,2.168,2.16,True,False,2026-09-08
+HYD,2,Skim Milk,model,1.674,98.326,1.674,2.377,2.116,2.335,2.116,True,False,2026-09-08
+HYD,2,Toned Milk,model,1.636,98.364,1.636,3.417,2.666,2.765,2.666,True,False,2026-09-08
+BLR,3,A2 Buffalo Milk,model,2.559,97.441,2.559,4.704,2.769,3.083,2.769,True,False,2026-09-08
+BLR,3,A2 Desi Cow Milk,model,3.096,96.904,3.096,4.087,3.582,3.569,3.569,True,False,2026-09-08
+BLR,3,Cow Milk,seasonal_7,2.421,97.579,2.716,3.543,2.421,2.746,2.421,True,False,2026-09-08
+BLR,3,Curd,model,6.111,93.889,6.111,6.232,7.139,6.518,6.232,True,False,2026-09-08
+BLR,3,Double Toned A2 Buffalo Milk,model,3.942,96.058,3.942,6.224,5.112,4.216,4.216,True,False,2026-09-08
+BLR,3,Skim Milk,recent_mean,4.479,95.521,4.735,4.789,4.591,4.479,4.479,True,False,2026-09-08
+BLR,3,Toned Milk,model,2.988,97.012,2.988,3.638,3.892,3.422,3.422,True,False,2026-09-08
