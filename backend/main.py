@@ -3237,6 +3237,78 @@ async def debug_components(
     }
 
 
+@app.post("/api/admin/run_daily_pipeline")
+async def run_daily_pipeline(x_admin_token: str | None = Header(default=None)):
+    """Run the same four steps as scripts/issue_daily_forecasts.ps1, for use
+    by an external scheduler (e.g. a GitHub Actions cron) once the laptop
+    running Windows Task Scheduler is no longer the deployment target.
+    """
+    if not ADMIN_TOKEN:
+        raise HTTPException(status_code=403, detail="ADMIN_TOKEN is not configured")
+    if x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(status_code=403, detail="Admin token required")
+
+    import sys
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.audit_festival_calendar import (
+        DEFAULT_CALENDAR,
+        load_and_validate as validate_festival_calendar,
+    )
+    from scripts.reconcile_forecast_actuals import collect as collect_actuals
+    from scripts.evaluate_official_forecasts import (
+        evaluate as evaluate_official,
+        load_official_rows,
+    )
+    from backend.forecast_history import upsert_actuals
+
+    result: dict = {"steps": {}}
+
+    _, calendar_errors = validate_festival_calendar(DEFAULT_CALENDAR)
+    if calendar_errors:
+        raise HTTPException(
+            status_code=422,
+            detail={"step": "festival_calendar", "errors": calendar_errors},
+        )
+    result["steps"]["festival_calendar"] = "ok"
+
+    yesterday = _today_ist() - pd.Timedelta(days=1)
+    try:
+        actuals = await collect_actuals(
+            pd.date_range(yesterday, yesterday), force_refresh=True
+        )
+        upserted = 0 if actuals.empty else upsert_actuals(actuals)
+        result["steps"]["reconciliation"] = {"upserted_rows": int(upserted)}
+    except Exception as exc:
+        result["steps"]["reconciliation"] = {"warning": str(exc)}
+
+    issue_date = str(_today_ist().date())
+    try:
+        issuance = await issue_daily_operational_forecast(issue_date, force_refresh=True)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail={"step": "issuance", "error": str(exc)},
+        ) from exc
+    result["steps"]["issuance"] = issuance
+
+    try:
+        gate = evaluate_official(
+            load_official_rows(),
+            minimum_days=28,
+            maximum_city_wape=4,
+            maximum_product_wape=8,
+        )[2]
+        result["steps"]["accuracy_report"] = gate
+    except Exception as exc:
+        result["steps"]["accuracy_report"] = {"warning": str(exc)}
+
+    return result
+
+
 @app.get("/api/debug/model_features")
 async def debug_model_features(
     date: str = Query(..., description="YYYY-MM-DD"),

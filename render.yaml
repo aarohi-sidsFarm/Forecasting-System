@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: forecast-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: REDASH_BASE_URL
+        sync: false
+      - key: QUERY_API_KEY
+        sync: false
+      - key: SUBSCRIPTION_QUERY_ID
+        sync: false
+      - key: KNOWN_BUY_ONCE_QUERY_ID
+        sync: false
+      - key: RECENT_ACTUALS_QUERY_ID
+        sync: false
+      - key: SELECTED_ACTUALS_QUERY_ID
+        sync: false
+      - key: PROCUREMENT_TRAINING_QUERY_ID
+        sync: false
+      - key: CUTOFF_SNAPSHOT_QUERY_ID
+        sync: false
+      - key: REDASH_JOB_POLL_ATTEMPTS
+        value: "500"
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+
+  - type: web
+    name: forecast-dashboard
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
