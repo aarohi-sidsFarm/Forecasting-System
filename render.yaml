@@ -25,8 +25,6 @@ services:
         sync: false
       - key: REDASH_JOB_POLL_ATTEMPTS
         value: "500"
-      - key: ADMIN_TOKEN
-        sync: false
       - key: CORS_ORIGINS
         sync: false
 
