@@ -2381,237 +2381,6 @@ async def _build_operational_forecast_df(
     ].copy()
 
 
-MIN_ISSUED_PRODUCTS_PER_CITY = {
-    city: len(MILK_EXPORT_PRODUCTS) for city in FORECAST_LEAD_DAYS
-}
-# PNQ's subscription, buy-once and completed-actuals inputs consistently carry
-# only 4 of the 7 milk-export products (no Double Toned A2 Buffalo Milk, Skim
-# Milk, or Toned Milk) across every checked date. That has blocked every
-# issuance run since at least 2026-08-26.
-MIN_ISSUED_PRODUCTS_PER_CITY["PNQ"] = 4
-
-
-def _validate_issuance_inputs(
-    *,
-    target_date: str,
-    issue_date: pd.Timestamp,
-    relevant_cities: set[str],
-    subscription_df: pd.DataFrame,
-    known_df: pd.DataFrame,
-    recent_df: pd.DataFrame,
-) -> pd.DataFrame:
-    for name, frame in (
-        ("subscription", subscription_df),
-        ("known_buy_once", known_df),
-        ("recent_actuals", recent_df),
-    ):
-        if frame.empty:
-            raise RuntimeError(f"{name} returned no usable rows for {target_date}")
-        if frame.duplicated(["city_cd", "product_name"]).any() and name != "recent_actuals":
-            raise RuntimeError(f"{name} contains duplicate city/SKU keys for {target_date}")
-
-    missing_subscription_cities = relevant_cities.difference(
-        set(subscription_df["city_cd"])
-    )
-    if missing_subscription_cities:
-        raise RuntimeError(
-            f"Subscription input is missing cities {sorted(missing_subscription_cities)} "
-            f"for {target_date}"
-        )
-
-    completed_through = pd.Timestamp(issue_date).normalize() - pd.Timedelta(days=1)
-    completed_recent = recent_df[
-        pd.to_datetime(recent_df["target_date"]).dt.normalize() <= completed_through
-    ].copy()
-    if completed_recent.empty:
-        raise RuntimeError(
-            f"Recent actuals have no completed data through {completed_through.date()}"
-        )
-    latest_actual = pd.to_datetime(completed_recent["target_date"]).max().normalize()
-    if latest_actual < completed_through:
-        raise RuntimeError(
-            f"Recent actuals are stale: latest {latest_actual.date()}, "
-            f"expected {completed_through.date()}"
-        )
-    latest_rows = completed_recent[
-        pd.to_datetime(completed_recent["target_date"]).dt.normalize()
-        == completed_through
-    ]
-    missing_recent_cities = relevant_cities.difference(set(latest_rows["city_cd"]))
-    if missing_recent_cities:
-        raise RuntimeError(
-            f"Recent actuals are missing latest-day cities "
-            f"{sorted(missing_recent_cities)} for {completed_through.date()}"
-        )
-    return completed_recent
-
-
-def _validate_issued_forecast_frame(frame: pd.DataFrame) -> None:
-    if frame.empty:
-        raise RuntimeError("Issuance produced no forecast rows")
-    keys = ["issue_date", "forecast_date", "city", "product_name"]
-    if frame.duplicated(keys).any():
-        duplicates = frame.loc[frame.duplicated(keys, keep=False), keys]
-        raise RuntimeError(
-            f"Issuance produced duplicate keys: {duplicates.head().to_dict('records')}"
-        )
-    missing_cities = set(FORECAST_LEAD_DAYS).difference(frame["city"])
-    if missing_cities:
-        raise RuntimeError(f"Issuance is missing cities: {sorted(missing_cities)}")
-    counts = frame.groupby("city")["product_name"].nunique().to_dict()
-    insufficient = {
-        city: {"actual": int(counts.get(city, 0)), "minimum": minimum}
-        for city, minimum in MIN_ISSUED_PRODUCTS_PER_CITY.items()
-        if counts.get(city, 0) < minimum
-    }
-    if insufficient:
-        raise RuntimeError(f"Issuance SKU coverage failed: {insufficient}")
-    if frame["forecast_quantity"].le(0).any():
-        raise RuntimeError("Issuance contains non-positive final forecasts")
-
-
-def _redash_fetch_metadata(target_date: str) -> dict:
-    query_ids = {
-        "subscription": SUBSCRIPTION_QUERY_ID,
-        "known_buy_once": int(KNOWN_BUY_ONCE_QUERY_ID),
-        "recent_actuals": int(RECENT_ACTUALS_QUERY_ID),
-    }
-    result = {}
-    for name, query_id in query_ids.items():
-        entry = _redash_cache.get((name, query_id, target_date))
-        result[name] = {
-            "query_id": query_id,
-            "rows": int(len(entry["df"])) if entry else None,
-            "fetched_at": pd.Timestamp(
-                entry["fetched_at"], unit="s", tz="UTC"
-            ).tz_convert("Asia/Kolkata").isoformat() if entry else None,
-        }
-    return result
-
-
-async def _issue_daily_operational_forecast_once(
-    issue_date: str,
-    *,
-    force_refresh: bool = True,
-) -> dict:
-    issue_dt = _parse_forecast_date(issue_date)
-    if issue_dt != _today_ist():
-        raise ValueError(
-            "Official issuance must run on its actual issue date; "
-            f"today is {_today_ist().date()}"
-        )
-    existing = await run_in_threadpool(
-        issued_run_for_issue_date, str(issue_dt.date())
-    )
-    if existing:
-        return {"status": "already_issued", **existing}
-
-    target_by_city = _operational_target_dates(issue_dt)
-    rows: list[dict] = []
-    input_metadata = {}
-    for target_date in sorted(set(target_by_city.values())):
-        relevant_cities = {
-            city for city, city_target in target_by_city.items()
-            if city_target == target_date
-        }
-        subscription_df = await fetch_subscription_df_async(
-            target_date, force_refresh, strict=True, wait_mode="issuance"
-        )
-        known_df = await fetch_known_buy_once_df_async(
-            target_date, force_refresh, strict=True, wait_mode="issuance"
-        )
-        recent_df = await fetch_recent_actuals_df_async(
-            target_date, force_refresh, strict=True, wait_mode="issuance"
-        )
-        recent_df = _validate_issuance_inputs(
-            target_date=target_date,
-            issue_date=issue_dt,
-            relevant_cities=relevant_cities,
-            subscription_df=subscription_df,
-            known_df=known_df,
-            recent_df=recent_df,
-        )
-        target_rows = await run_in_threadpool(
-            build_forecast_for_dates,
-            pd.DatetimeIndex([pd.Timestamp(target_date)]),
-            subscription_df,
-            known_df,
-            recent_df,
-        )
-        rows.extend(target_rows)
-        input_metadata[target_date] = _redash_fetch_metadata(target_date)
-
-    forecast_df = _forecast_rows_to_operational_df(rows, issue_dt)
-    forecast_df = forecast_df[
-        forecast_df["city"].isin(MILK_EXPORT_CITIES)
-        & forecast_df["product_name"].isin(MILK_EXPORT_PRODUCTS)
-    ].copy()
-    _validate_issued_forecast_frame(forecast_df)
-
-    history_frame = forecast_df.rename(columns={
-        "city": "city_cd",
-        "lead_time_days": "horizon",
-        "forecast_quantity": "p50_qty",
-        "subscription_qty": "visible_subscription_qty",
-        "known_buy_once_qty": "visible_buy_once_qty",
-    }).copy()
-    history_frame["p80_qty"] = None
-    history_frame["visible_orders"] = None
-    history_frame["method"] = "official_issued"
-    metadata = {
-        "issue_date": str(issue_dt.date()),
-        "target_dates": target_by_city,
-        "query_inputs": input_metadata,
-        "training_data_freshness": _training_data_freshness(),
-        "rows_by_city": {
-            city: int(count)
-            for city, count in forecast_df.groupby("city").size().items()
-        },
-    }
-    try:
-        history_result = await run_in_threadpool(
-            record_forecast_run,
-            history_frame,
-            run_kind="official_issued",
-            model_version=(
-                f"general:{_model_target_type}|hyd:{_model_hyd_target_type}"
-            ),
-            cutoff_policy="city_horizon:D-2_HYD_VGA,D-3_BLR_PNQ; immutable",
-            metadata=metadata,
-        )
-    except Exception:
-        existing = await run_in_threadpool(
-            issued_run_for_issue_date, str(issue_dt.date())
-        )
-        if existing:
-            return {"status": "already_issued", **existing}
-        raise
-    return {
-        "status": "issued",
-        **history_result,
-        "issue_date": str(issue_dt.date()),
-        "target_dates": target_by_city,
-        "rows_by_city": metadata["rows_by_city"],
-        "total_quantity": int(forecast_df["forecast_quantity"].sum()),
-    }
-
-
-async def issue_daily_operational_forecast(
-    issue_date: str,
-    *,
-    force_refresh: bool = True,
-) -> dict:
-    cache_before = dict(_redash_cache)
-    try:
-        return await _issue_daily_operational_forecast_once(
-            issue_date, force_refresh=force_refresh
-        )
-    except Exception:
-        _redash_cache.clear()
-        _redash_cache.update(cache_before)
-        raise
-
-
 async def _build_target_forecast_df(
     target_date: pd.Timestamp,
     force_refresh: bool = False,
@@ -2631,71 +2400,6 @@ async def _build_target_forecast_df(
         forecast_df["city"].isin(MILK_EXPORT_CITIES)
         & forecast_df["product_name"].isin(MILK_EXPORT_PRODUCTS)
     ].copy()
-
-
-def _issued_rows_to_operational_df(
-    issued_rows: pd.DataFrame,
-    target_date: pd.Timestamp,
-) -> pd.DataFrame:
-    if issued_rows.empty:
-        return pd.DataFrame(columns=[
-            *OPERATIONAL_FORECAST_COLUMNS,
-            "forecast_status", "forecast_run_id",
-        ])
-    frame = issued_rows.copy().rename(columns={
-        "city_cd": "city",
-        "p50_qty": "forecast_quantity",
-        "visible_subscription_qty": "subscription_qty",
-        "visible_buy_once_qty": "known_buy_once_qty",
-    })
-    frame["city"] = frame["city"].apply(_normalize_city_code)
-    frame["product_name"] = frame["product_name"].apply(_normalize_product_name)
-    issue_dates = _target_issue_dates(target_date)
-    frame["issue_date"] = frame.apply(
-        lambda row: row["issue_date"]
-        if pd.notna(row.get("issue_date"))
-        else issue_dates.get(row["city"]),
-        axis=1,
-    )
-    frame["lead_time_days"] = pd.to_numeric(
-        frame.get("horizon"), errors="coerce"
-    )
-    frame["lead_time_days"] = frame["lead_time_days"].fillna(
-        frame["city"].map(FORECAST_LEAD_DAYS)
-    ).astype(int)
-    frame["confirmed_subscription_qty"] = pd.to_numeric(
-        frame.get("confirmed_subscription_qty"), errors="coerce"
-    ).fillna(frame["subscription_qty"])
-    frame["at_risk_subscription_qty"] = pd.to_numeric(
-        frame.get("at_risk_subscription_qty"), errors="coerce"
-    ).fillna(0)
-    frame["ml_unknown_adhoc_qty"] = pd.to_numeric(
-        frame.get("ml_unknown_adhoc_qty"), errors="coerce"
-    ).fillna(
-        pd.to_numeric(frame["forecast_quantity"], errors="coerce")
-        - pd.to_numeric(frame["subscription_qty"], errors="coerce").fillna(0)
-        - pd.to_numeric(frame["known_buy_once_qty"], errors="coerce").fillna(0)
-    ).clip(lower=0)
-    frame["remaining_model_gap_qty"] = frame["ml_unknown_adhoc_qty"]
-    for column in [
-        "subscription_qty", "confirmed_subscription_qty",
-        "at_risk_subscription_qty", "known_buy_once_qty",
-        "remaining_model_gap_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
-    ]:
-        frame[column] = pd.to_numeric(
-            frame[column], errors="coerce"
-        ).fillna(0).round().astype(int)
-    frame["forecast_date"] = pd.to_datetime(
-        frame["forecast_date"]
-    ).dt.strftime("%Y-%m-%d")
-    frame["forecast_status"] = np.where(
-        issued_rows["issue_date"].notna(), "official_issued", "legacy_issued"
-    )
-    frame["forecast_run_id"] = frame.get("run_id")
-    return frame[[
-        *OPERATIONAL_FORECAST_COLUMNS,
-        "forecast_status", "forecast_run_id",
-    ]].sort_values(["forecast_date", "city", "product_name"])
 
 
 def _attach_actual_comparison(
@@ -2751,39 +2455,6 @@ def _attach_actual_comparison(
         result["absolute_error_pct"], errors="coerce"
     ).round(2)
     return result
-
-
-def _is_complete_official_forecast(forecast_df: pd.DataFrame) -> bool:
-    """Only immutable D-2/D-3 rows are eligible for accuracy comparison."""
-    required = {
-        "city", "product_name", "forecast_status", "forecast_run_id",
-        "issue_date", "forecast_date", "lead_time_days",
-    }
-    if forecast_df.empty or not required.issubset(forecast_df.columns):
-        return False
-    if set(forecast_df["city"]) != set(FORECAST_LEAD_DAYS):
-        return False
-    if not forecast_df["forecast_status"].eq("official_issued").all():
-        return False
-    if forecast_df[["forecast_run_id", "issue_date", "lead_time_days"]].isna().any().any():
-        return False
-    if forecast_df.duplicated(["city", "product_name"]).any():
-        return False
-    expected_products = set(MILK_EXPORT_PRODUCTS)
-    if any(
-        set(group["product_name"]) != expected_products
-        for _, group in forecast_df.groupby("city")
-    ):
-        return False
-    expected_leads = forecast_df["city"].map(FORECAST_LEAD_DAYS)
-    actual_leads = pd.to_numeric(forecast_df["lead_time_days"], errors="coerce")
-    if not actual_leads.eq(expected_leads).all():
-        return False
-    target_dates = pd.to_datetime(forecast_df["forecast_date"], errors="coerce")
-    issue_dates = pd.to_datetime(forecast_df["issue_date"], errors="coerce")
-    if target_dates.isna().any() or issue_dates.isna().any():
-        return False
-    return (target_dates - issue_dates).dt.days.eq(expected_leads).all()
 
 
 def _csv_filter_values(raw_values: str | None, allowed_values: set[str]) -> set[str]:
@@ -3237,78 +2908,6 @@ async def debug_components(
     }
 
 
-@app.post("/api/admin/run_daily_pipeline")
-async def run_daily_pipeline(x_admin_token: str | None = Header(default=None)):
-    """Run the same four steps as scripts/issue_daily_forecasts.ps1, for use
-    by an external scheduler (e.g. a GitHub Actions cron) once the laptop
-    running Windows Task Scheduler is no longer the deployment target.
-    """
-    if not ADMIN_TOKEN:
-        raise HTTPException(status_code=403, detail="ADMIN_TOKEN is not configured")
-    if x_admin_token != ADMIN_TOKEN:
-        raise HTTPException(status_code=403, detail="Admin token required")
-
-    import sys
-    from pathlib import Path
-
-    root = Path(__file__).resolve().parents[1]
-    if str(root) not in sys.path:
-        sys.path.insert(0, str(root))
-    from scripts.audit_festival_calendar import (
-        DEFAULT_CALENDAR,
-        load_and_validate as validate_festival_calendar,
-    )
-    from scripts.reconcile_forecast_actuals import collect as collect_actuals
-    from scripts.evaluate_official_forecasts import (
-        evaluate as evaluate_official,
-        load_official_rows,
-    )
-    from backend.forecast_history import upsert_actuals
-
-    result: dict = {"steps": {}}
-
-    _, calendar_errors = validate_festival_calendar(DEFAULT_CALENDAR)
-    if calendar_errors:
-        raise HTTPException(
-            status_code=422,
-            detail={"step": "festival_calendar", "errors": calendar_errors},
-        )
-    result["steps"]["festival_calendar"] = "ok"
-
-    yesterday = _today_ist() - pd.Timedelta(days=1)
-    try:
-        actuals = await collect_actuals(
-            pd.date_range(yesterday, yesterday), force_refresh=True
-        )
-        upserted = 0 if actuals.empty else upsert_actuals(actuals)
-        result["steps"]["reconciliation"] = {"upserted_rows": int(upserted)}
-    except Exception as exc:
-        result["steps"]["reconciliation"] = {"warning": str(exc)}
-
-    issue_date = str(_today_ist().date())
-    try:
-        issuance = await issue_daily_operational_forecast(issue_date, force_refresh=True)
-    except Exception as exc:
-        raise HTTPException(
-            status_code=502,
-            detail={"step": "issuance", "error": str(exc)},
-        ) from exc
-    result["steps"]["issuance"] = issuance
-
-    try:
-        gate = evaluate_official(
-            load_official_rows(),
-            minimum_days=28,
-            maximum_city_wape=4,
-            maximum_product_wape=8,
-        )[2]
-        result["steps"]["accuracy_report"] = gate
-    except Exception as exc:
-        result["steps"]["accuracy_report"] = {"warning": str(exc)}
-
-    return result
-
-
 @app.get("/api/debug/model_features")
 async def debug_model_features(
     date: str = Query(..., description="YYYY-MM-DD"),
@@ -3445,93 +3044,72 @@ async def get_forecast_day(
     return response
 
 
+_LIVE_FORECAST_CACHE_TTL_SECONDS = 3600
+_live_forecast_cache: dict[str, dict] = {}
+
+
 @app.get("/api/operational_forecast")
 async def get_operational_forecast(
     target_date: str = Query(..., description="Forecast target date in YYYY-MM-DD format"),
     refresh: bool = Query(False),
 ):
+    """Always compute the forecast directly from live Redash inputs. Cached
+    per date for an hour so repeat dashboard loads don't re-hit Redash every
+    time; there is no separate "official/issued" snapshot anymore.
+    """
     target_dt = _parse_forecast_date(target_date)
-    issued_rows, issued_info = await run_in_threadpool(
-        issued_forecast_for_date, target_date
+    cached = _live_forecast_cache.get(target_date)
+    cache_is_fresh = cached is not None and (
+        time.time() - cached["fetched_at"] < _LIVE_FORECAST_CACHE_TTL_SECONDS
     )
-    frozen_df = _issued_rows_to_operational_df(issued_rows, target_dt)
-    frozen_cities = set(frozen_df["city"]) if not frozen_df.empty else set()
-    missing_cities = set(FORECAST_LEAD_DAYS).difference(frozen_cities)
-    live_df = pd.DataFrame()
-    availability_warning = None
-    if missing_cities and not refresh and not frozen_df.empty:
-        availability_warning = (
-            "Showing immutable frozen rows only. "
-            f"Unavailable cities: {', '.join(sorted(missing_cities))}. "
-            "Use Refresh to retry the live Redash inputs."
-        )
-    elif missing_cities:
+    if cache_is_fresh and not refresh:
+        forecast_df = cached["df"]
+    else:
         try:
             try:
                 async with asyncio.timeout(INTERACTIVE_FORECAST_TIMEOUT_SECONDS):
-                    live_df = await _build_target_forecast_df(
+                    forecast_df = await _build_target_forecast_df(
                         target_dt, refresh, strict_inputs=True
                     )
             except TimeoutError as timeout_exc:
                 raise _redash_progress_for_date(target_date) from timeout_exc
         except Exception as exc:
-            if frozen_df.empty:
+            if cached is None:
                 if isinstance(exc, RedashRefreshInProgress):
                     return JSONResponse(
                         status_code=202,
-                        content={
-                            **exc.response(),
-                            "target_date": target_date,
-                            "frozen_rows_available": False,
-                        },
+                        content={**exc.response(), "target_date": target_date},
                         headers={"Retry-After": "15"},
                     )
                 raise HTTPException(
                     status_code=503,
                     detail=(
-                        "Forecast refresh failed validation and no frozen forecast "
-                        f"is available. Cause: {exc}"
+                        "Forecast refresh failed and no cached forecast is "
+                        f"available. Cause: {exc}"
                     ),
                 ) from exc
-            if isinstance(exc, RedashRefreshInProgress):
-                availability_warning = (
-                    "Live refresh is still running; showing immutable frozen "
-                    f"rows only. Unavailable cities: "
-                    f"{', '.join(sorted(missing_cities))}. Retry shortly."
-                )
-            else:
-                availability_warning = (
-                    "Live refresh failed; showing immutable frozen rows only. "
-                    f"Unavailable cities: {', '.join(sorted(missing_cities))}. "
-                    f"Cause: {exc}"
-                )
-        live_df = live_df[live_df["city"].isin(missing_cities)].copy()
-        live_df["forecast_status"] = "live_preview"
-        live_df["forecast_run_id"] = None
-    forecast_df = pd.concat([frozen_df, live_df], ignore_index=True, sort=False)
-    live_cities = set(live_df["city"]) if not live_df.empty else set()
-    if frozen_cities == set(FORECAST_LEAD_DAYS):
-        forecast_view = "issued"
-    elif frozen_cities and live_cities:
-        forecast_view = "mixed"
-    elif frozen_cities:
-        forecast_view = "partial_issued"
-    else:
-        forecast_view = "live_preview"
+            # A cached (even if stale) result beats a hard error.
+            forecast_df = cached["df"]
+        else:
+            _live_forecast_cache[target_date] = {
+                "df": forecast_df, "fetched_at": time.time(),
+            }
+
+    forecast_df = forecast_df.copy()
+    if not forecast_df.empty:
+        forecast_df["forecast_status"] = "live_preview"
+        forecast_df["forecast_run_id"] = None
+
     comparison_status = "not_completed"
-    comparison_eligible = _is_complete_official_forecast(forecast_df)
     comparison_summary = {
         "available": False,
-        "eligible": comparison_eligible,
         "source_query_id": int(SELECTED_ACTUALS_QUERY_ID) if SELECTED_ACTUALS_QUERY_ID else None,
-        "forecast_basis": forecast_view,
-        "requirement": "complete immutable official D-2/D-3 forecast",
         "matched_rows": 0,
         "actual_quantity": None,
         "difference": None,
         "wape_pct": None,
     }
-    if target_dt < _today_ist() and comparison_eligible:
+    if target_dt < _today_ist():
         actual_df = await fetch_selected_actuals_df_async(target_date, refresh)
         forecast_df = _attach_actual_comparison(forecast_df, actual_df)
         matched = forecast_df[forecast_df["actual_available"]].copy()
@@ -3549,8 +3127,6 @@ async def get_operational_forecast(
             })
         else:
             comparison_status = "actuals_unavailable"
-    elif target_dt < _today_ist():
-        comparison_status = "official_forecast_unavailable"
     city_summary = []
     if not forecast_df.empty:
         city_summary = (
@@ -3569,15 +3145,6 @@ async def get_operational_forecast(
         "meta": {
             "target_date": target_date,
             "generated_at": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
-            "forecast_view": forecast_view,
-            "issued_run_ids": issued_info.get("run_ids", []) if issued_info else [],
-            "issued_generated_at": issued_info.get("generated_at") if issued_info else None,
-            "frozen_cities": sorted(frozen_cities),
-            "live_preview_cities": sorted(live_cities),
-            "unavailable_cities": (
-                sorted(missing_cities) if availability_warning else []
-            ),
-            "availability_warning": availability_warning,
             "total_quantity": int(forecast_df["forecast_quantity"].sum()) if not forecast_df.empty else 0,
             "total_cities": int(forecast_df["city"].nunique()) if not forecast_df.empty else 0,
             "total_products": int(forecast_df["product_name"].nunique()) if not forecast_df.empty else 0,
