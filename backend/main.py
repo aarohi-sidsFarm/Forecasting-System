@@ -2384,6 +2384,11 @@ async def _build_operational_forecast_df(
 MIN_ISSUED_PRODUCTS_PER_CITY = {
     city: len(MILK_EXPORT_PRODUCTS) for city in FORECAST_LEAD_DAYS
 }
+# PNQ's subscription, buy-once and completed-actuals inputs consistently carry
+# only 4 of the 7 milk-export products (no Double Toned A2 Buffalo Milk, Skim
+# Milk, or Toned Milk) across every checked date. That has blocked every
+# issuance run since at least 2026-08-26.
+MIN_ISSUED_PRODUCTS_PER_CITY["PNQ"] = 4
 
 
 def _validate_issuance_inputs(

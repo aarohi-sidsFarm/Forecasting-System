@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getOperationalForecast, getStatus } from "./api";
 import "./App.css";
 
@@ -50,6 +50,9 @@ const fetchDashboard = async (targetDate, refresh) => {
   return { forecast, status };
 };
 
+const RETRY_INTERVAL_MS = 15000;
+const MAX_LOAD_RETRIES = 20;
+
 export default function App() {
   const params = new URLSearchParams(window.location.search);
   const initialDate = params.get("target") || params.get("as_of") || todayInIndia();
@@ -58,47 +61,70 @@ export default function App() {
   const [systemStatus, setSystemStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const retryTimerRef = useRef(null);
+  const requestIdRef = useRef(0);
+  const loadRef = useRef(() => {});
   const [cityFilter, setCityFilter] = useState("All");
   const [productFilter, setProductFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [showComponents, setShowComponents] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const load = useCallback(async (refresh = false) => {
-    setLoading(true);
-    setError("");
-    try {
-      const { forecast, status } = await fetchDashboard(targetDate, refresh);
-      setData(forecast);
-      setSystemStatus(status);
-    } catch (err) {
-      setError(`Could not load the operational forecast: ${err.message}`);
-    } finally {
-      setLoading(false);
+  const load = useCallback((refresh = false, attempt = 0) => {
+    if (retryTimerRef.current) {
+      clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = null;
     }
+    const requestId = attempt === 0 ? ++requestIdRef.current : requestIdRef.current;
+    if (attempt === 0) {
+      setLoading(true);
+      setError("");
+      setRefreshing(false);
+    }
+    fetchDashboard(targetDate, refresh)
+      .then(({ forecast, status }) => {
+        if (requestIdRef.current !== requestId) return;
+        setData(forecast);
+        setSystemStatus(status);
+        setError("");
+        setRefreshing(false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (requestIdRef.current !== requestId) return;
+        if (err.code === "refresh_in_progress" && attempt < MAX_LOAD_RETRIES) {
+          // Forecast for this date isn't saved yet and is still being rebuilt
+          // live from Redash (can take a few minutes). Keep whatever is
+          // already on screen and quietly retry instead of showing an error.
+          setRefreshing(true);
+          setLoading(false);
+          retryTimerRef.current = setTimeout(() => loadRef.current(refresh, attempt + 1), RETRY_INTERVAL_MS);
+          return;
+        }
+        setRefreshing(false);
+        setLoading(false);
+        setError(`Could not load the operational forecast: ${err.message}`);
+      });
   }, [targetDate]);
+
+  useEffect(() => {
+    loadRef.current = load;
+  }, [load]);
 
   useEffect(() => {
     const url = new URL(window.location);
     url.searchParams.delete("as_of");
     url.searchParams.set("target", targetDate);
     window.history.replaceState({}, "", url);
-    let active = true;
-    fetchDashboard(targetDate, false)
-      .then(({ forecast, status }) => {
-        if (!active) return;
-        setData(forecast);
-        setSystemStatus(status);
-        setError("");
-      })
-      .catch((err) => {
-        if (active) setError(`Could not load the operational forecast: ${err.message}`);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-    return () => { active = false; };
-  }, [targetDate]);
+    Promise.resolve().then(() => load(false));
+    return () => {
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current);
+        retryTimerRef.current = null;
+      }
+    };
+  }, [load, targetDate]);
 
   const rows = useMemo(() => data?.rows ?? [], [data]);
   const cities = useMemo(() => [...new Set(rows.map((row) => row.city))].sort(), [rows]);
@@ -206,8 +232,8 @@ export default function App() {
               onChange={(event) => setTargetDate(event.target.value)}
             />
           </label>
-          <button className="btn header-action" onClick={() => load(true)} disabled={loading}>
-            {loading ? "Refreshing..." : "Refresh"}
+          <button className="btn header-action" onClick={() => load(true)} disabled={loading || refreshing}>
+            {loading ? "Refreshing..." : refreshing ? "Preparing..." : "Refresh"}
           </button>
           <button className="btn btn-export header-action" onClick={downloadFilteredCsv} disabled={!filteredRows.length}>
             Download filtered CSV
@@ -223,6 +249,9 @@ export default function App() {
 
       <main className="main">
         {error && <div className="error-banner"><strong>{error}</strong></div>}
+        {!error && refreshing && (
+          <div className="info-banner">Preparing forecast for this date — checking again shortly.</div>
+        )}
         {availabilityWarning && (
           <div className="warning-banner"><strong>{availabilityWarning}</strong></div>
         )}

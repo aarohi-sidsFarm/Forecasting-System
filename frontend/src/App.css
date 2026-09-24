@@ -193,6 +193,16 @@
   font-size: 12px;
 }
 
+.info-banner {
+  margin-bottom: 18px;
+  padding: 11px 14px;
+  border: 1px solid #B9C6E0;
+  border-radius: 10px;
+  color: #38445E;
+  background: #EEF2FA;
+  font-size: 12px;
+}
+
 .workspace-heading h2 { margin: 0; color: #3F4246; letter-spacing: -0.7px; }
 .lead-badge,
 .result-count {
