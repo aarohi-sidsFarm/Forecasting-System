@@ -193,6 +193,19 @@ _model_hyd_target_type = _saved_hyd.get("target_type", "total_adhoc")
 _model_hyd_calibration = _saved_hyd.get("calibration", {})
 _model_hyd_dow_calibration = _saved_hyd.get("dow_calibration", {})
 
+
+def _encoder_lookup(encoder) -> dict:
+    # Same codes as LabelEncoder.transform, without its per-call validation cost.
+    if encoder is None:
+        return {}
+    return {label: index for index, label in enumerate(encoder.classes_)}
+
+
+_enc_city = _encoder_lookup(_le_city)
+_enc_product = _encoder_lookup(_le_product)
+_enc_city_prod = _encoder_lookup(_le_city_prod)
+_enc_product_hyd = _encoder_lookup(_le_product_hyd)
+
 BLR_D3_DIRECT_PATH = os.path.join(MODEL_DIR, "blr_d3_direct.pkl")
 BLR_D3_DIRECT_ENABLED = os.getenv("BLR_D3_DIRECT_ENABLED", "true").lower() in {
     "1", "true", "yes", "on",
@@ -292,16 +305,30 @@ _festival_impact_dict = (
 )
 
 
+# Precomputed day-before / day-after sets so _festival_features is O(1) per
+# call instead of scanning every high-impact date (it runs ~10^5 times per
+# forecast request).
+_city_pre_fest_dates = {
+    city: {d - pd.Timedelta(days=1) for d in dates}
+    for city, dates in _city_high_impact_dates.items()
+}
+_city_post_fest_dates = {
+    city: {d + pd.Timedelta(days=1) for d in dates}
+    for city, dates in _city_high_impact_dates.items()
+}
+
+
 def _festival_features(city: str, dt: pd.Timestamp) -> dict:
     city = str(city).upper()
     dt = pd.Timestamp(dt).normalize()
     city_dates = _festival_dates_by_city.get(city, set())
-    high_dates = _city_high_impact_dates.get(city, _high_impact_dates)
+    pre_dates = _city_pre_fest_dates.get(city, _pre_fest_set)
+    post_dates = _city_post_fest_dates.get(city, _post_fest_set)
     return {
         "is_festival": int(dt in _festival_set),
         "is_city_festival": int(dt in city_dates),
-        "is_pre_festival": int(any(dt == date - pd.Timedelta(days=1) for date in high_dates)),
-        "is_post_festival": int(any(dt == date + pd.Timedelta(days=1) for date in high_dates)),
+        "is_pre_festival": int(dt in pre_dates),
+        "is_post_festival": int(dt in post_dates),
         "festival_impact_direction": int(
             _festival_impact_by_city_date.get((city, dt), _festival_impact_dict.get(dt, 0))
         ),
@@ -1548,18 +1575,17 @@ def _build_model_features(
     snapshot_visible_orders: float = 0.0,
 ):
     if is_hyd_model:
-        if product not in _le_product_hyd.classes_:
+        if product not in _enc_product_hyd:
             return None
-        product_enc = int(_le_product_hyd.transform([product])[0])
+        product_enc = _enc_product_hyd[product]
         city_enc = 0
         city_prod_enc = 0
     else:
-        if city not in _le_city.classes_ or product not in _le_product.classes_:
+        if city not in _enc_city or product not in _enc_product:
             return None
-        product_enc = int(_le_product.transform([product])[0])
-        city_enc = int(_le_city.transform([city])[0])
-        city_prod = f"{city}_{product}"
-        city_prod_enc = int(_le_city_prod.transform([city_prod])[0]) if _le_city_prod and city_prod in _le_city_prod.classes_ else -1
+        product_enc = _enc_product[product]
+        city_enc = _enc_city[city]
+        city_prod_enc = _enc_city_prod.get(f"{city}_{product}", -1)
 
     lf = _get_lag_features(city, product, dt, future_preds, recent_actuals, 0.0)
     festival_features = _festival_features(city, dt)
@@ -2214,14 +2240,18 @@ async def _build_forecast_rows_by_date(
     rows = []
     for dt in forecast_dates:
         target_date_str = str(pd.Timestamp(dt).date())
-        sub_df = await fetch_subscription_df_async(
-            target_date_str, force_refresh, strict=strict_inputs
-        )
-        known_df = await fetch_known_buy_once_df_async(
-            target_date_str, force_refresh, strict=strict_inputs
-        )
-        recent_df = await fetch_recent_actuals_df_async(
-            target_date_str, force_refresh, strict=strict_inputs
+        # Independent Redash queries: run concurrently so the wait is the
+        # slowest query, not the sum of all three.
+        sub_df, known_df, recent_df = await asyncio.gather(
+            fetch_subscription_df_async(
+                target_date_str, force_refresh, strict=strict_inputs
+            ),
+            fetch_known_buy_once_df_async(
+                target_date_str, force_refresh, strict=strict_inputs
+            ),
+            fetch_recent_actuals_df_async(
+                target_date_str, force_refresh, strict=strict_inputs
+            ),
         )
         day_rows = await run_in_threadpool(build_forecast_for_dates, pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
         rows.extend(day_rows)
@@ -2965,10 +2995,12 @@ async def get_forecast_day(
     view: str = Query("issued", pattern="^(issued|live)$"),
 ):
     target_dt = pd.DatetimeIndex([_parse_forecast_date(date)])
-    sub_df = await fetch_subscription_df_async(date, refresh)
-    known_df = await fetch_known_buy_once_df_async(date, refresh)
-    recent_df = await fetch_recent_actuals_df_async(date, refresh)
-    actual_df = await fetch_selected_actuals_df_async(date, refresh)
+    sub_df, known_df, recent_df, actual_df = await asyncio.gather(
+        fetch_subscription_df_async(date, refresh),
+        fetch_known_buy_once_df_async(date, refresh),
+        fetch_recent_actuals_df_async(date, refresh),
+        fetch_selected_actuals_df_async(date, refresh),
+    )
     rows = await run_in_threadpool(build_forecast_for_dates, target_dt, sub_df, known_df, recent_df)
     day_df = pd.DataFrame(rows)
 
