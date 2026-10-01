@@ -10,7 +10,9 @@ from __future__ import annotations
 import argparse
 import asyncio
 import csv
+import json
 import os
+import time
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -19,6 +21,12 @@ import httpx
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "data" / "raw" / "redash_exports" / "procurement_final_total_training.csv"
+# Remembers a Redash job that outlived our polling window, so the next run
+# resumes it (or reuses its finished result) instead of re-running the export.
+PENDING_JOB_PATH = ROOT / "data" / "raw" / "redash_exports" / ".pending_training_fetch.json"
+PENDING_JOB_TTL_SECONDS = 6 * 3600
+POLL_INTERVAL_SECONDS = 3
+POLL_ATTEMPTS = 200
 REQUIRED_COLUMNS = {
     "target_date",
     "city_cd",
@@ -68,6 +76,58 @@ def arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _load_pending_job(query_id: int, start_date: str, end_date: str) -> dict | None:
+    if not PENDING_JOB_PATH.exists():
+        return None
+    try:
+        pending = json.loads(PENDING_JOB_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if (
+        pending.get("query_id") != query_id
+        or pending.get("start_date") != start_date
+        or pending.get("end_date") != end_date
+        or time.time() - float(pending.get("started_at", 0)) > PENDING_JOB_TTL_SECONDS
+    ):
+        return None
+    return pending
+
+
+def _save_pending_job(query_id: int, start_date: str, end_date: str, job_id: str, started_at: float) -> None:
+    PENDING_JOB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    PENDING_JOB_PATH.write_text(json.dumps({
+        "query_id": query_id,
+        "start_date": start_date,
+        "end_date": end_date,
+        "job_id": job_id,
+        "started_at": started_at,
+    }), encoding="utf-8")
+
+
+def _clear_pending_job() -> None:
+    PENDING_JOB_PATH.unlink(missing_ok=True)
+
+
+async def _poll_job(client: httpx.AsyncClient, base_url: str, headers: dict, job_id: str) -> list[dict] | None:
+    """Return rows when the job finishes, or None if it is still running after the poll window."""
+    for _ in range(POLL_ATTEMPTS):
+        job_response = await client.get(f"{base_url}/api/jobs/{job_id}", headers=headers)
+        job_response.raise_for_status()
+        job = job_response.json()["job"]
+        if job["status"] == 3:
+            result_response = await client.get(
+                f"{base_url}/api/query_results/{job['query_result_id']}",
+                headers=headers,
+            )
+            result_response.raise_for_status()
+            return result_response.json()["query_result"]["data"]["rows"]
+        if job["status"] in (4, 5):
+            state = "failed" if job["status"] == 4 else "was cancelled"
+            raise RuntimeError(f"Redash job {state}: {job}")
+        await asyncio.sleep(POLL_INTERVAL_SECONDS)
+    return None
+
+
 async def fetch_rows(query_id: int, start_date: str, end_date: str, max_age: int) -> list[dict]:
     base_url = os.environ.get("REDASH_BASE_URL", "https://analytics.sidsfarm.in").rstrip("/")
     api_key = os.environ.get("QUERY_API_KEY")
@@ -77,40 +137,56 @@ async def fetch_rows(query_id: int, start_date: str, end_date: str, max_age: int
         raise RuntimeError("Missing --query-id or PROCUREMENT_TRAINING_QUERY_ID.")
 
     headers = {"Authorization": f"Key {api_key}", "Content-Type": "application/json"}
-    payload = {
-        "parameters": {"start_date": start_date, "end_date": end_date},
-        "max_age": max_age,
-    }
+    pending = _load_pending_job(query_id, start_date, end_date)
+    started_at = float(pending["started_at"]) if pending else time.time()
     async with httpx.AsyncClient(timeout=90) as client:
+        if pending:
+            print(f"Resuming Redash job {pending['job_id']} from an earlier timed-out run")
+            try:
+                rows = await _poll_job(client, base_url, headers, pending["job_id"])
+            except httpx.HTTPStatusError as exc:
+                # Redash expires job records; fall through to a new request,
+                # which can still reuse the finished result via max_age below.
+                print(f"Earlier Redash job is no longer available ({exc.response.status_code}); requesting again")
+                rows = None
+            else:
+                if rows is None:
+                    raise TimeoutError(
+                        "Redash training export is still running; rerun this command to keep waiting."
+                    )
+                _clear_pending_job()
+                return rows
+            # Accept only results produced since the earlier attempt started,
+            # so a resumed run never picks up data older than it asked for.
+            max_age = max(max_age, int(time.time() - started_at) + 60)
+
         response = await client.post(
             f"{base_url}/api/queries/{query_id}/results",
             headers=headers,
-            json=payload,
+            json={
+                "parameters": {"start_date": start_date, "end_date": end_date},
+                "max_age": max_age,
+            },
         )
         response.raise_for_status()
         body = response.json()
         rows = body.get("query_result", {}).get("data", {}).get("rows")
         if rows is not None:
+            _clear_pending_job()
             return rows
 
         job_id = body.get("job", {}).get("id")
         if not job_id:
             raise RuntimeError(f"Unexpected Redash response: {body}")
-        for _ in range(200):
-            await asyncio.sleep(3)
-            job_response = await client.get(f"{base_url}/api/jobs/{job_id}", headers=headers)
-            job_response.raise_for_status()
-            job = job_response.json()["job"]
-            if job["status"] == 3:
-                result_response = await client.get(
-                    f"{base_url}/api/query_results/{job['query_result_id']}",
-                    headers=headers,
-                )
-                result_response.raise_for_status()
-                return result_response.json()["query_result"]["data"]["rows"]
-            if job["status"] == 4:
-                raise RuntimeError(f"Redash job failed: {job}")
-    raise TimeoutError("Redash training export did not finish within 10 minutes.")
+        rows = await _poll_job(client, base_url, headers, job_id)
+        if rows is None:
+            _save_pending_job(query_id, start_date, end_date, job_id, started_at)
+            raise TimeoutError(
+                "Redash training export did not finish within 10 minutes. "
+                "The job keeps running on Redash; rerun the same command to resume it."
+            )
+        _clear_pending_job()
+        return rows
 
 
 def _row_key(row: dict) -> tuple[str, str, str]:

@@ -16,3 +16,4 @@ frontend/dist/
 *.db-wal
 .DS_Store
 Thumbs.db
+data/raw/redash_exports/.pending_training_fetch.json

@@ -79,10 +79,13 @@ async def backtest(start_date: str, end_date: str, refresh: bool) -> pd.DataFram
     output = []
     for dt in pd.date_range(start_date, end_date):
         date = str(dt.date())
-        sub_df = await app.fetch_subscription_df_async(date, refresh)
-        known_df = await app.fetch_known_buy_once_df_async(date, refresh)
-        recent_df = await app.fetch_recent_actuals_df_async(date, refresh)
-        actual_df = await app.fetch_selected_actuals_df_async(date, refresh)
+        # Batch job, not a browser request: wait the full issuance window for
+        # slow Redash refreshes instead of the dashboard's short interactive
+        # one. Fetched one at a time so a backtest doesn't flood Redash's queue.
+        sub_df = await app.fetch_subscription_df_async(date, refresh, wait_mode="issuance")
+        known_df = await app.fetch_known_buy_once_df_async(date, refresh, wait_mode="issuance")
+        recent_df = await app.fetch_recent_actuals_df_async(date, refresh, wait_mode="issuance")
+        actual_df = await app.fetch_selected_actuals_df_async(date, refresh, wait_mode="issuance")
         rows = app.build_forecast_for_dates(pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
         forecast = forecast_frame(rows)
         actual = actual_frame(actual_df, date)
@@ -250,6 +253,13 @@ def main() -> None:
     df = asyncio.run(backtest(args.start_date, args.end_date, args.refresh))
     if not df.empty:
         df = df[df["city"].isin(cities) & df["product_name"].isin(products)].copy()
+    if df.empty:
+        # Usually means Redash inputs failed. Keep the previous backtest and
+        # reports instead of replacing them with an empty window.
+        sys.exit(
+            "No comparable forecast/actual rows for "
+            f"{args.start_date} -> {args.end_date}; existing outputs left unchanged."
+        )
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output, index=False, lineterminator="\n")
