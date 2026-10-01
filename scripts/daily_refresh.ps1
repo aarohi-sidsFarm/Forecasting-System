@@ -12,10 +12,15 @@ param(
 $ErrorActionPreference = "Stop"
 
 $ProjectRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$Python = Join-Path $ProjectRoot "venv\Scripts\python.exe"
+# Use the project-root venv when present, otherwise the backend venv.
+$PythonCandidates = @(
+    (Join-Path $ProjectRoot "venv\Scripts\python.exe"),
+    (Join-Path $ProjectRoot "backend\venv\Scripts\python.exe")
+)
+$Python = $PythonCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
 
-if (-not (Test-Path $Python)) {
-    throw "Python executable not found at $Python. Activate/create venv first."
+if (-not $Python) {
+    throw "Python executable not found at $($PythonCandidates -join ' or '). Activate/create venv first."
 }
 
 if ([string]::IsNullOrWhiteSpace($EndDate)) {
@@ -145,4 +150,4 @@ Write-Host ""
 Write-Host "Daily refresh complete." -ForegroundColor Green
 Write-Host "Restart backend to load newly trained model artifacts:"
 Write-Host "cd $ProjectRoot\backend"
-Write-Host "..\venv\Scripts\python.exe -m uvicorn main:app --reload --host 127.0.0.1 --port 8000"
+Write-Host "$Python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000"

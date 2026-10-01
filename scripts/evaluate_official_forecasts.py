@@ -173,6 +173,13 @@ def main() -> None:
         maximum_product_wape=args.maximum_product_wape,
     )
     output = Path(args.output)
+    if city.empty and product.empty:
+        # e.g. a local forecast_history.db with no official_issued runs; don't
+        # wipe the committed reports with an empty evaluation.
+        print("No official forecasts with completed actuals; existing reports left unchanged.")
+        print("\nPromotion gate")
+        print(json.dumps(gate, indent=2))
+        return
     output.parent.mkdir(parents=True, exist_ok=True)
     product.round(2).to_csv(output, index=False, lineterminator="\n")
     city_output = output.with_name(f"{output.stem}_by_city{output.suffix}")
