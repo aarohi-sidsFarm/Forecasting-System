@@ -68,7 +68,8 @@ normalized_orders AS (
         ORDER BY cust_id, updated_at DESC NULLS LAST, id DESC
     ) ca
         ON ca.cust_id = toi.customer_id
-    WHERE toi.order_date::date = t.target_date
+    WHERE toi.order_date >= t.target_date
+      AND toi.order_date < t.target_date + INTERVAL '1 day'
       AND UPPER(TRIM(COALESCE(toi.status, ''))) IN ('DRAFT', 'PROCESSED_TO_ORDER')
       AND COALESCE(toi.quantity, 0) > 0
       AND COALESCE(toi.free_product, false) = false

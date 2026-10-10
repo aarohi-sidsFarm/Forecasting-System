@@ -111,6 +111,46 @@ class OperationalForecastPolicyTests(unittest.TestCase):
         self.assertEqual(baseline, with_future)
         self.assertTrue(baseline[1].startswith("hyd_d2_direct:"))
 
+    def test_hyd_focus_model_only_replaces_configured_products(self):
+        previous_base = main._hyd_d2_direct
+        previous_focus = main._hyd_d2_focus_direct
+        main._hyd_d2_direct = {"name": "base"}
+        main._hyd_d2_focus_direct = {
+            "name": "focus",
+            "product_encoder": type("Encoder", (), {
+                "classes_": ["A2 Buffalo Milk", "Cow Milk", "Toned Milk"],
+            })(),
+        }
+        try:
+            with patch.object(
+                main,
+                "_predict_city_direct",
+                side_effect=lambda artifact, *_args: (artifact["name"], "method"),
+            ):
+                focused = main._predict_hyd_d2_direct(
+                    "Cow Milk", pd.Timestamp("2026-10-10"), {}
+                )
+                unchanged = main._predict_hyd_d2_direct(
+                    "Curd", pd.Timestamp("2026-10-10"), {}
+                )
+            self.assertEqual(focused[0], "focus")
+            self.assertEqual(unchanged[0], "base")
+        finally:
+            main._hyd_d2_direct = previous_base
+            main._hyd_d2_focus_direct = previous_focus
+
+    def test_hyd_focus_model_is_fresh_and_limited_to_requested_products(self):
+        self.assertIsNotNone(main._hyd_d2_focus_direct)
+        focus = main._hyd_d2_focus_direct
+        self.assertEqual(
+            set(focus["product_encoder"].classes_),
+            {"A2 Buffalo Milk", "Cow Milk", "Toned Milk"},
+        )
+        self.assertEqual(
+            focus["trained_through"],
+            str(main._train_df["target_date"].max().date()),
+        )
+
     def test_actual_comparison_joins_query_1968_values_by_city_sku(self):
         forecast = pd.DataFrame([{
             "city": "HYD",

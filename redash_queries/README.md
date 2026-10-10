@@ -59,3 +59,12 @@ low-wallet and unknown-wallet quantities. For every returned row, verify:
 ```text
 expected_qty = confirmed_qty + at_risk_qty + wallet_unknown_qty
 ```
+
+The target-day and training-window filters in Queries 3086, 3101, and 3269
+compare the source date column directly to a half-open range instead of casting
+that column to `date`. This preserves the inclusive business date window while
+allowing a matching database index to be considered. Query 3086 also scopes its
+latest-address lookup to customers with candidate orders for the target date.
+After updating the matching Redash queries, compare their results with the
+previous versions for representative dates and check Redash execution plans
+and timings; local SQL edits alone do not update saved Redash queries.

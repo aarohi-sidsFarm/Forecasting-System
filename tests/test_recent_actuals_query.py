@@ -15,6 +15,13 @@ class RecentActualsQueryTests(unittest.TestCase):
         self.assertIn("recent final all-status total packet demand", self.sql)
         self.assertNotIn("f.status in", self.sql)
 
+    def test_recent_date_range_does_not_cast_the_filtered_column(self):
+        self.assertIn(
+            "f.delivery_date >= t.target_date - interval '90 days'", self.sql
+        )
+        self.assertIn("f.delivery_date < t.target_date", self.sql)
+        self.assertNotIn("f.delivery_date::date >=", self.sql)
+
 
 if __name__ == "__main__":
     unittest.main()

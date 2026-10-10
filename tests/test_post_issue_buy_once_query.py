@@ -24,6 +24,13 @@ class PostIssueBuyOnceQueryTests(unittest.TestCase):
         self.assertIn("new_buy_once_line_count", self.sql)
         self.assertIn("new_buy_once_customers", self.sql)
 
+    def test_target_day_filter_does_not_cast_order_date(self):
+        self.assertIn("toi.order_date >= t.target_date", self.sql)
+        self.assertIn(
+            "toi.order_date < t.target_date + interval '1 day'", self.sql
+        )
+        self.assertNotIn("toi.order_date::date", self.sql)
+
 
 if __name__ == "__main__":
     unittest.main()
