@@ -130,6 +130,8 @@ def main() -> None:
     parser.add_argument("--city", required=True)
     parser.add_argument("--lead-days", required=True, type=int)
     parser.add_argument("--holdout-days", type=int, default=90)
+    parser.add_argument("--products", nargs="+")
+    parser.add_argument("--artifact-name")
     args = parser.parse_args()
     city = args.city.upper().strip()
     if args.lead_days < 1:
@@ -137,6 +139,12 @@ def main() -> None:
 
     source = pd.read_csv(DATA, parse_dates=["target_date"])
     features = pd.read_csv(FEATURE_DATA, parse_dates=["target_date"])
+    if args.products:
+        unknown_products = sorted(set(args.products) - set(source.product_name))
+        if unknown_products:
+            raise ValueError(f"Products are missing from training data: {unknown_products}")
+        source = source[source.product_name.isin(args.products)].copy()
+        features = features[features.product_name.isin(args.products)].copy()
     dataset, encoder = make_dataset(source, features, city, args.lead_days)
     cutoff = dataset.target_date.max() - pd.Timedelta(days=args.holdout_days - 1)
     train = dataset[dataset.target_date.lt(cutoff)].copy()
@@ -194,21 +202,47 @@ def main() -> None:
         "completed_actual_gap_days": args.lead_days + 1,
         "cutoff": str(cutoff.date()),
         "end": str(valid.target_date.max().date()),
+        "validation_model_trained_through": str(train.target_date.max().date()),
+        "final_model_trained_through": str(dataset.target_date.max().date()),
         "model_wape": wape(valid, "model"),
         "selected_wape": wape(valid, "selected_prediction"),
         "bias_pct": 100 * (valid.selected_prediction - valid.actual_qty).sum() / valid.actual_qty.sum(),
         "selector": selector,
         "product_metrics": product_metrics,
     }
+    final_weights = 0.5 + 0.5 * (
+        (dataset.target_date - dataset.target_date.min()).dt.days.astype(float)
+        / max((dataset.target_date - dataset.target_date.min()).dt.days.max(), 1)
+    )
+    final_scale = dataset["roll_28_mean"].clip(lower=1.0)
+    final_model = lgb.train(
+        {
+            "objective": "regression_l1", "metric": "mae",
+            "learning_rate": 0.025, "num_leaves": 31,
+            "max_depth": 6, "min_child_samples": 30,
+            "feature_fraction": 0.80, "bagging_fraction": 0.80,
+            "bagging_freq": 5, "lambda_l1": 0.5, "lambda_l2": 0.5,
+            "verbose": -1, "seed": 42, "deterministic": True,
+            "force_col_wise": True,
+        },
+        lgb.Dataset(
+            dataset[FEATURES],
+            label=dataset.actual_qty / final_scale,
+            weight=final_weights,
+        ),
+        num_boost_round=max(model.best_iteration, 1),
+    )
     artifact = {
         "city": city, "lead_days": args.lead_days,
         "completed_actual_gap_days": args.lead_days + 1,
-        "model": model, "product_encoder": encoder,
+        "model": final_model, "product_encoder": encoder,
         "features": FEATURES, "selector": selector,
         "metrics": metrics,
         "trained_through": str(source.target_date.max().date()),
     }
-    stem = f"{city.lower()}_d{args.lead_days}_direct"
+    stem = args.artifact_name or f"{city.lower()}_d{args.lead_days}_direct"
+    if Path(stem).name != stem or not stem.endswith("_direct"):
+        raise ValueError("--artifact-name must be a file stem ending in '_direct'")
     with (MODEL_DIR / f"{stem}.pkl").open("wb") as handle:
         pickle.dump(artifact, handle)
     valid.to_csv(MODEL_DIR / f"{stem}_backtest.csv", index=False)

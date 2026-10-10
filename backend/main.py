@@ -225,6 +225,12 @@ if os.path.exists(HYD_D2_DIRECT_PATH):
         _hyd_d2_direct = pickle.load(f)
 else:
     _hyd_d2_direct = None
+HYD_D2_FOCUS_PATH = os.path.join(MODEL_DIR, "hyd_d2_direct_focus_direct.pkl")
+if os.path.exists(HYD_D2_FOCUS_PATH):
+    with open(HYD_D2_FOCUS_PATH, "rb") as f:
+        _hyd_d2_focus_direct = pickle.load(f)
+else:
+    _hyd_d2_focus_direct = None
 
 FEATURE_ORDER = _model.feature_name()
 FEATURE_ORDER_HYD = _model_hyd.feature_name()
@@ -1743,8 +1749,15 @@ def _predict_hyd_d2_direct(
     target_date: pd.Timestamp,
     recent_actuals: dict,
 ) -> tuple[int, str] | None:
+    focus_products = set(
+        _hyd_d2_focus_direct["product_encoder"].classes_
+    ) if _hyd_d2_focus_direct is not None else set()
     return _predict_city_direct(
-        _hyd_d2_direct, "HYD", product, target_date, recent_actuals
+        _hyd_d2_focus_direct if product in focus_products else _hyd_d2_direct,
+        "HYD",
+        product,
+        target_date,
+        recent_actuals,
     )
 
 
@@ -2866,6 +2879,15 @@ def status():
             ),
             "hyd_d2_direct_metrics": (
                 _hyd_d2_direct.get("metrics") if _hyd_d2_direct else None
+            ),
+            "hyd_d2_focus_direct_available": _hyd_d2_focus_direct is not None,
+            "hyd_d2_focus_direct_products": (
+                list(_hyd_d2_focus_direct["product_encoder"].classes_)
+                if _hyd_d2_focus_direct else []
+            ),
+            "hyd_d2_focus_direct_metrics": (
+                _hyd_d2_focus_direct.get("metrics")
+                if _hyd_d2_focus_direct else None
             ),
             "general_features": len(FEATURE_ORDER),
             "hyd_features": len(FEATURE_ORDER_HYD),

@@ -119,6 +119,22 @@ champion filenames during routine challenger training.
 The refresh exports `reports/current_model_validation.csv`, which compares the
 selected method for every city/SKU against the raw model, same-day-of-week
 median, seasonal-7, and recent-mean baselines.
+Before model promotion, compare each loaded artifact's `trained_through` date
+with the latest completed training actual; refreshing the CSVs does not retrain
+or replace an already loaded model. Review HYD D-2 changes over the recent
+demand-shift window as well as the full rolling holdout.
+
+To train an isolated HYD D-2 challenger for the three high-volume milk SKUs,
+run:
+
+```powershell
+venv\Scripts\python.exe ml_pipeline\train_city_direct.py --city HYD --lead-days 2 --holdout-days 90 --products "A2 Buffalo Milk" "Cow Milk" "Toned Milk" --artifact-name hyd_d2_direct_focus_direct
+```
+
+This saves a separate `hyd_d2_direct_focus_direct.pkl`. The backend loads that
+artifact on startup when present; restart the backend after deploying both the
+artifact and code. Only the listed products use it; all other HYD products
+continue using `hyd_d2_direct.pkl`.
 
 ## Promotion gate
 

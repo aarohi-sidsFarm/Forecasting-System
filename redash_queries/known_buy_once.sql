@@ -2,6 +2,40 @@ WITH target AS (
     SELECT '{{target_date}}'::date AS target_date
 ),
 
+candidate_orders AS (
+    SELECT toi.*
+    FROM temp_order_item toi
+    CROSS JOIN target t
+    WHERE toi.order_date >= t.target_date
+      AND toi.order_date < t.target_date + INTERVAL '1 day'
+      AND UPPER(TRIM(COALESCE(toi.status, ''))) IN ('DRAFT', 'PROCESSED_TO_ORDER')
+      AND COALESCE(toi.quantity, 0) > 0
+      AND COALESCE(toi.free_product, false) = false
+      AND (
+            LOWER(TRIM(COALESCE(toi.purchase_type, ''))) IN (
+                'buy once', 'adhoc buy once', 'first_x_order'
+            )
+            OR toi.purchase_type ILIKE '%buy once%'
+          )
+),
+
+relevant_customers AS (
+    SELECT DISTINCT customer_id
+    FROM candidate_orders
+    WHERE customer_id IS NOT NULL
+),
+
+latest_customer_address AS (
+    SELECT DISTINCT ON (ca.cust_id)
+        ca.cust_id,
+        ca.city_cd
+    FROM customer_address ca
+    JOIN relevant_customers rc
+        ON rc.customer_id = ca.cust_id
+    WHERE ca.is_active = true
+    ORDER BY ca.cust_id, ca.updated_at DESC NULLS LAST, ca.id DESC
+),
+
 normalized_orders AS (
     SELECT
         t.target_date,
@@ -41,7 +75,7 @@ normalized_orders AS (
                 THEN 'Curd'
             ELSE TRIM(REPLACE(pp.name, E'\t', ''))
         END AS product_name
-    FROM temp_order_item toi
+    FROM candidate_orders toi
     CROSS JOIN target t
     JOIN product_productvariant pv
         ON pv.id = toi.variant_id
@@ -49,25 +83,8 @@ normalized_orders AS (
         ON pp.id = pv.product_id
     LEFT JOIN customer_address ship_ca
         ON ship_ca.id = toi.shipping_address_id
-    LEFT JOIN (
-        SELECT DISTINCT ON (cust_id)
-            cust_id,
-            city_cd
-        FROM customer_address
-        WHERE is_active = true
-        ORDER BY cust_id, updated_at DESC NULLS LAST, id DESC
-    ) ca
+    LEFT JOIN latest_customer_address ca
         ON ca.cust_id = toi.customer_id
-    WHERE toi.order_date::date = t.target_date
-      AND UPPER(TRIM(COALESCE(toi.status, ''))) IN ('DRAFT', 'PROCESSED_TO_ORDER')
-      AND COALESCE(toi.quantity, 0) > 0
-      AND COALESCE(toi.free_product, false) = false
-      AND (
-            LOWER(TRIM(COALESCE(toi.purchase_type, ''))) IN (
-                'buy once', 'adhoc buy once', 'first_x_order'
-            )
-            OR toi.purchase_type ILIKE '%buy once%'
-          )
 ),
 
 row_level AS (

@@ -52,7 +52,8 @@ row_level AS (
         f.customer_id
     FROM d2c_order_newfact f
     JOIN params p
-        ON f.delivery_date::date BETWEEN p.start_date AND p.end_date
+        ON f.delivery_date >= p.start_date
+       AND f.delivery_date < p.end_date + INTERVAL '1 day'
     WHERE COALESCE(f.order_volume, 0) > 0
       AND UPPER(TRIM(f.customer_city)) IN ('HYD', 'PNQ', 'BLR', 'VGA')
       AND f.product_name NOT ILIKE '%sample%'

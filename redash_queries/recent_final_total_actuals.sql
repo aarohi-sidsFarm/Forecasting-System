@@ -40,8 +40,8 @@ row_level AS (
         f.customer_id
     FROM d2c_order_newfact f
     CROSS JOIN target t
-    WHERE f.delivery_date::date >= t.target_date - INTERVAL '90 days'
-      AND f.delivery_date::date < t.target_date
+    WHERE f.delivery_date >= t.target_date - INTERVAL '90 days'
+      AND f.delivery_date < t.target_date
       AND COALESCE(f.order_volume, 0) > 0
       AND UPPER(TRIM(f.customer_city)) IN ('HYD', 'PNQ', 'BLR', 'VGA')
       AND f.product_name NOT ILIKE '%sample%'
