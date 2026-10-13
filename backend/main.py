@@ -382,6 +382,7 @@ _forecast_cache = {"forecast_rows": None, "generated_at": None}
 _redash_cache = {}
 _redash_failure_cache = {}
 _redash_pending_jobs = {}
+_forecast_input_tasks: dict[tuple[str, bool], asyncio.Task] = {}
 _redash_health = {
     "last_success": None,
     "last_failure": None,
@@ -396,10 +397,17 @@ PROCUREMENT_TOTAL_TARGET_TYPES = {"procurement_final_total"}
 class RedashRefreshInProgress(RuntimeError):
     """Raised when a browser request reaches its bounded Redash wait time."""
 
-    def __init__(self, cache_key: str, target_date: str, job_id: str | None):
+    def __init__(
+        self,
+        cache_key: str,
+        target_date: str,
+        job_id: str | None,
+        query_id: int | None = None,
+    ):
         self.cache_key = cache_key
         self.target_date = target_date
         self.job_id = job_id
+        self.query_id = query_id
         super().__init__(
             f"Redash {cache_key} refresh is still running for {target_date}"
         )
@@ -409,6 +417,7 @@ class RedashRefreshInProgress(RuntimeError):
             "status": "refresh_in_progress",
             "detail": str(self),
             "query": self.cache_key,
+            "query_id": self.query_id,
             "target_date": self.target_date,
             "job_id": self.job_id,
             "retry_after_seconds": 15,
@@ -459,11 +468,22 @@ def _redash_health_event(
     _redash_health["last_error"] = "; ".join(failures) if failures else None
 
 
-def _redash_progress_for_date(target_date: str) -> RedashRefreshInProgress:
+def _redash_progress_for_date(
+    target_date: str,
+    query_date: str | None = None,
+) -> RedashRefreshInProgress:
+    dates = {target_date}
+    if query_date:
+        dates.add(query_date)
     for key, value in _redash_pending_jobs.items():
-        if key[2] == target_date:
-            return RedashRefreshInProgress(key[0], target_date, value["job_id"])
-    return RedashRefreshInProgress("required_inputs", target_date, None)
+        if key[2] in dates:
+            return RedashRefreshInProgress(
+                key[0], target_date, value["job_id"], query_id=key[1]
+            )
+    return RedashRefreshInProgress(
+        "forecast_inputs", target_date, None,
+        query_id=SUBSCRIPTION_QUERY_ID,
+    )
 
 
 @app.exception_handler(RedashRefreshInProgress)
@@ -630,6 +650,7 @@ async def _fetch_redash_rows(
                     "job_id": job_id,
                     "started_at": pending.get("started_at", time.time())
                     if pending else time.time(),
+                    "last_status": last_job_status,
                 }
                 _redash_health_event(
                     cache_key,
@@ -646,6 +667,8 @@ async def _fetch_redash_rows(
                     job = job_data.get("job", {})
                     last_job_status = job.get("status")
                     last_job_error = job.get("error")
+                    if key in _redash_pending_jobs:
+                        _redash_pending_jobs[key]["last_status"] = last_job_status
                     if last_job_status == 3:
                         result_id = job_data["job"]["query_result_id"]
                         result_resp = await client.get(
@@ -893,6 +916,86 @@ async def fetch_recent_actuals_df_async(
     if strict and result.empty:
         raise RuntimeError(f"Recent actuals input is unusable for {target_date_str}")
     return result
+
+
+async def fetch_forecast_inputs_async(
+    target_date_str: str,
+    force_refresh: bool = False,
+    *,
+    strict: bool = False,
+    wait_mode: str = "interactive",
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Fetch shared inputs once per query target and refresh mode."""
+    key = (target_date_str, bool(force_refresh))
+    task = _forecast_input_tasks.get(key)
+    if task is None or task.done():
+        async def fetch_all() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+            return await asyncio.gather(
+                fetch_subscription_df_async(
+                    target_date_str, force_refresh, strict=strict,
+                    wait_mode=wait_mode,
+                ),
+                fetch_known_buy_once_df_async(
+                    target_date_str, force_refresh, strict=strict,
+                    wait_mode=wait_mode,
+                ),
+                fetch_recent_actuals_df_async(
+                    target_date_str, force_refresh, strict=strict,
+                    wait_mode=wait_mode,
+                ),
+            )
+
+        task = asyncio.create_task(fetch_all())
+        _forecast_input_tasks[key] = task
+
+        def discard_finished(completed: asyncio.Task) -> None:
+            if _forecast_input_tasks.get(key) is completed:
+                _forecast_input_tasks.pop(key, None)
+
+        task.add_done_callback(discard_finished)
+    return await task
+
+
+async def fetch_forecast_inputs_with_lags_async(
+    target_date_str: str,
+    force_refresh: bool = False,
+    *,
+    strict: bool = False,
+    wait_mode: str = "interactive",
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Fetch issue-date components and lags through the previous completed day."""
+    target = _parse_forecast_date(target_date_str)
+    today = _today_ist()
+    lead_dates = [
+        target - pd.Timedelta(days=lead_days)
+        for lead_days in FORECAST_LEAD_DAYS.values()
+    ]
+    issue_date = min(lead_dates)
+    if target > today and issue_date >= today:
+        return await fetch_forecast_inputs_async(
+            target_date_str, force_refresh, strict=strict,
+            wait_mode=wait_mode,
+        )
+
+    # A late preview and a same-day operational forecast may use yesterday's
+    # completed actual. Recent-actual SQL ends before its parameter date, so
+    # shift only that query to include the latest completed day.
+    lag_target = str((today + pd.Timedelta(days=1)).date())
+    subscription, known_buy_once, recent_actuals = await asyncio.gather(
+        fetch_subscription_df_async(
+            target_date_str, force_refresh, strict=strict,
+            wait_mode=wait_mode,
+        ),
+        fetch_known_buy_once_df_async(
+            target_date_str, force_refresh, strict=strict,
+            wait_mode=wait_mode,
+        ),
+        fetch_recent_actuals_df_async(
+            lag_target, force_refresh, strict=strict,
+            wait_mode=wait_mode,
+        ),
+    )
+    return subscription, known_buy_once, recent_actuals
 
 
 async def fetch_selected_actuals_df_async(
@@ -2249,22 +2352,21 @@ async def _build_forecast_rows_by_date(
     force_refresh: bool = False,
     *,
     strict_inputs: bool = False,
+    include_latest_completed_actuals: bool = False,
 ) -> list[dict]:
     rows = []
     for dt in forecast_dates:
         target_date_str = str(pd.Timestamp(dt).date())
         # Independent Redash queries: run concurrently so the wait is the
         # slowest query, not the sum of all three.
-        sub_df, known_df, recent_df = await asyncio.gather(
-            fetch_subscription_df_async(
-                target_date_str, force_refresh, strict=strict_inputs
-            ),
-            fetch_known_buy_once_df_async(
-                target_date_str, force_refresh, strict=strict_inputs
-            ),
-            fetch_recent_actuals_df_async(
-                target_date_str, force_refresh, strict=strict_inputs
-            ),
+        input_fetch = (
+            fetch_forecast_inputs_with_lags_async
+            if include_latest_completed_actuals
+            else fetch_forecast_inputs_async
+        )
+        sub_df, known_df, recent_df = await input_fetch(
+            target_date_str, force_refresh, strict=strict_inputs,
+            wait_mode="interactive",
         )
         day_rows = await run_in_threadpool(build_forecast_for_dates, pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
         rows.extend(day_rows)
@@ -2433,6 +2535,7 @@ async def _build_target_forecast_df(
     rows = await _build_forecast_rows_by_date(
         pd.DatetimeIndex([pd.Timestamp(target_date)]), force_refresh,
         strict_inputs=strict_inputs,
+        include_latest_completed_actuals=True,
     )
     forecast_df = _forecast_rows_to_operational_df(
         rows, target_date=target_date
@@ -2535,10 +2638,8 @@ async def _build_accuracy_report_df(
     async def build_one_date(dt: pd.Timestamp, semaphore: asyncio.Semaphore) -> pd.DataFrame:
         async with semaphore:
             date = str(pd.Timestamp(dt).date())
-            sub_df, known_df, recent_df, actual_df = await asyncio.gather(
-                fetch_subscription_df_async(date, force_refresh),
-                fetch_known_buy_once_df_async(date, force_refresh),
-                fetch_recent_actuals_df_async(date, force_refresh),
+            (sub_df, known_df, recent_df), actual_df = await asyncio.gather(
+                fetch_forecast_inputs_async(date, force_refresh),
                 fetch_selected_actuals_df_async(date, force_refresh),
             )
             rows = await run_in_threadpool(build_forecast_for_dates, pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
@@ -2839,6 +2940,7 @@ def status():
             "target_date": key[2],
             "job_id": value["job_id"],
             "age_seconds": int(max(0, time.time() - value["started_at"])),
+            "last_status": value.get("last_status"),
         }
         for key, value in _redash_pending_jobs.items()
     ]
@@ -2929,10 +3031,10 @@ async def debug_components(
     if ADMIN_TOKEN and x_admin_token != ADMIN_TOKEN:
         raise HTTPException(status_code=403, detail="Admin token required")
     target_dt = pd.DatetimeIndex([_parse_forecast_date(date)])
-    sub_df = await fetch_subscription_df_async(date, refresh)
-    known_df = await fetch_known_buy_once_df_async(date, refresh)
-    recent_df = await fetch_recent_actuals_df_async(date, refresh)
-    actual_df = await fetch_selected_actuals_df_async(date, refresh)
+    (sub_df, known_df, recent_df), actual_df = await asyncio.gather(
+        fetch_forecast_inputs_async(date, refresh),
+        fetch_selected_actuals_df_async(date, refresh),
+    )
     rows = await run_in_threadpool(build_forecast_for_dates, target_dt, sub_df, known_df, recent_df)
     model_diagnostics = await run_in_threadpool(build_model_diagnostics_for_date, target_dt[0], sub_df, known_df, recent_df)
     day_df = pd.DataFrame(rows)
@@ -3017,10 +3119,13 @@ async def get_forecast_day(
     view: str = Query("issued", pattern="^(issued|live)$"),
 ):
     target_dt = pd.DatetimeIndex([_parse_forecast_date(date)])
-    sub_df, known_df, recent_df, actual_df = await asyncio.gather(
-        fetch_subscription_df_async(date, refresh),
-        fetch_known_buy_once_df_async(date, refresh),
-        fetch_recent_actuals_df_async(date, refresh),
+    input_fetch = (
+        fetch_forecast_inputs_with_lags_async
+        if view == "live"
+        else fetch_forecast_inputs_async
+    )
+    (sub_df, known_df, recent_df), actual_df = await asyncio.gather(
+        input_fetch(date, refresh),
         fetch_selected_actuals_df_async(date, refresh),
     )
     rows = await run_in_threadpool(build_forecast_for_dates, target_dt, sub_df, known_df, recent_df)
@@ -3075,6 +3180,15 @@ async def get_forecast_day(
             day_df = pd.concat([day_df, *component_frames], ignore_index=True)
             rows = day_df.to_dict(orient="records")
 
+    # Attach completed Query 1968 actuals to the day-level breakdown so the
+    # requested forecast-versus-actual deviation is visible in this endpoint.
+    # Same-day quantities are incomplete and are intentionally not presented
+    # as final actuals.
+    if view == "live" and date < str(_today_ist().date()):
+        response_actuals = actual_df
+    else:
+        response_actuals = _empty_actuals_df()
+
     if _forecast_cache["forecast_rows"] is None:
         _forecast_cache["forecast_rows"] = rows
     else:
@@ -3085,9 +3199,16 @@ async def get_forecast_day(
             existing = pd.DataFrame()
         _forecast_cache["forecast_rows"] = pd.concat([existing, day_df], ignore_index=True).to_dict(orient="records")
     _forecast_cache["generated_at"] = pd.Timestamp.now().isoformat()
-    response = _aggregate_response(day_df, date, actual_df)
+    response = _aggregate_response(day_df, date, response_actuals)
+    target_issue_dates = _target_issue_dates(_parse_forecast_date(date))
+    past_issue_dates = any(
+        pd.Timestamp(issue_date) < _today_ist()
+        for issue_date in target_issue_dates.values()
+    )
     response["meta"]["forecast_view"] = (
-        "issued" if issued_info else "live"
+        "issued" if issued_info
+        else "late_preview" if past_issue_dates
+        else "live"
     )
     response["meta"]["issued_run_id"] = (
         issued_info["run_id"] if issued_info else None
@@ -3126,7 +3247,10 @@ async def get_operational_forecast(
                         target_dt, refresh, strict_inputs=True
                     )
             except TimeoutError as timeout_exc:
-                raise _redash_progress_for_date(target_date) from timeout_exc
+                lag_target = str((target_dt + pd.Timedelta(days=1)).date())
+                raise _redash_progress_for_date(
+                    target_date, lag_target
+                ) from timeout_exc
         except Exception as exc:
             if cached is None:
                 if isinstance(exc, RedashRefreshInProgress):

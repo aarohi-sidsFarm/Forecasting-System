@@ -19,8 +19,13 @@ class RecentActualsQueryTests(unittest.TestCase):
         self.assertIn(
             "f.delivery_date >= t.target_date - interval '90 days'", self.sql
         )
-        self.assertIn("f.delivery_date < t.target_date", self.sql)
+        self.assertIn(
+            "f.delivery_date < t.target_date + interval '1 day'", self.sql
+        )
         self.assertNotIn("f.delivery_date::date >=", self.sql)
+
+    def test_target_date_includes_latest_completed_lag_day(self):
+        self.assertIn("through the latest completed day", self.sql)
 
 
 if __name__ == "__main__":
