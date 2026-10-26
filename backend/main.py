@@ -9,7 +9,7 @@ from datetime import timedelta
 import httpx
 import numpy as np
 import pandas as pd
-from fastapi import FastAPI, Header, HTTPException, Query
+from fastapi import FastAPI, Header, HTTPException, Query, Request
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -385,6 +385,10 @@ _forecast_cache = {"forecast_rows": None, "generated_at": None}
 _redash_cache = {}
 _redash_failure_cache = {}
 _redash_pending_jobs = {}
+# (cache_key, target_date) -> details for inputs served from an older snapshot
+# after a failed refresh. Surfaced in /api/status and forecast metadata.
+_redash_stale_inputs: dict[tuple[str, str], dict] = {}
+REDASH_STALE_MAX_AGE_SECONDS = int(os.getenv("REDASH_STALE_MAX_AGE_SECONDS", str(6 * 3600)))
 _forecast_input_tasks: dict[tuple[str, bool], asyncio.Task] = {}
 _redash_health = {
     "last_success": None,
@@ -394,6 +398,11 @@ _redash_health = {
 }
 _missing_key_warned = False
 DIRECT_UNKNOWN_TARGET_TYPES = {"residual_unknown_adhoc", "remaining_unknown_adhoc"}
+# Row methods that are parts of the forecast total. Rows ending in _info only
+# restate subscription quantities for display and must never be summed in.
+FORECAST_COMPONENT_METHODS = {
+    "subscription", "known_buy_once", "ml_unknown_adhoc", "official_issued_snapshot",
+}
 PROCUREMENT_TOTAL_TARGET_TYPES = {"procurement_final_total"}
 
 
@@ -724,6 +733,7 @@ async def _fetch_redash_rows(
                 )
             _redash_cache[key] = {"df": df, "fetched_at": time.time()}
             _redash_failure_cache.pop(key, None)
+            _redash_stale_inputs.pop((cache_key, target_date_str), None)
             _redash_health_event(
                 cache_key,
                 query_id,
@@ -750,11 +760,22 @@ async def _fetch_redash_rows(
             job_id=job_id,
         )
         stale = _redash_cache.get(key)
-        if stale is not None and not stale["df"].empty:
+        stale_age = time.time() - stale["fetched_at"] if stale is not None else None
+        if (
+            stale is not None
+            and not stale["df"].empty
+            and stale_age <= REDASH_STALE_MAX_AGE_SECONDS
+        ):
             print(
-                f"Using last successful Redash {cache_key} snapshot for"
-                f"{target_date_str} after refresh failure"
+                f"Using last successful Redash {cache_key} snapshot for "
+                f"{target_date_str} ({int(stale_age)}s old) after refresh failure"
             )
+            _redash_stale_inputs[(cache_key, target_date_str)] = {
+                "query": cache_key,
+                "target_date": target_date_str,
+                "snapshot_age_seconds": int(stale_age),
+                "refresh_error": str(exc),
+            }
             return stale["df"]
         if strict:
             raise RuntimeError(
@@ -830,7 +851,12 @@ def _process_quantity_rows(
         ).clip(lower=0)
     out["daily_qty"] = pd.to_numeric(out["daily_qty"], errors="coerce").fillna(0).round().astype(int)
     out["daily_orders"] = pd.to_numeric(out["daily_orders"], errors="coerce").fillna(0).round().astype(int)
-    return out[out["daily_qty"] > 0]
+    keep = out["daily_qty"] > 0
+    if "unconfirmed_qty" in out.columns:
+        # A product whose subscriptions are all unconfirmed (low or unknown
+        # wallet) still needs its at-risk diagnostic row.
+        keep |= out["unconfirmed_qty"] > 0
+    return out[keep]
 
 
 async def fetch_subscription_df_async(
@@ -2741,6 +2767,10 @@ def _load_cached_accuracy_report_df(start_date: str, end_date: str) -> pd.DataFr
         & df["city"].isin(MILK_EXPORT_CITIES)
         & df["product_name"].isin(MILK_EXPORT_PRODUCTS)
     ].copy()
+    # A partially covered range must be rebuilt, not returned as if complete.
+    requested = {str(d.date()) for d in pd.date_range(start, end)}
+    if not requested.issubset(set(df["forecast_date"])):
+        return pd.DataFrame(columns=columns)
     return df.sort_values(["forecast_date", "city", "product_name"]).reindex(columns=columns)
 
 
@@ -2748,13 +2778,33 @@ def _save_accuracy_report_cache(report_df: pd.DataFrame) -> None:
     if report_df.empty:
         return
     os.makedirs(PROCESSED_DIR, exist_ok=True)
-    report_df.to_csv(ACCURACY_CACHE_PATH, index=False)
+    merged = report_df
+    if os.path.exists(ACCURACY_CACHE_PATH):
+        try:
+            existing = pd.read_csv(ACCURACY_CACHE_PATH)
+        except Exception:
+            existing = pd.DataFrame()
+        if not existing.empty and "forecast_date" in existing.columns:
+            # Replace only the dates being saved; keep every other cached date.
+            existing["forecast_date"] = pd.to_datetime(
+                existing["forecast_date"], errors="coerce"
+            ).dt.strftime("%Y-%m-%d")
+            new_dates = set(report_df["forecast_date"].astype(str))
+            existing = existing[~existing["forecast_date"].isin(new_dates)]
+            merged = pd.concat([existing, report_df], ignore_index=True)
+    merged.sort_values(["forecast_date", "city", "product_name"]).to_csv(
+        ACCURACY_CACHE_PATH, index=False
+    )
 
 
 def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame | None = None) -> dict:
     if day_df.empty:
         raise HTTPException(status_code=404, detail=f"No forecast available for {date}")
-    forecast_qty = int(day_df["predicted_qty"].sum())
+    # *_info rows are diagnostics that restate subscription quantities; only
+    # demand components add up to the forecast total.
+    forecast_qty = int(
+        day_df.loc[day_df["method"].isin(FORECAST_COMPONENT_METHODS), "predicted_qty"].sum()
+    )
     sub_qty = int(day_df.loc[day_df["method"] == "subscription", "predicted_qty"].sum())
     known_qty = int(day_df.loc[day_df["method"] == "known_buy_once", "predicted_qty"].sum())
     ml_qty = int(day_df.loc[day_df["method"] == "ml_unknown_adhoc", "predicted_qty"].sum())
@@ -2917,6 +2967,25 @@ def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame
     }
 
 
+def _require_admin(request: Request, x_admin_token: str | None) -> None:
+    """Gate endpoints that fan out into many Redash queries.
+
+    With ADMIN_TOKEN configured the header must match. Without it, only
+    requests from this machine are allowed, so a deployed instance cannot be
+    used by anyone on the network to flood Redash.
+    """
+    if ADMIN_TOKEN:
+        if x_admin_token != ADMIN_TOKEN:
+            raise HTTPException(status_code=403, detail="Admin token required")
+        return
+    client_host = request.client.host if request.client else None
+    if client_host not in {"127.0.0.1", "::1", "localhost", "testclient"}:
+        raise HTTPException(
+            status_code=403,
+            detail="Set ADMIN_TOKEN to use this endpoint from another machine",
+        )
+
+
 @app.get("/")
 def home():
     return {"message": "API is running"}
@@ -2979,6 +3048,7 @@ def status():
             )),
             "state": redash_state,
             "pending_jobs": pending_jobs,
+            "stale_inputs_in_use": list(_redash_stale_inputs.values()),
             **_redash_health,
         },
         "models": {
@@ -3040,12 +3110,12 @@ def status():
 
 @app.get("/api/debug/components")
 async def debug_components(
+    request: Request,
     date: str = Query(..., description="YYYY-MM-DD"),
     refresh: bool = Query(False),
     x_admin_token: str | None = Header(default=None),
 ):
-    if ADMIN_TOKEN and x_admin_token != ADMIN_TOKEN:
-        raise HTTPException(status_code=403, detail="Admin token required")
+    _require_admin(request, x_admin_token)
     target_dt = pd.DatetimeIndex([_parse_forecast_date(date)])
     (sub_df, known_df, recent_df), actual_df = await asyncio.gather(
         fetch_forecast_inputs_async(date, refresh),
@@ -3080,6 +3150,7 @@ async def debug_components(
 
 @app.get("/api/debug/model_features")
 async def debug_model_features(
+    request: Request,
     date: str = Query(..., description="YYYY-MM-DD"),
     city: str | None = Query(None),
     product: str | None = Query(None),
@@ -3087,8 +3158,7 @@ async def debug_model_features(
     x_admin_token: str | None = Header(default=None),
 ):
     """Inspect time/event features without depending on slow component queries."""
-    if ADMIN_TOKEN and x_admin_token != ADMIN_TOKEN:
-        raise HTTPException(status_code=403, detail="Admin token required")
+    _require_admin(request, x_admin_token)
     target = _parse_forecast_date(date)
     recent_df = await fetch_recent_actuals_df_async(date, refresh, strict=True)
     empty_components = pd.DataFrame(columns=[
@@ -3118,7 +3188,13 @@ async def debug_model_features(
 
 
 @app.get("/api/forecast_raw")
-async def get_forecast_raw(refresh: bool = Query(False)):
+async def get_forecast_raw(
+    request: Request,
+    refresh: bool = Query(False),
+    x_admin_token: str | None = Header(default=None),
+):
+    # 30 dates x 3 Redash queries per call, including the slow Query 3085.
+    _require_admin(request, x_admin_token)
     if _forecast_cache["forecast_rows"] is None or refresh:
         forecast_start = pd.Timestamp.today().normalize() + pd.Timedelta(days=1)
         forecast_dates = pd.date_range(forecast_start, periods=30)
@@ -3352,91 +3428,102 @@ async def get_operational_forecast(
     if cache_is_fresh and not refresh:
         forecast_df = cached["df"]
     else:
+        lag_target = str((target_dt + pd.Timedelta(days=1)).date())
         task = _live_forecast_tasks.get(target_date)
+        latest_failure = None
         if task is None or task.done():
             active_cooldown = [
-                (key, item) for key, item in _redash_failure_cache.items()
-                if key[2] in {target_date, str((target_dt + pd.Timedelta(days=1)).date())}
+                item for key, item in _redash_failure_cache.items()
+                if key[2] in {target_date, lag_target}
                 and time.time() - item["failed_at"] < 60
             ]
             if active_cooldown:
-                _, latest = max(
-                    active_cooldown, key=lambda pair: pair[1]["failed_at"]
-                )
-                error_text = latest["error"]
-                if "canceling statement due to conflict with recovery" in error_text.lower():
-                    detail = (
-                        "The database canceled the subscription query during recovery. "
-                        "No fresh forecast is available yet; retry after the Redash "
-                        "subscription query succeeds."
-                    )
-                else:
-                    detail = f"Redash is retrying after a query failure: {error_text}"
-                return JSONResponse(
-                    status_code=503,
-                    content={
-                        "status": "redash_unavailable",
-                        "target_date": target_date,
-                        "retry_after_seconds": max(
-                            1, 60 - int(time.time() - latest["failed_at"])
-                        ),
-                        "detail": detail,
-                    },
-                    headers={"Retry-After": str(max(
-                        1, 60 - int(time.time() - latest["failed_at"])
-                    ))},
-                )
-        if task is None or task.done():
-            async def refresh_forecast() -> pd.DataFrame:
-                return await _build_target_forecast_df(
-                    target_dt, True, strict_inputs=True
-                )
-
-            task = asyncio.create_task(refresh_forecast())
-            _track_live_forecast_task(target_date, task)
-        try:
-            async with asyncio.timeout(INTERACTIVE_FORECAST_TIMEOUT_SECONDS):
-                forecast_df = await asyncio.shield(task)
-        except (TimeoutError, RedashRefreshInProgress) as pending_exc:
-            lag_target = str((target_dt + pd.Timedelta(days=1)).date())
-            progress = _redash_progress_for_date(target_date, lag_target)
-            if isinstance(pending_exc, RedashRefreshInProgress):
-                progress = pending_exc
-            progress_details = progress.response()
-            pending_jobs = [
-                {
-                    "query": key[0],
-                    "query_id": key[1],
-                    "target_date": key[2],
-                    "job_id": value["job_id"],
-                    "age_seconds": int(max(0, time.time() - value["started_at"])),
-                    "last_status": value.get("last_status"),
-                }
-                for key, value in _redash_pending_jobs.items()
-                if key[2] in {target_date, lag_target}
-            ]
-            progress_details["pending_jobs"] = pending_jobs
-            return JSONResponse(
-                status_code=202,
-                content={**progress_details, "target_date": target_date},
-                headers={"Retry-After": "15"},
-            )
-        except Exception as exc:
-            if cached is None:
-                raise HTTPException(
-                    status_code=503,
-                    detail=(
-                        "Forecast refresh failed and no cached forecast is "
-                        f"available. Cause: {exc}"
-                    ),
-                ) from exc
-            # A cached (even if stale) result beats a hard error.
+                latest_failure = max(active_cooldown, key=lambda item: item["failed_at"])
+        if latest_failure is not None and cached is not None:
+            # Redash just failed for this date; an older forecast beats an
+            # error. It is labelled stale_preview below.
             forecast_df = cached["df"]
             used_stale_cache = True
+        elif latest_failure is not None:
+            error_text = latest_failure["error"]
+            if "canceling statement due to conflict with recovery" in error_text.lower():
+                detail = (
+                    "The database canceled the subscription query during recovery. "
+                    "No fresh forecast is available yet; retry after the Redash "
+                    "subscription query succeeds."
+                )
+            else:
+                detail = f"Redash is retrying after a query failure: {error_text}"
+            retry_after = max(1, 60 - int(time.time() - latest_failure["failed_at"]))
+            return JSONResponse(
+                status_code=503,
+                content={
+                    "status": "redash_unavailable",
+                    "target_date": target_date,
+                    "retry_after_seconds": retry_after,
+                    "detail": detail,
+                },
+                headers={"Retry-After": str(retry_after)},
+            )
         else:
-            _live_forecast_cache[target_date] = {
-                "df": forecast_df, "fetched_at": time.time(),
-            }
+            if task is None or task.done():
+                # Only an explicit refresh forces Redash to re-run (max_age=0).
+                # Normal loads may reuse Redash's one-hour result cache, which
+                # avoids re-running the 10-15 minute subscription query.
+                async def refresh_forecast() -> pd.DataFrame:
+                    return await _build_target_forecast_df(
+                        target_dt, refresh, strict_inputs=True
+                    )
+
+                task = asyncio.create_task(refresh_forecast())
+                _track_live_forecast_task(target_date, task)
+            try:
+                async with asyncio.timeout(INTERACTIVE_FORECAST_TIMEOUT_SECONDS):
+                    forecast_df = await asyncio.shield(task)
+            except (TimeoutError, RedashRefreshInProgress) as pending_exc:
+                if cached is not None:
+                    # Keep showing the previous forecast (labelled stale) while
+                    # the background refresh keeps running.
+                    forecast_df = cached["df"]
+                    used_stale_cache = True
+                else:
+                    progress = _redash_progress_for_date(target_date, lag_target)
+                    if isinstance(pending_exc, RedashRefreshInProgress):
+                        progress = pending_exc
+                    progress_details = progress.response()
+                    progress_details["pending_jobs"] = [
+                        {
+                            "query": key[0],
+                            "query_id": key[1],
+                            "target_date": key[2],
+                            "job_id": value["job_id"],
+                            "age_seconds": int(max(0, time.time() - value["started_at"])),
+                            "last_status": value.get("last_status"),
+                        }
+                        for key, value in _redash_pending_jobs.items()
+                        if key[2] in {target_date, lag_target}
+                    ]
+                    return JSONResponse(
+                        status_code=202,
+                        content={**progress_details, "target_date": target_date},
+                        headers={"Retry-After": "15"},
+                    )
+            except Exception as exc:
+                if cached is None:
+                    raise HTTPException(
+                        status_code=503,
+                        detail=(
+                            "Forecast refresh failed and no cached forecast is "
+                            f"available. Cause: {exc}"
+                        ),
+                    ) from exc
+                # A cached (even if stale) result beats a hard error.
+                forecast_df = cached["df"]
+                used_stale_cache = True
+            else:
+                _live_forecast_cache[target_date] = {
+                    "df": forecast_df, "fetched_at": time.time(),
+                }
 
     forecast_df = forecast_df.copy()
     if not forecast_df.empty:
@@ -3506,6 +3593,10 @@ async def get_operational_forecast(
             "comparison_status": comparison_status,
             "comparison": comparison_summary,
             "forecast_source": "stale_cache" if used_stale_cache else "live_redash",
+            "stale_inputs": [
+                item for (_, query_date), item in _redash_stale_inputs.items()
+                if query_date in {target_date, str((target_dt + pd.Timedelta(days=1)).date())}
+            ],
         },
         "city_summary": city_summary,
         "rows": forecast_df.astype(object).where(
@@ -3546,9 +3637,17 @@ async def export_milk_city_forecast_csv(
     date: str = Query(..., description="YYYY-MM-DD"),
     days: int = Query(7, ge=1, le=31),
     refresh: bool = Query(False),
-    record: bool = Query(True),
+    record: bool = Query(False),
 ):
     start_dt = _parse_forecast_date(date)
+    # A download must not silently create "official" history. Recording is
+    # opt-in, and only for windows that have not started: a forecast built
+    # for a past or same-day date already sees post-issue data.
+    if record and start_dt <= _today_ist():
+        raise HTTPException(
+            status_code=400,
+            detail="record=true is only allowed when every forecast date is in the future",
+        )
     forecast_dates = pd.date_range(start_dt, periods=days)
     rows = await _build_forecast_rows_by_date(forecast_dates, refresh)
 
@@ -3695,6 +3794,7 @@ async def get_forecast_trend(days: int = Query(30, ge=1, le=60)):
     df = pd.DataFrame(_forecast_cache["forecast_rows"])
     if df.empty or "forecast_date" not in df.columns or "predicted_qty" not in df.columns:
         return {"trend": []}
+    df = df[df["method"].isin(FORECAST_COMPONENT_METHODS)]
     daily = (
         df.groupby("forecast_date")["predicted_qty"].sum().reset_index()
         .sort_values("forecast_date")
