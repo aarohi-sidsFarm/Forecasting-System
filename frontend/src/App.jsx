@@ -223,7 +223,7 @@ export default function App() {
         <div className="header-left">
           <img className="brand-logo" src="/sids-farm-logo.png" alt="Sid's Farm" />
           <div>
-            <div className="header-title">Sid's Farm Forecast</div>
+            <div className="header-title">Order Forecasting</div>
             <div className="header-subtitle">City-level procurement plan</div>
           </div>
         </div>
@@ -261,7 +261,7 @@ export default function App() {
       <main className="main">
         {error && <div className="error-banner"><strong>{error}</strong></div>}
         {!error && refreshing && (
-          <div className="info-banner">Preparing forecast for this date — checking again shortly.</div>
+          <div className="info-banner">Preparing forecast for this date. Checking again shortly.</div>
         )}
         {availabilityWarning && (
           <div className="warning-banner"><strong>{availabilityWarning}</strong></div>
@@ -425,7 +425,7 @@ export default function App() {
         </section>
 
         <footer className="footer">
-          Sid&apos;s Farm Forecasting
+          Sid&apos;s Farm Order Forecasting
         </footer>
       </main>
     </div>
