@@ -1,0 +1,71 @@
+/* Design tokens: every colour, size and space in the app comes from here.
+   Numbers use Geist Sans with tabular figures so columns align. */
+
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Colour */
+  --color-bg: #FAFAF9;
+  --color-surface: #FFFFFF;
+  --color-tint: #F5F5F4;
+  --color-hover: #F7F7F6;
+  --color-text: #1C1917;
+  --color-text-muted: #57534E;
+  --color-text-subtle: #78716C;
+  --color-border: #E7E5E4;
+  --color-border-strong: #D6D3D1;
+
+  /* Sid's Farm yellow: active date tab and the primary action only */
+  --color-accent: #FEDA68;
+  --color-accent-hover: #FCD34D;
+  --color-accent-border: #E8C04A;
+
+  /* Status: a dot plus text, never a filled pill */
+  --color-issued: #15803D;
+  --color-draft: #D97706;
+  --color-draft-text: #92400E;
+  --color-error: #B91C1C;
+
+  --color-focus: #1C1917;
+
+  /* Type */
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-20: 20px;
+  --fs-hero: 36px;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --lh-body: 1.5;
+  --lh-number: 1;
+  --tracking-label: 0.04em;
+
+  /* Space (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Shape */
+  --radius: 8px;
+  --hairline: 1px solid var(--color-border);
+  --control-h: 32px;
+  --row-h: 40px;
+  --header-h: 56px;
+  --content-max: 1200px;
+  --shadow-popover: 0 4px 16px rgba(28, 25, 23, 0.08);
+}

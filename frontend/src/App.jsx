@@ -9,21 +9,20 @@ const CITY_NAMES = {
   PNQ: "Pune",
 };
 
-const CITY_COLORS = {
-  HYD: "#34A77B",
-  VGA: "#E06C68",
-  BLR: "#7075D8",
-  PNQ: "#D99A2B",
-};
-
-// Delivery-order of cities on screen and in shared text.
+// Order of cities on screen and in shared text.
 const CITY_ORDER = ["HYD", "BLR", "PNQ", "VGA"];
+
+// Sales history older than this many days gets a stronger notice.
+const STALE_DATA_WARN_DAYS = 7;
+
+// Forecasts are issued nightly at this IST time (D-2 / D-3 cutoff).
+const ISSUE_TIME = "22:05";
+const ISSUE_TIME_LABEL = "10:05 PM";
 
 const fmt = (value) => Number(value ?? 0).toLocaleString("en-IN");
 const fmtSigned = (value) => `${Number(value) > 0 ? "+" : ""}${fmt(value)}`;
 const fmtPct = (value) => `${Number(value ?? 0).toFixed(1)}%`;
 const cityName = (city) => CITY_NAMES[city] ?? city;
-const cityColor = (city) => CITY_COLORS[city] ?? "#74787D";
 const cityRank = (city) => {
   const index = CITY_ORDER.indexOf(city);
   return index === -1 ? CITY_ORDER.length : index;
@@ -44,20 +43,24 @@ const shiftDate = (iso, days) => {
   return isoInIndia(date);
 };
 
-const prettyDate = (date) => new Intl.DateTimeFormat("en-IN", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "Asia/Kolkata",
-}).format(new Date(`${date}T12:00:00+05:30`));
+const daysBetween = (fromIso, toIso) => Math.round(
+  (new Date(`${toIso}T12:00:00+05:30`) - new Date(`${fromIso}T12:00:00+05:30`)) / 86400000,
+);
 
-const shortDate = (date) => new Intl.DateTimeFormat("en-IN", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  timeZone: "Asia/Kolkata",
-}).format(new Date(`${date}T12:00:00+05:30`));
+// One date format everywhere: "Mon, 26 Oct" (year only where it matters).
+const formatDate = (iso, withYear = false) => {
+  const parts = new Intl.DateTimeFormat("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Kolkata",
+  }).formatToParts(new Date(`${iso}T12:00:00+05:30`));
+  const part = (type) => parts.find((p) => p.type === type)?.value;
+  return `${part("weekday")}, ${part("day")} ${part("month")}${withYear ? ` ${part("year")}` : ""}`;
+};
+
+const lockTime = (issueDate) => new Date(`${issueDate}T${ISSUE_TIME}:00+05:30`).getTime();
 
 const csvCell = (value) => {
   const text = String(value ?? "");
@@ -66,16 +69,6 @@ const csvCell = (value) => {
 
 const isFrozen = (row) => ["official_issued", "legacy_issued", "archived_export"].includes(row.forecast_status)
   || Boolean(row.forecast_run_id);
-
-// Plain-language label for the whole page, with what it means for the reader.
-const VIEW_LABELS = {
-  issued: ["Final", "Issued at the D-2 / D-3 cutoff. These numbers will not change."],
-  mixed: ["Partly final", "Some cities are issued and final; the rest are still a preview."],
-  partial_issued: ["Partly final", "Some cities are issued and final; the rest are still a preview."],
-  archived_export: ["Archive", "Saved forecast from before the dashboard kept issued history."],
-  stale_preview: ["Preview (older data)", "Latest orders could not be loaded, so this uses the last saved inputs."],
-  live_preview: ["Preview", "Not issued yet. Numbers can still change until the D-2 / D-3 cutoff at 22:05."],
-};
 
 const copyText = async (text) => {
   try {
@@ -97,6 +90,11 @@ const copyText = async (text) => {
   }
 };
 
+const listNames = (cities) => {
+  const names = cities.map(cityName);
+  return names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names[0];
+};
+
 const fetchDashboard = async (targetDate) => {
   const [forecast, status] = await Promise.all([
     getOperationalForecast(targetDate),
@@ -110,6 +108,22 @@ const MAX_LOAD_RETRIES = 80;
 // A free Render server takes about a minute to wake up or redeploy.
 const WAKE_RETRY_MS = 8000;
 const MAX_WAKE_RETRIES = 15;
+
+function StatusDot({ tone }) {
+  return <span className={`dot dot-${tone}`} aria-hidden="true" />;
+}
+
+function SkeletonRows({ count = 6, columns = 2 }) {
+  return Array.from({ length: count }, (_, row) => (
+    <tr key={row} className="skeleton-row" aria-hidden="true">
+      {Array.from({ length: columns }, (__, column) => (
+        <td key={column} className={column ? "num" : ""}>
+          <span className="skeleton-bar" style={{ width: column ? 56 : 120 + ((row * 37) % 80) }} />
+        </td>
+      ))}
+    </tr>
+  ));
+}
 
 export default function App() {
   const params = new URLSearchParams(window.location.search);
@@ -125,11 +139,14 @@ export default function App() {
   const [now, setNow] = useState(() => Date.now());
   const [cityFilter, setCityFilter] = useState("All");
   const [search, setSearch] = useState("");
+  const [collapsed, setCollapsed] = useState(() => new Set());
+  const [menuOpen, setMenuOpen] = useState(false);
   const [toast, setToast] = useState("");
   const retryTimerRef = useRef(null);
   const toastTimerRef = useRef(null);
   const requestIdRef = useRef(0);
   const loadRef = useRef(() => {});
+  const menuRef = useRef(null);
 
   const load = useCallback((attempt = 0) => {
     if (retryTimerRef.current) {
@@ -194,11 +211,26 @@ export default function App() {
     };
   }, [load, targetDate]);
 
+  // Keeps the waiting time and "locks at" status current.
   useEffect(() => {
-    if (!preparingSince) return undefined;
-    const timer = setInterval(() => setNow(Date.now()), 1000);
+    const timer = setInterval(() => setNow(Date.now()), preparingSince ? 1000 : 30000);
     return () => clearInterval(timer);
   }, [preparingSince]);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const close = (event) => {
+      if (event.type === "keydown" ? event.key === "Escape" : !menuRef.current?.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [menuOpen]);
 
   const changeDate = (next) => {
     if (!next || next === targetDate) return;
@@ -268,14 +300,56 @@ export default function App() {
   const absErrorTotal = comparedRows.reduce((sum, row) => sum + Math.abs(Number(row.difference)), 0);
   const errorPct = actualTotal ? (100 * absErrorTotal) / actualTotal : 0;
 
+  // Status, shown once. Cities lock separately (HYD/VGA at D-2, BLR/PNQ at D-3).
   const forecastView = data?.meta?.forecast_view ?? "live_preview";
-  const [viewLabel, viewHelp] = VIEW_LABELS[forecastView] ?? VIEW_LABELS.live_preview;
+  const draftGroups = cityGroups.filter((group) => !group.final);
+  const pendingLocks = draftGroups
+    .filter((group) => group.issueDate && lockTime(group.issueDate) > now)
+    .map((group) => group.issueDate)
+    .sort();
+  const nextLock = pendingLocks[0];
+  let status = null;
+  if (data && cityGroups.length) {
+    if (!draftGroups.length) {
+      status = {
+        tone: "issued",
+        label: "Issued",
+        detail: forecastView === "archived_export" ? "from the saved archive" : "locked at the cutoff and will not change",
+      };
+    } else if (forecastView === "stale_preview") {
+      status = { tone: "draft", label: "Draft", detail: "based on the last saved orders, as the latest could not be loaded" };
+    } else if (draftGroups.length < cityGroups.length) {
+      status = {
+        tone: "draft",
+        label: "Partly issued",
+        detail: nextLock
+          ? `${listNames(draftGroups.map((group) => group.city))} lock ${formatDate(nextLock)} at ${ISSUE_TIME_LABEL}`
+          : `${listNames(draftGroups.map((group) => group.city))} were not issued at the cutoff`,
+      };
+    } else {
+      status = {
+        tone: "draft",
+        label: "Draft",
+        detail: nextLock
+          ? `locks ${formatDate(nextLock)} at ${ISSUE_TIME_LABEL}`
+          : "was not issued at the cutoff, so these numbers are a recalculation",
+      };
+    }
+  }
+  const statusLabel = status?.label ?? "Draft";
+
   const availabilityWarning = data?.meta?.availability_warning ?? "";
   const freshness = data?.meta?.training_data_freshness ?? {};
-  const upcomingEvents = (systemStatus?.festival_calendar?.upcoming_events ?? [])
+  const syncedDate = freshness.max_training_date;
+  const syncedAgeDays = syncedDate ? daysBetween(syncedDate, today) : 0;
+  const showFreshness = Boolean(syncedDate) && (freshness.is_stale || syncedAgeDays > STALE_DATA_WARN_DAYS);
+  const freshnessStrong = syncedAgeDays > STALE_DATA_WARN_DAYS;
+
+  const festivals = (systemStatus?.festival_calendar?.upcoming_events ?? [])
     .filter((event) => event.date >= shiftDate(targetDate, -3))
-    .slice(0, 6);
-  const preparingFor = preparingSince ? Math.max(0, Math.floor((now - preparingSince) / 1000)) : 0;
+    .slice(0, 8);
+  const waitedSeconds = preparingSince ? Math.max(0, Math.floor((now - preparingSince) / 1000)) : 0;
+  const busy = !data && !error && (loading || waking || Boolean(preparingSince));
 
   const shareUrl = () => {
     const url = new URL(window.location);
@@ -285,10 +359,10 @@ export default function App() {
   };
 
   const shareText = () => {
-    const lines = [`*Order forecast for ${prettyDate(targetDate)}*`, `Status: ${viewLabel}`, ""];
+    const lines = [`*Order forecast for ${formatDate(targetDate, true)}*`, `Status: ${statusLabel}`, ""];
     for (const group of visibleGroups) {
       const groupTotal = group.shownRows.reduce((sum, row) => sum + Number(row.forecast_quantity), 0);
-      lines.push(`*${cityName(group.city)}: ${fmt(groupTotal)}*${group.final ? "" : " (preview)"}`);
+      lines.push(`*${cityName(group.city)}: ${fmt(groupTotal)}*${group.final ? "" : " (draft)"}`);
       for (const row of group.shownRows) {
         const actual = comparisonAvailable && row.actual_available
           ? ` (actual ${fmt(row.actual_quantity)})`
@@ -306,11 +380,11 @@ export default function App() {
   };
 
   const copySummary = async () => {
-    notify(await copyText(shareText()) ? "Copied. Paste it into WhatsApp or email." : "Could not copy. Try again.");
+    notify(await copyText(shareText()) ? "Copied. Paste it into WhatsApp or email." : "Couldn't copy. Try again.");
   };
 
   const copyLink = async () => {
-    notify(await copyText(shareUrl()) ? "Link copied" : "Could not copy the link");
+    notify(await copyText(shareUrl()) ? "Link copied" : "Couldn't copy the link. Try again.");
   };
 
   const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
@@ -328,7 +402,7 @@ export default function App() {
       ["City", (row) => cityName(row.city)],
       ["Product", (row) => row.product_name],
       ["Forecast quantity", (row) => row.forecast_quantity],
-      ["Status", (row) => (isFrozen(row) ? "Final" : "Preview")],
+      ["Status", (row) => (isFrozen(row) ? "Issued" : "Draft")],
       ["Issued on", (row) => row.issue_date ?? ""],
       ["Lead time (days)", (row) => row.lead_time_days],
       ["Confirmed subscriptions", (row) => row.confirmed_subscription_qty],
@@ -358,254 +432,301 @@ export default function App() {
     notify("CSV downloaded");
   };
 
+  const runMenuAction = (action) => {
+    setMenuOpen(false);
+    action();
+  };
+
+  const toggleGroup = (city) => {
+    setCollapsed((current) => {
+      const next = new Set(current);
+      if (next.has(city)) next.delete(city);
+      else next.add(city);
+      return next;
+    });
+  };
+
   const quickDates = [
     ["Today", today],
     ["Tomorrow", shiftDate(today, 1)],
     ["Day after", shiftDate(today, 2)],
   ];
   const hasRows = visibleRows.length > 0;
+  const columnCount = comparisonAvailable ? 5 : 2;
 
   return (
     <div className="app">
       <header className="header">
-        <div className="header-left">
-          <img className="brand-logo" src="/sids-farm-logo.png" alt="Sid's Farm" />
-          <div>
-            <div className="header-title">Order Forecasting</div>
-            <div className="header-subtitle">Packets to plan per city and product</div>
+        <div className="header-inner">
+          <div className="brand">
+            <img className="brand-logo" src="/apple-touch-icon.png" alt="Sid's Farm" width="28" height="28" />
+            <span className="brand-title">Order Forecasting</span>
           </div>
-        </div>
-        <div className="date-nav" role="group" aria-label="Delivery date">
-          <div className="quick-dates">
-            {quickDates.map(([label, date]) => (
-              <button
-                key={label}
-                type="button"
-                className={`chip ${targetDate === date ? "chip-active" : ""}`}
-                onClick={() => changeDate(date)}
-              >
-                {label}
+          <nav className="date-nav" aria-label="Delivery date">
+            <div className="segmented" role="group" aria-label="Quick dates">
+              {quickDates.map(([label, date]) => (
+                <button
+                  key={label}
+                  type="button"
+                  className="segment"
+                  aria-pressed={targetDate === date}
+                  onClick={() => changeDate(date)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="stepper" role="group" aria-label="Pick a date">
+              <button type="button" className="stepper-btn" aria-label="Previous day" onClick={() => changeDate(shiftDate(targetDate, -1))}>
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </button>
-            ))}
-          </div>
-          <div className="date-stepper">
-            <button type="button" className="btn icon-btn" aria-label="Previous day" onClick={() => changeDate(shiftDate(targetDate, -1))}>‹</button>
-            <input
-              type="date"
-              className="date-input"
-              aria-label="Delivery date"
-              value={targetDate}
-              onChange={(event) => changeDate(event.target.value)}
-            />
-            <button type="button" className="btn icon-btn" aria-label="Next day" onClick={() => changeDate(shiftDate(targetDate, 1))}>›</button>
-          </div>
+              <input
+                type="date"
+                className="stepper-input"
+                aria-label="Delivery date"
+                value={targetDate}
+                onChange={(event) => changeDate(event.target.value)}
+              />
+              <button type="button" className="stepper-btn" aria-label="Next day" onClick={() => changeDate(shiftDate(targetDate, 1))}>
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+            </div>
+          </nav>
         </div>
       </header>
 
-      <main className="main">
-        <section className="hero">
-          <div>
-            <div className="hero-label">Delivery on {prettyDate(targetDate)}</div>
-            {data && (
-              <div className="hero-total">
-                {fmt(filtered ? visibleTotal : grandTotal)}
-                <span className="hero-unit">packets{filtered ? " (filtered)" : ""}</span>
+      <div className="layout">
+        <main className="content">
+          <section className="summary" aria-live="polite">
+            <div className="eyebrow">Delivery · {formatDate(targetDate, true)}</div>
+            {data ? (
+              <div className="hero">
+                <span className="hero-number">{fmt(filtered ? visibleTotal : grandTotal)}</span>
+                <span className="hero-unit">packets{filtered ? " shown" : ""}</span>
               </div>
+            ) : (
+              <div className="hero" aria-hidden="true"><span className="skeleton-bar skeleton-hero" /></div>
             )}
-          </div>
-          {data && (
-            <span className={`status-pill status-${forecastView}`} title={viewHelp}>{viewLabel}</span>
-          )}
-        </section>
-        {data && <p className="status-help">{viewHelp}</p>}
 
-        {error && (
-          <div className="banner banner-error" role="alert">
-            <div>
-              <strong>The forecast could not be loaded.</strong>
-              <div className="banner-detail">{error}</div>
-            </div>
-            <button type="button" className="btn" onClick={() => load()}>Try again</button>
-          </div>
-        )}
-        {waking && !error && (
-          <div className="banner banner-info" role="status">
-            <span className="spinner" aria-hidden="true" />
-            <div>
-              <strong>Starting the forecast server.</strong>
-              <div className="banner-detail">
-                It sleeps when nobody has used it for a while, or is updating. This takes about a minute;
-                the page loads by itself.
-              </div>
-            </div>
-          </div>
-        )}
-        {preparingSince && (
-          <div className="banner banner-info" role="status">
-            <span className="spinner" aria-hidden="true" />
-            <div>
-              <strong>Building this forecast from the latest orders.</strong>
-              <div className="banner-detail">
-                It has not been issued yet, so it is calculated now. This can take up to 15 minutes;
-                the page updates by itself. Waiting {Math.floor(preparingFor / 60)}m {preparingFor % 60}s.
-              </div>
-            </div>
-          </div>
-        )}
-        {loading && !data && !preparingSince && !waking && !error && (
-          <div className="skeleton-grid" aria-label="Loading">
-            {[0, 1, 2, 3].map((key) => <div key={key} className="skeleton" />)}
-          </div>
-        )}
-        {availabilityWarning && <div className="banner banner-warning">{availabilityWarning}</div>}
-        {freshness.is_stale && (
-          <div className="banner banner-warning">
-            Sales history last updated {freshness.max_training_date}. Forecasts may drift until it is refreshed.
-          </div>
-        )}
-
-        {data && (
-          <>
-            <section className="city-grid">
-              {cityGroups.map((group) => (
-                <button
-                  type="button"
-                  key={group.city}
-                  className={`city-card ${cityFilter === group.city ? "selected" : ""}`}
-                  style={{ borderLeftColor: cityColor(group.city) }}
-                  aria-pressed={cityFilter === group.city}
-                  onClick={() => setCityFilter(cityFilter === group.city ? "All" : group.city)}
-                >
-                  <div className="city-card-top">
-                    <span className="city-name" style={{ color: cityColor(group.city) }}>{cityName(group.city)}</span>
-                    <span className={`mini-pill ${group.final ? "mini-final" : "mini-preview"}`}>
-                      {group.final ? "Final" : "Preview"}
-                    </span>
-                  </div>
-                  <div className="city-qty">{fmt(group.total)}</div>
-                  <div className="city-detail">
-                    {group.rows.length} products
-                    {group.issueDate ? ` · issued ${shortDate(group.issueDate)}` : ""}
-                    {group.leadDays != null ? ` (D-${group.leadDays})` : ""}
-                  </div>
-                  {group.errorPct != null && (
-                    <div className="city-detail">Actual {fmt(group.actual)} · error {fmtPct(group.errorPct)}</div>
-                  )}
-                </button>
-              ))}
-            </section>
-
+            {status && (
+              <p className="status-line">
+                <StatusDot tone={status.tone} />
+                <span className="status-label">{status.label}</span>{" "}
+                <span className="status-detail">· {status.detail}</span>
+              </p>
+            )}
             {comparisonAvailable && comparedRows.length > 0 && (
-              <section className="comparison-strip" aria-label="Forecast against actual sales">
-                <div>
-                  <div className="metric-label">Actual sold</div>
-                  <div className="comparison-value">{fmt(actualTotal)}</div>
-                </div>
-                <div>
-                  <div className="metric-label">Forecast minus actual</div>
-                  <div className="comparison-value">{fmtSigned(differenceTotal)}</div>
-                </div>
-                <div>
-                  <div className="metric-label">Error</div>
-                  <div className="comparison-value">{fmtPct(errorPct)}</div>
-                </div>
-              </section>
+              <p className="meta-line">
+                Actual <span className="num-inline">{fmt(actualTotal)}</span>
+                <span className="sep">·</span>
+                <span className="num-inline">{fmtSigned(differenceTotal)}</span> vs forecast
+                <span className="sep">·</span>
+                <span className="num-inline">{fmtPct(errorPct)}</span> error
+              </p>
             )}
 
-            <section className="card workspace">
-              <div className="toolbar">
+            {waking && !error && (
+              <p className="meta-line">Connecting to the server. This takes about a minute after a quiet period.</p>
+            )}
+            {preparingSince && !error && (
+              <p className="meta-line">
+                Calculating this forecast from the latest orders. This can take up to 15 minutes; the page updates by itself.
+                <span className="num-inline waited"> {Math.floor(waitedSeconds / 60)}:{String(waitedSeconds % 60).padStart(2, "0")}</span>
+              </p>
+            )}
+            {error && (
+              <div className="callout callout-error" role="alert">
+                <StatusDot tone="error" />
+                <span title={error}>Couldn&apos;t load the forecast. Check your connection and try again.</span>
+                <button type="button" className="btn btn-ghost" onClick={() => load()}>Try again</button>
+              </div>
+            )}
+
+            {data && cityGroups.length > 0 && (
+              <div className="stats" role="group" aria-label="Totals by city">
+                {cityGroups.map((group) => (
+                  <button
+                    type="button"
+                    key={group.city}
+                    className="stat"
+                    aria-pressed={cityFilter === group.city}
+                    onClick={() => setCityFilter(cityFilter === group.city ? "All" : group.city)}
+                  >
+                    <span className="stat-name">{cityName(group.city)}</span>
+                    <span className="stat-number">{fmt(group.total)}</span>
+                    <span className="stat-meta">
+                      {group.rows.length} products ·{" "}
+                      {group.final
+                        ? (group.issueDate ? `issued ${formatDate(group.issueDate)}` : "issued")
+                        : (group.issueDate && lockTime(group.issueDate) > now
+                          ? `locks ${formatDate(group.issueDate)}`
+                          : "draft")}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {busy && !data && (
+              <div className="stats" aria-hidden="true">
+                {[0, 1, 2, 3].map((key) => (
+                  <div key={key} className="stat">
+                    <span className="skeleton-bar" style={{ width: 72 }} />
+                    <span className="skeleton-bar skeleton-stat" />
+                    <span className="skeleton-bar" style={{ width: 120 }} />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {showFreshness && (
+              freshnessStrong ? (
+                <div className="callout callout-draft">
+                  <StatusDot tone="draft" />
+                  <span>
+                    Sales data last synced {formatDate(syncedDate)}, {syncedAgeDays} days ago.
+                    Forecasts may drift until it is refreshed.
+                  </span>
+                </div>
+              ) : (
+                <p className="meta-line">
+                  <StatusDot tone="draft" />
+                  Sales data last synced {formatDate(syncedDate)}. Forecasts may drift until refreshed.
+                </p>
+              )
+            )}
+            {availabilityWarning && (
+              <p className="meta-line"><StatusDot tone="draft" />{availabilityWarning}</p>
+            )}
+          </section>
+
+          <section className="panel" aria-label="Products by city">
+            <div className="toolbar">
+              <div className="search">
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m10.5 10.5 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
                 <input
-                  className="search-input"
                   type="search"
                   placeholder="Search product or city"
+                  aria-label="Search product or city"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                 />
-                {filtered && (
-                  <button type="button" className="btn btn-quiet" onClick={() => { setCityFilter("All"); setSearch(""); }}>
-                    Show all cities
+              </div>
+              {filtered && (
+                <button type="button" className="btn btn-ghost" onClick={() => { setCityFilter("All"); setSearch(""); }}>
+                  Clear filter
+                </button>
+              )}
+              <div className="toolbar-actions">
+                <button type="button" className="btn btn-primary" onClick={copySummary} disabled={!hasRows}>
+                  Copy for WhatsApp
+                </button>
+                <div className="menu" ref={menuRef}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    aria-haspopup="menu"
+                    aria-expanded={menuOpen}
+                    onClick={() => setMenuOpen((open) => !open)}
+                  >
+                    More
+                    <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
-                )}
-                <div className="toolbar-actions">
-                  <button type="button" className="btn btn-primary" onClick={copySummary} disabled={!hasRows}>
-                    Copy for WhatsApp
-                  </button>
-                  {canShare && (
-                    <button type="button" className="btn" onClick={shareNative} disabled={!hasRows}>Share</button>
+                  {menuOpen && (
+                    <div className="menu-list" role="menu">
+                      {canShare && (
+                        <button type="button" role="menuitem" disabled={!hasRows} onClick={() => runMenuAction(shareNative)}>Share</button>
+                      )}
+                      <button type="button" role="menuitem" disabled={!hasRows} onClick={() => runMenuAction(downloadCsv)}>Download CSV</button>
+                      <button type="button" role="menuitem" onClick={() => runMenuAction(copyLink)}>Copy link</button>
+                    </div>
                   )}
-                  <button type="button" className="btn" onClick={downloadCsv} disabled={!hasRows}>Download CSV</button>
-                  <button type="button" className="btn" onClick={copyLink}>Copy link</button>
                 </div>
               </div>
-
-              <div className="table-wrap">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Product</th>
-                      <th className="numeric">Forecast</th>
-                      {comparisonAvailable && <th className="numeric">Actual</th>}
-                      {comparisonAvailable && <th className="numeric">Difference</th>}
-                      {comparisonAvailable && <th className="numeric">Error</th>}
-                    </tr>
-                  </thead>
-                  {!hasRows ? (
-                    <tbody>
-                      <tr>
-                        <td colSpan={comparisonAvailable ? 5 : 2} className="empty-state">
-                          {rows.length ? "No products match your search." : "No forecast for this date."}
-                        </td>
-                      </tr>
-                    </tbody>
-                  ) : visibleGroups.map((group) => (
-                    <tbody key={group.city}>
-                      <tr className="group-row">
-                        <td>
-                          <span className="city-dot" style={{ background: cityColor(group.city) }} />
-                          {cityName(group.city)}
-                          {!group.final && <span className="mini-pill mini-preview">Preview</span>}
-                        </td>
-                        <td className="numeric">{fmt(group.shownRows.reduce((sum, row) => sum + Number(row.forecast_quantity), 0))}</td>
-                        {comparisonAvailable && <td className="numeric">{group.compared ? fmt(group.actual) : "-"}</td>}
-                        {comparisonAvailable && <td className="numeric">{group.compared ? fmtSigned(group.difference) : "-"}</td>}
-                        {comparisonAvailable && <td className="numeric">{group.errorPct != null ? fmtPct(group.errorPct) : "-"}</td>}
-                      </tr>
-                      {group.shownRows.map((row) => (
-                        <tr key={`${group.city}-${row.product_name}`}>
-                          <td className="product-name">{row.product_name}</td>
-                          <td className="numeric qty-value">{fmt(row.forecast_quantity)}</td>
-                          {comparisonAvailable && <td className="numeric">{row.actual_available ? fmt(row.actual_quantity) : "-"}</td>}
-                          {comparisonAvailable && <td className="numeric">{row.actual_available ? fmtSigned(row.difference) : "-"}</td>}
-                          {comparisonAvailable && <td className="numeric">{row.actual_available ? fmtPct(row.absolute_error_pct) : "-"}</td>}
-                        </tr>
-                      ))}
-                    </tbody>
-                  ))}
-                </table>
-              </div>
-            </section>
-          </>
-        )}
-
-        {upcomingEvents.length > 0 && (
-          <section className="card festival-panel">
-            <h2 className="panel-title">Festivals coming up</h2>
-            <div className="festival-list">
-              {upcomingEvents.map((event) => (
-                <div
-                  className={`festival-item ${event.date === targetDate ? "festival-today" : ""}`}
-                  key={`${event.date}-${event.festival}-${event.cities}`}
-                >
-                  <strong>{event.festival}</strong>
-                  <span>{shortDate(event.date)} · {event.cities === "ALL" ? "All cities" : event.cities}</span>
-                </div>
-              ))}
             </div>
-          </section>
-        )}
 
-        <footer className="footer">Sid&apos;s Farm Order Forecasting</footer>
-      </main>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col" className="num">Forecast</th>
+                  {comparisonAvailable && <th scope="col" className="num">Actual</th>}
+                  {comparisonAvailable && <th scope="col" className="num col-diff">Difference</th>}
+                  {comparisonAvailable && <th scope="col" className="num">Error</th>}
+                </tr>
+              </thead>
+              {busy || (error && !data) ? (
+                <tbody><SkeletonRows columns={columnCount} /></tbody>
+              ) : !hasRows ? (
+                <tbody>
+                  <tr>
+                    <td colSpan={columnCount} className="empty">
+                      {rows.length
+                        ? <>No products match &ldquo;{search}&rdquo;.</>
+                        : "No forecast for this date."}
+                    </td>
+                  </tr>
+                </tbody>
+              ) : visibleGroups.map((group) => {
+                const isCollapsed = collapsed.has(group.city) && !query;
+                const groupTotal = group.shownRows.reduce((sum, row) => sum + Number(row.forecast_quantity), 0);
+                return (
+                  <tbody key={group.city}>
+                    <tr className="group-row">
+                      <th scope="rowgroup">
+                        <button
+                          type="button"
+                          className="group-toggle"
+                          aria-expanded={!isCollapsed}
+                          onClick={() => toggleGroup(group.city)}
+                        >
+                          <svg className="chevron" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                          {cityName(group.city)}
+                        </button>
+                      </th>
+                      <td className="num">{fmt(groupTotal)}</td>
+                      {comparisonAvailable && <td className="num">{group.compared ? fmt(group.actual) : "-"}</td>}
+                      {comparisonAvailable && <td className="num col-diff">{group.compared ? fmtSigned(group.difference) : "-"}</td>}
+                      {comparisonAvailable && <td className="num">{group.errorPct != null ? fmtPct(group.errorPct) : "-"}</td>}
+                    </tr>
+                    {!isCollapsed && group.shownRows.map((row) => (
+                      <tr key={`${group.city}-${row.product_name}`} className="item-row">
+                        <td className="product">{row.product_name}</td>
+                        <td className="num num-strong">{fmt(row.forecast_quantity)}</td>
+                        {comparisonAvailable && <td className="num">{row.actual_available ? fmt(row.actual_quantity) : "-"}</td>}
+                        {comparisonAvailable && <td className="num col-diff">{row.actual_available ? fmtSigned(row.difference) : "-"}</td>}
+                        {comparisonAvailable && <td className="num">{row.actual_available ? fmtPct(row.absolute_error_pct) : "-"}</td>}
+                      </tr>
+                    ))}
+                  </tbody>
+                );
+              })}
+            </table>
+          </section>
+        </main>
+
+        {festivals.length > 0 && (
+          <aside className="sidebar" aria-labelledby="festivals-title">
+            <h2 id="festivals-title" className="section-label">Festivals</h2>
+            <ul className="festivals">
+              {festivals.map((event) => {
+                const onDate = event.date === targetDate;
+                return (
+                  <li key={`${event.date}-${event.festival}-${event.cities}`} className={onDate ? "on-date" : ""}>
+                    <span className="festival-date">{formatDate(event.date)}</span>
+                    <span className="festival-name">
+                      {event.festival}
+                      {onDate && <span className="visually-hidden"> (on this delivery date)</span>}
+                    </span>
+                    <span className="festival-cities">
+                      {event.cities === "ALL" ? "All cities" : event.cities.split(",").map((c) => cityName(c.trim())).join(", ")}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </aside>
+        )}
+      </div>
 
       {toast && <div className="toast" role="status">{toast}</div>}
     </div>
