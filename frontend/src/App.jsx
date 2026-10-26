@@ -158,11 +158,16 @@ export default function App() {
   const freshness = data?.meta?.training_data_freshness ?? {};
   const forecastView = data?.meta?.forecast_view ?? "live_preview";
   const availabilityWarning = data?.meta?.availability_warning ?? "";
+  const comparisonNotEligible = data?.meta?.comparison_status === "not_eligible_preview";
   const forecastViewLabel = forecastView === "issued"
     ? "OFFICIAL"
     : forecastView === "mixed"
       ? "MIXED"
-      : forecastView === "partial_issued" ? "PARTIAL" : "PREVIEW";
+      : forecastView === "partial_issued"
+        ? "PARTIAL"
+        : forecastView === "archived_export"
+          ? "ARCHIVE"
+          : forecastView === "stale_preview" ? "STALE" : "PREVIEW";
 
   const resetFilters = () => {
     setCityFilter("All");
@@ -229,7 +234,13 @@ export default function App() {
               type="date"
               className="date-input"
               value={targetDate}
-              onChange={(event) => setTargetDate(event.target.value)}
+              onChange={(event) => {
+                // Historical exports may contain fewer cities than the live
+                // forecast; clear filters so a previously selected city does
+                // not make a valid archived forecast appear empty.
+                resetFilters();
+                setTargetDate(event.target.value);
+              }}
             />
           </label>
           <button className="btn header-action" onClick={() => load(true)} disabled={loading || refreshing}>
@@ -294,11 +305,16 @@ export default function App() {
               <div className="comparison-value">{fmtPct(filteredWape)}</div>
             </div>
             <div className="comparison-note">
-              {comparedRows.length} matched rows - comparison uses {forecastView === "issued"
-                ? "the frozen D-2/D-3 forecast"
-                : "a live preview for cities not yet frozen"}
+              {comparedRows.length} matched rows - comparison uses the frozen D-2/D-3 forecast
             </div>
           </section>
+        )}
+        {comparisonNotEligible && (
+          <div className="warning-banner">
+            Accuracy is shown only for forecasts frozen at their D-2/D-3 issue time.
+            This date has no complete issued forecast, so its preview would look
+            more accurate than it really was.
+          </div>
         )}
 
         <section className="city-grid operational-city-grid">
@@ -312,7 +328,7 @@ export default function App() {
             >
               <div>
                 <div className="city-name" style={{ color: cityColor(summary.city) }}>{cityName(summary.city)}</div>
-                <div className="city-detail">D-{summary.lead_time_days} - issue {prettyDate(summary.issue_date)}</div>
+                <div className="city-detail">D-{summary.lead_time_days}{summary.issue_date ? ` - issue ${prettyDate(summary.issue_date)}` : " - archived"}</div>
               </div>
               <div>
                 <div className="city-qty" style={{ color: cityColor(summary.city) }}>{fmt(summary.forecast_quantity)}</div>

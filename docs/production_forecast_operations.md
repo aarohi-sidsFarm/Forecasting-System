@@ -29,7 +29,18 @@ future placeholder rows in a month-wide extract from being stored as actuals.
    A malformed calendar stops the run before Redash is called. Re-running the
    command returns `already_issued`; it never overwrites the successful run.
 
-   To register the Windows scheduled task at 10:05 PM:
+   **Nightly schedule (GitHub Actions).** `.github/workflows/daily-issuance.yml`
+   runs at 22:05 IST with a 22:50 IST retry, so no PC has to be on. It
+   validates the festival calendars, issues the forecast and commits it as
+   `backend/issued_forecasts/<issue_date>.json`. The backend imports that
+   ledger at startup, so issued forecasts survive Render restarts, and the
+   commit triggers a backend redeploy that picks up the new day. It needs the
+   repository secret `QUERY_API_KEY`; run it once by hand from the Actions tab
+   (Run workflow) to confirm Redash is reachable. GitHub emails the repository
+   owner when a scheduled run fails. GitHub may start scheduled runs a few
+   minutes late; buy-once orders are still cut off at 22:05 by Query 3086.
+
+   The Windows task is the fallback for a machine that is on at night:
 
    `powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\register_daily_forecast_task.ps1 -DailyAt 22:05`
 

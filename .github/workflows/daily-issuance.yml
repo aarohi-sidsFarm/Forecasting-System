@@ -1,0 +1,64 @@
+name: Daily forecast issuance
+
+# Issues the immutable HYD/VGA D-2 and BLR/PNQ D-3 forecast every night and
+# commits it to backend/issued_forecasts/, which the backend loads at startup.
+# Replaces the Windows scheduled task, so no PC has to be on at night.
+on:
+  schedule:
+    # 22:05 IST, plus a 22:50 IST retry. The retry is a no-op once the
+    # first run has committed the day's file.
+    - cron: "35 16 * * *"
+    - cron: "20 17 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: daily-issuance
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  issue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      REDASH_BASE_URL: https://analytics.sidsfarm.in
+      QUERY_API_KEY: ${{ secrets.QUERY_API_KEY }}
+      SUBSCRIPTION_QUERY_ID: "3085"
+      KNOWN_BUY_ONCE_QUERY_ID: "3086"
+      RECENT_ACTUALS_QUERY_ID: "3101"
+      SELECTED_ACTUALS_QUERY_ID: "3114"
+      TZ: Asia/Kolkata
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Validate festival calendars
+        run: python scripts/audit_festival_calendar.py --as-of "$(date +%F)" --lookahead-days 45
+
+      - name: Issue today's forecast
+        run: python scripts/issue_daily_forecasts.py --export-ledger
+
+      - name: Commit the issued forecast
+        run: |
+          git add backend/issued_forecasts
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit (already issued)."
+            exit 0
+          fi
+          git config user.name "forecast-issuance-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Issue forecast for $(date +%F)"
+          git pull --rebase origin main
+          git push origin HEAD:main

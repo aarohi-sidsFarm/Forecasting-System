@@ -1,4 +1,5 @@
 import asyncio
+import contextvars
 import io
 import os
 import pickle
@@ -9,7 +10,7 @@ from datetime import timedelta
 import httpx
 import numpy as np
 import pandas as pd
-from fastapi import FastAPI, Header, HTTPException, Query
+from fastapi import FastAPI, Header, HTTPException, Query, Request
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -91,17 +92,20 @@ app.add_middleware(
 REDASH_BASE_URL = os.getenv("REDASH_BASE_URL", "https://analytics.sidsfarm.in")
 QUERY_API_KEY = os.getenv("QUERY_API_KEY")
 REDASH_HTTP_TIMEOUT_SECONDS = float(os.getenv("REDASH_HTTP_TIMEOUT_SECONDS", "90"))
-# Query 3085 can take 10-12 minutes during peak load. Poll for up to 15 minutes
-# only for scheduled issuance; interactive API requests have a short bound.
+# Query 3085 can take 10-12 minutes during peak load. Interactive API requests
+# use a bounded wait; scheduled issuance can use the longer job poll allowance.
 REDASH_JOB_POLL_INTERVAL_SECONDS = int(
     os.getenv("REDASH_JOB_POLL_INTERVAL_SECONDS", "3")
 )
 REDASH_JOB_POLL_ATTEMPTS = int(os.getenv("REDASH_JOB_POLL_ATTEMPTS", "300"))
 INTERACTIVE_REDASH_WAIT_SECONDS = int(
-    os.getenv("INTERACTIVE_REDASH_WAIT_SECONDS", "45")
+    os.getenv("INTERACTIVE_REDASH_WAIT_SECONDS", "90")
 )
 INTERACTIVE_FORECAST_TIMEOUT_SECONDS = int(
-    os.getenv("INTERACTIVE_FORECAST_TIMEOUT_SECONDS", "60")
+    os.getenv(
+        "INTERACTIVE_FORECAST_TIMEOUT_SECONDS",
+        str(INTERACTIVE_REDASH_WAIT_SECONDS + 15),
+    )
 )
 INTERACTIVE_REDASH_JOB_POLL_ATTEMPTS = max(
     1,
@@ -265,7 +269,29 @@ for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
         for d in range(7)
     }
 
-fest_df = pd.read_csv(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"))
+# Reviewed calendar first, then drafts for later years. Draft rows are used so
+# that forecasts past the reviewed range still see festivals, and are flagged
+# in /api/status until someone reviews them.
+FESTIVAL_CALENDAR_FILES = [
+    ("festival_list_2024_2026.csv", False),
+    ("festival_list_2027_draft.csv", True),
+]
+
+
+def _load_festival_calendar() -> pd.DataFrame:
+    frames = []
+    for file_name, is_draft in FESTIVAL_CALENDAR_FILES:
+        path = os.path.join(MODEL_DIR, file_name)
+        if not os.path.exists(path):
+            continue
+        frame = pd.read_csv(path)
+        frame["calendar_file"] = file_name
+        frame["is_draft"] = is_draft
+        frames.append(frame)
+    return pd.concat(frames, ignore_index=True)
+
+
+fest_df = _load_festival_calendar()
 fest_df["date"] = pd.to_datetime(fest_df["date"], format="mixed", dayfirst=True)
 fest_df["cities"] = fest_df["cities"].fillna("").astype(str).str.upper()
 
@@ -282,17 +308,17 @@ _festival_set = set(_national_fest_df["date"])
 _festival_name_by_date = _national_fest_df.groupby("date")["festival"].first().to_dict()
 _festival_dates_by_city = {}
 _city_high_impact_dates = {}
-_festival_name_by_city_date = {}
+# Several festivals can fall on the same date (e.g. Diwali and Nagula
+# Chavithi on 2026-11-08); keep all of them, not just the first.
+_festival_names_by_city_date: dict[tuple[str, pd.Timestamp], list[str]] = {}
 _festival_impact_by_city_date = {}
 for _city in KNOWN_CITIES:
     _city_rows = fest_df[fest_df["cities"].apply(lambda value: _festival_applies_to_city(value, _city))]
     _regional_rows = _city_rows[~_city_rows.index.isin(_national_fest_df.index)]
     _festival_dates_by_city[_city] = set(_regional_rows["date"])
     _city_high_impact_dates[_city] = set(_city_rows[_city_rows["impact"] == "HIGH"]["date"])
-    _festival_name_by_city_date.update({
-        (_city, date): name
-        for date, name in _city_rows.groupby("date")["festival"].first().to_dict().items()
-    })
+    for _date, _names in _city_rows.groupby("date")["festival"].apply(list).items():
+        _festival_names_by_city_date[(_city, _date)] = list(dict.fromkeys(_names))
     if "impact_direction" in _city_rows.columns:
         _festival_impact_by_city_date.update({
             (_city, date): int(direction)
@@ -382,6 +408,10 @@ _forecast_cache = {"forecast_rows": None, "generated_at": None}
 _redash_cache = {}
 _redash_failure_cache = {}
 _redash_pending_jobs = {}
+# (cache_key, target_date) -> details for inputs served from an older snapshot
+# after a failed refresh. Surfaced in /api/status and forecast metadata.
+_redash_stale_inputs: dict[tuple[str, str], dict] = {}
+REDASH_STALE_MAX_AGE_SECONDS = int(os.getenv("REDASH_STALE_MAX_AGE_SECONDS", str(6 * 3600)))
 _forecast_input_tasks: dict[tuple[str, bool], asyncio.Task] = {}
 _redash_health = {
     "last_success": None,
@@ -391,6 +421,11 @@ _redash_health = {
 }
 _missing_key_warned = False
 DIRECT_UNKNOWN_TARGET_TYPES = {"residual_unknown_adhoc", "remaining_unknown_adhoc"}
+# Row methods that are parts of the forecast total. Rows ending in _info only
+# restate subscription quantities for display and must never be summed in.
+FORECAST_COMPONENT_METHODS = {
+    "subscription", "known_buy_once", "ml_unknown_adhoc", "official_issued_snapshot",
+}
 PROCUREMENT_TOTAL_TARGET_TYPES = {"procurement_final_total"}
 
 
@@ -453,7 +488,7 @@ def _redash_health_event(
     failures = [
         f"{name} {item.get('target_date')}: {item.get('last_error')}"
         for name, item in queries.items()
-        if item.get("last_error")
+        if item.get("last_error") and item.get("state") == "failed"
     ]
     successes = [
         item.get("last_success") for item in queries.values()
@@ -488,9 +523,22 @@ def _redash_progress_for_date(
 
 @app.exception_handler(RedashRefreshInProgress)
 async def _redash_refresh_in_progress_response(_request, exc):
+    details = exc.response()
+    details["pending_jobs"] = [
+        {
+            "query": key[0],
+            "query_id": key[1],
+            "target_date": key[2],
+            "job_id": value["job_id"],
+            "age_seconds": int(max(0, time.time() - value["started_at"])),
+            "last_status": value.get("last_status"),
+        }
+        for key, value in _redash_pending_jobs.items()
+        if key[0] == exc.cache_key and key[2] == exc.target_date
+    ]
     return JSONResponse(
         status_code=202,
-        content=exc.response(),
+        content=details,
         headers={"Retry-After": "15"},
     )
 
@@ -708,6 +756,7 @@ async def _fetch_redash_rows(
                 )
             _redash_cache[key] = {"df": df, "fetched_at": time.time()}
             _redash_failure_cache.pop(key, None)
+            _redash_stale_inputs.pop((cache_key, target_date_str), None)
             _redash_health_event(
                 cache_key,
                 query_id,
@@ -734,11 +783,22 @@ async def _fetch_redash_rows(
             job_id=job_id,
         )
         stale = _redash_cache.get(key)
-        if stale is not None and not stale["df"].empty:
+        stale_age = time.time() - stale["fetched_at"] if stale is not None else None
+        if (
+            stale is not None
+            and not stale["df"].empty
+            and stale_age <= REDASH_STALE_MAX_AGE_SECONDS
+        ):
             print(
-                f"Using last successful Redash {cache_key} snapshot for"
-                f"{target_date_str} after refresh failure"
+                f"Using last successful Redash {cache_key} snapshot for "
+                f"{target_date_str} ({int(stale_age)}s old) after refresh failure"
             )
+            _redash_stale_inputs[(cache_key, target_date_str)] = {
+                "query": cache_key,
+                "target_date": target_date_str,
+                "snapshot_age_seconds": int(stale_age),
+                "refresh_error": str(exc),
+            }
             return stale["df"]
         if strict:
             raise RuntimeError(
@@ -814,7 +874,12 @@ def _process_quantity_rows(
         ).clip(lower=0)
     out["daily_qty"] = pd.to_numeric(out["daily_qty"], errors="coerce").fillna(0).round().astype(int)
     out["daily_orders"] = pd.to_numeric(out["daily_orders"], errors="coerce").fillna(0).round().astype(int)
-    return out[out["daily_qty"] > 0]
+    keep = out["daily_qty"] > 0
+    if "unconfirmed_qty" in out.columns:
+        # A product whose subscriptions are all unconfirmed (low or unknown
+        # wallet) still needs its at-risk diagnostic row.
+        keep |= out["unconfirmed_qty"] > 0
+    return out[keep]
 
 
 async def fetch_subscription_df_async(
@@ -1183,7 +1248,27 @@ def _festival_status() -> dict:
     upcoming["date"] = upcoming["date"].dt.strftime("%Y-%m-%d")
     return {
         "enabled": True,
-        "calendar_path": os.path.relpath(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"), PROJECT_DIR),
+        "calendar_files": [
+            {
+                "path": os.path.relpath(os.path.join(MODEL_DIR, name), PROJECT_DIR),
+                "is_draft": is_draft,
+                "loaded": bool((fest_df["calendar_file"] == name).any()),
+            }
+            for name, is_draft in FESTIVAL_CALENDAR_FILES
+        ],
+        "draft_dates_in_use": {
+            "start_date": str(fest_df.loc[fest_df["is_draft"], "date"].min().date())
+            if fest_df["is_draft"].any() else None,
+            "end_date": str(fest_df.loc[fest_df["is_draft"], "date"].max().date())
+            if fest_df["is_draft"].any() else None,
+            "warning": "Draft festival dates need domain review."
+            if fest_df["is_draft"].any() else None,
+        },
+        "calendar_expiry_warning": (
+            f"Festival calendar ends {fest_df['date'].max().date()}; "
+            "add the next year before then."
+            if (fest_df["date"].max() - today).days < 60 else None
+        ),
         "rows": int(len(fest_df)),
         "national_rows": int(len(_national_fest_df)),
         "regional_rows": int(len(regional_rows)),
@@ -1229,6 +1314,21 @@ def _recent_actual_lookup(recent_df: pd.DataFrame) -> dict[tuple[str, str, pd.Ti
     }
 
 
+# Latest delivery date whose actuals may be used. None means "everything
+# known now" (live serving). build_as_issued_forecast_rows sets it to the day
+# before each city's issue date so a past forecast is rebuilt exactly as it
+# would have been issued, without later actuals. A ContextVar keeps
+# concurrent requests and threadpool workers independent.
+_HISTORY_AS_OF: contextvars.ContextVar[pd.Timestamp | None] = contextvars.ContextVar(
+    "history_as_of", default=None
+)
+
+
+def _history_visible(date: pd.Timestamp) -> bool:
+    as_of = _HISTORY_AS_OF.get()
+    return as_of is None or pd.Timestamp(date).normalize() <= as_of
+
+
 def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals=None, fallback_val=0.0):
     if future_preds is None:
         future_preds = {}
@@ -1244,7 +1344,8 @@ def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals
     for n in range(28, 0, -1):
         target_dt = pd.Timestamp(ref_date - timedelta(days=n)).normalize()
         pred_key = (city, product, target_dt)
-        if pred_key in recent_actuals:
+        visible = _history_visible(target_dt)
+        if visible and pred_key in recent_actuals:
             vals.append(float(recent_actuals[pred_key]))
             sources.append("recent_actual")
             continue
@@ -1252,7 +1353,7 @@ def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals
             vals.append(float(future_preds[pred_key]))
             sources.append("recursive_prediction")
             continue
-        if len(dates):
+        if len(dates) and visible:
             idx = np.where(dates == np.datetime64(target_dt))[0]
             if len(idx):
                 vals.append(float(qty[idx[0]]))
@@ -1638,32 +1739,36 @@ def _apply_festival_guardrail(
     # silently skipped the loop below for every one of those cases even
     # before the scan window itself was widened to reach them.
     dt = pd.Timestamp(dt).normalize()
-    candidate_dates = [
-        dt - pd.Timedelta(days=offset)
-        for offset in range(_FESTIVAL_GUARDRAIL_MIN_OFFSET, _FESTIVAL_GUARDRAIL_MAX_OFFSET + 1)
-    ]
-    for festival_date in candidate_dates:
-        festival_name = _festival_name_by_city_date.get((city, festival_date))
-        if not festival_name:
+    # Search outward from the target date so the nearest festival wins; among
+    # festivals at the same distance, the one with the largest uplift wins.
+    max_distance = max(abs(_FESTIVAL_GUARDRAIL_MIN_OFFSET), abs(_FESTIVAL_GUARDRAIL_MAX_OFFSET))
+    for distance in range(0, max_distance + 1):
+        matches = []
+        for offset in sorted({distance, -distance}):
+            if not _FESTIVAL_GUARDRAIL_MIN_OFFSET <= offset <= _FESTIVAL_GUARDRAIL_MAX_OFFSET:
+                continue
+            festival_date = dt - pd.Timedelta(days=offset)
+            for festival_name in _festival_names_by_city_date.get((city, festival_date), []):
+                uplift_override = None
+                if festival_name == "Varalakshmi Vratam" and offset == 0:
+                    uplift_override = VARALAKSHMI_DAY0_UPLIFT_PCT.get(city, {}).get(product)
+                uplift_pct = (
+                    uplift_override
+                    if uplift_override is not None
+                    else _festival_guardrail_lookup.get((festival_name, city, product, offset))
+                )
+                if uplift_pct is None:
+                    continue
+                cap_pct = (
+                    abs(float(uplift_override))
+                    if uplift_override is not None
+                    else DEFAULT_FESTIVAL_GUARDRAIL_CAP_PCT
+                )
+                capped_pct = float(np.clip(uplift_pct, -cap_pct, cap_pct))
+                matches.append((abs(capped_pct), festival_name, offset, capped_pct))
+        if not matches:
             continue
-        offset = int((dt - festival_date).days)
-        uplift_override = None
-        if festival_name == "Varalakshmi Vratam" and offset == 0:
-            uplift_override = VARALAKSHMI_DAY0_UPLIFT_PCT.get(city, {}).get(product)
-        uplift_pct = (
-            uplift_override
-            if uplift_override is not None
-            else _festival_guardrail_lookup.get((festival_name, city, product, offset))
-        )
-        if uplift_pct is None:
-            continue
-
-        cap_pct = (
-            abs(float(uplift_override))
-            if uplift_override is not None
-            else DEFAULT_FESTIVAL_GUARDRAIL_CAP_PCT
-        )
-        capped_pct = float(np.clip(uplift_pct, -cap_pct, cap_pct))
+        _, festival_name, offset, capped_pct = max(matches, key=lambda item: item[0])
         factor = 1.0 + (capped_pct / 100.0)
         adjusted = int(round(prediction * factor))
         if adjusted == prediction:
@@ -1745,6 +1850,8 @@ def _historical_actual_value(
     recent_actuals: dict,
 ) -> float:
     normalized = pd.Timestamp(date).normalize()
+    if not _history_visible(normalized):
+        return 0.0
     recent_key = (city, product, normalized)
     if recent_key in recent_actuals:
         return float(recent_actuals[recent_key])
@@ -1930,6 +2037,9 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
 
     first_req = pd.Timestamp(forecast_dates[0]).normalize()
     max_train = pd.Timestamp(_train_df["target_date"].max()).normalize()
+    history_as_of = _HISTORY_AS_OF.get()
+    if history_as_of is not None:
+        max_train = min(max_train, history_as_of)
     compute_dates = pd.date_range(max_train + pd.Timedelta(days=1), forecast_dates[-1]) if first_req > max_train + pd.Timedelta(days=1) else forecast_dates
 
     ml_rows = []
@@ -2032,18 +2142,18 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     target_type,
                     feats,
                 )
-                final_ad_hoc_pred, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    pred_dt,
-                    feats,
-                )
                 final_ad_hoc_pred, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
                     final_ad_hoc_pred,
                     city,
                     product,
                     target_type,
+                    feats,
+                )
+                final_ad_hoc_pred, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    pred_dt,
                     feats,
                 )
                 future_preds[(city, product, pred_dt)] = final_ad_hoc_pred
@@ -2109,6 +2219,17 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     if direct is None:
                         continue
                     total_prediction, direct_method = direct
+                    # Direct models give festival flags ~1-3% of their weight
+                    # and under-forecast festival days by ~10% on holdout, so
+                    # apply the same festival uplift the model path uses.
+                    (
+                        total_prediction,
+                        festival_guardrail_name,
+                        festival_guardrail_factor,
+                        festival_guardrail_offset,
+                    ) = _apply_festival_guardrail(
+                        total_prediction, city, product, target_date, {}
+                    )
                     key = (city, product, str(target_date.date()))
                     visible = int(round(
                         sub_dict.get((city, product), 0)
@@ -2126,6 +2247,9 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                             "method": "ml_unknown_adhoc",
                             "prediction_source": direct_method,
                             "blr_forecast_method": direct_method,
+                            "festival_guardrail_name": festival_guardrail_name,
+                            "festival_guardrail_factor": festival_guardrail_factor,
+                            "festival_guardrail_offset": festival_guardrail_offset,
                         })
         ml_rows = [
             row for row in ml_rows
@@ -2134,6 +2258,30 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
         ] + replacements
 
     return sub_rows + known_rows + ml_rows
+
+
+def build_as_issued_forecast_rows(target_date, recent_df=None) -> list[dict]:
+    """Rebuild the forecast each city would have been issued for target_date.
+
+    Each city only sees actuals completed before its own issue date (HYD/VGA
+    D-2, BLR/PNQ D-3). Issue-time subscription and buy-once snapshots cannot
+    be reconstructed (Query 3085 is current-state), so components are empty
+    and the total is the model total.
+    """
+    target = pd.Timestamp(target_date).normalize()
+    empty = _empty_component_df()
+    rows: list[dict] = []
+    for lead_days in sorted(set(FORECAST_LEAD_DAYS.values())):
+        cities = {city for city, lead in FORECAST_LEAD_DAYS.items() if lead == lead_days}
+        token = _HISTORY_AS_OF.set(target - pd.Timedelta(days=lead_days + 1))
+        try:
+            lead_rows = build_forecast_for_dates(
+                pd.DatetimeIndex([target]), empty, empty, recent_df
+            )
+        finally:
+            _HISTORY_AS_OF.reset(token)
+        rows.extend(row for row in lead_rows if row["city_cd"] in cities)
+    return rows
 
 
 def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> list[dict]:
@@ -2251,18 +2399,18 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     target_type,
                     feats,
                 )
-                model_total_adhoc, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    current_dt,
-                    feats,
-                )
                 model_total_adhoc, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
                     model_total_adhoc,
                     city,
                     product,
                     target_type,
+                    feats,
+                )
+                model_total_adhoc, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    current_dt,
                     feats,
                 )
                 future_preds[(city, product, current_dt)] = model_total_adhoc
@@ -2526,6 +2674,246 @@ async def _build_operational_forecast_df(
     ].copy()
 
 
+# Minimum distinct products per city for a complete issuance. PNQ's
+# subscription, buy-once and actuals inputs carry only 4 of the 7 export
+# products (no Double Toned, Skim or Toned Milk). The old code required 4 to
+# issue but 7 for accuracy eligibility, so PNQ could never be compared; both
+# checks now use this one table.
+MIN_ISSUED_PRODUCTS_PER_CITY = {
+    city: len(MILK_EXPORT_PRODUCTS) for city in FORECAST_LEAD_DAYS
+}
+MIN_ISSUED_PRODUCTS_PER_CITY["PNQ"] = 4
+
+
+def _validate_issuance_inputs(
+    *,
+    target_date: str,
+    issue_date: pd.Timestamp,
+    relevant_cities: set[str],
+    subscription_df: pd.DataFrame,
+    known_df: pd.DataFrame,
+    recent_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Reject incomplete inputs and drop actuals the issue cutoff cannot see."""
+    for name, frame in (
+        ("subscription", subscription_df),
+        ("known_buy_once", known_df),
+        ("recent_actuals", recent_df),
+    ):
+        if frame.empty:
+            raise RuntimeError(f"{name} returned no usable rows for {target_date}")
+        if frame.duplicated(["city_cd", "product_name"]).any() and name != "recent_actuals":
+            raise RuntimeError(f"{name} contains duplicate city/SKU keys for {target_date}")
+
+    missing_subscription_cities = relevant_cities.difference(
+        set(subscription_df["city_cd"])
+    )
+    if missing_subscription_cities:
+        raise RuntimeError(
+            f"Subscription input is missing cities {sorted(missing_subscription_cities)} "
+            f"for {target_date}"
+        )
+
+    completed_through = pd.Timestamp(issue_date).normalize() - pd.Timedelta(days=1)
+    completed_recent = recent_df[
+        pd.to_datetime(recent_df["target_date"]).dt.normalize() <= completed_through
+    ].copy()
+    if completed_recent.empty:
+        raise RuntimeError(
+            f"Recent actuals have no completed data through {completed_through.date()}"
+        )
+    latest_actual = pd.to_datetime(completed_recent["target_date"]).max().normalize()
+    if latest_actual < completed_through:
+        raise RuntimeError(
+            f"Recent actuals are stale: latest {latest_actual.date()}, "
+            f"expected {completed_through.date()}"
+        )
+    latest_rows = completed_recent[
+        pd.to_datetime(completed_recent["target_date"]).dt.normalize()
+        == completed_through
+    ]
+    missing_recent_cities = relevant_cities.difference(set(latest_rows["city_cd"]))
+    if missing_recent_cities:
+        raise RuntimeError(
+            f"Recent actuals are missing latest-day cities "
+            f"{sorted(missing_recent_cities)} for {completed_through.date()}"
+        )
+    return completed_recent
+
+
+def _validate_issued_forecast_frame(frame: pd.DataFrame) -> None:
+    if frame.empty:
+        raise RuntimeError("Issuance produced no forecast rows")
+    keys = ["issue_date", "forecast_date", "city", "product_name"]
+    if frame.duplicated(keys).any():
+        duplicates = frame.loc[frame.duplicated(keys, keep=False), keys]
+        raise RuntimeError(
+            f"Issuance produced duplicate keys: {duplicates.head().to_dict('records')}"
+        )
+    missing_cities = set(FORECAST_LEAD_DAYS).difference(frame["city"])
+    if missing_cities:
+        raise RuntimeError(f"Issuance is missing cities: {sorted(missing_cities)}")
+    counts = frame.groupby("city")["product_name"].nunique().to_dict()
+    insufficient = {
+        city: {"actual": int(counts.get(city, 0)), "minimum": minimum}
+        for city, minimum in MIN_ISSUED_PRODUCTS_PER_CITY.items()
+        if counts.get(city, 0) < minimum
+    }
+    if insufficient:
+        raise RuntimeError(f"Issuance SKU coverage failed: {insufficient}")
+    if frame["forecast_quantity"].le(0).any():
+        raise RuntimeError("Issuance contains non-positive final forecasts")
+
+
+def _redash_fetch_metadata(target_date: str) -> dict:
+    query_ids = {
+        "subscription": SUBSCRIPTION_QUERY_ID,
+        "known_buy_once": int(KNOWN_BUY_ONCE_QUERY_ID) if KNOWN_BUY_ONCE_QUERY_ID else None,
+        "recent_actuals": int(RECENT_ACTUALS_QUERY_ID) if RECENT_ACTUALS_QUERY_ID else None,
+    }
+    result = {}
+    for name, query_id in query_ids.items():
+        entry = _redash_cache.get((name, query_id, target_date)) if query_id else None
+        result[name] = {
+            "query_id": query_id,
+            "rows": int(len(entry["df"])) if entry else None,
+            "fetched_at": pd.Timestamp(
+                entry["fetched_at"], unit="s", tz="UTC"
+            ).tz_convert("Asia/Kolkata").isoformat() if entry else None,
+            "stale_snapshot": _redash_stale_inputs.get((name, target_date)),
+        }
+    return result
+
+
+async def _issue_daily_operational_forecast_once(
+    issue_date: str,
+    *,
+    force_refresh: bool = True,
+) -> dict:
+    issue_dt = _parse_forecast_date(issue_date)
+    if issue_dt != _today_ist():
+        raise ValueError(
+            "Official issuance must run on its actual issue date; "
+            f"today is {_today_ist().date()}"
+        )
+    existing = await run_in_threadpool(
+        issued_run_for_issue_date, str(issue_dt.date())
+    )
+    if existing:
+        return {"status": "already_issued", **existing}
+
+    target_by_city = _operational_target_dates(issue_dt)
+    rows: list[dict] = []
+    input_metadata = {}
+    for target_date in sorted(set(target_by_city.values())):
+        relevant_cities = {
+            city for city, city_target in target_by_city.items()
+            if city_target == target_date
+        }
+        subscription_df, known_df, recent_df = await asyncio.gather(
+            fetch_subscription_df_async(
+                target_date, force_refresh, strict=True, wait_mode="issuance"
+            ),
+            fetch_known_buy_once_df_async(
+                target_date, force_refresh, strict=True, wait_mode="issuance"
+            ),
+            fetch_recent_actuals_df_async(
+                target_date, force_refresh, strict=True, wait_mode="issuance"
+            ),
+        )
+        recent_df = _validate_issuance_inputs(
+            target_date=target_date,
+            issue_date=issue_dt,
+            relevant_cities=relevant_cities,
+            subscription_df=subscription_df,
+            known_df=known_df,
+            recent_df=recent_df,
+        )
+        target_rows = await run_in_threadpool(
+            build_forecast_for_dates,
+            pd.DatetimeIndex([pd.Timestamp(target_date)]),
+            subscription_df,
+            known_df,
+            recent_df,
+        )
+        rows.extend(target_rows)
+        input_metadata[target_date] = _redash_fetch_metadata(target_date)
+
+    forecast_df = _forecast_rows_to_operational_df(rows, issue_dt)
+    forecast_df = forecast_df[
+        forecast_df["city"].isin(MILK_EXPORT_CITIES)
+        & forecast_df["product_name"].isin(MILK_EXPORT_PRODUCTS)
+    ].copy()
+    _validate_issued_forecast_frame(forecast_df)
+
+    # Confirmed and at-risk subscription quantities are stored with every
+    # issued row: they are the issue-time snapshot a subscription-based model
+    # needs, and they cannot be reconstructed later.
+    history_frame = forecast_df.rename(columns={
+        "city": "city_cd",
+        "lead_time_days": "horizon",
+        "forecast_quantity": "p50_qty",
+        "subscription_qty": "visible_subscription_qty",
+        "known_buy_once_qty": "visible_buy_once_qty",
+    }).copy()
+    history_frame["p80_qty"] = None
+    history_frame["visible_orders"] = None
+    history_frame["method"] = "official_issued"
+    metadata = {
+        "issue_date": str(issue_dt.date()),
+        "target_dates": target_by_city,
+        "query_inputs": input_metadata,
+        "training_data_freshness": _training_data_freshness(),
+        "rows_by_city": {
+            city: int(count)
+            for city, count in forecast_df.groupby("city").size().items()
+        },
+    }
+    try:
+        history_result = await run_in_threadpool(
+            record_forecast_run,
+            history_frame,
+            run_kind="official_issued",
+            model_version=(
+                f"general:{_model_target_type}|hyd:{_model_hyd_target_type}"
+            ),
+            cutoff_policy="city_horizon:D-2_HYD_VGA,D-3_BLR_PNQ; immutable",
+            metadata=metadata,
+        )
+    except Exception:
+        existing = await run_in_threadpool(
+            issued_run_for_issue_date, str(issue_dt.date())
+        )
+        if existing:
+            return {"status": "already_issued", **existing}
+        raise
+    return {
+        "status": "issued",
+        **history_result,
+        "issue_date": str(issue_dt.date()),
+        "target_dates": target_by_city,
+        "rows_by_city": metadata["rows_by_city"],
+        "total_quantity": int(forecast_df["forecast_quantity"].sum()),
+    }
+
+
+async def issue_daily_operational_forecast(
+    issue_date: str,
+    *,
+    force_refresh: bool = True,
+) -> dict:
+    """Issue today's immutable forecast; restore the Redash cache on failure."""
+    cache_before = dict(_redash_cache)
+    try:
+        return await _issue_daily_operational_forecast_once(
+            issue_date, force_refresh=force_refresh
+        )
+    except Exception:
+        _redash_cache.clear()
+        _redash_cache.update(cache_before)
+        raise
+
+
 async def _build_target_forecast_df(
     target_date: pd.Timestamp,
     force_refresh: bool = False,
@@ -2546,6 +2934,71 @@ async def _build_target_forecast_df(
         forecast_df["city"].isin(MILK_EXPORT_CITIES)
         & forecast_df["product_name"].isin(MILK_EXPORT_PRODUCTS)
     ].copy()
+
+
+def _issued_rows_to_operational_df(
+    issued_rows: pd.DataFrame,
+    target_date: pd.Timestamp,
+) -> pd.DataFrame:
+    if issued_rows.empty:
+        return pd.DataFrame(columns=[
+            *OPERATIONAL_FORECAST_COLUMNS,
+            "forecast_status", "forecast_run_id",
+        ])
+    frame = issued_rows.copy().rename(columns={
+        "city_cd": "city",
+        "p50_qty": "forecast_quantity",
+        "visible_subscription_qty": "subscription_qty",
+        "visible_buy_once_qty": "known_buy_once_qty",
+    })
+    frame["city"] = frame["city"].apply(_normalize_city_code)
+    frame["product_name"] = frame["product_name"].apply(_normalize_product_name)
+    issue_dates = _target_issue_dates(target_date)
+    frame["issue_date"] = frame.apply(
+        lambda row: row["issue_date"]
+        if pd.notna(row.get("issue_date"))
+        else issue_dates.get(row["city"]),
+        axis=1,
+    )
+    frame["lead_time_days"] = pd.to_numeric(
+        frame.get("horizon"), errors="coerce"
+    )
+    frame["lead_time_days"] = frame["lead_time_days"].fillna(
+        frame["city"].map(FORECAST_LEAD_DAYS)
+    ).astype(int)
+    frame["confirmed_subscription_qty"] = pd.to_numeric(
+        frame.get("confirmed_subscription_qty"), errors="coerce"
+    ).fillna(frame["subscription_qty"])
+    frame["at_risk_subscription_qty"] = pd.to_numeric(
+        frame.get("at_risk_subscription_qty"), errors="coerce"
+    ).fillna(0)
+    frame["ml_unknown_adhoc_qty"] = pd.to_numeric(
+        frame.get("ml_unknown_adhoc_qty"), errors="coerce"
+    ).fillna(
+        pd.to_numeric(frame["forecast_quantity"], errors="coerce")
+        - pd.to_numeric(frame["subscription_qty"], errors="coerce").fillna(0)
+        - pd.to_numeric(frame["known_buy_once_qty"], errors="coerce").fillna(0)
+    ).clip(lower=0)
+    frame["remaining_model_gap_qty"] = frame["ml_unknown_adhoc_qty"]
+    for column in [
+        "subscription_qty", "confirmed_subscription_qty",
+        "at_risk_subscription_qty", "known_buy_once_qty",
+        "remaining_model_gap_qty", "ml_unknown_adhoc_qty", "forecast_quantity",
+    ]:
+        frame[column] = pd.to_numeric(
+            frame[column], errors="coerce"
+        ).fillna(0).round().astype(int)
+    frame["forecast_date"] = pd.to_datetime(
+        frame["forecast_date"]
+    ).dt.strftime("%Y-%m-%d")
+    frame["forecast_status"] = np.where(
+        issued_rows["issue_date"].notna(), "official_issued", "legacy_issued"
+    )
+    frame["forecast_run_id"] = frame.get("run_id")
+    return frame[[
+        *OPERATIONAL_FORECAST_COLUMNS,
+        "forecast_status", "forecast_run_id",
+    ]].sort_values(["forecast_date", "city", "product_name"])
 
 
 def _attach_actual_comparison(
@@ -2603,6 +3056,41 @@ def _attach_actual_comparison(
     return result
 
 
+def _is_complete_official_forecast(forecast_df: pd.DataFrame) -> bool:
+    """Only immutable D-2/D-3 rows are eligible for accuracy comparison."""
+    required = {
+        "city", "product_name", "forecast_status", "forecast_run_id",
+        "issue_date", "forecast_date", "lead_time_days",
+    }
+    if forecast_df.empty or not required.issubset(forecast_df.columns):
+        return False
+    if set(forecast_df["city"]) != set(FORECAST_LEAD_DAYS):
+        return False
+    if not forecast_df["forecast_status"].eq("official_issued").all():
+        return False
+    if forecast_df[["forecast_run_id", "issue_date", "lead_time_days"]].isna().any().any():
+        return False
+    if forecast_df.duplicated(["city", "product_name"]).any():
+        return False
+    # Same per-city coverage rule as issuance (PNQ only sells 4 of the 7).
+    for city, group in forecast_df.groupby("city"):
+        products = set(group["product_name"])
+        if not products.issubset(MILK_EXPORT_PRODUCTS):
+            return False
+        if len(products) < MIN_ISSUED_PRODUCTS_PER_CITY.get(city, len(MILK_EXPORT_PRODUCTS)):
+            return False
+    expected_leads = forecast_df["city"].map(FORECAST_LEAD_DAYS)
+    actual_leads = pd.to_numeric(forecast_df["lead_time_days"], errors="coerce")
+    if not actual_leads.eq(expected_leads).all():
+        return False
+    target_dates = pd.to_datetime(forecast_df["forecast_date"], errors="coerce")
+    issue_dates = pd.to_datetime(forecast_df["issue_date"], errors="coerce")
+    if target_dates.isna().any() or issue_dates.isna().any():
+        return False
+    # bool(): numpy.bool_ is not JSON-serialisable in API responses.
+    return bool((target_dates - issue_dates).dt.days.eq(expected_leads).all())
+
+
 def _csv_filter_values(raw_values: str | None, allowed_values: set[str]) -> set[str]:
     if not raw_values:
         return set(allowed_values)
@@ -2638,11 +3126,14 @@ async def _build_accuracy_report_df(
     async def build_one_date(dt: pd.Timestamp, semaphore: asyncio.Semaphore) -> pd.DataFrame:
         async with semaphore:
             date = str(pd.Timestamp(dt).date())
-            (sub_df, known_df, recent_df), actual_df = await asyncio.gather(
-                fetch_forecast_inputs_async(date, force_refresh),
+            # As-issued rebuild: only actuals before each city's issue date
+            # are used, so the report measures real D-2/D-3 accuracy instead
+            # of a forecast that already saw later sales.
+            recent_df, actual_df = await asyncio.gather(
+                fetch_recent_actuals_df_async(date, force_refresh),
                 fetch_selected_actuals_df_async(date, force_refresh),
             )
-            rows = await run_in_threadpool(build_forecast_for_dates, pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
+            rows = await run_in_threadpool(build_as_issued_forecast_rows, dt, recent_df)
             forecast_df = _forecast_rows_to_quantity_df(rows)
             actual_qty_df = _selected_actuals_to_quantity_df(actual_df, date)
             if forecast_df.empty or actual_qty_df.empty:
@@ -2725,6 +3216,10 @@ def _load_cached_accuracy_report_df(start_date: str, end_date: str) -> pd.DataFr
         & df["city"].isin(MILK_EXPORT_CITIES)
         & df["product_name"].isin(MILK_EXPORT_PRODUCTS)
     ].copy()
+    # A partially covered range must be rebuilt, not returned as if complete.
+    requested = {str(d.date()) for d in pd.date_range(start, end)}
+    if not requested.issubset(set(df["forecast_date"])):
+        return pd.DataFrame(columns=columns)
     return df.sort_values(["forecast_date", "city", "product_name"]).reindex(columns=columns)
 
 
@@ -2732,13 +3227,33 @@ def _save_accuracy_report_cache(report_df: pd.DataFrame) -> None:
     if report_df.empty:
         return
     os.makedirs(PROCESSED_DIR, exist_ok=True)
-    report_df.to_csv(ACCURACY_CACHE_PATH, index=False)
+    merged = report_df
+    if os.path.exists(ACCURACY_CACHE_PATH):
+        try:
+            existing = pd.read_csv(ACCURACY_CACHE_PATH)
+        except Exception:
+            existing = pd.DataFrame()
+        if not existing.empty and "forecast_date" in existing.columns:
+            # Replace only the dates being saved; keep every other cached date.
+            existing["forecast_date"] = pd.to_datetime(
+                existing["forecast_date"], errors="coerce"
+            ).dt.strftime("%Y-%m-%d")
+            new_dates = set(report_df["forecast_date"].astype(str))
+            existing = existing[~existing["forecast_date"].isin(new_dates)]
+            merged = pd.concat([existing, report_df], ignore_index=True)
+    merged.sort_values(["forecast_date", "city", "product_name"]).to_csv(
+        ACCURACY_CACHE_PATH, index=False
+    )
 
 
 def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame | None = None) -> dict:
     if day_df.empty:
         raise HTTPException(status_code=404, detail=f"No forecast available for {date}")
-    forecast_qty = int(day_df["predicted_qty"].sum())
+    # *_info rows are diagnostics that restate subscription quantities; only
+    # demand components add up to the forecast total.
+    forecast_qty = int(
+        day_df.loc[day_df["method"].isin(FORECAST_COMPONENT_METHODS), "predicted_qty"].sum()
+    )
     sub_qty = int(day_df.loc[day_df["method"] == "subscription", "predicted_qty"].sum())
     known_qty = int(day_df.loc[day_df["method"] == "known_buy_once", "predicted_qty"].sum())
     ml_qty = int(day_df.loc[day_df["method"] == "ml_unknown_adhoc", "predicted_qty"].sum())
@@ -2901,6 +3416,25 @@ def _aggregate_response(day_df: pd.DataFrame, date: str, actual_df: pd.DataFrame
     }
 
 
+def _require_admin(request: Request, x_admin_token: str | None) -> None:
+    """Gate endpoints that fan out into many Redash queries.
+
+    With ADMIN_TOKEN configured the header must match. Without it, only
+    requests from this machine are allowed, so a deployed instance cannot be
+    used by anyone on the network to flood Redash.
+    """
+    if ADMIN_TOKEN:
+        if x_admin_token != ADMIN_TOKEN:
+            raise HTTPException(status_code=403, detail="Admin token required")
+        return
+    client_host = request.client.host if request.client else None
+    if client_host not in {"127.0.0.1", "::1", "localhost", "testclient"}:
+        raise HTTPException(
+            status_code=403,
+            detail="Set ADMIN_TOKEN to use this endpoint from another machine",
+        )
+
+
 @app.get("/")
 def home():
     return {"message": "API is running"}
@@ -2963,6 +3497,7 @@ def status():
             )),
             "state": redash_state,
             "pending_jobs": pending_jobs,
+            "stale_inputs_in_use": list(_redash_stale_inputs.values()),
             **_redash_health,
         },
         "models": {
@@ -3024,12 +3559,12 @@ def status():
 
 @app.get("/api/debug/components")
 async def debug_components(
+    request: Request,
     date: str = Query(..., description="YYYY-MM-DD"),
     refresh: bool = Query(False),
     x_admin_token: str | None = Header(default=None),
 ):
-    if ADMIN_TOKEN and x_admin_token != ADMIN_TOKEN:
-        raise HTTPException(status_code=403, detail="Admin token required")
+    _require_admin(request, x_admin_token)
     target_dt = pd.DatetimeIndex([_parse_forecast_date(date)])
     (sub_df, known_df, recent_df), actual_df = await asyncio.gather(
         fetch_forecast_inputs_async(date, refresh),
@@ -3062,8 +3597,84 @@ async def debug_components(
     }
 
 
+@app.post("/api/admin/run_daily_pipeline")
+async def run_daily_pipeline(x_admin_token: str | None = Header(default=None)):
+    """Run the steps of scripts/issue_daily_forecasts.ps1 for an external
+    scheduler. The server must have persistent storage for the history DB.
+    """
+    if not ADMIN_TOKEN:
+        raise HTTPException(status_code=403, detail="ADMIN_TOKEN is not configured")
+    if x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(status_code=403, detail="Admin token required")
+
+    import sys
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from scripts.audit_festival_calendar import (
+        DEFAULT_CALENDARS,
+        load_and_validate as validate_festival_calendar,
+    )
+    from scripts.reconcile_forecast_actuals import collect as collect_actuals
+    from scripts.evaluate_official_forecasts import (
+        evaluate as evaluate_official,
+        load_official_rows,
+    )
+    from backend.forecast_history import upsert_actuals
+
+    result: dict = {"steps": {}}
+
+    calendar_errors = []
+    for calendar_path in DEFAULT_CALENDARS:
+        if calendar_path.exists():
+            _, errors = validate_festival_calendar(calendar_path)
+            calendar_errors.extend(f"{calendar_path.name}: {error}" for error in errors)
+    if calendar_errors:
+        raise HTTPException(
+            status_code=422,
+            detail={"step": "festival_calendar", "errors": calendar_errors},
+        )
+    result["steps"]["festival_calendar"] = "ok"
+
+    yesterday = _today_ist() - pd.Timedelta(days=1)
+    try:
+        actuals = await collect_actuals(
+            pd.date_range(yesterday, yesterday), force_refresh=True
+        )
+        upserted = 0 if actuals.empty else upsert_actuals(actuals)
+        result["steps"]["reconciliation"] = {"upserted_rows": int(upserted)}
+    except Exception as exc:
+        result["steps"]["reconciliation"] = {"warning": str(exc)}
+
+    issue_date = str(_today_ist().date())
+    try:
+        issuance = await issue_daily_operational_forecast(issue_date, force_refresh=True)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail={"step": "issuance", "error": str(exc)},
+        ) from exc
+    result["steps"]["issuance"] = issuance
+
+    try:
+        gate = evaluate_official(
+            load_official_rows(),
+            minimum_days=28,
+            maximum_city_wape=4,
+            maximum_product_wape=8,
+        )[2]
+        result["steps"]["accuracy_report"] = gate
+    except Exception as exc:
+        result["steps"]["accuracy_report"] = {"warning": str(exc)}
+
+    return result
+
+
 @app.get("/api/debug/model_features")
 async def debug_model_features(
+    request: Request,
     date: str = Query(..., description="YYYY-MM-DD"),
     city: str | None = Query(None),
     product: str | None = Query(None),
@@ -3071,8 +3682,7 @@ async def debug_model_features(
     x_admin_token: str | None = Header(default=None),
 ):
     """Inspect time/event features without depending on slow component queries."""
-    if ADMIN_TOKEN and x_admin_token != ADMIN_TOKEN:
-        raise HTTPException(status_code=403, detail="Admin token required")
+    _require_admin(request, x_admin_token)
     target = _parse_forecast_date(date)
     recent_df = await fetch_recent_actuals_df_async(date, refresh, strict=True)
     empty_components = pd.DataFrame(columns=[
@@ -3102,7 +3712,13 @@ async def debug_model_features(
 
 
 @app.get("/api/forecast_raw")
-async def get_forecast_raw(refresh: bool = Query(False)):
+async def get_forecast_raw(
+    request: Request,
+    refresh: bool = Query(False),
+    x_admin_token: str | None = Header(default=None),
+):
+    # 30 dates x 3 Redash queries per call, including the slow Query 3085.
+    _require_admin(request, x_admin_token)
     if _forecast_cache["forecast_rows"] is None or refresh:
         forecast_start = pd.Timestamp.today().normalize() + pd.Timedelta(days=1)
         forecast_dates = pd.date_range(forecast_start, periods=30)
@@ -3221,6 +3837,65 @@ async def get_forecast_day(
 
 _LIVE_FORECAST_CACHE_TTL_SECONDS = 3600
 _live_forecast_cache: dict[str, dict] = {}
+_live_forecast_tasks: dict[str, asyncio.Task] = {}
+
+
+def _load_legacy_issued_export(target_date: str) -> pd.DataFrame:
+    """Load a dated CSV export when no structured issued run was retained."""
+    export_path = os.path.join(
+        PROJECT_DIR, "data", "official", f"issued_forecast_{target_date}.csv"
+    )
+    if not os.path.isfile(export_path):
+        return pd.DataFrame()
+    try:
+        frame = pd.read_csv(export_path)
+    except (OSError, pd.errors.ParserError, UnicodeError):
+        return pd.DataFrame()
+    required = {"forecast_date", "city", "product_name", "forecast_quantity"}
+    if not required.issubset(frame.columns):
+        return pd.DataFrame()
+    raw_dates = frame["forecast_date"].astype("string").str.strip()
+    parsed_dates = pd.to_datetime(raw_dates, format="%Y-%m-%d", errors="coerce")
+    legacy_dates = pd.to_datetime(raw_dates, format="%d-%m-%Y", errors="coerce")
+    frame["forecast_date"] = parsed_dates.fillna(legacy_dates).dt.strftime("%Y-%m-%d")
+    frame = frame[frame["forecast_date"] == target_date].copy()
+    if frame.empty:
+        return pd.DataFrame()
+    frame["city"] = frame["city"].map(_normalize_city_code)
+    frame["product_name"] = frame["product_name"].map(_normalize_product_name)
+    frame["forecast_quantity"] = pd.to_numeric(
+        frame["forecast_quantity"], errors="coerce"
+    )
+    frame = frame.dropna(subset=["forecast_quantity"])
+    frame = frame[frame["city"].isin(FORECAST_LEAD_DAYS)]
+    if frame.empty:
+        return pd.DataFrame()
+    frame["lead_time_days"] = frame["city"].map(FORECAST_LEAD_DAYS).astype(int)
+    # Legacy CSVs contain only total forecast quantities. Keep the unknown
+    # components at zero and mark the archive clearly in response metadata.
+    frame["issue_date"] = None
+    for column in [
+        "subscription_qty", "confirmed_subscription_qty", "at_risk_subscription_qty",
+        "known_buy_once_qty", "remaining_model_gap_qty", "ml_unknown_adhoc_qty",
+    ]:
+        frame[column] = 0
+    frame["forecast_quantity"] = frame["forecast_quantity"].round().astype(int)
+    return frame[OPERATIONAL_FORECAST_COLUMNS].sort_values(["city", "product_name"])
+
+
+def _track_live_forecast_task(target_date: str, task: asyncio.Task) -> None:
+    _live_forecast_tasks[target_date] = task
+
+    def cleanup(completed: asyncio.Task) -> None:
+        if _live_forecast_tasks.get(target_date) is completed:
+            _live_forecast_tasks.pop(target_date, None)
+        if not completed.cancelled():
+            try:
+                completed.exception()
+            except Exception:
+                pass
+
+    task.add_done_callback(cleanup)
 
 
 @app.get("/api/operational_forecast")
@@ -3228,66 +3903,201 @@ async def get_operational_forecast(
     target_date: str = Query(..., description="Forecast target date in YYYY-MM-DD format"),
     refresh: bool = Query(False),
 ):
-    """Always compute the forecast directly from live Redash inputs. Cached
-    per date for an hour so repeat dashboard loads don't re-hit Redash every
-    time; there is no separate "official/issued" snapshot anymore.
+    """Serve the immutable issued forecast when one exists; otherwise build
+    a live preview from Redash (cached per date for an hour). Cities without
+    an issued row are filled from the live preview and the view is "mixed".
     """
     target_dt = _parse_forecast_date(target_date)
-    cached = _live_forecast_cache.get(target_date)
-    cache_is_fresh = cached is not None and (
-        time.time() - cached["fetched_at"] < _LIVE_FORECAST_CACHE_TTL_SECONDS
+    issued_rows, issued_info = await run_in_threadpool(
+        issued_forecast_for_date, target_date, include_exports=False
     )
-    if cache_is_fresh and not refresh:
-        forecast_df = cached["df"]
-    else:
-        try:
-            try:
-                async with asyncio.timeout(INTERACTIVE_FORECAST_TIMEOUT_SECONDS):
-                    forecast_df = await _build_target_forecast_df(
-                        target_dt, refresh, strict_inputs=True
-                    )
-            except TimeoutError as timeout_exc:
-                lag_target = str((target_dt + pd.Timedelta(days=1)).date())
-                raise _redash_progress_for_date(
-                    target_date, lag_target
-                ) from timeout_exc
-        except Exception as exc:
-            if cached is None:
-                if isinstance(exc, RedashRefreshInProgress):
-                    return JSONResponse(
-                        status_code=202,
-                        content={**exc.response(), "target_date": target_date},
-                        headers={"Retry-After": "15"},
-                    )
-                raise HTTPException(
-                    status_code=503,
-                    detail=(
-                        "Forecast refresh failed and no cached forecast is "
-                        f"available. Cause: {exc}"
+    frozen_df = _issued_rows_to_operational_df(issued_rows, target_dt)
+    frozen_cities = set(frozen_df["city"]) if not frozen_df.empty else set()
+    if target_dt < _today_ist() and frozen_df.empty:
+        archived_df = await run_in_threadpool(_load_legacy_issued_export, target_date)
+        if not archived_df.empty:
+            rows = archived_df.astype(object).where(
+                pd.notna(archived_df), None
+            ).to_dict(orient="records")
+            city_summary = (
+                archived_df.groupby(["city", "forecast_date"], as_index=False)
+                .agg(
+                    forecast_quantity=("forecast_quantity", "sum"),
+                    products_count=("product_name", "nunique"),
+                )
+            )
+            city_summary["lead_time_days"] = city_summary["city"].map(
+                FORECAST_LEAD_DAYS
+            ).astype(int)
+            city_summary["issue_date"] = None
+            city_summary = city_summary.to_dict(orient="records")
+            return {
+                "meta": {
+                    "target_date": target_date,
+                    "generated_at": None,
+                    "forecast_view": "archived_export",
+                    "forecast_source": "legacy_issued_csv",
+                    "total_quantity": int(archived_df["forecast_quantity"].sum()),
+                    "total_cities": int(archived_df["city"].nunique()),
+                    "total_products": int(archived_df["product_name"].nunique()),
+                    "availability_warning": (
+                        "Archived issued CSV: total forecast quantities only; "
+                        "subscription and buy-once breakdowns were not retained."
                     ),
-                ) from exc
-            # A cached (even if stale) result beats a hard error.
+                    "comparison": {"available": False},
+                },
+                "city_summary": city_summary,
+                "rows": rows,
+            }
+    used_stale_cache = False
+    live_cities: set[str] = set()
+    if frozen_cities == set(FORECAST_LEAD_DAYS):
+        # Issued forecasts are immutable: Refresh never replaces them.
+        forecast_df = frozen_df.copy()
+    else:
+        cached = _live_forecast_cache.get(target_date)
+        cache_is_fresh = cached is not None and (
+            time.time() - cached["fetched_at"] < _LIVE_FORECAST_CACHE_TTL_SECONDS
+        )
+        if cache_is_fresh and not refresh:
             forecast_df = cached["df"]
         else:
-            _live_forecast_cache[target_date] = {
-                "df": forecast_df, "fetched_at": time.time(),
-            }
+            lag_target = str((target_dt + pd.Timedelta(days=1)).date())
+            task = _live_forecast_tasks.get(target_date)
+            latest_failure = None
+            if task is None or task.done():
+                active_cooldown = [
+                    item for key, item in _redash_failure_cache.items()
+                    if key[2] in {target_date, lag_target}
+                    and time.time() - item["failed_at"] < 60
+                ]
+                if active_cooldown:
+                    latest_failure = max(active_cooldown, key=lambda item: item["failed_at"])
+            if latest_failure is not None and cached is not None:
+                # Redash just failed for this date; an older forecast beats an
+                # error. It is labelled stale_preview below.
+                forecast_df = cached["df"]
+                used_stale_cache = True
+            elif latest_failure is not None:
+                error_text = latest_failure["error"]
+                if "canceling statement due to conflict with recovery" in error_text.lower():
+                    detail = (
+                        "The database canceled the subscription query during recovery. "
+                        "No fresh forecast is available yet; retry after the Redash "
+                        "subscription query succeeds."
+                    )
+                else:
+                    detail = f"Redash is retrying after a query failure: {error_text}"
+                retry_after = max(1, 60 - int(time.time() - latest_failure["failed_at"]))
+                return JSONResponse(
+                    status_code=503,
+                    content={
+                        "status": "redash_unavailable",
+                        "target_date": target_date,
+                        "retry_after_seconds": retry_after,
+                        "detail": detail,
+                    },
+                    headers={"Retry-After": str(retry_after)},
+                )
+            else:
+                if task is None or task.done():
+                    # Only an explicit refresh forces Redash to re-run (max_age=0).
+                    # Normal loads may reuse Redash's one-hour result cache, which
+                    # avoids re-running the 10-15 minute subscription query.
+                    async def refresh_forecast() -> pd.DataFrame:
+                        return await _build_target_forecast_df(
+                            target_dt, refresh, strict_inputs=True
+                        )
 
-    forecast_df = forecast_df.copy()
-    if not forecast_df.empty:
-        forecast_df["forecast_status"] = "live_preview"
-        forecast_df["forecast_run_id"] = None
+                    task = asyncio.create_task(refresh_forecast())
+                    _track_live_forecast_task(target_date, task)
+                try:
+                    async with asyncio.timeout(INTERACTIVE_FORECAST_TIMEOUT_SECONDS):
+                        forecast_df = await asyncio.shield(task)
+                except (TimeoutError, RedashRefreshInProgress) as pending_exc:
+                    if cached is not None:
+                        # Keep showing the previous forecast (labelled stale) while
+                        # the background refresh keeps running.
+                        forecast_df = cached["df"]
+                        used_stale_cache = True
+                    else:
+                        progress = _redash_progress_for_date(target_date, lag_target)
+                        if isinstance(pending_exc, RedashRefreshInProgress):
+                            progress = pending_exc
+                        progress_details = progress.response()
+                        progress_details["pending_jobs"] = [
+                            {
+                                "query": key[0],
+                                "query_id": key[1],
+                                "target_date": key[2],
+                                "job_id": value["job_id"],
+                                "age_seconds": int(max(0, time.time() - value["started_at"])),
+                                "last_status": value.get("last_status"),
+                            }
+                            for key, value in _redash_pending_jobs.items()
+                            if key[2] in {target_date, lag_target}
+                        ]
+                        return JSONResponse(
+                            status_code=202,
+                            content={**progress_details, "target_date": target_date},
+                            headers={"Retry-After": "15"},
+                        )
+                except Exception as exc:
+                    if cached is None:
+                        raise HTTPException(
+                            status_code=503,
+                            detail=(
+                                "Forecast refresh failed and no cached forecast is "
+                                f"available. Cause: {exc}"
+                            ),
+                        ) from exc
+                    # A cached (even if stale) result beats a hard error.
+                    forecast_df = cached["df"]
+                    used_stale_cache = True
+                else:
+                    _live_forecast_cache[target_date] = {
+                        "df": forecast_df, "fetched_at": time.time(),
+                    }
+
+        forecast_df = forecast_df.copy()
+        if not forecast_df.empty:
+            forecast_df["forecast_status"] = (
+                "stale_preview" if used_stale_cache else "live_preview"
+            )
+            forecast_df["forecast_run_id"] = None
+        live_cities = set(forecast_df["city"]) - frozen_cities if not forecast_df.empty else set()
+        if not frozen_df.empty:
+            forecast_df = pd.concat(
+                [frozen_df, forecast_df[~forecast_df["city"].isin(frozen_cities)]],
+                ignore_index=True,
+                sort=False,
+            )
+    if frozen_cities == set(FORECAST_LEAD_DAYS):
+        forecast_view = "issued"
+    elif frozen_cities:
+        forecast_view = "mixed"
+    else:
+        forecast_view = "stale_preview" if used_stale_cache else "live_preview"
 
     comparison_status = "not_completed"
+    # Data contract: accuracy may only be shown for a complete immutable
+    # D-2/D-3 issuance. Previews are rebuilt with today's subscription state
+    # and later actuals, so their "accuracy" would be better than reality.
+    comparison_eligible = _is_complete_official_forecast(forecast_df)
     comparison_summary = {
         "available": False,
+        "eligible": comparison_eligible,
+        "forecast_basis": forecast_view,
+        "requirement": "complete immutable official D-2/D-3 forecast",
         "source_query_id": int(SELECTED_ACTUALS_QUERY_ID) if SELECTED_ACTUALS_QUERY_ID else None,
         "matched_rows": 0,
         "actual_quantity": None,
         "difference": None,
         "wape_pct": None,
     }
-    if target_dt < _today_ist():
+    if target_dt < _today_ist() and not comparison_eligible:
+        comparison_status = "not_eligible_preview"
+    elif target_dt < _today_ist():
         actual_df = await fetch_selected_actuals_df_async(target_date, refresh)
         forecast_df = _attach_actual_comparison(forecast_df, actual_df)
         matched = forecast_df[forecast_df["actual_available"]].copy()
@@ -3338,6 +4148,19 @@ async def get_operational_forecast(
             "training_data_freshness": _training_data_freshness(),
             "comparison_status": comparison_status,
             "comparison": comparison_summary,
+            "forecast_source": (
+                "issued_history" if forecast_view == "issued"
+                else "stale_cache" if used_stale_cache else "live_redash"
+            ),
+            "forecast_view": forecast_view,
+            "issued_run_ids": issued_info.get("run_ids", []) if issued_info else [],
+            "issued_generated_at": issued_info.get("generated_at") if issued_info else None,
+            "frozen_cities": sorted(frozen_cities),
+            "live_preview_cities": sorted(live_cities),
+            "stale_inputs": [
+                item for (_, query_date), item in _redash_stale_inputs.items()
+                if query_date in {target_date, str((target_dt + pd.Timedelta(days=1)).date())}
+            ],
         },
         "city_summary": city_summary,
         "rows": forecast_df.astype(object).where(
@@ -3378,9 +4201,17 @@ async def export_milk_city_forecast_csv(
     date: str = Query(..., description="YYYY-MM-DD"),
     days: int = Query(7, ge=1, le=31),
     refresh: bool = Query(False),
-    record: bool = Query(True),
+    record: bool = Query(False),
 ):
     start_dt = _parse_forecast_date(date)
+    # A download must not silently create "official" history. Recording is
+    # opt-in, and only for windows that have not started: a forecast built
+    # for a past or same-day date already sees post-issue data.
+    if record and start_dt <= _today_ist():
+        raise HTTPException(
+            status_code=400,
+            detail="record=true is only allowed when every forecast date is in the future",
+        )
     forecast_dates = pd.date_range(start_dt, periods=days)
     rows = await _build_forecast_rows_by_date(forecast_dates, refresh)
 
@@ -3527,6 +4358,7 @@ async def get_forecast_trend(days: int = Query(30, ge=1, le=60)):
     df = pd.DataFrame(_forecast_cache["forecast_rows"])
     if df.empty or "forecast_date" not in df.columns or "predicted_qty" not in df.columns:
         return {"trend": []}
+    df = df[df["method"].isin(FORECAST_COMPONENT_METHODS)]
     daily = (
         df.groupby("forecast_date")["predicted_qty"].sum().reset_index()
         .sort_values("forecast_date")
