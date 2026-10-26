@@ -45,7 +45,15 @@ def db_connection(db_path: str | None = None):
         connection.close()
 
 
+_initialized_paths: set[str] = set()
+
+
 def initialize(db_path: str | None = None) -> None:
+    # Schema setup is idempotent but not free; every API request used to
+    # re-run it. Do it once per database file per process.
+    path = os.path.abspath(db_path or default_db_path())
+    if path in _initialized_paths and os.path.exists(path):
+        return
     with db_connection(db_path) as connection:
         connection.executescript(
             """
@@ -120,6 +128,7 @@ def initialize(db_path: str | None = None) -> None:
             WHERE issue_date IS NOT NULL
             """
         )
+    _initialized_paths.add(path)
 
 
 def record_run(
