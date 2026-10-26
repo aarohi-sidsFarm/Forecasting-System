@@ -254,14 +254,25 @@ def upsert_actuals(actuals: pd.DataFrame, db_path: str | None = None) -> int:
 
 
 def issued_forecast_for_date(
-    forecast_date: str, db_path: str | None = None
+    forecast_date: str,
+    db_path: str | None = None,
+    *,
+    include_exports: bool = True,
 ) -> tuple[pd.DataFrame, dict | None]:
-    """Return the best immutable issued rows for every city/SKU on a target date."""
+    """Return the best immutable issued rows for every city/SKU on a target date.
+
+    official_export runs are CSV downloads, not cutoff-time issuances; pass
+    include_exports=False wherever rows are presented as the issued forecast.
+    """
     normalized = pd.Timestamp(forecast_date).strftime("%Y-%m-%d")
+    run_kinds = ["official_issued", "official_import"]
+    if include_exports:
+        run_kinds.append("official_export")
     initialize(db_path)
     with db_connection(db_path) as connection:
+        placeholders = ", ".join("?" for _ in run_kinds)
         rows = pd.read_sql_query(
-            """
+            f"""
             WITH ranked AS (
                 SELECT fr.*, r.generated_at, r.run_kind, r.model_version,
                        r.metadata_json,
@@ -277,9 +288,7 @@ def issued_forecast_for_date(
                        ) AS row_rank
                 FROM forecast_rows fr
                 JOIN forecast_runs r ON r.run_id=fr.run_id
-                WHERE r.run_kind IN (
-                    'official_issued', 'official_export', 'official_import'
-                )
+                WHERE r.run_kind IN ({placeholders})
                   AND r.status='complete'
                   AND fr.forecast_date=?
             )
@@ -293,7 +302,7 @@ def issued_forecast_for_date(
             WHERE row_rank=1
             """,
             connection,
-            params=(normalized,),
+            params=(*run_kinds, normalized),
         )
         if rows.empty:
             return pd.DataFrame(), None

@@ -11,6 +11,11 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CALENDAR = ROOT / "backend" / "ml_models" / "festival_list_2024_2026.csv"
+# Same files, in the same order, that backend/main.py loads for serving.
+DEFAULT_CALENDARS = [
+    DEFAULT_CALENDAR,
+    ROOT / "backend" / "ml_models" / "festival_list_2027_draft.csv",
+]
 ALLOWED_CITIES = {"ALL", "HYD", "VGA", "BLR", "PNQ"}
 ALLOWED_IMPACTS = {"HIGH", "MED", "LOW"}
 LUNAR_HOLIDAY_TERMS = ("eid", "bakrid", "moharr", "milad")
@@ -61,17 +66,27 @@ def load_and_validate(path: Path) -> tuple[pd.DataFrame, list[str]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--calendar", type=Path, default=DEFAULT_CALENDAR)
+    parser.add_argument(
+        "--calendar", type=Path, action="append",
+        help="Calendar CSV to validate; repeat for several. Defaults to every serving calendar.",
+    )
     parser.add_argument("--as-of", type=date.fromisoformat, default=date.today())
     parser.add_argument("--lookahead-days", type=int, default=45)
     args = parser.parse_args()
 
-    frame, errors = load_and_validate(args.calendar)
-    if errors:
-        print("Festival calendar validation FAILED")
-        for error in errors:
-            print(f"- {error}")
+    calendars = args.calendar or [path for path in DEFAULT_CALENDARS if path.exists()]
+    frames, failed = [], False
+    for path in calendars:
+        frame, errors = load_and_validate(path)
+        if errors:
+            failed = True
+            print(f"Festival calendar validation FAILED: {path.name}")
+            for error in errors:
+                print(f"- {error}")
+        frames.append(frame)
+    if failed:
         raise SystemExit(1)
+    frame = pd.concat(frames, ignore_index=True).sort_values(["parsed_date", "festival"])
 
     start = pd.Timestamp(args.as_of)
     end = start + pd.Timedelta(days=args.lookahead_days)
