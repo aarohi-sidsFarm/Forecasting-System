@@ -107,6 +107,9 @@ const fetchDashboard = async (targetDate) => {
 
 const RETRY_INTERVAL_MS = 15000;
 const MAX_LOAD_RETRIES = 80;
+// A free Render server takes about a minute to wake up or redeploy.
+const WAKE_RETRY_MS = 8000;
+const MAX_WAKE_RETRIES = 15;
 
 export default function App() {
   const params = new URLSearchParams(window.location.search);
@@ -118,6 +121,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [preparingSince, setPreparingSince] = useState(null);
+  const [waking, setWaking] = useState(false);
   const [now, setNow] = useState(() => Date.now());
   const [cityFilter, setCityFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -137,6 +141,7 @@ export default function App() {
       setLoading(true);
       setError("");
       setPreparingSince(null);
+      setWaking(false);
     }
     fetchDashboard(targetDate)
       .then(({ forecast, status }) => {
@@ -145,6 +150,7 @@ export default function App() {
         if (status) setSystemStatus(status);
         setError("");
         setPreparingSince(null);
+        setWaking(false);
         setLoading(false);
       })
       .catch((err) => {
@@ -158,7 +164,13 @@ export default function App() {
           retryTimerRef.current = setTimeout(() => loadRef.current(attempt + 1), RETRY_INTERVAL_MS);
           return;
         }
+        if (err.code === "unreachable" && attempt < MAX_WAKE_RETRIES) {
+          setWaking(true);
+          retryTimerRef.current = setTimeout(() => loadRef.current(attempt + 1), WAKE_RETRY_MS);
+          return;
+        }
         setPreparingSince(null);
+        setWaking(false);
         setLoading(false);
         setError(err.message);
       });
@@ -416,6 +428,18 @@ export default function App() {
             <button type="button" className="btn" onClick={() => load()}>Try again</button>
           </div>
         )}
+        {waking && !error && (
+          <div className="banner banner-info" role="status">
+            <span className="spinner" aria-hidden="true" />
+            <div>
+              <strong>Starting the forecast server.</strong>
+              <div className="banner-detail">
+                It sleeps when nobody has used it for a while, or is updating. This takes about a minute;
+                the page loads by itself.
+              </div>
+            </div>
+          </div>
+        )}
         {preparingSince && (
           <div className="banner banner-info" role="status">
             <span className="spinner" aria-hidden="true" />
@@ -428,7 +452,7 @@ export default function App() {
             </div>
           </div>
         )}
-        {loading && !data && !preparingSince && !error && (
+        {loading && !data && !preparingSince && !waking && !error && (
           <div className="skeleton-grid" aria-label="Loading">
             {[0, 1, 2, 3].map((key) => <div key={key} className="skeleton" />)}
           </div>

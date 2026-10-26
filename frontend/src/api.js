@@ -2,7 +2,16 @@ const API = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 const pendingRequests = new Map();
 
 const fetchJson = async (path) => {
-  const response = await fetch(`${API}${path}`);
+  let response;
+  try {
+    response = await fetch(`${API}${path}`);
+  } catch {
+    // Render answers without CORS headers while it deploys or wakes up, so
+    // the browser reports only a network failure.
+    const error = new Error("The forecast server is not reachable right now.");
+    error.code = "unreachable";
+    throw error;
+  }
   const payload = await response.json().catch(() => null);
   if (response.status === 202 && payload?.status === "refresh_in_progress") {
     const error = new Error(
@@ -13,7 +22,9 @@ const fetchJson = async (path) => {
   }
   if (!response.ok) {
     const detail = payload?.detail ?? JSON.stringify(payload);
-    throw new Error(`${response.status} - ${detail}`);
+    const error = new Error(`${response.status} - ${detail}`);
+    if ([502, 503, 504].includes(response.status)) error.code = "unreachable";
+    throw error;
   }
   return payload;
 };
