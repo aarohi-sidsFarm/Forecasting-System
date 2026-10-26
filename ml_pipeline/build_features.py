@@ -27,7 +27,13 @@ df.loc[(df['city_cd'] != 'HYD') & (df['day_of_week'] == 3), 'is_midweek_peak'] =
 
 # 2. Festivals
 print("Loading festival calendar...")
-fest_df = pd.read_csv(os.path.join(MODEL_DIR, 'festival_list_2024_2026.csv'))
+# Must match the calendar files loaded by backend/main.py so training and
+# serving see the same festival flags.
+fest_df = pd.concat([
+    pd.read_csv(os.path.join(MODEL_DIR, name))
+    for name in ('festival_list_2024_2026.csv', 'festival_list_2027_draft.csv')
+    if os.path.exists(os.path.join(MODEL_DIR, name))
+], ignore_index=True)
 fest_df['date'] = pd.to_datetime(fest_df['date'], format='mixed', dayfirst=True)
 fest_df['cities'] = fest_df['cities'].fillna('').astype(str).str.upper()
 

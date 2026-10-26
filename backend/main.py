@@ -268,7 +268,29 @@ for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
         for d in range(7)
     }
 
-fest_df = pd.read_csv(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"))
+# Reviewed calendar first, then drafts for later years. Draft rows are used so
+# that forecasts past the reviewed range still see festivals, and are flagged
+# in /api/status until someone reviews them.
+FESTIVAL_CALENDAR_FILES = [
+    ("festival_list_2024_2026.csv", False),
+    ("festival_list_2027_draft.csv", True),
+]
+
+
+def _load_festival_calendar() -> pd.DataFrame:
+    frames = []
+    for file_name, is_draft in FESTIVAL_CALENDAR_FILES:
+        path = os.path.join(MODEL_DIR, file_name)
+        if not os.path.exists(path):
+            continue
+        frame = pd.read_csv(path)
+        frame["calendar_file"] = file_name
+        frame["is_draft"] = is_draft
+        frames.append(frame)
+    return pd.concat(frames, ignore_index=True)
+
+
+fest_df = _load_festival_calendar()
 fest_df["date"] = pd.to_datetime(fest_df["date"], format="mixed", dayfirst=True)
 fest_df["cities"] = fest_df["cities"].fillna("").astype(str).str.upper()
 
@@ -285,17 +307,17 @@ _festival_set = set(_national_fest_df["date"])
 _festival_name_by_date = _national_fest_df.groupby("date")["festival"].first().to_dict()
 _festival_dates_by_city = {}
 _city_high_impact_dates = {}
-_festival_name_by_city_date = {}
+# Several festivals can fall on the same date (e.g. Diwali and Nagula
+# Chavithi on 2026-11-08); keep all of them, not just the first.
+_festival_names_by_city_date: dict[tuple[str, pd.Timestamp], list[str]] = {}
 _festival_impact_by_city_date = {}
 for _city in KNOWN_CITIES:
     _city_rows = fest_df[fest_df["cities"].apply(lambda value: _festival_applies_to_city(value, _city))]
     _regional_rows = _city_rows[~_city_rows.index.isin(_national_fest_df.index)]
     _festival_dates_by_city[_city] = set(_regional_rows["date"])
     _city_high_impact_dates[_city] = set(_city_rows[_city_rows["impact"] == "HIGH"]["date"])
-    _festival_name_by_city_date.update({
-        (_city, date): name
-        for date, name in _city_rows.groupby("date")["festival"].first().to_dict().items()
-    })
+    for _date, _names in _city_rows.groupby("date")["festival"].apply(list).items():
+        _festival_names_by_city_date[(_city, _date)] = list(dict.fromkeys(_names))
     if "impact_direction" in _city_rows.columns:
         _festival_impact_by_city_date.update({
             (_city, date): int(direction)
@@ -1225,7 +1247,27 @@ def _festival_status() -> dict:
     upcoming["date"] = upcoming["date"].dt.strftime("%Y-%m-%d")
     return {
         "enabled": True,
-        "calendar_path": os.path.relpath(os.path.join(MODEL_DIR, "festival_list_2024_2026.csv"), PROJECT_DIR),
+        "calendar_files": [
+            {
+                "path": os.path.relpath(os.path.join(MODEL_DIR, name), PROJECT_DIR),
+                "is_draft": is_draft,
+                "loaded": bool((fest_df["calendar_file"] == name).any()),
+            }
+            for name, is_draft in FESTIVAL_CALENDAR_FILES
+        ],
+        "draft_dates_in_use": {
+            "start_date": str(fest_df.loc[fest_df["is_draft"], "date"].min().date())
+            if fest_df["is_draft"].any() else None,
+            "end_date": str(fest_df.loc[fest_df["is_draft"], "date"].max().date())
+            if fest_df["is_draft"].any() else None,
+            "warning": "Draft festival dates need domain review."
+            if fest_df["is_draft"].any() else None,
+        },
+        "calendar_expiry_warning": (
+            f"Festival calendar ends {fest_df['date'].max().date()}; "
+            "add the next year before then."
+            if (fest_df["date"].max() - today).days < 60 else None
+        ),
         "rows": int(len(fest_df)),
         "national_rows": int(len(_national_fest_df)),
         "regional_rows": int(len(regional_rows)),
@@ -1680,32 +1722,36 @@ def _apply_festival_guardrail(
     # silently skipped the loop below for every one of those cases even
     # before the scan window itself was widened to reach them.
     dt = pd.Timestamp(dt).normalize()
-    candidate_dates = [
-        dt - pd.Timedelta(days=offset)
-        for offset in range(_FESTIVAL_GUARDRAIL_MIN_OFFSET, _FESTIVAL_GUARDRAIL_MAX_OFFSET + 1)
-    ]
-    for festival_date in candidate_dates:
-        festival_name = _festival_name_by_city_date.get((city, festival_date))
-        if not festival_name:
+    # Search outward from the target date so the nearest festival wins; among
+    # festivals at the same distance, the one with the largest uplift wins.
+    max_distance = max(abs(_FESTIVAL_GUARDRAIL_MIN_OFFSET), abs(_FESTIVAL_GUARDRAIL_MAX_OFFSET))
+    for distance in range(0, max_distance + 1):
+        matches = []
+        for offset in sorted({distance, -distance}):
+            if not _FESTIVAL_GUARDRAIL_MIN_OFFSET <= offset <= _FESTIVAL_GUARDRAIL_MAX_OFFSET:
+                continue
+            festival_date = dt - pd.Timedelta(days=offset)
+            for festival_name in _festival_names_by_city_date.get((city, festival_date), []):
+                uplift_override = None
+                if festival_name == "Varalakshmi Vratam" and offset == 0:
+                    uplift_override = VARALAKSHMI_DAY0_UPLIFT_PCT.get(city, {}).get(product)
+                uplift_pct = (
+                    uplift_override
+                    if uplift_override is not None
+                    else _festival_guardrail_lookup.get((festival_name, city, product, offset))
+                )
+                if uplift_pct is None:
+                    continue
+                cap_pct = (
+                    abs(float(uplift_override))
+                    if uplift_override is not None
+                    else DEFAULT_FESTIVAL_GUARDRAIL_CAP_PCT
+                )
+                capped_pct = float(np.clip(uplift_pct, -cap_pct, cap_pct))
+                matches.append((abs(capped_pct), festival_name, offset, capped_pct))
+        if not matches:
             continue
-        offset = int((dt - festival_date).days)
-        uplift_override = None
-        if festival_name == "Varalakshmi Vratam" and offset == 0:
-            uplift_override = VARALAKSHMI_DAY0_UPLIFT_PCT.get(city, {}).get(product)
-        uplift_pct = (
-            uplift_override
-            if uplift_override is not None
-            else _festival_guardrail_lookup.get((festival_name, city, product, offset))
-        )
-        if uplift_pct is None:
-            continue
-
-        cap_pct = (
-            abs(float(uplift_override))
-            if uplift_override is not None
-            else DEFAULT_FESTIVAL_GUARDRAIL_CAP_PCT
-        )
-        capped_pct = float(np.clip(uplift_pct, -cap_pct, cap_pct))
+        _, festival_name, offset, capped_pct = max(matches, key=lambda item: item[0])
         factor = 1.0 + (capped_pct / 100.0)
         adjusted = int(round(prediction * factor))
         if adjusted == prediction:
@@ -2074,18 +2120,18 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     target_type,
                     feats,
                 )
-                final_ad_hoc_pred, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    pred_dt,
-                    feats,
-                )
                 final_ad_hoc_pred, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
                     final_ad_hoc_pred,
                     city,
                     product,
                     target_type,
+                    feats,
+                )
+                final_ad_hoc_pred, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    final_ad_hoc_pred,
+                    city,
+                    product,
+                    pred_dt,
                     feats,
                 )
                 future_preds[(city, product, pred_dt)] = final_ad_hoc_pred
@@ -2151,6 +2197,17 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     if direct is None:
                         continue
                     total_prediction, direct_method = direct
+                    # Direct models give festival flags ~1-3% of their weight
+                    # and under-forecast festival days by ~10% on holdout, so
+                    # apply the same festival uplift the model path uses.
+                    (
+                        total_prediction,
+                        festival_guardrail_name,
+                        festival_guardrail_factor,
+                        festival_guardrail_offset,
+                    ) = _apply_festival_guardrail(
+                        total_prediction, city, product, target_date, {}
+                    )
                     key = (city, product, str(target_date.date()))
                     visible = int(round(
                         sub_dict.get((city, product), 0)
@@ -2168,6 +2225,9 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                             "method": "ml_unknown_adhoc",
                             "prediction_source": direct_method,
                             "blr_forecast_method": direct_method,
+                            "festival_guardrail_name": festival_guardrail_name,
+                            "festival_guardrail_factor": festival_guardrail_factor,
+                            "festival_guardrail_offset": festival_guardrail_offset,
                         })
         ml_rows = [
             row for row in ml_rows
@@ -2293,18 +2353,18 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     target_type,
                     feats,
                 )
-                model_total_adhoc, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    current_dt,
-                    feats,
-                )
                 model_total_adhoc, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
                     model_total_adhoc,
                     city,
                     product,
                     target_type,
+                    feats,
+                )
+                model_total_adhoc, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
+                    model_total_adhoc,
+                    city,
+                    product,
+                    current_dt,
                     feats,
                 )
                 future_preds[(city, product, current_dt)] = model_total_adhoc
