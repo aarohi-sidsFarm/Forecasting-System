@@ -36,6 +36,18 @@ class FestivalPeriodTests(unittest.TestCase):
             main._HISTORY_AS_OF.reset(token)
         self.assertEqual(effect, 0.0)
 
+    def test_one_day_spike_is_kept(self):
+        # Ganesh Chaturthi 2026 as issued (D-2): HYD jumped 22% on Ganesh 2025.
+        token = main._HISTORY_AS_OF.set(pd.Timestamp("2026-09-11"))
+        try:
+            effect, festival, offset = main._festival_period_effect("HYD", pd.Timestamp("2026-09-14"))
+            day_after, _, _ = main._festival_period_effect("HYD", pd.Timestamp("2026-09-16"))
+        finally:
+            main._HISTORY_AS_OF.reset(token)
+        self.assertGreater(effect, 0.12)
+        self.assertEqual((festival, offset), ("Ganesh Chaturthi", 0))
+        self.assertEqual(day_after, 0.0)
+
     def test_guardrail_reports_the_period_adjustment(self):
         adjusted, name, factor, _ = main._apply_festival_guardrail(
             10000, "HYD", "A2 Buffalo Milk", pd.Timestamp("2026-10-18"), {}

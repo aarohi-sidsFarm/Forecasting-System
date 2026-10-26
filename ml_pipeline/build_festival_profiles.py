@@ -7,6 +7,12 @@ such as Dussehra or Sankranti; looking both ways cancels steady growth, which
 otherwise reads as a festival uplift in fast-growing PNQ/VGA). Cities are
 skipped while they were still launching.
 
+Festivals less than a week apart form one cluster (Navratri to Dussehra, Bhogi
+to Kanuma, Christmas to New Year) and share their days. A day within three
+days of a festival in a different cluster is not attributed to this one, so
+one festival's dip cannot leak into a neighbour's window: Sankranti 2026 fell
+nine days before Ratha Saptami 2026, but in 2027 they are four weeks apart.
+
 The backend turns these occurrences into a festival-period profile at serving
 time, using only occurrences that had completed before the issue date, so the
 as-issued backtest stays leak-free.
@@ -29,6 +35,8 @@ OUTPUT = MODEL_DIR / "festival_period_occurrences.csv"
 CALENDARS = [MODEL_DIR / "festival_list_2024_2026.csv", MODEL_DIR / "festival_list_2027_draft.csv"]
 CITIES = ["HYD", "BLR", "PNQ", "VGA"]
 K_MIN, K_MAX = -12, 7
+CLUSTER_GAP_DAYS = 7
+CORE_DAYS = 3
 BASELINE_OFFSETS = (-42, -35, -28, -21, 21, 28, 35, 42)
 # PNQ and VGA were still launching through mid-2025.
 MATURE_FROM = {
@@ -44,7 +52,7 @@ def load_actuals() -> pd.Series:
     # Final actuals exported after the training data ends (Query 3101).
     frames += [
         pd.read_csv(path, parse_dates=["target_date"])
-        for path in sorted(PROCESSED_DIR.glob("final_actuals_*.csv"))
+        for path in sorted(PROCESSED_DIR.glob("final_actuals*.csv"))
     ]
     daily = [frame.groupby(["city_cd", "target_date"])["total_qty"].sum() for frame in frames]
     # Later files win where they overlap.
@@ -63,19 +71,45 @@ def load_events() -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["festival", "city_cd", "festival_date"]).drop_duplicates()
 
 
+def cluster_ids(events: pd.DataFrame) -> dict[tuple[str, pd.Timestamp], int]:
+    """(city, festival_date) -> cluster id; dates under CLUSTER_GAP_DAYS apart chain."""
+    ids = {}
+    for city, group in events.groupby("city_cd"):
+        cluster, previous = 0, None
+        for date in sorted(group["festival_date"].unique()):
+            date = pd.Timestamp(date)
+            if previous is not None and (date - previous).days > CLUSTER_GAP_DAYS:
+                cluster += 1
+            ids[(city, date)] = cluster
+            previous = date
+    return ids
+
+
 def main() -> None:
     actuals = load_actuals()
     last_actual = actuals.index.get_level_values(1).max()
     events = load_events()
-    events = events[events["festival_date"] + pd.Timedelta(days=K_MAX + max(BASELINE_OFFSETS)) <= last_actual]
+    events = events[events["festival_date"] + pd.Timedelta(days=int(K_MAX + max(BASELINE_OFFSETS))) <= last_actual]
+    all_events = load_events()
+    cluster = cluster_ids(all_events)
+    dates_by_city = {
+        city: sorted(pd.Timestamp(date) for date in group["festival_date"].unique())
+        for city, group in all_events.groupby("city_cd")
+    }
     rows = []
     for event in events.itertuples():
         for k in range(K_MIN, K_MAX + 1):
-            day = event.festival_date + pd.Timedelta(days=k)
+            day = event.festival_date + pd.Timedelta(days=int(k))
             if day < MATURE_FROM[event.city_cd]:
                 continue
+            own = cluster[(event.city_cd, event.festival_date)]
+            if any(
+                abs((other - day).days) <= CORE_DAYS and cluster[(event.city_cd, other)] != own
+                for other in dates_by_city[event.city_cd]
+            ):
+                continue
             actual = actuals.get((event.city_cd, day))
-            base = [actuals.get((event.city_cd, day + pd.Timedelta(days=offset)))
+            base = [actuals.get((event.city_cd, day + pd.Timedelta(days=int(offset))))
                     for offset in BASELINE_OFFSETS]
             base = [value for value in base if value]
             if not actual or len(base) < 6:

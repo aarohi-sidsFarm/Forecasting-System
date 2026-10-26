@@ -41,12 +41,25 @@ future placeholder rows in a month-wide extract from being stored as actuals.
    minutes late; buy-once orders are still cut off at 22:05 by Query 3086.
 
    **Festival-period profiles.** Long holiday dips (Dussehra, Sankranti,
-   Diwali in BLR, Christmas to New Year) come from
-   `backend/ml_models/festival_period_occurrences.csv`. After a big festival
-   has been followed by about six weeks of actuals, export final actuals
-   (Query 3101) to `data/processed/final_actuals_<start>_to_<end>.csv`, run
-   `python ml_pipeline/build_festival_profiles.py`, and commit the result so
-   the next year learns from it. Run it again after any calendar change.
+   Diwali in BLR, Christmas to New Year) and one-day jumps (Ganesh Chaturthi,
+   Varalakshmi Vratam in HYD) come from
+   `backend/ml_models/festival_period_occurrences.csv`. They apply to HYD and
+   BLR only; PNQ and VGA keep the one-day guardrail until they have clean
+   festival history. Multi-day effects of 12% or more are applied at 75%
+   strength; a single-day jump of 12% or more within a day of a festival is
+   used when no multi-day effect applies. Hand-tuned Varalakshmi SKU uplifts
+   take precedence.
+
+   **Weekly maintenance (GitHub Actions).** `.github/workflows/weekly-maintenance.yml`
+   runs every Sunday at 11:00 IST. It appends settled Query 3101 actuals to
+   `data/processed/final_actuals.csv`, rebuilds the festival-period profiles
+   (a festival is learned once its window plus six weeks of baseline has
+   passed, so Diwali 2026 is picked up in late December and Christmas 2026
+   in mid February), commits both files, and writes an issued-vs-actual
+   accuracy table per city to the run summary. Open the latest run in the
+   Actions tab to check how each festival actually landed. Run
+   `python ml_pipeline/build_festival_profiles.py` by hand after any calendar
+   change.
 
    The Windows task is the fallback for a machine that is on at night:
 

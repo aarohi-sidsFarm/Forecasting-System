@@ -1,0 +1,60 @@
+name: Weekly forecast maintenance
+
+# Keeps the festival-period profiles learning from finished festivals and
+# reports issued-vs-actual accuracy in the run summary. Sunday 11:00 IST, well
+# clear of the 22:05 nightly issuance.
+on:
+  schedule:
+    - cron: "30 5 * * 0"
+  workflow_dispatch:
+
+concurrency:
+  group: daily-issuance
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      REDASH_BASE_URL: https://analytics.sidsfarm.in
+      REDASH_JOB_POLL_INTERVAL_SECONDS: "5"
+      REDASH_JOB_POLL_ATTEMPTS: "360"
+      QUERY_API_KEY: ${{ secrets.QUERY_API_KEY }}
+      SUBSCRIPTION_QUERY_ID: "3085"
+      KNOWN_BUY_ONCE_QUERY_ID: "3086"
+      RECENT_ACTUALS_QUERY_ID: "3101"
+      SELECTED_ACTUALS_QUERY_ID: "3114"
+      TZ: Asia/Kolkata
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Refresh actuals, festival profiles and accuracy report
+        run: python scripts/weekly_forecast_maintenance.py
+
+      - name: Commit refreshed data
+        run: |
+          git add data/processed/final_actuals.csv backend/ml_models/festival_period_occurrences.csv
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "forecast-maintenance-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Weekly refresh of actuals and festival profiles ($(date +%F))"
+          git pull --rebase origin main
+          git push origin HEAD:main
