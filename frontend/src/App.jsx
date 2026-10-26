@@ -117,6 +117,12 @@ export default function App() {
     url.searchParams.delete("as_of");
     url.searchParams.set("target", targetDate);
     window.history.replaceState({}, "", url);
+    // Historical exports may contain fewer cities than the live forecast.
+    // Clear prior filters on date changes so a previously selected city does
+    // not make a valid archived forecast appear empty.
+    setCityFilter("All");
+    setProductFilter("All");
+    setSearch("");
     Promise.resolve().then(() => load(false));
     return () => {
       if (retryTimerRef.current) {
@@ -162,7 +168,9 @@ export default function App() {
     ? "OFFICIAL"
     : forecastView === "mixed"
       ? "MIXED"
-      : forecastView === "partial_issued" ? "PARTIAL" : "PREVIEW";
+      : forecastView === "partial_issued"
+        ? "PARTIAL"
+        : forecastView === "archived_export" ? "ARCHIVE" : "PREVIEW";
 
   const resetFilters = () => {
     setCityFilter("All");
@@ -312,7 +320,7 @@ export default function App() {
             >
               <div>
                 <div className="city-name" style={{ color: cityColor(summary.city) }}>{cityName(summary.city)}</div>
-                <div className="city-detail">D-{summary.lead_time_days} - issue {prettyDate(summary.issue_date)}</div>
+                <div className="city-detail">D-{summary.lead_time_days}{summary.issue_date ? ` - issue ${prettyDate(summary.issue_date)}` : " - archived"}</div>
               </div>
               <div>
                 <div className="city-qty" style={{ color: cityColor(summary.city) }}>{fmt(summary.forecast_quantity)}</div>
