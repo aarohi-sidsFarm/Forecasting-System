@@ -40,6 +40,14 @@ future placeholder rows in a month-wide extract from being stored as actuals.
    owner when a scheduled run fails. GitHub may start scheduled runs a few
    minutes late; buy-once orders are still cut off at 22:05 by Query 3086.
 
+   **Festival-period profiles.** Long holiday dips (Dussehra, Sankranti,
+   Diwali in BLR, Christmas to New Year) come from
+   `backend/ml_models/festival_period_occurrences.csv`. After a big festival
+   has been followed by about six weeks of actuals, export final actuals
+   (Query 3101) to `data/processed/final_actuals_<start>_to_<end>.csv`, run
+   `python ml_pipeline/build_festival_profiles.py`, and commit the result so
+   the next year learns from it. Run it again after any calendar change.
+
    The Windows task is the fallback for a machine that is on at night:
 
    `powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\register_daily_forecast_task.ps1 -DailyAt 22:05`

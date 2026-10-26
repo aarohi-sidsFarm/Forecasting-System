@@ -1,7 +1,7 @@
 date,festival,cities,impact,year,impact_direction,confidence,source_note
 01-01-2027,New Year Day,ALL,HIGH,2027,0,fixed,Gregorian fixed date
 14-01-2027,Bhogi,"HYD,VGA",HIGH,2027,0,estimate,One day before Makar Sankranti per 2026 pattern; Telangana state holiday list also shows Jan 14
-14-01-2027,Makara Sankranthi,BLR,HIGH,2027,0,estimate,Same day as Bhogi per 2026 pattern; verify against Karnataka govt calendar
+15-01-2027,Makara Sankranthi,BLR,HIGH,2027,0,sourced,Drik Panchang: Sankranti moment 21:14 IST on 14 Jan 2027 so the festival is observed on 15 Jan
 15-01-2027,Sankranti / Pongal,"HYD,VGA",HIGH,2027,0,sourced-conflict,drikpanchang.com gives Jan 15 (tithi-precise); Telangana state holiday list gives Jan 14 for the combined Bhogi/Sankranti holiday; confirm which day Query 1968 history actually shows as the demand peak
 16-01-2027,Kanuma,"HYD,VGA",HIGH,2027,0,estimate,One day after Sankranti per 2026 pattern
 26-01-2027,Republic Day,ALL,MED,2027,-1,fixed,Gregorian fixed date

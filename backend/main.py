@@ -400,6 +400,90 @@ _festival_guardrail_offsets = [key[3] for key in _festival_guardrail_lookup]
 _FESTIVAL_GUARDRAIL_MIN_OFFSET = min(_festival_guardrail_offsets, default=-3)
 _FESTIVAL_GUARDRAIL_MAX_OFFSET = max(_festival_guardrail_offsets, default=3)
 
+# Festival-period profiles. Big festivals move a whole city for days, mostly
+# down: people leave for Dussehra and Sankranti (HYD/BLR -15..-25% for about a
+# week), BLR dips around Diwali and Christmas. The one-day +/-5% guardrail
+# above cannot express that; on the Dussehra 2026 holdout it over-forecast HYD
+# and BLR by 13-28% for ten days. These profiles come from
+# ml_pipeline/build_festival_profiles.py: per-occurrence residuals against a
+# same-weekday baseline 21-42 days either side. Only strong, smoothed effects are applied, at 75%
+# strength (chosen on the Aug-Oct 2026 holdout).
+FESTIVAL_PERIOD_OCCURRENCES_PATH = os.path.join(MODEL_DIR, "festival_period_occurrences.csv")
+FESTIVAL_PERIOD_K_MIN, FESTIVAL_PERIOD_K_MAX = -12, 7
+# The residual baseline reaches 42 days past the window.
+FESTIVAL_PERIOD_BASELINE_REACH = 42
+FESTIVAL_PERIOD_MIN_EFFECT = 0.12
+FESTIVAL_PERIOD_SHRINK = 0.75
+FESTIVAL_PERIOD_MAX_EFFECT = 0.35
+if os.path.exists(FESTIVAL_PERIOD_OCCURRENCES_PATH):
+    _festival_period_occurrences = pd.read_csv(
+        FESTIVAL_PERIOD_OCCURRENCES_PATH, parse_dates=["festival_date"]
+    )
+else:
+    _festival_period_occurrences = pd.DataFrame(
+        columns=["festival", "city_cd", "festival_date", "k", "residual"]
+    )
+_high_fest_df = fest_df[fest_df["impact"].astype(str).str.upper().eq("HIGH")]
+_festival_period_events = {
+    city: _high_fest_df[_high_fest_df["cities"].apply(
+        lambda value, city=city: _festival_applies_to_city(value, city)
+    )][["festival", "date"]].drop_duplicates()
+    for city in KNOWN_CITIES
+}
+_festival_period_profile_cache: dict[pd.Timestamp | None, dict] = {}
+
+
+def _festival_period_profile(as_of: pd.Timestamp | None) -> dict:
+    """(festival, city, k) -> smoothed median residual from completed occurrences.
+
+    Only occurrences whose window and baseline had ended by as_of are used,
+    so the as-issued backtest never learns from the festival it forecasts.
+    """
+    if as_of in _festival_period_profile_cache:
+        return _festival_period_profile_cache[as_of]
+    occurrences = _festival_period_occurrences
+    if as_of is not None:
+        window_end = occurrences["festival_date"] + pd.Timedelta(
+            days=FESTIVAL_PERIOD_K_MAX + FESTIVAL_PERIOD_BASELINE_REACH
+        )
+        occurrences = occurrences[window_end <= as_of]
+    profile = occurrences.groupby(["festival", "city_cd", "k"])["residual"].median()
+    # A 3-day centred median keeps multi-day holiday dips and drops
+    # single-day noise from one observed year.
+    profile = profile.groupby(level=[0, 1], group_keys=False).apply(
+        lambda group: group.rolling(3, center=True, min_periods=3).median()
+    ).dropna()
+    result = profile.to_dict()
+    _festival_period_profile_cache[as_of] = result
+    return result
+
+
+def _festival_period_effect(city: str, dt: pd.Timestamp) -> tuple[float, str | None, int]:
+    """City-wide multiplicative effect for dt, the festival behind it, and its offset."""
+    events = _festival_period_events.get(city)
+    if events is None or events.empty or _festival_period_occurrences.empty:
+        return 0.0, None, 0
+    dt = pd.Timestamp(dt).normalize()
+    nearby = events[
+        (events["date"] >= dt - pd.Timedelta(days=FESTIVAL_PERIOD_K_MAX))
+        & (events["date"] <= dt - pd.Timedelta(days=FESTIVAL_PERIOD_K_MIN))
+    ]
+    if nearby.empty:
+        return 0.0, None, 0
+    profile = _festival_period_profile(_HISTORY_AS_OF.get())
+    best, best_name, best_k = 0.0, None, 0
+    for event in nearby.itertuples():
+        k = int((dt - event.date).days)
+        value = profile.get((event.festival, city, k))
+        if value is not None and abs(value) > abs(best):
+            best, best_name, best_k = float(value), event.festival, k
+    if abs(best) < FESTIVAL_PERIOD_MIN_EFFECT:
+        return 0.0, None, 0
+    effect = float(np.clip(
+        FESTIVAL_PERIOD_SHRINK * best, -FESTIVAL_PERIOD_MAX_EFFECT, FESTIVAL_PERIOD_MAX_EFFECT
+    ))
+    return effect, best_name, best_k
+
 print(f"  Models loaded. Plan rows: {len(_lgbm_p)}")
 print(f"  Training data: {len(_train_df)} rows, {len(_train_lookup)} series from {os.path.basename(_train_path)}")
 print("Startup complete.")
@@ -1729,6 +1813,10 @@ def _apply_festival_guardrail(
     dt: pd.Timestamp,
     features: dict,
 ) -> tuple[int, str | None, float, int]:
+    period_effect, period_festival, period_offset = _festival_period_effect(city, dt)
+    if period_effect:
+        factor = round(1.0 + period_effect, 4)
+        return max(0, int(round(prediction * factor))), f"{period_festival} (period)", factor, period_offset
     if not _festival_guardrail_lookup:
         return prediction, None, 1.0, 0
     # Do not gate on the is_festival/is_pre_festival/is_post_festival ML
