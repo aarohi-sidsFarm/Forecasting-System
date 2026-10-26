@@ -1,4 +1,5 @@
 import asyncio
+import contextvars
 import io
 import os
 import pickle
@@ -1313,6 +1314,21 @@ def _recent_actual_lookup(recent_df: pd.DataFrame) -> dict[tuple[str, str, pd.Ti
     }
 
 
+# Latest delivery date whose actuals may be used. None means "everything
+# known now" (live serving). build_as_issued_forecast_rows sets it to the day
+# before each city's issue date so a past forecast is rebuilt exactly as it
+# would have been issued, without later actuals. A ContextVar keeps
+# concurrent requests and threadpool workers independent.
+_HISTORY_AS_OF: contextvars.ContextVar[pd.Timestamp | None] = contextvars.ContextVar(
+    "history_as_of", default=None
+)
+
+
+def _history_visible(date: pd.Timestamp) -> bool:
+    as_of = _HISTORY_AS_OF.get()
+    return as_of is None or pd.Timestamp(date).normalize() <= as_of
+
+
 def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals=None, fallback_val=0.0):
     if future_preds is None:
         future_preds = {}
@@ -1328,7 +1344,8 @@ def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals
     for n in range(28, 0, -1):
         target_dt = pd.Timestamp(ref_date - timedelta(days=n)).normalize()
         pred_key = (city, product, target_dt)
-        if pred_key in recent_actuals:
+        visible = _history_visible(target_dt)
+        if visible and pred_key in recent_actuals:
             vals.append(float(recent_actuals[pred_key]))
             sources.append("recent_actual")
             continue
@@ -1336,7 +1353,7 @@ def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals
             vals.append(float(future_preds[pred_key]))
             sources.append("recursive_prediction")
             continue
-        if len(dates):
+        if len(dates) and visible:
             idx = np.where(dates == np.datetime64(target_dt))[0]
             if len(idx):
                 vals.append(float(qty[idx[0]]))
@@ -1833,6 +1850,8 @@ def _historical_actual_value(
     recent_actuals: dict,
 ) -> float:
     normalized = pd.Timestamp(date).normalize()
+    if not _history_visible(normalized):
+        return 0.0
     recent_key = (city, product, normalized)
     if recent_key in recent_actuals:
         return float(recent_actuals[recent_key])
@@ -2018,6 +2037,9 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
 
     first_req = pd.Timestamp(forecast_dates[0]).normalize()
     max_train = pd.Timestamp(_train_df["target_date"].max()).normalize()
+    history_as_of = _HISTORY_AS_OF.get()
+    if history_as_of is not None:
+        max_train = min(max_train, history_as_of)
     compute_dates = pd.date_range(max_train + pd.Timedelta(days=1), forecast_dates[-1]) if first_req > max_train + pd.Timedelta(days=1) else forecast_dates
 
     ml_rows = []
@@ -2236,6 +2258,30 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
         ] + replacements
 
     return sub_rows + known_rows + ml_rows
+
+
+def build_as_issued_forecast_rows(target_date, recent_df=None) -> list[dict]:
+    """Rebuild the forecast each city would have been issued for target_date.
+
+    Each city only sees actuals completed before its own issue date (HYD/VGA
+    D-2, BLR/PNQ D-3). Issue-time subscription and buy-once snapshots cannot
+    be reconstructed (Query 3085 is current-state), so components are empty
+    and the total is the model total.
+    """
+    target = pd.Timestamp(target_date).normalize()
+    empty = _empty_component_df()
+    rows: list[dict] = []
+    for lead_days in sorted(set(FORECAST_LEAD_DAYS.values())):
+        cities = {city for city, lead in FORECAST_LEAD_DAYS.items() if lead == lead_days}
+        token = _HISTORY_AS_OF.set(target - pd.Timedelta(days=lead_days + 1))
+        try:
+            lead_rows = build_forecast_for_dates(
+                pd.DatetimeIndex([target]), empty, empty, recent_df
+            )
+        finally:
+            _HISTORY_AS_OF.reset(token)
+        rows.extend(row for row in lead_rows if row["city_cd"] in cities)
+    return rows
 
 
 def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> list[dict]:
@@ -3041,7 +3087,8 @@ def _is_complete_official_forecast(forecast_df: pd.DataFrame) -> bool:
     issue_dates = pd.to_datetime(forecast_df["issue_date"], errors="coerce")
     if target_dates.isna().any() or issue_dates.isna().any():
         return False
-    return (target_dates - issue_dates).dt.days.eq(expected_leads).all()
+    # bool(): numpy.bool_ is not JSON-serialisable in API responses.
+    return bool((target_dates - issue_dates).dt.days.eq(expected_leads).all())
 
 
 def _csv_filter_values(raw_values: str | None, allowed_values: set[str]) -> set[str]:
@@ -3079,11 +3126,14 @@ async def _build_accuracy_report_df(
     async def build_one_date(dt: pd.Timestamp, semaphore: asyncio.Semaphore) -> pd.DataFrame:
         async with semaphore:
             date = str(pd.Timestamp(dt).date())
-            (sub_df, known_df, recent_df), actual_df = await asyncio.gather(
-                fetch_forecast_inputs_async(date, force_refresh),
+            # As-issued rebuild: only actuals before each city's issue date
+            # are used, so the report measures real D-2/D-3 accuracy instead
+            # of a forecast that already saw later sales.
+            recent_df, actual_df = await asyncio.gather(
+                fetch_recent_actuals_df_async(date, force_refresh),
                 fetch_selected_actuals_df_async(date, force_refresh),
             )
-            rows = await run_in_threadpool(build_forecast_for_dates, pd.DatetimeIndex([dt]), sub_df, known_df, recent_df)
+            rows = await run_in_threadpool(build_as_issued_forecast_rows, dt, recent_df)
             forecast_df = _forecast_rows_to_quantity_df(rows)
             actual_qty_df = _selected_actuals_to_quantity_df(actual_df, date)
             if forecast_df.empty or actual_qty_df.empty:
@@ -4030,15 +4080,24 @@ async def get_operational_forecast(
         forecast_view = "stale_preview" if used_stale_cache else "live_preview"
 
     comparison_status = "not_completed"
+    # Data contract: accuracy may only be shown for a complete immutable
+    # D-2/D-3 issuance. Previews are rebuilt with today's subscription state
+    # and later actuals, so their "accuracy" would be better than reality.
+    comparison_eligible = _is_complete_official_forecast(forecast_df)
     comparison_summary = {
         "available": False,
+        "eligible": comparison_eligible,
+        "forecast_basis": forecast_view,
+        "requirement": "complete immutable official D-2/D-3 forecast",
         "source_query_id": int(SELECTED_ACTUALS_QUERY_ID) if SELECTED_ACTUALS_QUERY_ID else None,
         "matched_rows": 0,
         "actual_quantity": None,
         "difference": None,
         "wape_pct": None,
     }
-    if target_dt < _today_ist():
+    if target_dt < _today_ist() and not comparison_eligible:
+        comparison_status = "not_eligible_preview"
+    elif target_dt < _today_ist():
         actual_df = await fetch_selected_actuals_df_async(target_date, refresh)
         forecast_df = _attach_actual_comparison(forecast_df, actual_df)
         matched = forecast_df[forecast_df["actual_available"]].copy()
