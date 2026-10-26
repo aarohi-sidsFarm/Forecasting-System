@@ -359,4 +359,115 @@ def issued_run_for_issue_date(
         return result
 
 
+# Issued runs are also kept as one JSON file per issue date in git. The host
+# (Render free) wipes its disk on restart and the nightly issuance runs on a
+# GitHub Actions runner, so the committed ledger is the durable record and
+# the SQLite database is rebuilt from it at startup.
+_RUN_COLUMNS = [
+    "run_id", "generated_at", "start_date", "end_date", "run_kind",
+    "model_version", "cutoff_policy", "metadata_json", "status",
+]
+_ROW_COLUMNS = [
+    "run_id", "forecast_date", "horizon", "city_cd", "product_name",
+    "p50_qty", "p80_qty", "method", "visible_subscription_qty",
+    "visible_buy_once_qty", "visible_orders", "issue_date",
+    "confirmed_subscription_qty", "at_risk_subscription_qty",
+    "ml_unknown_adhoc_qty",
+]
+
+
+def default_ledger_dir() -> str:
+    return os.getenv(
+        "FORECAST_LEDGER_DIR",
+        os.path.join(os.path.dirname(__file__), "issued_forecasts"),
+    )
+
+
+def export_run(
+    run_id: str,
+    ledger_dir: str | None = None,
+    db_path: str | None = None,
+) -> str:
+    """Write one issued run to <ledger>/<issue_date>.json; never overwrite."""
+    initialize(db_path)
+    with db_connection(db_path) as connection:
+        run = connection.execute(
+            f"SELECT {', '.join(_RUN_COLUMNS)} FROM forecast_runs WHERE run_id=?",
+            (run_id,),
+        ).fetchone()
+        if run is None:
+            raise ValueError(f"Unknown forecast run {run_id}")
+        rows = connection.execute(
+            f"SELECT {', '.join(_ROW_COLUMNS)} FROM forecast_rows WHERE run_id=? "
+            "ORDER BY forecast_date, city_cd, product_name",
+            (run_id,),
+        ).fetchall()
+    issue_dates = {row["issue_date"] for row in rows}
+    if len(issue_dates) != 1 or None in issue_dates:
+        raise ValueError(f"Run {run_id} must have exactly one issue_date")
+    directory = ledger_dir or default_ledger_dir()
+    os.makedirs(directory, exist_ok=True)
+    path = os.path.join(directory, f"{issue_dates.pop()}.json")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as handle:
+            existing = json.load(handle)["run"]["run_id"]
+        if existing != run_id:
+            raise ValueError(f"{path} already holds run {existing}")
+        return path
+    payload = {
+        "run": dict(run),
+        "rows": [dict(row) for row in rows],
+    }
+    with open(path, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=1, sort_keys=True)
+        handle.write("\n")
+    return path
+
+
+def import_ledger(
+    ledger_dir: str | None = None,
+    db_path: str | None = None,
+) -> int:
+    """Load committed issued runs that the local database does not have yet."""
+    directory = ledger_dir or default_ledger_dir()
+    if not os.path.isdir(directory):
+        return 0
+    initialize(db_path)
+    imported = 0
+    with db_connection(db_path) as connection:
+        known = {
+            row["run_id"] for row in connection.execute("SELECT run_id FROM forecast_runs")
+        }
+        for name in sorted(os.listdir(directory)):
+            if not name.endswith(".json"):
+                continue
+            with open(os.path.join(directory, name), encoding="utf-8") as handle:
+                payload = json.load(handle)
+            run = payload["run"]
+            if run["run_id"] in known:
+                continue
+            # A database that already issued this date itself keeps its own
+            # run; issued rows are immutable either way.
+            connection.execute("SAVEPOINT ledger_file")
+            try:
+                connection.execute(
+                    f"INSERT INTO forecast_runs ({', '.join(_RUN_COLUMNS)}) "
+                    f"VALUES ({', '.join('?' for _ in _RUN_COLUMNS)})",
+                    [run.get(column) for column in _RUN_COLUMNS],
+                )
+                connection.executemany(
+                    f"INSERT INTO forecast_rows ({', '.join(_ROW_COLUMNS)}) "
+                    f"VALUES ({', '.join('?' for _ in _ROW_COLUMNS)})",
+                    [[row.get(column) for column in _ROW_COLUMNS] for row in payload["rows"]],
+                )
+            except sqlite3.IntegrityError:
+                connection.execute("ROLLBACK TO ledger_file")
+                continue
+            finally:
+                connection.execute("RELEASE ledger_file")
+            imported += 1
+    return imported
+
+
 initialize()
+import_ledger()
