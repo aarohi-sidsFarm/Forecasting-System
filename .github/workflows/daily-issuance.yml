@@ -21,9 +21,13 @@ permissions:
 jobs:
   issue:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    # Query 3085 takes 10-17 minutes, or longer when the replica is busy,
+    # and runs once per target date (D-2 and D-3).
+    timeout-minutes: 150
     env:
       REDASH_BASE_URL: https://analytics.sidsfarm.in
+      REDASH_JOB_POLL_INTERVAL_SECONDS: "5"
+      REDASH_JOB_POLL_ATTEMPTS: "720"
       QUERY_API_KEY: ${{ secrets.QUERY_API_KEY }}
       SUBSCRIPTION_QUERY_ID: "3085"
       KNOWN_BUY_ONCE_QUERY_ID: "3086"
