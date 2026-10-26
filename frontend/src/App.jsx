@@ -380,7 +380,7 @@ export default function App() {
   };
 
   const copySummary = async () => {
-    notify(await copyText(shareText()) ? "Copied. Paste it into WhatsApp or email." : "Couldn't copy. Try again.");
+    notify(await copyText(shareText()) ? "Copied. Paste it into Google Chat or email." : "Couldn't copy. Try again.");
   };
 
   const copyLink = async () => {
@@ -618,7 +618,7 @@ export default function App() {
               )}
               <div className="toolbar-actions">
                 <button type="button" className="btn btn-primary" onClick={copySummary} disabled={!hasRows}>
-                  Copy for WhatsApp
+                  Copy
                 </button>
                 <div className="menu" ref={menuRef}>
                   <button

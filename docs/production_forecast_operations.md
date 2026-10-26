@@ -51,7 +51,11 @@ future placeholder rows in a month-wide extract from being stored as actuals.
    take precedence.
 
    **Weekly maintenance (GitHub Actions).** `.github/workflows/weekly-maintenance.yml`
-   runs every Sunday at 11:00 IST. It appends settled Query 3101 actuals to
+   runs every Sunday at 11:00 IST. It first brings the training data up to
+   yesterday with `scripts/refresh_training_data.py` (Query 3269, the data
+   steps of `daily_refresh.ps1`; models are not retrained), which also clears
+   the dashboard's "sales data last synced" notice. It then appends settled
+   Query 3101 actuals to
    `data/processed/final_actuals.csv`, rebuilds the festival-period profiles
    (a festival is learned once its window plus six weeks of baseline has
    passed, so Diwali 2026 is picked up in late December and Christmas 2026
