@@ -2705,7 +2705,47 @@ OPERATIONAL_FORECAST_COLUMNS = [
     "remaining_model_gap_qty",
     "ml_unknown_adhoc_qty",
     "forecast_quantity",
+    "plan_up_to_qty",
 ]
+
+# P80 range from as-issued backtests (scripts/build_p80_uplift.py): actual
+# sales should be at or under plan_up_to_qty on about 4 days in 5.
+P80_UPLIFT_PATH = os.path.join(MODEL_DIR, "p80_uplift.csv")
+P80_DEFAULT_UPLIFT = 0.10
+
+
+def _load_p80_uplift() -> dict[tuple[str, str], float]:
+    if not os.path.isfile(P80_UPLIFT_PATH):
+        return {}
+    table = pd.read_csv(P80_UPLIFT_PATH)
+    return {
+        (row.city_cd, row.product_name): float(row.uplift)
+        for row in table.itertuples()
+    }
+
+
+_p80_uplift = _load_p80_uplift()
+
+
+def _plan_up_to(city: str, product: str, forecast_qty: float) -> int:
+    uplift = _p80_uplift.get(
+        (city, product), _p80_uplift.get((city, "ALL"), P80_DEFAULT_UPLIFT)
+    )
+    forecast_qty = float(forecast_qty or 0)
+    return int(max(forecast_qty, round(forecast_qty * (1 + uplift))))
+
+
+def _add_plan_up_to(frame: pd.DataFrame) -> pd.DataFrame:
+    if frame.empty:
+        frame["plan_up_to_qty"] = pd.Series(dtype=int)
+        return frame
+    frame["plan_up_to_qty"] = [
+        _plan_up_to(city, product, qty)
+        for city, product, qty in zip(
+            frame["city"], frame["product_name"], frame["forecast_quantity"]
+        )
+    ]
+    return frame
 
 
 def _operational_target_dates(as_of_date: pd.Timestamp) -> dict[str, str]:
@@ -2797,6 +2837,7 @@ def _forecast_rows_to_operational_df(
         "forecast_quantity",
     ]:
         pivot[col] = pd.to_numeric(pivot[col], errors="coerce").fillna(0).round().astype(int)
+    pivot = _add_plan_up_to(pivot)
     return pivot[OPERATIONAL_FORECAST_COLUMNS].sort_values(
         ["forecast_date", "city", "product_name"]
     )
@@ -3024,7 +3065,7 @@ async def _issue_daily_operational_forecast_once(
         "subscription_qty": "visible_subscription_qty",
         "known_buy_once_qty": "visible_buy_once_qty",
     }).copy()
-    history_frame["p80_qty"] = None
+    history_frame["p80_qty"] = history_frame["plan_up_to_qty"]
     history_frame["visible_orders"] = None
     history_frame["method"] = "official_issued"
     metadata = {
@@ -3163,6 +3204,12 @@ def _issued_rows_to_operational_df(
         issued_rows["issue_date"].notna(), "official_issued", "legacy_issued"
     )
     frame["forecast_run_id"] = frame.get("run_id")
+    stored_p80 = (
+        pd.to_numeric(frame["p80_qty"], errors="coerce") if "p80_qty" in frame else None
+    )
+    frame = _add_plan_up_to(frame)
+    if stored_p80 is not None:
+        frame["plan_up_to_qty"] = stored_p80.round().fillna(frame["plan_up_to_qty"]).astype(int)
     return frame[[
         *OPERATIONAL_FORECAST_COLUMNS,
         "forecast_status", "forecast_run_id",
@@ -4048,6 +4095,7 @@ def _load_legacy_issued_export(target_date: str) -> pd.DataFrame:
     ]:
         frame[column] = 0
     frame["forecast_quantity"] = frame["forecast_quantity"].round().astype(int)
+    frame = _add_plan_up_to(frame)
     return frame[OPERATIONAL_FORECAST_COLUMNS].sort_values(["city", "product_name"])
 
 
@@ -4419,7 +4467,7 @@ async def export_milk_city_forecast_csv(
         history_frame = export_df.rename(
             columns={"city": "city_cd", "forecast_quantity": "p50_qty"}
         ).copy()
-        history_frame["p80_qty"] = None
+        history_frame["p80_qty"] = history_frame.get("plan_up_to_qty")
         history_frame["method"] = "production_export"
         raw_frame = pd.DataFrame(rows)
         visible = raw_frame[

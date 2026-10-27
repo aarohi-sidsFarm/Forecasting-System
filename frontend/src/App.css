@@ -500,6 +500,8 @@ button.stat:hover { background: var(--color-hover); }
   .group-toggle { gap: var(--space-1); }
 }
 
+.table thead th.col-plan { cursor: help; }
+
 @media (max-width: 480px) {
   .col-diff { display: none; }
 }

@@ -402,6 +402,7 @@ export default function App() {
       ["City", (row) => cityName(row.city)],
       ["Product", (row) => row.product_name],
       ["Forecast quantity", (row) => row.forecast_quantity],
+      ["Plan up to (P80)", (row) => row.plan_up_to_qty ?? ""],
       ["Status", (row) => (isFrozen(row) ? "Issued" : "Draft")],
       ["Issued on", (row) => row.issue_date ?? ""],
       ["Lead time (days)", (row) => row.lead_time_days],
@@ -452,7 +453,9 @@ export default function App() {
     ["Day after", shiftDate(today, 2)],
   ];
   const hasRows = visibleRows.length > 0;
-  const columnCount = comparisonAvailable ? 5 : 2;
+  // Plan-up-to is for planning ahead, so it is shown only before actuals exist.
+  const showPlan = !comparisonAvailable && rows.some((row) => row.plan_up_to_qty != null);
+  const columnCount = comparisonAvailable ? 5 : showPlan ? 3 : 2;
 
   return (
     <div className="app">
@@ -649,6 +652,11 @@ export default function App() {
                 <tr>
                   <th scope="col">Product</th>
                   <th scope="col" className="num">Forecast</th>
+                  {showPlan && (
+                    <th scope="col" className="num col-plan" title="Actual sales stayed at or under this on about 4 days in 5">
+                      Plan up to
+                    </th>
+                  )}
                   {comparisonAvailable && <th scope="col" className="num">Actual</th>}
                   {comparisonAvailable && <th scope="col" className="num col-diff">Difference</th>}
                   {comparisonAvailable && <th scope="col" className="num">Error</th>}
@@ -684,6 +692,11 @@ export default function App() {
                         </button>
                       </th>
                       <td className="num">{fmt(groupTotal)}</td>
+                      {showPlan && (
+                        <td className="num col-plan">
+                          {fmt(group.shownRows.reduce((sum, row) => sum + Number(row.plan_up_to_qty ?? row.forecast_quantity), 0))}
+                        </td>
+                      )}
                       {comparisonAvailable && <td className="num">{group.compared ? fmt(group.actual) : "-"}</td>}
                       {comparisonAvailable && <td className="num col-diff">{group.compared ? fmtSigned(group.difference) : "-"}</td>}
                       {comparisonAvailable && <td className="num">{group.errorPct != null ? fmtPct(group.errorPct) : "-"}</td>}
@@ -692,6 +705,7 @@ export default function App() {
                       <tr key={`${group.city}-${row.product_name}`} className="item-row">
                         <td className="product">{row.product_name}</td>
                         <td className="num num-strong">{fmt(row.forecast_quantity)}</td>
+                        {showPlan && <td className="num col-plan">{row.plan_up_to_qty != null ? fmt(row.plan_up_to_qty) : "-"}</td>}
                         {comparisonAvailable && <td className="num">{row.actual_available ? fmt(row.actual_quantity) : "-"}</td>}
                         {comparisonAvailable && <td className="num col-diff">{row.actual_available ? fmtSigned(row.difference) : "-"}</td>}
                         {comparisonAvailable && <td className="num">{row.actual_available ? fmtPct(row.absolute_error_pct) : "-"}</td>}
