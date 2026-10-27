@@ -158,19 +158,6 @@ MILK_EXPORT_PRODUCTS = [
     "Curd",
 ]
 
-HYD_MOMENTUM_PRODUCTS = {
-    "A2 Buffalo Milk",
-    "Double Toned A2 Buffalo Milk",
-    "A2 Desi Cow Milk",
-}
-HYD_STABLE_MILK_PRODUCTS = {
-    "A2 Buffalo Milk",
-    "Double Toned A2 Buffalo Milk",
-    "Cow Milk",
-    "A2 Desi Cow Milk",
-    "Skim Milk",
-    "Toned Milk",
-}
 BLR_BLEND_PRODUCTS = {
     "A2 Buffalo Milk",
     "Cow Milk",
@@ -311,7 +298,6 @@ _national_fest_df = fest_df[fest_df["cities"].apply(lambda value: "ALL" in {
     token.strip() for token in str(value).split(",") if token.strip()
 })].copy()
 _festival_set = set(_national_fest_df["date"])
-_festival_name_by_date = _national_fest_df.groupby("date")["festival"].first().to_dict()
 _festival_dates_by_city = {}
 _city_high_impact_dates = {}
 # Several festivals can fall on the same date (e.g. Diwali and Nagula
@@ -331,9 +317,6 @@ for _city in KNOWN_CITIES:
             for date, direction in _city_rows.groupby("date")["impact_direction"].max().to_dict().items()
         })
 
-_blr_fest_set = _festival_dates_by_city["BLR"]
-_hyd_vga_fest_set = _festival_dates_by_city["HYD"] | _festival_dates_by_city["VGA"]
-_pnq_fest_set = _festival_dates_by_city["PNQ"]
 _high_impact_dates = set(_national_fest_df[_national_fest_df["impact"] == "HIGH"]["date"])
 _pre_fest_set = {d - pd.Timedelta(days=1) for d in _high_impact_dates}
 _post_fest_set = {d + pd.Timedelta(days=1) for d in _high_impact_dates}
@@ -1314,37 +1297,32 @@ def _accuracy_cache_status() -> dict:
 def _guardrail_status() -> dict:
     return {
         "enabled": True,
-        "mode": "narrow product-city guardrails after model prediction",
+        "mode": "adjustments applied after the model prediction",
         "rules": [
             {
-                "name": "HYD recent run-rate floor",
-                "cities": ["HYD"],
-                "products": sorted(HYD_STABLE_MILK_PRODUCTS),
-                "effect": "raises weekday milk forecasts only when model falls below recent lag/rolling demand",
-            },
-            {
-                "name": "HYD Wednesday peak floor",
-                "cities": ["HYD"],
-                "products": sorted(HYD_STABLE_MILK_PRODUCTS),
-                "effect": "protects Wednesday milk peaks using same-weekday history with a recent-demand cap",
-            },
-            {
-                "name": "HYD Sunday same-DOW cap",
-                "cities": ["HYD"],
-                "products": sorted(HYD_STABLE_MILK_PRODUCTS),
-                "effect": "caps Sunday milk forecasts near last Sunday to avoid weekday momentum leakage",
-            },
-            {
-                "name": "HYD toned recency cap",
-                "cities": ["HYD"],
-                "products": ["Toned Milk"],
-                "effect": "caps toned milk over-forecasting using recent run-rate",
+                "name": "HYD and BLR direct models",
+                "cities": ["HYD", "BLR"],
+                "products": sorted(MILK_EXPORT_PRODUCTS),
+                "effect": "issued HYD D-2 and BLR D-3 forecasts come from the direct models; "
+                          "the general model is the fallback beyond about 7 days ahead",
             },
             {
                 "name": "BLR hybrid recency blend",
                 "cities": ["BLR"],
                 "products": sorted(BLR_BLEND_PRODUCTS | BLR_RECENCY_BLEND_PRODUCTS | BLR_SEVEN_DAY_PRODUCTS),
-                "effect": "uses recent lag blends for BLR products where the global model is weaker",
+                "effect": "general-model fallback only: recent lag blends where the general model is weaker",
+            },
+            {
+                "name": "Festival guardrail",
+                "cities": sorted(FORECAST_LEAD_DAYS),
+                "products": sorted(MILK_EXPORT_PRODUCTS),
+                "effect": "festival-period profiles (HYD, BLR) and festival uplifts on every model path",
+            },
+            {
+                "name": "Discontinued products",
+                "cities": sorted(FORECAST_LEAD_DAYS),
+                "products": sorted(MILK_EXPORT_PRODUCTS),
+                "effect": f"model estimate set to 0 after {DISCONTINUED_AFTER_DAYS} days without sales",
             },
         ],
     }
@@ -1626,235 +1604,6 @@ def _apply_blr_hybrid_forecast(
         blended = (0.55 * roll_7) + (0.30 * roll_28) + (0.15 * lag_7)
         return int(round(blended)), "recent_blend_7_28_lag7"
     return prediction, "model"
-
-
-def _apply_hyd_momentum_floor(
-    prediction: int,
-    city: str,
-    product: str,
-    target_type: str,
-    features: dict,
-) -> tuple[int, int, float]:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
-        return prediction, 0, 1.0
-    if city != "HYD" or product not in HYD_MOMENTUM_PRODUCTS:
-        return prediction, 0, 1.0
-
-    day_of_week = int(features.get("day_of_week", 0) or 0)
-    # HYD milk pattern from recent actuals: Monday high, Tuesday higher,
-    # Wednesday highest. Keep this as a narrow momentum guard, not a broad uplift.
-    if day_of_week not in {0, 1, 2}:
-        return prediction, 0, 1.0
-
-    lag_1 = float(features.get("lag_1", 0) or 0)
-    trend_ratio = float(features.get("trend_ratio_7_28", 0) or 0)
-    slope = float(features.get("demand_slope_28d", 0) or 0)
-    if lag_1 <= 0 or trend_ratio <= 1.02 or slope <= 0:
-        return prediction, 0, 1.0
-
-    trend_lift = max(0.0, trend_ratio - 1.0) * 0.35
-    slope_lift = max(0.0, slope / lag_1) * 3.0
-    lift = min(0.035, max(trend_lift, slope_lift))
-    floor_qty = int(round(lag_1 * (1.0 + lift)))
-    if floor_qty <= prediction:
-        return prediction, floor_qty, 1.0
-    return floor_qty, floor_qty, round(floor_qty / max(prediction, 1), 4)
-
-
-def _apply_hyd_recent_run_rate_guard(
-    prediction: int,
-    city: str,
-    product: str,
-    target_type: str,
-    features: dict,
-) -> tuple[int, int, float]:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
-        return prediction, 0, 1.0
-    if city != "HYD" or product not in HYD_STABLE_MILK_PRODUCTS:
-        return prediction, 0, 1.0
-
-    lag_1 = float(features.get("lag_1", 0) or 0)
-    lag_7 = float(features.get("lag_7", 0) or 0)
-    roll_7 = float(features.get("roll_7_mean", 0) or 0)
-    if min(lag_1, lag_7, roll_7) <= 0:
-        return prediction, 0, 1.0
-
-    # Core HYD milk demand is high-volume and stable. For procurement, prevent
-    # weekday forecasts from drifting below the recent run-rate when live
-    # actual lags are available; this is a floor only, not a blanket uplift.
-    # Weekends have a different demand shape and are handled by same-DOW logic.
-    if int(features.get("day_of_week", 0) or 0) >= 5:
-        return prediction, 0, 1.0
-
-    floor_qty = int(round((0.60 * lag_1) + (0.25 * roll_7) + (0.15 * lag_7)))
-    if floor_qty <= prediction:
-        return prediction, floor_qty, 1.0
-    return floor_qty, floor_qty, round(floor_qty / max(prediction, 1), 4)
-
-
-def _apply_hyd_cow_lag_spike_cap(
-    prediction: int,
-    city: str,
-    product: str,
-    target_type: str,
-    features: dict,
-) -> tuple[int, int, float]:
-    """Stop one abnormal prior weekday from becoming the next forecast.
-
-    The cap is deliberately narrow: HYD Cow Milk on a normal weekday, when
-    D-7 was a known event or is at least 4% above clean older same-weekday
-    anchors. The 0.5% allowance preserves gradual growth while shrinking
-    festival/buy-once spikes such as 17 August before forecasting 24 August.
-    """
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
-        return prediction, 0, 1.0
-    if city != "HYD" or product != "Cow Milk":
-        return prediction, 0, 1.0
-    if int(features.get("day_of_week", 0) or 0) >= 5:
-        return prediction, 0, 1.0
-    if int(features.get("is_festival", 0) or 0) or int(
-        features.get("is_city_festival", 0) or 0
-    ):
-        return prediction, 0, 1.0
-
-    lag_7 = float(features.get("lag_7", 0) or 0)
-    lag_14 = float(features.get("lag_14", 0) or 0)
-    lag_28 = float(features.get("lag_28", 0) or 0)
-    roll_28 = float(features.get("roll_28_mean", 0) or 0)
-    if min(lag_7, lag_14, lag_28, roll_28) <= 0:
-        return prediction, 0, 1.0
-
-    clean_older_lags = [
-        value
-        for value, is_event in (
-            (lag_14, int(features.get("lag_14_is_event", 0) or 0)),
-            (lag_28, int(features.get("lag_28_is_event", 0) or 0)),
-        )
-        if value > 0 and not is_event
-    ]
-    if not clean_older_lags:
-        return prediction, 0, 1.0
-    older_same_dow = float(np.mean(clean_older_lags))
-    lag_7_is_event = bool(int(features.get("lag_7_is_event", 0) or 0))
-    if not lag_7_is_event and lag_7 <= older_same_dow * 1.04:
-        return prediction, 0, 1.0
-
-    # The rolling mean itself contains D-7. Do not use it as the anchor when
-    # that observation came from a festival or regional event.
-    cap_anchor = older_same_dow if lag_7_is_event else max(older_same_dow, roll_28)
-    cap_qty = int(round(cap_anchor * 1.005))
-    if prediction <= cap_qty:
-        return prediction, cap_qty, 1.0
-    return cap_qty, cap_qty, round(cap_qty / max(prediction, 1), 4)
-
-
-def _apply_hyd_a2_saturday_floor(
-    prediction: int,
-    city: str,
-    product: str,
-    target_type: str,
-    features: dict,
-) -> tuple[int, int, float]:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
-        return prediction, 0, 1.0
-    if city != "HYD" or product != "A2 Buffalo Milk":
-        return prediction, 0, 1.0
-    if int(features.get("day_of_week", 0) or 0) != 5:
-        return prediction, 0, 1.0
-
-    lag_1 = float(features.get("lag_1", 0) or 0)
-    lag_7 = float(features.get("lag_7", 0) or 0)
-    if min(lag_1, lag_7) <= 0:
-        return prediction, 0, 1.0
-
-    # Leakage-free validation on the latest 120 days gives 0.92% WAPE for
-    # a 1% Friday-to-Saturday transition, versus 1.42% for raw Friday demand.
-    floor_qty = int(round(lag_1 * 0.99))
-    if floor_qty <= prediction:
-        return prediction, floor_qty, 1.0
-    return floor_qty, floor_qty, round(floor_qty / max(prediction, 1), 4)
-
-
-def _apply_hyd_sunday_same_dow_cap(
-    prediction: int,
-    city: str,
-    product: str,
-    target_type: str,
-    features: dict,
-) -> tuple[int, int, float]:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
-        return prediction, 0, 1.0
-    if city != "HYD" or product not in HYD_STABLE_MILK_PRODUCTS:
-        return prediction, 0, 1.0
-    if int(features.get("day_of_week", 0) or 0) != 6:
-        return prediction, 0, 1.0
-
-    lag_7 = float(features.get("lag_7", 0) or 0)
-    if lag_7 <= 0:
-        return prediction, 0, 1.0
-
-    # Sunday milk sales consistently run lower than weekday demand. Cap Sunday
-    # forecasts near the latest same-weekday actual to avoid carrying weekday
-    # procurement momentum into Sunday.
-    cap_qty = int(round(lag_7 * 0.995))
-    if prediction <= cap_qty:
-        return prediction, cap_qty, 1.0
-    return cap_qty, cap_qty, round(cap_qty / max(prediction, 1), 4)
-
-
-def _apply_hyd_wednesday_peak_floor(
-    prediction: int,
-    city: str,
-    product: str,
-    target_type: str,
-    features: dict,
-) -> tuple[int, int, float]:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
-        return prediction, 0, 1.0
-    if city != "HYD" or product not in HYD_STABLE_MILK_PRODUCTS:
-        return prediction, 0, 1.0
-    if int(features.get("day_of_week", 0) or 0) != 2:
-        return prediction, 0, 1.0
-
-    lag_7 = float(features.get("lag_7", 0) or 0)
-    lag_14 = float(features.get("lag_14", 0) or 0)
-    lag_1 = float(features.get("lag_1", 0) or 0)
-    roll_7 = float(features.get("roll_7_mean", 0) or 0)
-    if min(lag_1, lag_7, lag_14, roll_7) <= 0:
-        return prediction, 0, 1.0
-
-    # HYD Wednesday is the weekly milk peak. Use same-weekday history as a
-    # conservative floor, capped by yesterday's demand so old Wednesday peaks
-    # do not override a current week-over-week decline.
-    same_dow_floor = (0.50 * lag_7) + (0.30 * lag_14) + (0.20 * roll_7)
-    recency_cap = lag_1 * 1.015
-    floor_qty = int(round(min(same_dow_floor, recency_cap)))
-    if floor_qty <= prediction:
-        return prediction, floor_qty, 1.0
-    return floor_qty, floor_qty, round(floor_qty / max(prediction, 1), 4)
-
-
-def _apply_hyd_toned_recency_cap(
-    prediction: int,
-    city: str,
-    product: str,
-    target_type: str,
-    features: dict,
-) -> tuple[int, int, float]:
-    if target_type not in PROCUREMENT_TOTAL_TARGET_TYPES:
-        return prediction, 0, 1.0
-    if city != "HYD" or product != "Toned Milk":
-        return prediction, 0, 1.0
-
-    lag_1 = float(features.get("lag_1", 0) or 0)
-    roll_7 = float(features.get("roll_7_mean", 0) or 0)
-    if min(lag_1, roll_7) <= 0:
-        return prediction, 0, 1.0
-
-    cap_qty = int(round(max(lag_1 * 1.018, roll_7 * 1.012)))
-    if prediction <= cap_qty:
-        return prediction, cap_qty, 1.0
-    return cap_qty, cap_qty, round(cap_qty / max(prediction, 1), 4)
 
 
 def _apply_festival_guardrail(
@@ -2245,55 +1994,6 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     target_type,
                     feats,
                 )
-                final_ad_hoc_pred, momentum_floor_qty, momentum_factor = _apply_hyd_momentum_floor(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                final_ad_hoc_pred, run_rate_floor_qty, run_rate_factor = _apply_hyd_recent_run_rate_guard(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                final_ad_hoc_pred, saturday_floor_qty, saturday_floor_factor = _apply_hyd_a2_saturday_floor(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                final_ad_hoc_pred, wednesday_floor_qty, wednesday_floor_factor = _apply_hyd_wednesday_peak_floor(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                final_ad_hoc_pred, sunday_cap_qty, sunday_cap_factor = _apply_hyd_sunday_same_dow_cap(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                final_ad_hoc_pred, toned_cap_qty, toned_cap_factor = _apply_hyd_toned_recency_cap(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                final_ad_hoc_pred, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
-                    final_ad_hoc_pred,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
                 final_ad_hoc_pred, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
                     final_ad_hoc_pred,
                     city,
@@ -2328,23 +2028,9 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     "blr_forecast_method": blr_forecast_method,
                     "calibration_factor": calibration_factor,
                     "dow_calibration_factor": dow_calibration_factor,
-                    "momentum_floor_qty": momentum_floor_qty,
-                    "momentum_factor": momentum_factor,
-                    "run_rate_floor_qty": run_rate_floor_qty,
-                    "run_rate_factor": run_rate_factor,
-                    "saturday_floor_qty": saturday_floor_qty,
-                    "saturday_floor_factor": saturday_floor_factor,
-                    "wednesday_floor_qty": wednesday_floor_qty,
-                    "wednesday_floor_factor": wednesday_floor_factor,
-                    "sunday_cap_qty": sunday_cap_qty,
-                    "sunday_cap_factor": sunday_cap_factor,
-                    "toned_cap_qty": toned_cap_qty,
-                    "toned_cap_factor": toned_cap_factor,
                     "festival_guardrail_name": festival_guardrail_name,
                     "festival_guardrail_factor": festival_guardrail_factor,
                     "festival_guardrail_offset": festival_guardrail_offset,
-                    "cow_spike_cap_qty": cow_spike_cap_qty,
-                    "cow_spike_cap_factor": cow_spike_cap_factor,
                 })
 
         process_batch(batch_global, meta_global, _model, FEATURE_ORDER, _model_target_type, False)
@@ -2506,55 +2192,6 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     target_type,
                     feats,
                 )
-                model_total_adhoc, momentum_floor_qty, momentum_factor = _apply_hyd_momentum_floor(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                model_total_adhoc, run_rate_floor_qty, run_rate_factor = _apply_hyd_recent_run_rate_guard(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                model_total_adhoc, saturday_floor_qty, saturday_floor_factor = _apply_hyd_a2_saturday_floor(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                model_total_adhoc, wednesday_floor_qty, wednesday_floor_factor = _apply_hyd_wednesday_peak_floor(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                model_total_adhoc, sunday_cap_qty, sunday_cap_factor = _apply_hyd_sunday_same_dow_cap(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                model_total_adhoc, toned_cap_qty, toned_cap_factor = _apply_hyd_toned_recency_cap(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
-                model_total_adhoc, cow_spike_cap_qty, cow_spike_cap_factor = _apply_hyd_cow_lag_spike_cap(
-                    model_total_adhoc,
-                    city,
-                    product,
-                    target_type,
-                    feats,
-                )
                 model_total_adhoc, festival_guardrail_name, festival_guardrail_factor, festival_guardrail_offset = _apply_festival_guardrail(
                     model_total_adhoc,
                     city,
@@ -2597,23 +2234,9 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     ),
                     "calibration_factor": calibration_factor,
                     "dow_calibration_factor": dow_calibration_factor,
-                    "momentum_floor_qty": momentum_floor_qty,
-                    "momentum_factor": momentum_factor,
-                    "run_rate_floor_qty": run_rate_floor_qty,
-                    "run_rate_factor": run_rate_factor,
-                    "saturday_floor_qty": saturday_floor_qty,
-                    "saturday_floor_factor": saturday_floor_factor,
-                    "wednesday_floor_qty": wednesday_floor_qty,
-                    "wednesday_floor_factor": wednesday_floor_factor,
-                    "sunday_cap_qty": sunday_cap_qty,
-                    "sunday_cap_factor": sunday_cap_factor,
-                    "toned_cap_qty": toned_cap_qty,
-                    "toned_cap_factor": toned_cap_factor,
                     "festival_guardrail_name": festival_guardrail_name,
                     "festival_guardrail_factor": festival_guardrail_factor,
                     "festival_guardrail_offset": festival_guardrail_offset,
-                    "cow_spike_cap_qty": cow_spike_cap_qty,
-                    "cow_spike_cap_factor": cow_spike_cap_factor,
                     "prediction_source": pred_source,
                     "blr_forecast_method": blr_forecast_method,
                     "subscription_qty": int(round(sub_dict.get((city, product), 0))),

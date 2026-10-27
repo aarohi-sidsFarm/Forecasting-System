@@ -251,45 +251,6 @@ class OperationalForecastPolicyTests(unittest.TestCase):
         self.assertEqual(int(result.iloc[0]["wallet_unknown_qty"]), 10)
         self.assertEqual(int(result.iloc[0]["unconfirmed_qty"]), 40)
 
-    def test_hyd_a2_saturday_floor_uses_validated_transition(self):
-        forecast, floor, factor = main._apply_hyd_a2_saturday_floor(
-            16570,
-            "HYD",
-            "A2 Buffalo Milk",
-            "procurement_final_total",
-            {
-                "day_of_week": 5,
-                "lag_1": 17070,
-                "lag_7": 16794,
-            },
-        )
-        self.assertEqual(forecast, 16899)
-        self.assertEqual(floor, 16899)
-        self.assertGreater(factor, 1)
-
-    def test_hyd_cow_outlier_lag_is_capped_by_older_same_dow_history(self):
-        forecast, cap, factor = main._apply_hyd_cow_lag_spike_cap(
-            10121,
-            "HYD",
-            "Cow Milk",
-            "procurement_final_total",
-            {
-                "day_of_week": 0,
-                "lag_7": 10105,
-                "lag_14": 9497,
-                "lag_28": 9408,
-                "roll_28_mean": 9524,
-                "is_festival": 0,
-                "is_city_festival": 0,
-                "lag_7_is_event": 1,
-                "lag_14_is_event": 0,
-                "lag_28_is_event": 0,
-            },
-        )
-        self.assertEqual(cap, 9500)
-        self.assertEqual(forecast, 9500)
-        self.assertAlmostEqual(factor, 0.9386, places=4)
-
     def test_normal_target_knows_when_its_d7_lag_was_a_festival(self):
         features = main._build_model_features(
             "HYD", "Cow Milk", pd.Timestamp("2026-08-24"), True, {}, {}
@@ -297,25 +258,6 @@ class OperationalForecastPolicyTests(unittest.TestCase):
         self.assertEqual(features["is_festival"], 0)
         self.assertEqual(features["is_city_festival"], 0)
         self.assertEqual(features["lag_7_is_event"], 1)
-
-    def test_hyd_cow_cap_does_not_change_normal_or_festival_demand(self):
-        normal = main._apply_hyd_cow_lag_spike_cap(
-            9700, "HYD", "Cow Milk", "procurement_final_total",
-            {
-                "day_of_week": 0, "lag_7": 9600, "lag_14": 9500,
-                "lag_28": 9450, "roll_28_mean": 9500,
-            },
-        )
-        festival = main._apply_hyd_cow_lag_spike_cap(
-            10121, "HYD", "Cow Milk", "procurement_final_total",
-            {
-                "day_of_week": 0, "lag_7": 10105, "lag_14": 9497,
-                "lag_28": 9408, "roll_28_mean": 9524,
-                "is_city_festival": 1,
-            },
-        )
-        self.assertEqual(normal, (9700, 0, 1.0))
-        self.assertEqual(festival, (10121, 0, 1.0))
 
     def test_city_target_dates_follow_required_lead_times(self):
         targets = main._operational_target_dates(pd.Timestamp("2026-08-07"))
