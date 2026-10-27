@@ -6,26 +6,26 @@ import argparse
 import asyncio
 import json
 import sys
-from datetime import datetime
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from backend.forecast_history import export_run  # noqa: E402
-from backend.main import issue_daily_operational_forecast  # noqa: E402
+from backend.main import default_issue_date, issue_daily_operational_forecast  # noqa: E402
 
 
 def main() -> None:
-    today_ist = datetime.now(ZoneInfo("Asia/Kolkata")).date().isoformat()
+    # A late-starting nightly run (after midnight) still issues for the
+    # evening it was scheduled for.
+    default_date = str(default_issue_date().date())
     parser = argparse.ArgumentParser(
         description=(
             "Issue HYD/VGA D-2 and BLR/PNQ D-3 forecasts atomically. "
             "An existing successful issuance is never overwritten."
         )
     )
-    parser.add_argument("--issue-date", default=today_ist)
+    parser.add_argument("--issue-date", default=default_date)
     parser.add_argument(
         "--use-cache",
         action="store_true",

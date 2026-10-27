@@ -5,10 +5,14 @@ name: Daily forecast issuance
 # Replaces the Windows scheduled task, so no PC has to be on at night.
 on:
   schedule:
-    # 22:05 IST, plus a 22:50 IST retry. The retry is a no-op once the
-    # first run has committed the day's file.
+    # 22:05 IST, with retries at 22:50, 23:35 and 01:35 IST. A retry is a
+    # no-op once a run has committed the day's file. GitHub can start
+    # scheduled runs hours late; a run before noon IST issues for the
+    # previous evening (see LATE_ISSUANCE_UNTIL_HOUR in backend/main.py).
     - cron: "35 16 * * *"
     - cron: "20 17 * * *"
+    - cron: "5 18 * * *"
+    - cron: "5 20 * * *"
   workflow_dispatch:
 
 concurrency:

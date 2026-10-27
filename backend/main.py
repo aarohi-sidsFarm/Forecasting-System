@@ -2896,15 +2896,36 @@ def _redash_fetch_metadata(target_date: str) -> dict:
     return result
 
 
+# GitHub Actions can start a 22:05 scheduled run hours late, past midnight.
+# Until this hour (IST) a run still belongs to the previous evening's
+# issuance. Buy-once orders stay cut off at 22:05 by Query 3086, and only
+# actuals completed before the issue date are used, so a late run sees the
+# same demand inputs except for subscription changes made overnight.
+LATE_ISSUANCE_UNTIL_HOUR = 12
+
+
+def default_issue_date(now: pd.Timestamp | None = None) -> pd.Timestamp:
+    """The issuance a run made now belongs to."""
+    now = now if now is not None else pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    today = now.normalize()
+    return today - pd.Timedelta(days=1) if now.hour < LATE_ISSUANCE_UNTIL_HOUR else today
+
+
+def _issue_date_allowed(issue_dt: pd.Timestamp, now: pd.Timestamp | None = None) -> bool:
+    now = now if now is not None else pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    return issue_dt == now.normalize() or issue_dt == default_issue_date(now)
+
+
 async def _issue_daily_operational_forecast_once(
     issue_date: str,
     *,
     force_refresh: bool = True,
 ) -> dict:
     issue_dt = _parse_forecast_date(issue_date)
-    if issue_dt != _today_ist():
+    if not _issue_date_allowed(issue_dt):
         raise ValueError(
-            "Official issuance must run on its actual issue date; "
+            "Official issuance must run on its issue date (or before "
+            f"{LATE_ISSUANCE_UNTIL_HOUR}:00 the next morning); "
             f"today is {_today_ist().date()}"
         )
     existing = await run_in_threadpool(
