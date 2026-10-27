@@ -25,6 +25,13 @@ class LateIssuanceTests(unittest.TestCase):
         now = pd.Timestamp("2026-10-27 03:10")
         self.assertFalse(main._issue_date_allowed(pd.Timestamp("2026-10-28"), now))
 
+    def test_today_is_not_issued_before_the_2205_cutoff(self):
+        # 27 Oct 2026: a re-run at 10:15 locked that day's forecast 12 hours early.
+        self.assertTrue(main.issuance_before_cutoff(pd.Timestamp("2026-10-27"), pd.Timestamp("2026-10-27 10:15")))
+        self.assertTrue(main.issuance_before_cutoff(pd.Timestamp("2026-10-27"), pd.Timestamp("2026-10-27 22:04")))
+        self.assertFalse(main.issuance_before_cutoff(pd.Timestamp("2026-10-27"), pd.Timestamp("2026-10-27 22:05")))
+        self.assertFalse(main.issuance_before_cutoff(pd.Timestamp("2026-10-26"), pd.Timestamp("2026-10-27 03:10")))
+
 
 if __name__ == "__main__":
     unittest.main()

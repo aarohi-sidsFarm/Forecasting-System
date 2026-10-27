@@ -5,14 +5,21 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 import sys
 from pathlib import Path
+
+import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from backend.forecast_history import export_run  # noqa: E402
-from backend.main import default_issue_date, issue_daily_operational_forecast  # noqa: E402
+from backend.main import (  # noqa: E402
+    default_issue_date,
+    issuance_before_cutoff,
+    issue_daily_operational_forecast,
+)
 
 
 def main() -> None:
@@ -36,7 +43,24 @@ def main() -> None:
         action="store_true",
         help="Also write the run to backend/issued_forecasts/<issue_date>.json.",
     )
+    parser.add_argument(
+        "--allow-early",
+        action="store_true",
+        help="Issue before today's 22:05 cutoff (misses orders placed after now).",
+    )
     args = parser.parse_args()
+    if issuance_before_cutoff(pd.Timestamp(args.issue_date)) and not args.allow_early:
+        message = (
+            f"Not issuing {args.issue_date} yet: the 22:05 cutoff has not passed, so "
+            "orders placed later today would be missed. The 22:05 run will issue it; "
+            "pass --allow-early (or allow_early in Run workflow) to issue now anyway."
+        )
+        print(message)
+        summary = os.getenv("GITHUB_STEP_SUMMARY")
+        if summary:
+            with open(summary, "a", encoding="utf-8") as handle:
+                handle.write(message + "\n")
+        return
     result = asyncio.run(issue_daily_operational_forecast(
         args.issue_date,
         force_refresh=not args.use_cache,

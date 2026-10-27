@@ -2615,6 +2615,20 @@ def default_issue_date(now: pd.Timestamp | None = None) -> pd.Timestamp:
     return today - pd.Timedelta(days=1) if now.hour < LATE_ISSUANCE_UNTIL_HOUR else today
 
 
+# Buy-once orders for the issued dates keep arriving until 22:05 (Query 3086),
+# and the model estimates only what is still unknown at that cutoff.
+ISSUANCE_CUTOFF_HOUR, ISSUANCE_CUTOFF_MINUTE = 22, 5
+
+
+def issuance_before_cutoff(issue_dt: pd.Timestamp, now: pd.Timestamp | None = None) -> bool:
+    """True when issuing issue_dt now would miss orders placed before 22:05."""
+    now = now if now is not None else pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    cutoff = pd.Timestamp(issue_dt).normalize() + pd.Timedelta(
+        hours=ISSUANCE_CUTOFF_HOUR, minutes=ISSUANCE_CUTOFF_MINUTE
+    )
+    return now < cutoff
+
+
 def _issue_date_allowed(issue_dt: pd.Timestamp, now: pd.Timestamp | None = None) -> bool:
     now = now if now is not None else pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
     return issue_dt == now.normalize() or issue_dt == default_issue_date(now)

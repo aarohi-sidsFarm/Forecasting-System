@@ -13,7 +13,14 @@ on:
     - cron: "20 17 * * *"
     - cron: "5 18 * * *"
     - cron: "5 20 * * *"
+  # Use "Run workflow", not "Re-run" on an old run: a re-run uses the code
+  # of the commit that run started on.
   workflow_dispatch:
+    inputs:
+      allow_early:
+        description: "Issue today's forecast before the 22:05 cutoff"
+        type: boolean
+        default: false
 
 concurrency:
   group: daily-issuance
@@ -56,7 +63,7 @@ jobs:
         run: python scripts/audit_festival_calendar.py --as-of "$(date +%F)" --lookahead-days 45
 
       - name: Issue today's forecast
-        run: python scripts/issue_daily_forecasts.py --export-ledger
+        run: python scripts/issue_daily_forecasts.py --export-ledger ${{ inputs.allow_early && '--allow-early' || '' }}
 
       - name: Commit the issued forecast
         id: commit
