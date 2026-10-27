@@ -1432,6 +1432,32 @@ def _history_visible(date: pd.Timestamp) -> bool:
     return as_of is None or pd.Timestamp(date).normalize() <= as_of
 
 
+# A series with no sales on any of its last DISCONTINUED_AFTER_DAYS completed
+# days is treated as discontinued and its model estimate set to 0 (placed
+# subscriptions and buy-once orders still count). Without this the models
+# keep forecasting PNQ Double Toned, Skim and Toned Milk, which stopped
+# selling; a retrained general model put PNQ Toned at 21x actual.
+DISCONTINUED_AFTER_DAYS = 28
+DISCONTINUED_MIN_OBSERVED_DAYS = 21
+
+
+def _series_discontinued(city, product, recent_actuals=None) -> bool:
+    observed = {}
+    data = _train_lookup.get((city, product))
+    if data:
+        for date, qty in zip(data["dates"][-120:], data["qty"][-120:]):
+            observed[pd.Timestamp(date).normalize()] = float(qty)
+    for (row_city, row_product, date), qty in (recent_actuals or {}).items():
+        if row_city == city and row_product == product:
+            observed[pd.Timestamp(date).normalize()] = float(qty)
+    visible = {date: qty for date, qty in observed.items() if _history_visible(date)}
+    if not visible:
+        return False
+    window_start = max(visible) - pd.Timedelta(days=DISCONTINUED_AFTER_DAYS - 1)
+    window = [qty for date, qty in visible.items() if date >= window_start]
+    return len(window) >= DISCONTINUED_MIN_OBSERVED_DAYS and sum(window) == 0
+
+
 def _get_lag_features(city, product, ref_date, future_preds=None, recent_actuals=None, fallback_val=0.0):
     if future_preds is None:
         future_preds = {}
@@ -2267,6 +2293,8 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     pred_dt,
                     feats,
                 )
+                if _series_discontinued(city, product, recent_actuals):
+                    final_ad_hoc_pred = 0
                 future_preds[(city, product, pred_dt)] = final_ad_hoc_pred
                 if pred_dt not in forecast_dates:
                     continue
@@ -2341,6 +2369,8 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
                     ) = _apply_festival_guardrail(
                         total_prediction, city, product, target_date, {}
                     )
+                    if _series_discontinued(city, product, recent_actuals):
+                        total_prediction = 0
                     key = (city, product, str(target_date.date()))
                     visible = int(round(
                         sub_dict.get((city, product), 0)
@@ -2524,6 +2554,8 @@ def build_model_diagnostics_for_date(dt, sub_df, known_df, recent_df=None) -> li
                     current_dt,
                     feats,
                 )
+                if _series_discontinued(city, product, recent_actuals):
+                    model_total_adhoc = 0
                 future_preds[(city, product, current_dt)] = model_total_adhoc
                 if current_dt != dt:
                     continue
