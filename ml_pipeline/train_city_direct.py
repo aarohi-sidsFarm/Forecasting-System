@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import pickle
+import sys
 from pathlib import Path
 
 import lightgbm as lgb
@@ -14,6 +15,9 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from backend.direct_features import RELATIVE_FEATURES, add_relative_features  # noqa: E402
+
 MODEL_DIR = ROOT / "backend/ml_models"
 DATA = MODEL_DIR / "training_filled.csv"
 FEATURE_DATA = MODEL_DIR / "training_features.csv"
@@ -133,6 +137,10 @@ def main() -> None:
     parser.add_argument("--city", required=True)
     parser.add_argument("--lead-days", required=True, type=int)
     parser.add_argument("--holdout-days", type=int, default=90)
+    parser.add_argument(
+        "--relative-features", action="store_true",
+        help="scale-free inputs (backend/direct_features.py)",
+    )
     parser.add_argument("--products", nargs="+")
     parser.add_argument("--artifact-name")
     args = parser.parse_args()
@@ -149,6 +157,10 @@ def main() -> None:
         source = source[source.product_name.isin(args.products)].copy()
         features = features[features.product_name.isin(args.products)].copy()
     dataset, encoder = make_dataset(source, features, city, args.lead_days)
+    feature_names = FEATURES
+    if args.relative_features:
+        dataset = add_relative_features(dataset)
+        feature_names = RELATIVE_FEATURES
     cutoff = dataset.target_date.max() - pd.Timedelta(days=args.holdout_days - 1)
     train = dataset[dataset.target_date.lt(cutoff)].copy()
     valid = dataset[dataset.target_date.ge(cutoff)].copy()
@@ -179,12 +191,12 @@ def main() -> None:
             "verbose": -1, "seed": 42, "deterministic": True,
             "force_col_wise": True,
         },
-        lgb.Dataset(train[FEATURES], label=train.actual_qty / train_scale, weight=weights),
+        lgb.Dataset(train[feature_names], label=train.actual_qty / train_scale, weight=weights),
         num_boost_round=1800,
-        valid_sets=[lgb.Dataset(valid[FEATURES], label=valid.actual_qty / valid_scale)],
+        valid_sets=[lgb.Dataset(valid[feature_names], label=valid.actual_qty / valid_scale)],
         callbacks=[lgb.early_stopping(100, verbose=False)],
     )
-    valid["model"] = np.clip(model.predict(valid[FEATURES]), 0, None) * valid_scale.to_numpy()
+    valid["model"] = np.clip(model.predict(valid[feature_names]), 0, None) * valid_scale.to_numpy()
     selector = {}
     product_metrics = {}
     for product, group in valid.groupby("product_name"):
@@ -229,7 +241,7 @@ def main() -> None:
             "force_col_wise": True,
         },
         lgb.Dataset(
-            dataset[FEATURES],
+            dataset[feature_names],
             label=dataset.actual_qty / final_scale,
             weight=final_weights,
         ),
@@ -239,7 +251,8 @@ def main() -> None:
         "city": city, "lead_days": args.lead_days,
         "completed_actual_gap_days": args.lead_days + 1,
         "model": final_model, "product_encoder": encoder,
-        "features": FEATURES, "selector": selector,
+        "features": feature_names, "selector": selector,
+        "feature_transform": "relative" if args.relative_features else "raw",
         "metrics": metrics,
         "trained_through": str(source.target_date.max().date()),
     }

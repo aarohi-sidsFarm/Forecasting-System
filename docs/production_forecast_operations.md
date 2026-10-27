@@ -188,6 +188,27 @@ registry.
    (add `--only <file>.pkl` to promote a subset), then commit `backend/ml_models`.
 3. `python scripts/model_registry.py show` lists what is live and why.
 
+### Scale-free direct models (option, not live)
+
+`train_city_direct.py --relative-features` trains the direct models on inputs
+divided by each product's trailing 28-day mean, without month, week or day of
+month (`backend/direct_features.py`). The backend uses them automatically for
+an artifact with `feature_transform: relative`.
+
+Tested 2026-10-27, as issued:
+
+| Test | HYD daily error | BLR daily error |
+|---|---|---|
+| Trained to 8 Sep, scored 9 Sep - 26 Oct: raw inputs | 4.58% | 4.73% |
+| Same, scale-free inputs | 3.29% | 3.85% |
+| Trained to 4 Oct, scored 5 - 26 Oct: live models | 4.05% | 5.36% |
+| Same, raw retrain | 3.90% | 6.36% |
+| Same, scale-free retrain | 4.34% | 5.76% |
+
+Scale-free inputs remove most of the drift a raw retrain picks up, but did not
+beat the live models, so they are not promoted. Include them in the next
+retraining comparison.
+
 ## Promotion gate
 
 A challenger may enter manual promotion review only after at least 28 completed

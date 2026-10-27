@@ -16,12 +16,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 
 try:
+    from backend.direct_features import add_relative_features
     from backend.forecast_history import (
         issued_forecast_for_date,
         issued_run_for_issue_date,
         record_run as record_forecast_run,
     )
 except ModuleNotFoundError:
+    from direct_features import add_relative_features
     from forecast_history import (
         issued_forecast_for_date,
         issued_run_for_issue_date,
@@ -2065,6 +2067,8 @@ def _predict_city_direct(
         "recent_mean": roll_7,
     }
     frame = pd.DataFrame([row])
+    if artifact.get("feature_transform") == "relative":
+        frame = add_relative_features(frame)
     # The model is trained on qty / roll_28_mean (see ml_pipeline/train_city_direct.py)
     # so a leaf can only ever output a multiple of this row's own recent level,
     # not an absolute value borrowed from a differently-scaled product.
