@@ -59,14 +59,37 @@ jobs:
         run: python scripts/issue_daily_forecasts.py --export-ledger
 
       - name: Commit the issued forecast
+        id: commit
         run: |
           git add backend/issued_forecasts
           if git diff --cached --quiet; then
             echo "Nothing new to commit (already issued)."
             exit 0
           fi
+          # Named after the ledger file: a late run issues the previous day.
+          issued=$(basename "$(git diff --cached --name-only | head -1)" .json)
           git config user.name "forecast-issuance-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Issue forecast for $(date +%F)"
+          git commit -m "Issue forecast for ${issued}"
           git pull --rebase origin main
           git push origin HEAD:main
+          echo "issued=${issued}" >> "$GITHUB_OUTPUT"
+
+      # Once per night: only after a run that issued something new.
+      - name: Check recent accuracy
+        if: steps.commit.outputs.issued != ''
+        continue-on-error: true
+        env:
+          GOOGLE_CHAT_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+        run: python scripts/check_forecast_accuracy.py
+
+      - name: Tell the team the issuance failed
+        if: failure()
+        env:
+          GOOGLE_CHAT_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$GOOGLE_CHAT_WEBHOOK_URL" ]; then exit 0; fi
+          curl -sS -X POST -H "Content-Type: application/json; charset=UTF-8" \
+            -d "{\"text\": \"Order forecast issuance failed. A later retry may still succeed. Log: ${RUN_URL}\"}" \
+            "$GOOGLE_CHAT_WEBHOOK_URL"
