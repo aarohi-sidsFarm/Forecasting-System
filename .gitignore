@@ -17,3 +17,4 @@ frontend/dist/
 .DS_Store
 Thumbs.db
 data/raw/redash_exports/.pending_training_fetch.json
+backend/ml_models/candidates/

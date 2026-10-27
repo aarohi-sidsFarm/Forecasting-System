@@ -172,6 +172,22 @@ artifact on startup when present; restart the backend after deploying both the
 artifact and code. Only the listed products use it; all other HYD products
 continue using `hyd_d2_direct.pkl`.
 
+### Candidates and the model registry
+
+All training scripts write to `backend/ml_models/candidates/` (git-ignored), so
+training never replaces a live model. `backend/ml_models/model_registry.json`
+records each live model's checksum, training end date, promotion date and the
+reason for promoting it; the test suite fails if a live `.pkl` differs from the
+registry.
+
+1. Train, then backtest the candidates as issued:
+   `FORECAST_MODEL_ARTIFACT_DIR=backend/ml_models/candidates python scripts/backtest_as_issued.py --start ... --end ... --output-dir reports/candidate`
+   and the same command without the variable for the live models.
+2. If the candidates pass the promotion gate below:
+   `python scripts/model_registry.py promote --note "<the backtest numbers>"`
+   (add `--only <file>.pkl` to promote a subset), then commit `backend/ml_models`.
+3. `python scripts/model_registry.py show` lists what is live and why.
+
 ## Promotion gate
 
 A challenger may enter manual promotion review only after at least 28 completed

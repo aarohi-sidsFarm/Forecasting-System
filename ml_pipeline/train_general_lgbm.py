@@ -12,6 +12,11 @@ warnings.filterwarnings("ignore")
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(PROJECT_DIR, "backend", "ml_models")
+# Trained models go to candidates/ and are promoted with
+# scripts/model_registry.py after the as-issued backtest, so training
+# never overwrites the live models.
+OUTPUT_DIR = os.getenv("FORECAST_MODEL_OUTPUT_DIR") or os.path.join(DATA_DIR, "candidates")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 FEATURE_PATH = os.path.join(DATA_DIR, "training_features.csv")
 
 df = pd.read_csv(FEATURE_PATH, parse_dates=["target_date"])
@@ -193,7 +198,7 @@ print("\n=== TOP FEATURE IMPORTANCE ===")
 imp = pd.Series(model.feature_importance(importance_type="gain"), index=feature_cols)
 print(imp.sort_values(ascending=False).head(10).to_string())
 
-model_path = os.path.join(DATA_DIR, "lgbm_model.pkl")
+model_path = os.path.join(OUTPUT_DIR, "lgbm_model.pkl")
 with open(model_path, "wb") as f:
     pickle.dump(
         {
@@ -204,14 +209,15 @@ with open(model_path, "wb") as f:
             "target_type": target_type,
             "calibration": calibration,
             "dow_calibration": dow_calibration,
+            "trained_through": str(df["target_date"].max().date()),
         },
         f,
     )
 
 test[["target_date", "city_cd", "product_name", target, "pred_qty"]].to_csv(
-    os.path.join(DATA_DIR, "test_predictions.csv"),
+    os.path.join(OUTPUT_DIR, "test_predictions.csv"),
     index=False,
 )
 
 print(f"\nModel saved : {model_path}")
-print(f"Predictions : {os.path.join(DATA_DIR, 'test_predictions.csv')}")
+print(f"Predictions : {os.path.join(OUTPUT_DIR, 'test_predictions.csv')}")

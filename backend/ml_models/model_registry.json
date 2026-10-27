@@ -1,0 +1,40 @@
+{
+  "history": [],
+  "models": {
+    "blr_d3_direct.pkl": {
+      "description": "BLR D-3 direct model",
+      "note": "Recorded when the registry was created (2026-10-27); in production before then.",
+      "promoted_at": "2026-09-09",
+      "sha256": "71da791d3142f6466df1caf59781253d3a989c2bca5eae8831a34162fbf65585",
+      "trained_through": "2026-09-08"
+    },
+    "hyd_d2_direct.pkl": {
+      "description": "HYD D-2 direct model",
+      "note": "Recorded when the registry was created (2026-10-27); in production before then.",
+      "promoted_at": "2026-09-09",
+      "sha256": "fed70d7ef047e8339f1341af2993b038dc0b78c7b88ae07c1f9c3f2ed6efab14",
+      "trained_through": "2026-09-08"
+    },
+    "hyd_d2_direct_focus_direct.pkl": {
+      "description": "HYD D-2 direct model, A2 Buffalo / Cow / Toned",
+      "note": "Recorded when the registry was created (2026-10-27); in production before then.",
+      "promoted_at": "2026-10-10",
+      "sha256": "ece9cb5ebf878e583e0925810bce4b066bf24fd6c936294d4f48af634648f3e0",
+      "trained_through": "2026-10-04"
+    },
+    "lgbm_model.pkl": {
+      "description": "General recursive model (all cities)",
+      "note": "Recorded when the registry was created (2026-10-27); in production before then.",
+      "promoted_at": "2026-09-09",
+      "sha256": "f762073c3e54e00304186cdc42a2d2632f14ecff64384a410599bb93ea496ced",
+      "trained_through": "2026-09-08"
+    },
+    "lgbm_model_hyd.pkl": {
+      "description": "HYD recursive model",
+      "note": "Recorded when the registry was created (2026-10-27); in production before then.",
+      "promoted_at": "2026-09-09",
+      "sha256": "6a207e1eaa0a4e2e782e50a3830f1dbadccd7c9bf78317e46afb968064b12831",
+      "trained_through": "2026-09-08"
+    }
+  }
+}

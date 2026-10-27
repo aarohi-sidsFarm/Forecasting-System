@@ -178,8 +178,12 @@ BLR_BLEND_PRODUCTS = {
 BLR_RECENCY_BLEND_PRODUCTS = {"Curd", "Skim Milk", "Toned Milk"}
 BLR_SEVEN_DAY_PRODUCTS = {"A2 Desi Cow Milk"}
 
+# Model .pkl files only; point at backend/ml_models/candidates to backtest
+# freshly trained models before promoting them (scripts/model_registry.py).
+MODEL_ARTIFACT_DIR = os.getenv("FORECAST_MODEL_ARTIFACT_DIR") or MODEL_DIR
+
 print("Loading model + data at startup...")
-with open(os.path.join(MODEL_DIR, "lgbm_model.pkl"), "rb") as f:
+with open(os.path.join(MODEL_ARTIFACT_DIR, "lgbm_model.pkl"), "rb") as f:
     _saved = pickle.load(f)
 _model = _saved["model"]
 _le_city = _saved["le_city"]
@@ -189,7 +193,7 @@ _model_target_type = _saved.get("target_type", "total_adhoc")
 _model_calibration = _saved.get("calibration", {})
 _model_dow_calibration = _saved.get("dow_calibration", {})
 
-with open(os.path.join(MODEL_DIR, "lgbm_model_hyd.pkl"), "rb") as f:
+with open(os.path.join(MODEL_ARTIFACT_DIR, "lgbm_model_hyd.pkl"), "rb") as f:
     _saved_hyd = pickle.load(f)
 _model_hyd = _saved_hyd["model"]
 _le_product_hyd = _saved_hyd["le_product"]
@@ -210,7 +214,7 @@ _enc_product = _encoder_lookup(_le_product)
 _enc_city_prod = _encoder_lookup(_le_city_prod)
 _enc_product_hyd = _encoder_lookup(_le_product_hyd)
 
-BLR_D3_DIRECT_PATH = os.path.join(MODEL_DIR, "blr_d3_direct.pkl")
+BLR_D3_DIRECT_PATH = os.path.join(MODEL_ARTIFACT_DIR, "blr_d3_direct.pkl")
 BLR_D3_DIRECT_ENABLED = os.getenv("BLR_D3_DIRECT_ENABLED", "true").lower() in {
     "1", "true", "yes", "on",
 }
@@ -220,7 +224,7 @@ if os.path.exists(BLR_D3_DIRECT_PATH):
 else:
     _blr_d3_direct = None
 
-HYD_D2_DIRECT_PATH = os.path.join(MODEL_DIR, "hyd_d2_direct.pkl")
+HYD_D2_DIRECT_PATH = os.path.join(MODEL_ARTIFACT_DIR, "hyd_d2_direct.pkl")
 HYD_D2_DIRECT_ENABLED = os.getenv("HYD_D2_DIRECT_ENABLED", "true").lower() in {
     "1", "true", "yes", "on",
 }
@@ -229,7 +233,7 @@ if os.path.exists(HYD_D2_DIRECT_PATH):
         _hyd_d2_direct = pickle.load(f)
 else:
     _hyd_d2_direct = None
-HYD_D2_FOCUS_PATH = os.path.join(MODEL_DIR, "hyd_d2_direct_focus_direct.pkl")
+HYD_D2_FOCUS_PATH = os.path.join(MODEL_ARTIFACT_DIR, "hyd_d2_direct_focus_direct.pkl")
 if os.path.exists(HYD_D2_FOCUS_PATH):
     with open(HYD_D2_FOCUS_PATH, "rb") as f:
         _hyd_d2_focus_direct = pickle.load(f)

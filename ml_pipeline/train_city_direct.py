@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import pickle
 from pathlib import Path
 
@@ -16,6 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL_DIR = ROOT / "backend/ml_models"
 DATA = MODEL_DIR / "training_filled.csv"
 FEATURE_DATA = MODEL_DIR / "training_features.csv"
+# See train_general_lgbm.py: models go to candidates/ until promoted.
+OUTPUT_DIR = Path(os.getenv("FORECAST_MODEL_OUTPUT_DIR") or MODEL_DIR / "candidates")
 
 FEATURES = [
     "product_enc", "day_of_week", "day_of_month", "month", "week_of_year",
@@ -243,10 +246,11 @@ def main() -> None:
     stem = args.artifact_name or f"{city.lower()}_d{args.lead_days}_direct"
     if Path(stem).name != stem or not stem.endswith("_direct"):
         raise ValueError("--artifact-name must be a file stem ending in '_direct'")
-    with (MODEL_DIR / f"{stem}.pkl").open("wb") as handle:
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    with (OUTPUT_DIR / f"{stem}.pkl").open("wb") as handle:
         pickle.dump(artifact, handle)
-    valid.to_csv(MODEL_DIR / f"{stem}_backtest.csv", index=False)
-    (MODEL_DIR / f"{stem}_metrics.json").write_text(
+    valid.to_csv(OUTPUT_DIR / f"{stem}_backtest.csv", index=False)
+    (OUTPUT_DIR / f"{stem}_metrics.json").write_text(
         json.dumps(metrics, indent=2), encoding="utf-8"
     )
     print(json.dumps(metrics, indent=2))

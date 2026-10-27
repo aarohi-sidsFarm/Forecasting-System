@@ -12,6 +12,11 @@ warnings.filterwarnings("ignore")
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(PROJECT_DIR, "backend", "ml_models")
+# Trained models go to candidates/ and are promoted with
+# scripts/model_registry.py after the as-issued backtest, so training
+# never overwrites the live models.
+OUTPUT_DIR = os.getenv("FORECAST_MODEL_OUTPUT_DIR") or os.path.join(DATA_DIR, "candidates")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 FEATURE_PATH = os.path.join(DATA_DIR, "training_features.csv")
 
 df = pd.read_csv(FEATURE_PATH, parse_dates=["target_date"])
@@ -192,7 +197,7 @@ if target_type == "procurement_final_total":
     for key, factor in sorted(dow_calibration.items()):
         print(f"  {key}: {factor:.4f}")
 
-hyd_model_path = os.path.join(DATA_DIR, "lgbm_model_hyd.pkl")
+hyd_model_path = os.path.join(OUTPUT_DIR, "lgbm_model_hyd.pkl")
 with open(hyd_model_path, "wb") as f:
     pickle.dump(
         {
@@ -201,6 +206,7 @@ with open(hyd_model_path, "wb") as f:
             "target_type": target_type,
             "calibration": calibration,
             "dow_calibration": dow_calibration,
+            "trained_through": str(df["target_date"].max().date()),
         },
         f,
     )
