@@ -16,11 +16,15 @@ from sklearn.preprocessing import LabelEncoder
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from backend.data_gaps import fill_gap_days, gap_days_in_frame  # noqa: E402
 from backend.direct_features import RELATIVE_FEATURES, add_relative_features  # noqa: E402
 
 MODEL_DIR = ROOT / "backend/ml_models"
-DATA = MODEL_DIR / "training_filled.csv"
-FEATURE_DATA = MODEL_DIR / "training_features.csv"
+# FORECAST_TRAINING_DATA_DIR points at a cut-down copy of the two CSVs to
+# train a candidate that has not seen a holdout period.
+_DATA_DIR = Path(os.getenv("FORECAST_TRAINING_DATA_DIR") or MODEL_DIR)
+DATA = _DATA_DIR / "training_filled.csv"
+FEATURE_DATA = _DATA_DIR / "training_features.csv"
 # See train_general_lgbm.py: models go to candidates/ until promoted.
 OUTPUT_DIR = Path(os.getenv("FORECAST_MODEL_OUTPUT_DIR") or MODEL_DIR / "candidates")
 
@@ -149,6 +153,12 @@ def main() -> None:
         raise ValueError("--lead-days must be positive")
 
     source = pd.read_csv(DATA, parse_dates=["target_date"])
+    # Days missing from the sales data (e.g. 9 Nov 2026) would teach the
+    # model a fake collapse; fill them the way the backend does.
+    gaps = gap_days_in_frame(source)
+    if gaps:
+        print("Filling missing-data days: " + ", ".join(f"{c} {d.date()}" for c, d in sorted(gaps)))
+        source = fill_gap_days(source, gaps)
     features = pd.read_csv(FEATURE_DATA, parse_dates=["target_date"])
     if args.products:
         unknown_products = sorted(set(args.products) - set(source.product_name))

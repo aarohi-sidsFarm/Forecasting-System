@@ -52,8 +52,10 @@ def build(start: str, end: str) -> pd.DataFrame:
             & forecast["product_name"].isin(app.MILK_EXPORT_PRODUCTS)
         ]
         forecast["forecast_date"] = target
+        # A day missing from the sales data has no real actual to score.
         forecast["actual_qty"] = [
-            float(actuals.get((target, row.city_cd, row.product_name), np.nan))
+            np.nan if (row.city_cd, target) in app._DATA_GAP_DAYS
+            else float(actuals.get((target, row.city_cd, row.product_name), np.nan))
             for row in forecast.itertuples()
         ]
         forecast["is_event_day"] = [

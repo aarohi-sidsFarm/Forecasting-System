@@ -2091,6 +2091,7 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
         process_batch(batch_global, meta_global, _model, FEATURE_ORDER, _model_target_type, False)
         process_batch(batch_hyd, meta_hyd, _model_hyd, FEATURE_ORDER_HYD, _model_hyd_target_type, True)
 
+    replaced_keys = set()
     direct_routes = []
     if BLR_D3_DIRECT_ENABLED and _blr_d3_direct is not None:
         direct_routes.append(("BLR", _predict_blr_d3_direct))
@@ -2099,7 +2100,6 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
     if direct_routes:
         requested_dates = {pd.Timestamp(date).normalize() for date in forecast_dates}
         replacements = []
-        replaced_keys = set()
         for city, predictor in direct_routes:
             for target_date in requested_dates:
                 for product in MILK_EXPORT_PRODUCTS:
@@ -2147,7 +2147,14 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
             not in replaced_keys
         ] + replacements
 
-    ml_rows += _baseline_model_rows(forecast_dates, sub_dict, known_dict, recent_actuals)
+    # A model that already covers a baseline product (after a retrain) wins.
+    covered = replaced_keys | {
+        (row["city_cd"], row["product_name"], row["forecast_date"]) for row in ml_rows
+    }
+    ml_rows += [
+        row for row in _baseline_model_rows(forecast_dates, sub_dict, known_dict, recent_actuals)
+        if (row["city_cd"], row["product_name"], row["forecast_date"]) not in covered
+    ]
     return sub_rows + known_rows + ml_rows
 
 
