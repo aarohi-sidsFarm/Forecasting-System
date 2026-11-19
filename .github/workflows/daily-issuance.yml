@@ -90,6 +90,15 @@ jobs:
           GOOGLE_CHAT_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
         run: python scripts/check_forecast_accuracy.py
 
+      # Renamed products and days missing from the sales data both read as
+      # 0 sales; catch them within a day or two instead of weeks.
+      - name: Check the sales data
+        if: steps.commit.outputs.issued != ''
+        continue-on-error: true
+        env:
+          GOOGLE_CHAT_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+        run: python scripts/check_data_quality.py
+
       - name: Tell the team the issuance failed
         if: failure()
         env:
