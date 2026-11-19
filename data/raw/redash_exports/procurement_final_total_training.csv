@@ -9465,6 +9465,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-16,BLR,Cow Milk,1608.0,134.0,1742.0,1085
 2026-05-16,BLR,Curd,153.0,62.0,215.0,196
 2026-05-16,BLR,Double Toned A2 Buffalo Milk,398.0,59.0,457.0,316
+2026-05-16,BLR,High Protein Toned Milk,3.0,37.0,40.0,33
 2026-05-16,BLR,Skim Milk,422.0,58.0,480.0,350
 2026-05-16,BLR,Toned Milk,466.0,68.0,534.0,381
 2026-05-16,HYD,A2 Buffalo Milk,13661.0,652.0,14313.0,8815
@@ -9472,6 +9473,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-16,HYD,Cow Milk,7542.0,443.0,7985.0,4663
 2026-05-16,HYD,Curd,884.0,505.0,1389.0,1193
 2026-05-16,HYD,Double Toned A2 Buffalo Milk,4408.0,293.0,4701.0,3008
+2026-05-16,HYD,High Protein Toned Milk,21.0,188.0,209.0,176
 2026-05-16,HYD,Skim Milk,2047.0,137.0,2184.0,1459
 2026-05-16,HYD,Toned Milk,7912.0,784.0,8696.0,5269
 2026-05-16,PNQ,A2 Buffalo Milk,103.0,25.0,128.0,79
@@ -9490,6 +9492,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-17,BLR,Cow Milk,1598.0,94.0,1692.0,1041
 2026-05-17,BLR,Curd,134.0,62.0,196.0,184
 2026-05-17,BLR,Double Toned A2 Buffalo Milk,387.0,46.0,433.0,311
+2026-05-17,BLR,High Protein Toned Milk,10.0,46.0,56.0,46
 2026-05-17,BLR,Skim Milk,386.0,45.0,431.0,320
 2026-05-17,BLR,Toned Milk,452.0,62.0,514.0,368
 2026-05-17,HYD,A2 Buffalo Milk,13429.0,627.0,14056.0,8645
@@ -9497,6 +9500,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-17,HYD,Cow Milk,7326.0,307.0,7633.0,4458
 2026-05-17,HYD,Curd,857.0,569.0,1426.0,1213
 2026-05-17,HYD,Double Toned A2 Buffalo Milk,4380.0,304.0,4684.0,3005
+2026-05-17,HYD,High Protein Toned Milk,52.0,193.0,245.0,205
 2026-05-17,HYD,Skim Milk,1982.0,144.0,2126.0,1431
 2026-05-17,HYD,Toned Milk,7676.0,714.0,8390.0,5080
 2026-05-17,PNQ,A2 Buffalo Milk,109.0,23.0,132.0,81
@@ -9515,6 +9519,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-18,BLR,Cow Milk,1587.0,102.0,1689.0,1066
 2026-05-18,BLR,Curd,153.0,81.0,234.0,215
 2026-05-18,BLR,Double Toned A2 Buffalo Milk,410.0,64.0,474.0,338
+2026-05-18,BLR,High Protein Toned Milk,21.0,45.0,66.0,58
 2026-05-18,BLR,Skim Milk,408.0,61.0,469.0,356
 2026-05-18,BLR,Toned Milk,439.0,71.0,510.0,377
 2026-05-18,HYD,A2 Buffalo Milk,13629.0,606.0,14235.0,8818
@@ -9522,6 +9527,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-18,HYD,Cow Milk,7525.0,370.0,7895.0,4650
 2026-05-18,HYD,Curd,885.0,536.0,1421.0,1224
 2026-05-18,HYD,Double Toned A2 Buffalo Milk,4394.0,293.0,4687.0,3007
+2026-05-18,HYD,High Protein Toned Milk,89.0,192.0,281.0,225
 2026-05-18,HYD,Skim Milk,2049.0,131.0,2180.0,1498
 2026-05-18,HYD,Toned Milk,7890.0,742.0,8632.0,5305
 2026-05-18,PNQ,A2 Buffalo Milk,108.0,33.0,141.0,88
@@ -9540,6 +9546,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-19,BLR,Cow Milk,1618.0,127.0,1745.0,1099
 2026-05-19,BLR,Curd,145.0,95.0,240.0,225
 2026-05-19,BLR,Double Toned A2 Buffalo Milk,395.0,76.0,471.0,336
+2026-05-19,BLR,High Protein Toned Milk,28.0,31.0,59.0,49
 2026-05-19,BLR,Skim Milk,421.0,63.0,484.0,364
 2026-05-19,BLR,Toned Milk,477.0,70.0,547.0,405
 2026-05-19,HYD,A2 Buffalo Milk,13716.0,753.0,14469.0,8957
@@ -9547,6 +9554,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-19,HYD,Cow Milk,7528.0,364.0,7892.0,4663
 2026-05-19,HYD,Curd,890.0,599.0,1489.0,1256
 2026-05-19,HYD,Double Toned A2 Buffalo Milk,4511.0,336.0,4847.0,3096
+2026-05-19,HYD,High Protein Toned Milk,110.0,186.0,296.0,236
 2026-05-19,HYD,Skim Milk,2050.0,170.0,2220.0,1488
 2026-05-19,HYD,Toned Milk,7831.0,823.0,8654.0,5319
 2026-05-19,PNQ,A2 Buffalo Milk,118.0,29.0,147.0,88
@@ -9565,6 +9573,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-20,BLR,Cow Milk,1628.0,115.0,1743.0,1110
 2026-05-20,BLR,Curd,153.0,82.0,235.0,216
 2026-05-20,BLR,Double Toned A2 Buffalo Milk,403.0,71.0,474.0,342
+2026-05-20,BLR,High Protein Toned Milk,24.0,30.0,54.0,42
 2026-05-20,BLR,Skim Milk,403.0,65.0,468.0,359
 2026-05-20,BLR,Toned Milk,464.0,71.0,535.0,386
 2026-05-20,HYD,A2 Buffalo Milk,13747.0,674.0,14421.0,8956
@@ -9572,6 +9581,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-20,HYD,Cow Milk,7581.0,293.0,7874.0,4647
 2026-05-20,HYD,Curd,919.0,578.0,1497.0,1287
 2026-05-20,HYD,Double Toned A2 Buffalo Milk,4514.0,311.0,4825.0,3115
+2026-05-20,HYD,High Protein Toned Milk,140.0,184.0,324.0,254
 2026-05-20,HYD,Skim Milk,2009.0,159.0,2168.0,1476
 2026-05-20,HYD,Toned Milk,8054.0,838.0,8892.0,5437
 2026-05-20,PNQ,A2 Buffalo Milk,108.0,20.0,128.0,88
@@ -9590,6 +9600,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-21,BLR,Cow Milk,1651.0,118.0,1769.0,1116
 2026-05-21,BLR,Curd,149.0,81.0,230.0,206
 2026-05-21,BLR,Double Toned A2 Buffalo Milk,399.0,70.0,469.0,339
+2026-05-21,BLR,High Protein Toned Milk,26.0,30.0,56.0,47
 2026-05-21,BLR,Skim Milk,402.0,46.0,448.0,349
 2026-05-21,BLR,Toned Milk,468.0,65.0,533.0,388
 2026-05-21,HYD,A2 Buffalo Milk,13741.0,730.0,14471.0,8933
@@ -9597,6 +9608,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-21,HYD,Cow Milk,7535.0,353.0,7888.0,4610
 2026-05-21,HYD,Curd,925.0,538.0,1463.0,1231
 2026-05-21,HYD,Double Toned A2 Buffalo Milk,4535.0,328.0,4863.0,3096
+2026-05-21,HYD,High Protein Toned Milk,149.0,154.0,303.0,244
 2026-05-21,HYD,Skim Milk,2051.0,151.0,2202.0,1483
 2026-05-21,HYD,Toned Milk,7975.0,812.0,8787.0,5333
 2026-05-21,PNQ,A2 Buffalo Milk,112.0,23.0,135.0,87
@@ -9615,6 +9627,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-22,BLR,Cow Milk,1639.0,117.0,1756.0,1093
 2026-05-22,BLR,Curd,143.0,80.0,223.0,203
 2026-05-22,BLR,Double Toned A2 Buffalo Milk,401.0,65.0,466.0,342
+2026-05-22,BLR,High Protein Toned Milk,33.0,39.0,72.0,59
 2026-05-22,BLR,Skim Milk,408.0,70.0,478.0,361
 2026-05-22,BLR,Toned Milk,441.0,71.0,512.0,372
 2026-05-22,HYD,A2 Buffalo Milk,13832.0,708.0,14540.0,8931
@@ -9622,6 +9635,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-22,HYD,Cow Milk,7609.0,385.0,7994.0,4723
 2026-05-22,HYD,Curd,882.0,587.0,1469.0,1259
 2026-05-22,HYD,Double Toned A2 Buffalo Milk,4514.0,247.0,4761.0,3062
+2026-05-22,HYD,High Protein Toned Milk,157.0,149.0,306.0,242
 2026-05-22,HYD,Skim Milk,2022.0,175.0,2197.0,1488
 2026-05-22,HYD,Toned Milk,8023.0,872.0,8895.0,5385
 2026-05-22,PNQ,A2 Buffalo Milk,107.0,22.0,129.0,86
@@ -9640,6 +9654,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-23,BLR,Cow Milk,1619.0,118.0,1737.0,1067
 2026-05-23,BLR,Curd,149.0,74.0,223.0,203
 2026-05-23,BLR,Double Toned A2 Buffalo Milk,410.0,64.0,474.0,336
+2026-05-23,BLR,High Protein Toned Milk,33.0,30.0,63.0,51
 2026-05-23,BLR,Skim Milk,412.0,36.0,448.0,340
 2026-05-23,BLR,Toned Milk,438.0,61.0,499.0,361
 2026-05-23,HYD,A2 Buffalo Milk,13490.0,699.0,14189.0,8674
@@ -9647,6 +9662,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-23,HYD,Cow Milk,7425.0,340.0,7765.0,4538
 2026-05-23,HYD,Curd,912.0,523.0,1435.0,1229
 2026-05-23,HYD,Double Toned A2 Buffalo Milk,4330.0,342.0,4672.0,2984
+2026-05-23,HYD,High Protein Toned Milk,160.0,142.0,302.0,248
 2026-05-23,HYD,Skim Milk,2022.0,123.0,2145.0,1441
 2026-05-23,HYD,Toned Milk,7783.0,828.0,8611.0,5227
 2026-05-23,PNQ,A2 Buffalo Milk,113.0,35.0,148.0,98
@@ -9665,6 +9681,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-24,BLR,Cow Milk,1584.0,112.0,1696.0,1051
 2026-05-24,BLR,Curd,131.0,63.0,194.0,171
 2026-05-24,BLR,Double Toned A2 Buffalo Milk,420.0,70.0,490.0,346
+2026-05-24,BLR,High Protein Toned Milk,35.0,23.0,58.0,49
 2026-05-24,BLR,Skim Milk,399.0,52.0,451.0,336
 2026-05-24,BLR,Toned Milk,437.0,70.0,507.0,364
 2026-05-24,HYD,A2 Buffalo Milk,13305.0,660.0,13965.0,8564
@@ -9672,6 +9689,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-24,HYD,Cow Milk,7360.0,362.0,7722.0,4500
 2026-05-24,HYD,Curd,876.0,547.0,1423.0,1200
 2026-05-24,HYD,Double Toned A2 Buffalo Milk,4383.0,242.0,4625.0,2921
+2026-05-24,HYD,High Protein Toned Milk,180.0,131.0,311.0,254
 2026-05-24,HYD,Skim Milk,1961.0,106.0,2067.0,1388
 2026-05-24,HYD,Toned Milk,7698.0,749.0,8447.0,5152
 2026-05-24,PNQ,A2 Buffalo Milk,103.0,31.0,134.0,86
@@ -9690,6 +9708,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-25,BLR,Cow Milk,1667.0,112.0,1779.0,1099
 2026-05-25,BLR,Curd,146.0,79.0,225.0,215
 2026-05-25,BLR,Double Toned A2 Buffalo Milk,426.0,97.0,523.0,378
+2026-05-25,BLR,High Protein Toned Milk,38.0,33.0,71.0,59
 2026-05-25,BLR,Skim Milk,445.0,73.0,518.0,385
 2026-05-25,BLR,Toned Milk,460.0,69.0,529.0,385
 2026-05-25,HYD,A2 Buffalo Milk,13521.0,625.0,14146.0,8702
@@ -9697,6 +9716,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-25,HYD,Cow Milk,7492.0,337.0,7829.0,4607
 2026-05-25,HYD,Curd,880.0,515.0,1395.0,1185
 2026-05-25,HYD,Double Toned A2 Buffalo Milk,4358.0,324.0,4682.0,3014
+2026-05-25,HYD,High Protein Toned Milk,197.0,178.0,375.0,297
 2026-05-25,HYD,Skim Milk,2029.0,149.0,2178.0,1469
 2026-05-25,HYD,Toned Milk,7764.0,770.0,8534.0,5177
 2026-05-25,PNQ,A2 Buffalo Milk,101.0,25.0,126.0,84
@@ -9715,6 +9735,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-26,BLR,Cow Milk,1665.0,130.0,1795.0,1112
 2026-05-26,BLR,Curd,153.0,89.0,242.0,214
 2026-05-26,BLR,Double Toned A2 Buffalo Milk,415.0,63.0,478.0,341
+2026-05-26,BLR,High Protein Toned Milk,42.0,33.0,75.0,66
 2026-05-26,BLR,Skim Milk,401.0,54.0,455.0,344
 2026-05-26,BLR,Toned Milk,457.0,93.0,550.0,396
 2026-05-26,HYD,A2 Buffalo Milk,13505.0,670.0,14175.0,8758
@@ -9722,6 +9743,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-26,HYD,Cow Milk,7487.0,348.0,7835.0,4609
 2026-05-26,HYD,Curd,891.0,557.0,1448.0,1236
 2026-05-26,HYD,Double Toned A2 Buffalo Milk,4391.0,329.0,4720.0,3025
+2026-05-26,HYD,High Protein Toned Milk,229.0,151.0,380.0,292
 2026-05-26,HYD,Skim Milk,1974.0,161.0,2135.0,1428
 2026-05-26,HYD,Toned Milk,7891.0,888.0,8779.0,5289
 2026-05-26,PNQ,A2 Buffalo Milk,116.0,19.0,135.0,87
@@ -9740,6 +9762,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-27,BLR,Cow Milk,1666.0,127.0,1793.0,1126
 2026-05-27,BLR,Curd,155.0,77.0,232.0,209
 2026-05-27,BLR,Double Toned A2 Buffalo Milk,414.0,77.0,491.0,360
+2026-05-27,BLR,High Protein Toned Milk,40.0,30.0,70.0,56
 2026-05-27,BLR,Skim Milk,433.0,48.0,481.0,370
 2026-05-27,BLR,Toned Milk,425.0,77.0,502.0,366
 2026-05-27,HYD,A2 Buffalo Milk,13571.0,625.0,14196.0,8742
@@ -9747,6 +9770,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-27,HYD,Cow Milk,7559.0,369.0,7928.0,4653
 2026-05-27,HYD,Curd,923.0,565.0,1488.0,1262
 2026-05-27,HYD,Double Toned A2 Buffalo Milk,4385.0,293.0,4678.0,3018
+2026-05-27,HYD,High Protein Toned Milk,247.0,138.0,385.0,307
 2026-05-27,HYD,Skim Milk,2032.0,169.0,2201.0,1472
 2026-05-27,HYD,Toned Milk,7936.0,844.0,8780.0,5278
 2026-05-27,PNQ,A2 Buffalo Milk,111.0,27.0,138.0,87
@@ -9765,6 +9789,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-28,BLR,Cow Milk,1647.0,115.0,1762.0,1091
 2026-05-28,BLR,Curd,155.0,82.0,237.0,215
 2026-05-28,BLR,Double Toned A2 Buffalo Milk,403.0,70.0,473.0,346
+2026-05-28,BLR,High Protein Toned Milk,34.0,30.0,64.0,53
 2026-05-28,BLR,Skim Milk,413.0,54.0,467.0,348
 2026-05-28,BLR,Toned Milk,451.0,73.0,524.0,378
 2026-05-28,HYD,A2 Buffalo Milk,13536.0,711.0,14247.0,8732
@@ -9772,6 +9797,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-28,HYD,Cow Milk,7578.0,358.0,7936.0,4624
 2026-05-28,HYD,Curd,873.0,500.0,1373.0,1175
 2026-05-28,HYD,Double Toned A2 Buffalo Milk,4444.0,272.0,4716.0,3016
+2026-05-28,HYD,High Protein Toned Milk,252.0,137.0,389.0,313
 2026-05-28,HYD,Skim Milk,2004.0,133.0,2137.0,1445
 2026-05-28,HYD,Toned Milk,7920.0,885.0,8805.0,5309
 2026-05-28,PNQ,A2 Buffalo Milk,118.0,20.0,138.0,89
@@ -9790,6 +9816,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-29,BLR,Cow Milk,1649.0,119.0,1768.0,1100
 2026-05-29,BLR,Curd,139.0,70.0,209.0,194
 2026-05-29,BLR,Double Toned A2 Buffalo Milk,416.0,61.0,477.0,353
+2026-05-29,BLR,High Protein Toned Milk,42.0,27.0,69.0,57
 2026-05-29,BLR,Skim Milk,414.0,59.0,473.0,359
 2026-05-29,BLR,Toned Milk,458.0,66.0,524.0,370
 2026-05-29,HYD,A2 Buffalo Milk,13240.0,677.0,13917.0,8621
@@ -9797,6 +9824,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-29,HYD,Cow Milk,7333.0,364.0,7697.0,4545
 2026-05-29,HYD,Curd,847.0,517.0,1364.0,1175
 2026-05-29,HYD,Double Toned A2 Buffalo Milk,4397.0,309.0,4706.0,2983
+2026-05-29,HYD,High Protein Toned Milk,264.0,139.0,403.0,323
 2026-05-29,HYD,Skim Milk,1920.0,133.0,2053.0,1396
 2026-05-29,HYD,Toned Milk,7760.0,850.0,8610.0,5228
 2026-05-29,PNQ,A2 Buffalo Milk,109.0,31.0,140.0,90
@@ -9815,6 +9843,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-30,BLR,Cow Milk,1610.0,105.0,1715.0,1065
 2026-05-30,BLR,Curd,147.0,67.0,214.0,191
 2026-05-30,BLR,Double Toned A2 Buffalo Milk,394.0,73.0,467.0,340
+2026-05-30,BLR,High Protein Toned Milk,44.0,24.0,68.0,56
 2026-05-30,BLR,Skim Milk,404.0,37.0,441.0,325
 2026-05-30,BLR,Toned Milk,492.0,84.0,576.0,409
 2026-05-30,HYD,A2 Buffalo Milk,13231.0,667.0,13898.0,8514
@@ -9822,6 +9851,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-30,HYD,Cow Milk,7375.0,391.0,7766.0,4545
 2026-05-30,HYD,Curd,865.0,573.0,1438.0,1220
 2026-05-30,HYD,Double Toned A2 Buffalo Milk,4310.0,322.0,4632.0,2931
+2026-05-30,HYD,High Protein Toned Milk,299.0,143.0,442.0,351
 2026-05-30,HYD,Skim Milk,1927.0,154.0,2081.0,1395
 2026-05-30,HYD,Toned Milk,7788.0,902.0,8690.0,5230
 2026-05-30,PNQ,A2 Buffalo Milk,113.0,22.0,135.0,86
@@ -9840,6 +9870,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-31,BLR,Cow Milk,1625.0,137.0,1762.0,1066
 2026-05-31,BLR,Curd,143.0,90.0,233.0,205
 2026-05-31,BLR,Double Toned A2 Buffalo Milk,392.0,83.0,475.0,346
+2026-05-31,BLR,High Protein Toned Milk,42.0,13.0,55.0,47
 2026-05-31,BLR,Skim Milk,387.0,50.0,437.0,323
 2026-05-31,BLR,Toned Milk,450.0,61.0,511.0,358
 2026-05-31,HYD,A2 Buffalo Milk,13001.0,688.0,13689.0,8388
@@ -9847,6 +9878,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-05-31,HYD,Cow Milk,7313.0,304.0,7617.0,4457
 2026-05-31,HYD,Curd,836.0,503.0,1339.0,1153
 2026-05-31,HYD,Double Toned A2 Buffalo Milk,4245.0,277.0,4522.0,2872
+2026-05-31,HYD,High Protein Toned Milk,300.0,151.0,451.0,347
 2026-05-31,HYD,Skim Milk,1890.0,116.0,2006.0,1347
 2026-05-31,HYD,Toned Milk,7446.0,817.0,8263.0,5002
 2026-05-31,PNQ,A2 Buffalo Milk,121.0,30.0,151.0,93
@@ -9865,6 +9897,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-01,BLR,Cow Milk,1775.0,106.0,1881.0,1201
 2026-06-01,BLR,Curd,176.0,111.0,287.0,260
 2026-06-01,BLR,Double Toned A2 Buffalo Milk,438.0,67.0,505.0,379
+2026-06-01,BLR,High Protein Toned Milk,56.0,28.0,84.0,71
 2026-06-01,BLR,Skim Milk,450.0,61.0,511.0,384
 2026-06-01,BLR,Toned Milk,505.0,94.0,599.0,430
 2026-06-01,HYD,A2 Buffalo Milk,13810.0,705.0,14515.0,9010
@@ -9872,6 +9905,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-01,HYD,Cow Milk,7821.0,388.0,8209.0,4875
 2026-06-01,HYD,Curd,892.0,557.0,1449.0,1254
 2026-06-01,HYD,Double Toned A2 Buffalo Milk,4510.0,326.0,4836.0,3095
+2026-06-01,HYD,High Protein Toned Milk,324.0,168.0,492.0,392
 2026-06-01,HYD,Skim Milk,2013.0,143.0,2156.0,1477
 2026-06-01,HYD,Toned Milk,7918.0,797.0,8715.0,5361
 2026-06-01,PNQ,A2 Buffalo Milk,124.0,31.0,155.0,105
@@ -9890,6 +9924,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-02,BLR,Cow Milk,1755.0,126.0,1881.0,1196
 2026-06-02,BLR,Curd,155.0,81.0,236.0,217
 2026-06-02,BLR,Double Toned A2 Buffalo Milk,457.0,71.0,528.0,380
+2026-06-02,BLR,High Protein Toned Milk,63.0,27.0,90.0,77
 2026-06-02,BLR,Skim Milk,446.0,60.0,506.0,387
 2026-06-02,BLR,Toned Milk,511.0,66.0,577.0,418
 2026-06-02,HYD,A2 Buffalo Milk,13601.0,756.0,14357.0,8925
@@ -9897,6 +9932,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-02,HYD,Cow Milk,7787.0,384.0,8171.0,4834
 2026-06-02,HYD,Curd,876.0,527.0,1403.0,1227
 2026-06-02,HYD,Double Toned A2 Buffalo Milk,4436.0,332.0,4768.0,3056
+2026-06-02,HYD,High Protein Toned Milk,318.0,185.0,503.0,407
 2026-06-02,HYD,Skim Milk,2051.0,175.0,2226.0,1499
 2026-06-02,HYD,Toned Milk,7950.0,839.0,8789.0,5361
 2026-06-02,PNQ,A2 Buffalo Milk,148.0,26.0,174.0,107
@@ -9915,6 +9951,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-03,BLR,Cow Milk,1765.0,155.0,1920.0,1206
 2026-06-03,BLR,Curd,165.0,108.0,273.0,242
 2026-06-03,BLR,Double Toned A2 Buffalo Milk,476.0,67.0,543.0,399
+2026-06-03,BLR,High Protein Toned Milk,69.0,32.0,101.0,83
 2026-06-03,BLR,Skim Milk,457.0,57.0,514.0,385
 2026-06-03,BLR,Toned Milk,490.0,90.0,580.0,415
 2026-06-03,HYD,A2 Buffalo Milk,14029.0,803.0,14832.0,9145
@@ -9922,6 +9959,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-03,HYD,Cow Milk,8066.0,378.0,8444.0,4973
 2026-06-03,HYD,Curd,923.0,641.0,1564.0,1356
 2026-06-03,HYD,Double Toned A2 Buffalo Milk,4592.0,338.0,4930.0,3163
+2026-06-03,HYD,High Protein Toned Milk,348.0,167.0,515.0,409
 2026-06-03,HYD,Skim Milk,2090.0,165.0,2255.0,1540
 2026-06-03,HYD,Toned Milk,8165.0,934.0,9099.0,5559
 2026-06-03,PNQ,A2 Buffalo Milk,130.0,28.0,158.0,105
@@ -9940,6 +9978,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-04,BLR,Cow Milk,1766.0,123.0,1889.0,1200
 2026-06-04,BLR,Curd,157.0,80.0,237.0,218
 2026-06-04,BLR,Double Toned A2 Buffalo Milk,469.0,82.0,551.0,394
+2026-06-04,BLR,High Protein Toned Milk,56.0,32.0,88.0,73
 2026-06-04,BLR,Skim Milk,463.0,75.0,538.0,403
 2026-06-04,BLR,Toned Milk,524.0,60.0,584.0,420
 2026-06-04,HYD,A2 Buffalo Milk,14232.0,802.0,15034.0,9237
@@ -9947,6 +9986,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-04,HYD,Cow Milk,8021.0,423.0,8444.0,4989
 2026-06-04,HYD,Curd,937.0,545.0,1482.0,1271
 2026-06-04,HYD,Double Toned A2 Buffalo Milk,4624.0,339.0,4963.0,3157
+2026-06-04,HYD,High Protein Toned Milk,367.0,158.0,525.0,414
 2026-06-04,HYD,Skim Milk,2087.0,159.0,2246.0,1530
 2026-06-04,HYD,Toned Milk,8273.0,871.0,9144.0,5559
 2026-06-04,PNQ,A2 Buffalo Milk,140.0,29.0,169.0,112
@@ -9965,6 +10005,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-05,BLR,Cow Milk,1779.0,165.0,1944.0,1211
 2026-06-05,BLR,Curd,168.0,86.0,254.0,236
 2026-06-05,BLR,Double Toned A2 Buffalo Milk,443.0,92.0,535.0,391
+2026-06-05,BLR,High Protein Toned Milk,81.0,21.0,102.0,84
 2026-06-05,BLR,Skim Milk,473.0,52.0,525.0,396
 2026-06-05,BLR,Toned Milk,500.0,83.0,583.0,413
 2026-06-05,HYD,A2 Buffalo Milk,14255.0,762.0,15017.0,9258
@@ -9972,6 +10013,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-05,HYD,Cow Milk,8154.0,430.0,8584.0,5059
 2026-06-05,HYD,Curd,935.0,550.0,1485.0,1276
 2026-06-05,HYD,Double Toned A2 Buffalo Milk,4595.0,323.0,4918.0,3137
+2026-06-05,HYD,High Protein Toned Milk,398.0,165.0,563.0,440
 2026-06-05,HYD,Skim Milk,2044.0,163.0,2207.0,1505
 2026-06-05,HYD,Toned Milk,8365.0,874.0,9239.0,5588
 2026-06-05,PNQ,A2 Buffalo Milk,125.0,15.0,140.0,96
@@ -9990,6 +10032,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-06,BLR,Cow Milk,1762.0,128.0,1890.0,1182
 2026-06-06,BLR,Curd,174.0,66.0,240.0,217
 2026-06-06,BLR,Double Toned A2 Buffalo Milk,480.0,79.0,559.0,404
+2026-06-06,BLR,High Protein Toned Milk,67.0,25.0,92.0,74
 2026-06-06,BLR,Skim Milk,460.0,50.0,510.0,376
 2026-06-06,BLR,Toned Milk,489.0,67.0,556.0,398
 2026-06-06,HYD,A2 Buffalo Milk,14165.0,776.0,14941.0,9136
@@ -9997,6 +10040,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-06,HYD,Cow Milk,8069.0,385.0,8454.0,4958
 2026-06-06,HYD,Curd,938.0,509.0,1447.0,1248
 2026-06-06,HYD,Double Toned A2 Buffalo Milk,4594.0,360.0,4954.0,3143
+2026-06-06,HYD,High Protein Toned Milk,385.0,169.0,554.0,439
 2026-06-06,HYD,Skim Milk,2045.0,178.0,2223.0,1504
 2026-06-06,HYD,Toned Milk,8199.0,896.0,9095.0,5532
 2026-06-06,PNQ,A2 Buffalo Milk,130.0,37.0,167.0,100
@@ -10015,6 +10059,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-07,BLR,Cow Milk,1782.0,144.0,1926.0,1185
 2026-06-07,BLR,Curd,176.0,71.0,247.0,218
 2026-06-07,BLR,Double Toned A2 Buffalo Milk,447.0,66.0,513.0,370
+2026-06-07,BLR,High Protein Toned Milk,71.0,24.0,95.0,75
 2026-06-07,BLR,Skim Milk,443.0,52.0,495.0,360
 2026-06-07,BLR,Toned Milk,492.0,84.0,576.0,400
 2026-06-07,HYD,A2 Buffalo Milk,14133.0,743.0,14876.0,9102
@@ -10022,6 +10067,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-07,HYD,Cow Milk,8073.0,347.0,8420.0,4909
 2026-06-07,HYD,Curd,877.0,534.0,1411.0,1240
 2026-06-07,HYD,Double Toned A2 Buffalo Milk,4523.0,317.0,4840.0,3074
+2026-06-07,HYD,High Protein Toned Milk,414.0,150.0,564.0,440
 2026-06-07,HYD,Skim Milk,2076.0,135.0,2211.0,1491
 2026-06-07,HYD,Toned Milk,8288.0,868.0,9156.0,5525
 2026-06-07,PNQ,A2 Buffalo Milk,141.0,23.0,164.0,101
@@ -10040,6 +10086,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-08,BLR,Cow Milk,1772.0,143.0,1915.0,1222
 2026-06-08,BLR,Curd,167.0,90.0,257.0,231
 2026-06-08,BLR,Double Toned A2 Buffalo Milk,457.0,73.0,530.0,383
+2026-06-08,BLR,High Protein Toned Milk,78.0,26.0,104.0,86
 2026-06-08,BLR,Skim Milk,449.0,50.0,499.0,377
 2026-06-08,BLR,Toned Milk,492.0,74.0,566.0,410
 2026-06-08,HYD,A2 Buffalo Milk,14509.0,745.0,15254.0,9405
@@ -10047,6 +10094,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-08,HYD,Cow Milk,8281.0,373.0,8654.0,5127
 2026-06-08,HYD,Curd,926.0,528.0,1454.0,1252
 2026-06-08,HYD,Double Toned A2 Buffalo Milk,4609.0,333.0,4942.0,3175
+2026-06-08,HYD,High Protein Toned Milk,430.0,159.0,589.0,461
 2026-06-08,HYD,Skim Milk,2118.0,149.0,2267.0,1547
 2026-06-08,HYD,Toned Milk,8342.0,845.0,9187.0,5622
 2026-06-08,PNQ,A2 Buffalo Milk,151.0,14.0,165.0,107
@@ -10065,6 +10113,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-09,BLR,Cow Milk,1871.0,151.0,2022.0,1262
 2026-06-09,BLR,Curd,153.0,89.0,242.0,226
 2026-06-09,BLR,Double Toned A2 Buffalo Milk,459.0,87.0,546.0,392
+2026-06-09,BLR,High Protein Toned Milk,83.0,37.0,120.0,97
 2026-06-09,BLR,Skim Milk,445.0,63.0,508.0,373
 2026-06-09,BLR,Toned Milk,515.0,83.0,598.0,434
 2026-06-09,HYD,A2 Buffalo Milk,14722.0,793.0,15515.0,9583
@@ -10072,6 +10121,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-09,HYD,Cow Milk,8447.0,441.0,8888.0,5218
 2026-06-09,HYD,Curd,965.0,546.0,1511.0,1332
 2026-06-09,HYD,Double Toned A2 Buffalo Milk,4641.0,396.0,5037.0,3202
+2026-06-09,HYD,High Protein Toned Milk,453.0,161.0,614.0,477
 2026-06-09,HYD,Skim Milk,2116.0,169.0,2285.0,1572
 2026-06-09,HYD,Toned Milk,8588.0,937.0,9525.0,5816
 2026-06-09,PNQ,A2 Buffalo Milk,141.0,23.0,164.0,109
@@ -10090,6 +10140,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-10,BLR,Cow Milk,1849.0,145.0,1994.0,1258
 2026-06-10,BLR,Curd,175.0,72.0,247.0,227
 2026-06-10,BLR,Double Toned A2 Buffalo Milk,461.0,92.0,553.0,398
+2026-06-10,BLR,High Protein Toned Milk,86.0,34.0,120.0,97
 2026-06-10,BLR,Skim Milk,463.0,62.0,525.0,391
 2026-06-10,BLR,Toned Milk,516.0,71.0,587.0,418
 2026-06-10,HYD,A2 Buffalo Milk,14950.0,858.0,15808.0,9738
@@ -10097,6 +10148,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-10,HYD,Cow Milk,8486.0,433.0,8919.0,5232
 2026-06-10,HYD,Curd,940.0,549.0,1489.0,1285
 2026-06-10,HYD,Double Toned A2 Buffalo Milk,4762.0,369.0,5131.0,3264
+2026-06-10,HYD,High Protein Toned Milk,489.0,163.0,652.0,509
 2026-06-10,HYD,Skim Milk,2184.0,160.0,2344.0,1593
 2026-06-10,HYD,Toned Milk,8654.0,1024.0,9678.0,5863
 2026-06-10,PNQ,A2 Buffalo Milk,143.0,27.0,170.0,109
@@ -10115,6 +10167,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-11,BLR,Cow Milk,1866.0,148.0,2014.0,1254
 2026-06-11,BLR,Curd,174.0,70.0,244.0,222
 2026-06-11,BLR,Double Toned A2 Buffalo Milk,457.0,56.0,513.0,372
+2026-06-11,BLR,High Protein Toned Milk,85.0,44.0,129.0,108
 2026-06-11,BLR,Skim Milk,473.0,48.0,521.0,378
 2026-06-11,BLR,Toned Milk,508.0,75.0,583.0,422
 2026-06-11,HYD,A2 Buffalo Milk,15108.0,827.0,15935.0,9840
@@ -10122,6 +10175,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-11,HYD,Cow Milk,8626.0,470.0,9096.0,5321
 2026-06-11,HYD,Curd,934.0,574.0,1508.0,1310
 2026-06-11,HYD,Double Toned A2 Buffalo Milk,4713.0,330.0,5043.0,3228
+2026-06-11,HYD,High Protein Toned Milk,491.0,174.0,665.0,521
 2026-06-11,HYD,Skim Milk,2126.0,142.0,2268.0,1574
 2026-06-11,HYD,Toned Milk,8746.0,976.0,9722.0,5875
 2026-06-11,PNQ,A2 Buffalo Milk,148.0,26.0,174.0,111
@@ -10140,6 +10194,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-12,BLR,Cow Milk,1849.0,156.0,2005.0,1262
 2026-06-12,BLR,Curd,169.0,81.0,250.0,225
 2026-06-12,BLR,Double Toned A2 Buffalo Milk,443.0,69.0,512.0,374
+2026-06-12,BLR,High Protein Toned Milk,87.0,33.0,120.0,94
 2026-06-12,BLR,Skim Milk,462.0,52.0,514.0,379
 2026-06-12,BLR,Toned Milk,515.0,74.0,589.0,416
 2026-06-12,HYD,A2 Buffalo Milk,15228.0,903.0,16131.0,9927
@@ -10147,6 +10202,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-12,HYD,Cow Milk,8657.0,407.0,9064.0,5332
 2026-06-12,HYD,Curd,935.0,544.0,1479.0,1283
 2026-06-12,HYD,Double Toned A2 Buffalo Milk,4713.0,378.0,5091.0,3257
+2026-06-12,HYD,High Protein Toned Milk,502.0,146.0,648.0,517
 2026-06-12,HYD,Skim Milk,2174.0,147.0,2321.0,1589
 2026-06-12,HYD,Toned Milk,8752.0,964.0,9716.0,5840
 2026-06-12,PNQ,A2 Buffalo Milk,140.0,26.0,166.0,107
@@ -10165,6 +10221,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-13,BLR,Cow Milk,1800.0,176.0,1976.0,1227
 2026-06-13,BLR,Curd,168.0,81.0,249.0,224
 2026-06-13,BLR,Double Toned A2 Buffalo Milk,442.0,76.0,518.0,373
+2026-06-13,BLR,High Protein Toned Milk,84.0,30.0,114.0,94
 2026-06-13,BLR,Skim Milk,435.0,66.0,501.0,351
 2026-06-13,BLR,Toned Milk,498.0,71.0,569.0,406
 2026-06-13,HYD,A2 Buffalo Milk,15122.0,782.0,15904.0,9767
@@ -10172,6 +10229,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-13,HYD,Cow Milk,8719.0,487.0,9206.0,5365
 2026-06-13,HYD,Curd,973.0,512.0,1485.0,1263
 2026-06-13,HYD,Double Toned A2 Buffalo Milk,4701.0,318.0,5019.0,3228
+2026-06-13,HYD,High Protein Toned Milk,475.0,145.0,620.0,486
 2026-06-13,HYD,Skim Milk,2124.0,148.0,2272.0,1550
 2026-06-13,HYD,Toned Milk,8705.0,919.0,9624.0,5823
 2026-06-13,PNQ,A2 Buffalo Milk,150.0,19.0,169.0,110
@@ -10191,6 +10249,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-14,BLR,Cow Milk,1730.0,125.0,1855.0,1161
 2026-06-14,BLR,Curd,168.0,81.0,249.0,218
 2026-06-14,BLR,Double Toned A2 Buffalo Milk,426.0,67.0,493.0,361
+2026-06-14,BLR,High Protein Toned Milk,103.0,17.0,120.0,95
 2026-06-14,BLR,Skim Milk,437.0,39.0,476.0,353
 2026-06-14,BLR,Toned Milk,493.0,72.0,565.0,396
 2026-06-14,HYD,A2 Buffalo Milk,14951.0,847.0,15798.0,9703
@@ -10198,6 +10257,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-14,HYD,Cow Milk,8544.0,445.0,8989.0,5220
 2026-06-14,HYD,Curd,869.0,552.0,1421.0,1252
 2026-06-14,HYD,Double Toned A2 Buffalo Milk,4789.0,358.0,5147.0,3269
+2026-06-14,HYD,High Protein Toned Milk,500.0,180.0,680.0,514
 2026-06-14,HYD,Skim Milk,2093.0,134.0,2227.0,1503
 2026-06-14,HYD,Toned Milk,8653.0,991.0,9644.0,5807
 2026-06-14,PNQ,A2 Buffalo Milk,155.0,22.0,177.0,114
@@ -10216,6 +10276,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-15,BLR,Cow Milk,1761.0,138.0,1899.0,1200
 2026-06-15,BLR,Curd,173.0,62.0,235.0,219
 2026-06-15,BLR,Double Toned A2 Buffalo Milk,446.0,88.0,534.0,383
+2026-06-15,BLR,High Protein Toned Milk,105.0,31.0,136.0,104
 2026-06-15,BLR,Skim Milk,455.0,65.0,520.0,386
 2026-06-15,BLR,Toned Milk,501.0,67.0,568.0,421
 2026-06-15,HYD,A2 Buffalo Milk,15292.0,875.0,16167.0,10014
@@ -10223,6 +10284,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-15,HYD,Cow Milk,8825.0,479.0,9304.0,5486
 2026-06-15,HYD,Curd,939.0,548.0,1487.0,1301
 2026-06-15,HYD,Double Toned A2 Buffalo Milk,4870.0,358.0,5228.0,3339
+2026-06-15,HYD,High Protein Toned Milk,540.0,146.0,686.0,529
 2026-06-15,HYD,Skim Milk,2164.0,161.0,2325.0,1592
 2026-06-15,HYD,Toned Milk,8807.0,954.0,9761.0,5953
 2026-06-15,PNQ,A2 Buffalo Milk,146.0,24.0,170.0,117
@@ -10241,6 +10303,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-16,BLR,Cow Milk,1827.0,149.0,1976.0,1241
 2026-06-16,BLR,Curd,163.0,93.0,256.0,229
 2026-06-16,BLR,Double Toned A2 Buffalo Milk,460.0,79.0,539.0,387
+2026-06-16,BLR,High Protein Toned Milk,115.0,41.0,156.0,117
 2026-06-16,BLR,Skim Milk,425.0,60.0,485.0,365
 2026-06-16,BLR,Toned Milk,511.0,73.0,584.0,420
 2026-06-16,HYD,A2 Buffalo Milk,15489.0,915.0,16404.0,10144
@@ -10248,6 +10311,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-16,HYD,Cow Milk,8782.0,467.0,9249.0,5488
 2026-06-16,HYD,Curd,931.0,601.0,1532.0,1323
 2026-06-16,HYD,Double Toned A2 Buffalo Milk,4974.0,389.0,5363.0,3426
+2026-06-16,HYD,High Protein Toned Milk,536.0,140.0,676.0,524
 2026-06-16,HYD,Skim Milk,2174.0,170.0,2344.0,1589
 2026-06-16,HYD,Toned Milk,8849.0,968.0,9817.0,6024
 2026-06-16,PNQ,A2 Buffalo Milk,152.0,30.0,182.0,117
@@ -10266,6 +10330,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-17,BLR,Cow Milk,1810.0,138.0,1948.0,1232
 2026-06-17,BLR,Curd,170.0,89.0,259.0,230
 2026-06-17,BLR,Double Toned A2 Buffalo Milk,463.0,61.0,524.0,386
+2026-06-17,BLR,High Protein Toned Milk,109.0,38.0,147.0,114
 2026-06-17,BLR,Skim Milk,443.0,55.0,498.0,373
 2026-06-17,BLR,Toned Milk,508.0,78.0,586.0,425
 2026-06-17,HYD,A2 Buffalo Milk,15533.0,893.0,16426.0,10158
@@ -10273,6 +10338,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-17,HYD,Cow Milk,8895.0,452.0,9347.0,5502
 2026-06-17,HYD,Curd,966.0,618.0,1584.0,1379
 2026-06-17,HYD,Double Toned A2 Buffalo Milk,5017.0,335.0,5352.0,3402
+2026-06-17,HYD,High Protein Toned Milk,568.0,160.0,728.0,573
 2026-06-17,HYD,Skim Milk,2136.0,183.0,2319.0,1589
 2026-06-17,HYD,Toned Milk,9045.0,954.0,9999.0,6104
 2026-06-17,PNQ,A2 Buffalo Milk,161.0,36.0,197.0,124
@@ -10291,6 +10357,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-18,BLR,Cow Milk,1801.0,127.0,1928.0,1220
 2026-06-18,BLR,Curd,171.0,74.0,245.0,225
 2026-06-18,BLR,Double Toned A2 Buffalo Milk,434.0,75.0,509.0,372
+2026-06-18,BLR,High Protein Toned Milk,106.0,38.0,144.0,108
 2026-06-18,BLR,Skim Milk,452.0,41.0,493.0,367
 2026-06-18,BLR,Toned Milk,526.0,82.0,608.0,431
 2026-06-18,HYD,A2 Buffalo Milk,15633.0,871.0,16504.0,10237
@@ -10298,6 +10365,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-18,HYD,Cow Milk,8828.0,436.0,9264.0,5466
 2026-06-18,HYD,Curd,959.0,574.0,1533.0,1330
 2026-06-18,HYD,Double Toned A2 Buffalo Milk,4965.0,370.0,5335.0,3416
+2026-06-18,HYD,High Protein Toned Milk,544.0,131.0,675.0,536
 2026-06-18,HYD,Skim Milk,2172.0,152.0,2324.0,1578
 2026-06-18,HYD,Toned Milk,9006.0,953.0,9959.0,6100
 2026-06-18,PNQ,A2 Buffalo Milk,159.0,24.0,183.0,121
@@ -10316,6 +10384,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-19,BLR,Cow Milk,1808.0,136.0,1944.0,1220
 2026-06-19,BLR,Curd,157.0,72.0,229.0,214
 2026-06-19,BLR,Double Toned A2 Buffalo Milk,464.0,61.0,525.0,379
+2026-06-19,BLR,High Protein Toned Milk,111.0,34.0,145.0,111
 2026-06-19,BLR,Skim Milk,419.0,56.0,475.0,351
 2026-06-19,BLR,Toned Milk,517.0,65.0,582.0,422
 2026-06-19,HYD,A2 Buffalo Milk,15496.0,983.0,16479.0,10249
@@ -10323,6 +10392,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-19,HYD,Cow Milk,8996.0,532.0,9528.0,5609
 2026-06-19,HYD,Curd,965.0,585.0,1550.0,1334
 2026-06-19,HYD,Double Toned A2 Buffalo Milk,4989.0,382.0,5371.0,3394
+2026-06-19,HYD,High Protein Toned Milk,569.0,151.0,720.0,559
 2026-06-19,HYD,Skim Milk,2147.0,164.0,2311.0,1590
 2026-06-19,HYD,Toned Milk,9095.0,1044.0,10139.0,6172
 2026-06-19,PNQ,A2 Buffalo Milk,150.0,21.0,171.0,112
@@ -10341,6 +10411,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-20,BLR,Cow Milk,1781.0,98.0,1879.0,1169
 2026-06-20,BLR,Curd,148.0,63.0,211.0,186
 2026-06-20,BLR,Double Toned A2 Buffalo Milk,420.0,90.0,510.0,364
+2026-06-20,BLR,High Protein Toned Milk,111.0,32.0,143.0,106
 2026-06-20,BLR,Skim Milk,413.0,52.0,465.0,343
 2026-06-20,BLR,Toned Milk,499.0,55.0,554.0,400
 2026-06-20,HYD,A2 Buffalo Milk,15425.0,924.0,16349.0,10069
@@ -10348,6 +10419,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-20,HYD,Cow Milk,8796.0,467.0,9263.0,5434
 2026-06-20,HYD,Curd,957.0,524.0,1481.0,1274
 2026-06-20,HYD,Double Toned A2 Buffalo Milk,4855.0,368.0,5223.0,3330
+2026-06-20,HYD,High Protein Toned Milk,540.0,146.0,686.0,542
 2026-06-20,HYD,Skim Milk,2103.0,144.0,2247.0,1531
 2026-06-20,HYD,Toned Milk,8877.0,911.0,9788.0,5993
 2026-06-20,PNQ,A2 Buffalo Milk,161.0,25.0,186.0,123
@@ -10366,6 +10438,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-21,BLR,Cow Milk,1705.0,148.0,1853.0,1137
 2026-06-21,BLR,Curd,154.0,76.0,230.0,206
 2026-06-21,BLR,Double Toned A2 Buffalo Milk,434.0,60.0,494.0,356
+2026-06-21,BLR,High Protein Toned Milk,104.0,34.0,138.0,102
 2026-06-21,BLR,Skim Milk,382.0,51.0,433.0,326
 2026-06-21,BLR,Toned Milk,472.0,57.0,529.0,379
 2026-06-21,HYD,A2 Buffalo Milk,15209.0,801.0,16010.0,9860
@@ -10373,6 +10446,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-21,HYD,Cow Milk,8684.0,413.0,9097.0,5308
 2026-06-21,HYD,Curd,940.0,585.0,1525.0,1322
 2026-06-21,HYD,Double Toned A2 Buffalo Milk,4782.0,342.0,5124.0,3259
+2026-06-21,HYD,High Protein Toned Milk,561.0,151.0,712.0,543
 2026-06-21,HYD,Skim Milk,2025.0,162.0,2187.0,1478
 2026-06-21,HYD,Toned Milk,8806.0,891.0,9697.0,5927
 2026-06-21,PNQ,A2 Buffalo Milk,155.0,23.0,178.0,115
@@ -10391,6 +10465,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-22,BLR,Cow Milk,1756.0,114.0,1870.0,1177
 2026-06-22,BLR,Curd,157.0,66.0,223.0,200
 2026-06-22,BLR,Double Toned A2 Buffalo Milk,450.0,68.0,518.0,361
+2026-06-22,BLR,High Protein Toned Milk,114.0,29.0,143.0,110
 2026-06-22,BLR,Skim Milk,413.0,56.0,469.0,352
 2026-06-22,BLR,Toned Milk,489.0,53.0,542.0,396
 2026-06-22,HYD,A2 Buffalo Milk,15355.0,892.0,16247.0,10116
@@ -10398,6 +10473,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-22,HYD,Cow Milk,8666.0,428.0,9094.0,5414
 2026-06-22,HYD,Curd,938.0,541.0,1479.0,1270
 2026-06-22,HYD,Double Toned A2 Buffalo Milk,4893.0,346.0,5239.0,3362
+2026-06-22,HYD,High Protein Toned Milk,538.0,147.0,685.0,542
 2026-06-22,HYD,Skim Milk,2110.0,159.0,2269.0,1548
 2026-06-22,HYD,Toned Milk,8658.0,955.0,9613.0,5921
 2026-06-22,PNQ,A2 Buffalo Milk,149.0,18.0,167.0,113
@@ -10416,6 +10492,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-23,BLR,Cow Milk,1784.0,149.0,1933.0,1214
 2026-06-23,BLR,Curd,154.0,82.0,236.0,220
 2026-06-23,BLR,Double Toned A2 Buffalo Milk,432.0,83.0,515.0,361
+2026-06-23,BLR,High Protein Toned Milk,122.0,37.0,159.0,119
 2026-06-23,BLR,Skim Milk,409.0,61.0,470.0,351
 2026-06-23,BLR,Toned Milk,494.0,92.0,586.0,420
 2026-06-23,HYD,A2 Buffalo Milk,15488.0,947.0,16435.0,10231
@@ -10423,6 +10500,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-23,HYD,Cow Milk,8856.0,486.0,9342.0,5511
 2026-06-23,HYD,Curd,952.0,595.0,1547.0,1332
 2026-06-23,HYD,Double Toned A2 Buffalo Milk,4923.0,421.0,5344.0,3396
+2026-06-23,HYD,High Protein Toned Milk,602.0,154.0,756.0,581
 2026-06-23,HYD,Skim Milk,2119.0,181.0,2300.0,1551
 2026-06-23,HYD,Toned Milk,9041.0,955.0,9996.0,6085
 2026-06-23,PNQ,A2 Buffalo Milk,149.0,34.0,183.0,117
@@ -10441,6 +10519,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-24,BLR,Cow Milk,1828.0,132.0,1960.0,1232
 2026-06-24,BLR,Curd,157.0,74.0,231.0,212
 2026-06-24,BLR,Double Toned A2 Buffalo Milk,436.0,77.0,513.0,372
+2026-06-24,BLR,High Protein Toned Milk,125.0,26.0,151.0,113
 2026-06-24,BLR,Skim Milk,426.0,57.0,483.0,359
 2026-06-24,BLR,Toned Milk,480.0,60.0,540.0,397
 2026-06-24,HYD,A2 Buffalo Milk,15466.0,858.0,16324.0,10114
@@ -10448,6 +10527,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-24,HYD,Cow Milk,8659.0,486.0,9145.0,5390
 2026-06-24,HYD,Curd,940.0,563.0,1503.0,1312
 2026-06-24,HYD,Double Toned A2 Buffalo Milk,4944.0,399.0,5343.0,3423
+2026-06-24,HYD,High Protein Toned Milk,589.0,152.0,741.0,579
 2026-06-24,HYD,Skim Milk,2172.0,153.0,2325.0,1595
 2026-06-24,HYD,Toned Milk,8812.0,926.0,9738.0,5985
 2026-06-24,PNQ,A2 Buffalo Milk,151.0,38.0,189.0,120
@@ -10466,6 +10546,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-25,BLR,Cow Milk,1780.0,136.0,1916.0,1200
 2026-06-25,BLR,Curd,169.0,81.0,250.0,222
 2026-06-25,BLR,Double Toned A2 Buffalo Milk,440.0,86.0,526.0,370
+2026-06-25,BLR,High Protein Toned Milk,125.0,34.0,159.0,118
 2026-06-25,BLR,Skim Milk,414.0,38.0,452.0,343
 2026-06-25,BLR,Toned Milk,470.0,62.0,532.0,394
 2026-06-25,HYD,A2 Buffalo Milk,15310.0,928.0,16238.0,10067
@@ -10473,6 +10554,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-25,HYD,Cow Milk,8852.0,515.0,9367.0,5511
 2026-06-25,HYD,Curd,927.0,527.0,1454.0,1269
 2026-06-25,HYD,Double Toned A2 Buffalo Milk,4829.0,359.0,5188.0,3303
+2026-06-25,HYD,High Protein Toned Milk,586.0,137.0,723.0,564
 2026-06-25,HYD,Skim Milk,2149.0,158.0,2307.0,1582
 2026-06-25,HYD,Toned Milk,8896.0,936.0,9832.0,6057
 2026-06-25,PNQ,A2 Buffalo Milk,144.0,33.0,177.0,118
@@ -10491,6 +10573,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-26,BLR,Cow Milk,1741.0,104.0,1845.0,1165
 2026-06-26,BLR,Curd,155.0,79.0,234.0,208
 2026-06-26,BLR,Double Toned A2 Buffalo Milk,400.0,65.0,465.0,341
+2026-06-26,BLR,High Protein Toned Milk,115.0,32.0,147.0,111
 2026-06-26,BLR,Skim Milk,419.0,40.0,459.0,344
 2026-06-26,BLR,Toned Milk,490.0,74.0,564.0,412
 2026-06-26,HYD,A2 Buffalo Milk,15264.0,875.0,16139.0,10018
@@ -10498,6 +10581,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-26,HYD,Cow Milk,8665.0,513.0,9178.0,5450
 2026-06-26,HYD,Curd,911.0,532.0,1443.0,1240
 2026-06-26,HYD,Double Toned A2 Buffalo Milk,4848.0,380.0,5228.0,3331
+2026-06-26,HYD,High Protein Toned Milk,581.0,158.0,739.0,582
 2026-06-26,HYD,Skim Milk,2136.0,169.0,2305.0,1550
 2026-06-26,HYD,Toned Milk,8859.0,929.0,9788.0,5966
 2026-06-26,PNQ,A2 Buffalo Milk,158.0,28.0,186.0,115
@@ -10516,6 +10600,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-27,BLR,Cow Milk,1644.0,128.0,1772.0,1114
 2026-06-27,BLR,Curd,148.0,85.0,233.0,203
 2026-06-27,BLR,Double Toned A2 Buffalo Milk,376.0,80.0,456.0,322
+2026-06-27,BLR,High Protein Toned Milk,126.0,21.0,147.0,106
 2026-06-27,BLR,Skim Milk,403.0,41.0,444.0,328
 2026-06-27,BLR,Toned Milk,481.0,76.0,557.0,394
 2026-06-27,HYD,A2 Buffalo Milk,15019.0,812.0,15831.0,9775
@@ -10523,6 +10608,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-27,HYD,Cow Milk,8590.0,466.0,9056.0,5319
 2026-06-27,HYD,Curd,932.0,456.0,1388.0,1209
 2026-06-27,HYD,Double Toned A2 Buffalo Milk,4753.0,356.0,5109.0,3243
+2026-06-27,HYD,High Protein Toned Milk,583.0,129.0,712.0,552
 2026-06-27,HYD,Skim Milk,2044.0,165.0,2209.0,1481
 2026-06-27,HYD,Toned Milk,8680.0,877.0,9557.0,5815
 2026-06-27,PNQ,A2 Buffalo Milk,151.0,34.0,185.0,118
@@ -10541,6 +10627,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-28,BLR,Cow Milk,1624.0,116.0,1740.0,1091
 2026-06-28,BLR,Curd,141.0,72.0,213.0,188
 2026-06-28,BLR,Double Toned A2 Buffalo Milk,355.0,72.0,427.0,313
+2026-06-28,BLR,High Protein Toned Milk,118.0,32.0,150.0,106
 2026-06-28,BLR,Skim Milk,379.0,34.0,413.0,309
 2026-06-28,BLR,Toned Milk,486.0,42.0,528.0,377
 2026-06-28,HYD,A2 Buffalo Milk,14785.0,797.0,15582.0,9666
@@ -10548,6 +10635,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-28,HYD,Cow Milk,8408.0,465.0,8873.0,5198
 2026-06-28,HYD,Curd,843.0,461.0,1304.0,1157
 2026-06-28,HYD,Double Toned A2 Buffalo Milk,4745.0,380.0,5125.0,3224
+2026-06-28,HYD,High Protein Toned Milk,583.0,113.0,696.0,542
 2026-06-28,HYD,Skim Milk,2049.0,112.0,2161.0,1456
 2026-06-28,HYD,Toned Milk,8499.0,894.0,9393.0,5778
 2026-06-28,PNQ,A2 Buffalo Milk,148.0,45.0,193.0,122
@@ -10566,6 +10654,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-29,BLR,Cow Milk,1726.0,119.0,1845.0,1169
 2026-06-29,BLR,Curd,158.0,91.0,249.0,231
 2026-06-29,BLR,Double Toned A2 Buffalo Milk,411.0,85.0,496.0,355
+2026-06-29,BLR,High Protein Toned Milk,134.0,34.0,168.0,122
 2026-06-29,BLR,Skim Milk,426.0,72.0,498.0,365
 2026-06-29,BLR,Toned Milk,476.0,93.0,569.0,400
 2026-06-29,HYD,A2 Buffalo Milk,15131.0,947.0,16078.0,9996
@@ -10573,6 +10662,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-29,HYD,Cow Milk,8700.0,515.0,9215.0,5486
 2026-06-29,HYD,Curd,921.0,554.0,1475.0,1310
 2026-06-29,HYD,Double Toned A2 Buffalo Milk,4790.0,375.0,5165.0,3310
+2026-06-29,HYD,High Protein Toned Milk,594.0,131.0,725.0,568
 2026-06-29,HYD,Skim Milk,2109.0,148.0,2257.0,1553
 2026-06-29,HYD,Toned Milk,8761.0,1050.0,9811.0,6004
 2026-06-29,PNQ,A2 Buffalo Milk,148.0,42.0,190.0,121
@@ -10591,6 +10681,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-30,BLR,Cow Milk,1724.0,150.0,1874.0,1180
 2026-06-30,BLR,Curd,149.0,87.0,236.0,215
 2026-06-30,BLR,Double Toned A2 Buffalo Milk,418.0,86.0,504.0,363
+2026-06-30,BLR,High Protein Toned Milk,100.0,37.0,137.0,102
 2026-06-30,BLR,Skim Milk,403.0,66.0,469.0,347
 2026-06-30,BLR,Toned Milk,508.0,60.0,568.0,404
 2026-06-30,HYD,A2 Buffalo Milk,15218.0,903.0,16121.0,10050
@@ -10598,6 +10689,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-06-30,HYD,Cow Milk,8556.0,476.0,9032.0,5336
 2026-06-30,HYD,Curd,899.0,531.0,1430.0,1250
 2026-06-30,HYD,Double Toned A2 Buffalo Milk,4845.0,431.0,5276.0,3380
+2026-06-30,HYD,High Protein Toned Milk,627.0,165.0,792.0,599
 2026-06-30,HYD,Skim Milk,2115.0,172.0,2287.0,1552
 2026-06-30,HYD,Toned Milk,8669.0,956.0,9625.0,5931
 2026-06-30,PNQ,A2 Buffalo Milk,163.0,32.0,195.0,127
@@ -10616,6 +10708,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-01,BLR,Cow Milk,1831.0,125.0,1956.0,1254
 2026-07-01,BLR,Curd,169.0,87.0,256.0,230
 2026-07-01,BLR,Double Toned A2 Buffalo Milk,411.0,72.0,483.0,356
+2026-07-01,BLR,High Protein Toned Milk,117.0,35.0,152.0,114
 2026-07-01,BLR,Skim Milk,429.0,51.0,480.0,358
 2026-07-01,BLR,Toned Milk,507.0,87.0,594.0,432
 2026-07-01,HYD,A2 Buffalo Milk,15657.0,931.0,16588.0,10402
@@ -10623,6 +10716,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-01,HYD,Cow Milk,8851.0,456.0,9307.0,5575
 2026-07-01,HYD,Curd,964.0,530.0,1494.0,1319
 2026-07-01,HYD,Double Toned A2 Buffalo Milk,4900.0,338.0,5238.0,3402
+2026-07-01,HYD,High Protein Toned Milk,655.0,152.0,807.0,622
 2026-07-01,HYD,Skim Milk,2124.0,180.0,2304.0,1591
 2026-07-01,HYD,Toned Milk,8990.0,923.0,9913.0,6146
 2026-07-01,PNQ,A2 Buffalo Milk,153.0,43.0,196.0,126
@@ -10641,6 +10735,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-02,BLR,Cow Milk,1765.0,123.0,1888.0,1203
 2026-07-02,BLR,Curd,158.0,86.0,244.0,224
 2026-07-02,BLR,Double Toned A2 Buffalo Milk,399.0,87.0,486.0,355
+2026-07-02,BLR,High Protein Toned Milk,116.0,33.0,149.0,111
 2026-07-02,BLR,Skim Milk,412.0,80.0,492.0,369
 2026-07-02,BLR,Toned Milk,503.0,68.0,571.0,404
 2026-07-02,HYD,A2 Buffalo Milk,15456.0,932.0,16388.0,10260
@@ -10648,6 +10743,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-02,HYD,Cow Milk,8752.0,427.0,9179.0,5448
 2026-07-02,HYD,Curd,923.0,542.0,1465.0,1294
 2026-07-02,HYD,Double Toned A2 Buffalo Milk,4847.0,365.0,5212.0,3350
+2026-07-02,HYD,High Protein Toned Milk,636.0,157.0,793.0,629
 2026-07-02,HYD,Skim Milk,2114.0,125.0,2239.0,1529
 2026-07-02,HYD,Toned Milk,8793.0,994.0,9787.0,6051
 2026-07-02,PNQ,A2 Buffalo Milk,175.0,26.0,201.0,127
@@ -10666,6 +10762,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-03,BLR,Cow Milk,1679.0,130.0,1809.0,1169
 2026-07-03,BLR,Curd,149.0,82.0,231.0,210
 2026-07-03,BLR,Double Toned A2 Buffalo Milk,406.0,80.0,486.0,359
+2026-07-03,BLR,High Protein Toned Milk,131.0,34.0,165.0,114
 2026-07-03,BLR,Skim Milk,417.0,49.0,466.0,345
 2026-07-03,BLR,Toned Milk,478.0,56.0,534.0,394
 2026-07-03,HYD,A2 Buffalo Milk,15304.0,937.0,16241.0,10153
@@ -10673,6 +10770,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-03,HYD,Cow Milk,8872.0,520.0,9392.0,5612
 2026-07-03,HYD,Curd,908.0,524.0,1432.0,1275
 2026-07-03,HYD,Double Toned A2 Buffalo Milk,4880.0,402.0,5282.0,3396
+2026-07-03,HYD,High Protein Toned Milk,659.0,147.0,806.0,617
 2026-07-03,HYD,Skim Milk,2083.0,161.0,2244.0,1535
 2026-07-03,HYD,Toned Milk,8845.0,950.0,9795.0,6039
 2026-07-03,PNQ,A2 Buffalo Milk,147.0,32.0,179.0,120
@@ -10691,6 +10789,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-04,BLR,Cow Milk,1696.0,113.0,1809.0,1156
 2026-07-04,BLR,Curd,172.0,74.0,246.0,224
 2026-07-04,BLR,Double Toned A2 Buffalo Milk,406.0,66.0,472.0,348
+2026-07-04,BLR,High Protein Toned Milk,115.0,38.0,153.0,111
 2026-07-04,BLR,Skim Milk,419.0,74.0,493.0,350
 2026-07-04,BLR,Toned Milk,454.0,69.0,523.0,380
 2026-07-04,HYD,A2 Buffalo Milk,15027.0,910.0,15937.0,9932
@@ -10698,6 +10797,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-04,HYD,Cow Milk,8786.0,477.0,9263.0,5458
 2026-07-04,HYD,Curd,880.0,474.0,1354.0,1204
 2026-07-04,HYD,Double Toned A2 Buffalo Milk,4814.0,362.0,5176.0,3307
+2026-07-04,HYD,High Protein Toned Milk,634.0,130.0,764.0,586
 2026-07-04,HYD,Skim Milk,2111.0,159.0,2270.0,1522
 2026-07-04,HYD,Toned Milk,8700.0,977.0,9677.0,5920
 2026-07-04,PNQ,A2 Buffalo Milk,167.0,37.0,204.0,131
@@ -10716,6 +10816,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-05,BLR,Cow Milk,1633.0,133.0,1766.0,1117
 2026-07-05,BLR,Curd,143.0,72.0,215.0,188
 2026-07-05,BLR,Double Toned A2 Buffalo Milk,377.0,72.0,449.0,331
+2026-07-05,BLR,High Protein Toned Milk,119.0,14.0,133.0,95
 2026-07-05,BLR,Skim Milk,399.0,45.0,444.0,328
 2026-07-05,BLR,Toned Milk,469.0,64.0,533.0,370
 2026-07-05,HYD,A2 Buffalo Milk,14787.0,837.0,15624.0,9706
@@ -10723,6 +10824,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-05,HYD,Cow Milk,8598.0,466.0,9064.0,5346
 2026-07-05,HYD,Curd,852.0,505.0,1357.0,1184
 2026-07-05,HYD,Double Toned A2 Buffalo Milk,4723.0,419.0,5142.0,3263
+2026-07-05,HYD,High Protein Toned Milk,640.0,157.0,797.0,595
 2026-07-05,HYD,Skim Milk,2058.0,144.0,2202.0,1494
 2026-07-05,HYD,Toned Milk,8550.0,879.0,9429.0,5848
 2026-07-05,PNQ,A2 Buffalo Milk,152.0,27.0,179.0,116
@@ -10741,6 +10843,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-06,BLR,Cow Milk,1737.0,136.0,1873.0,1199
 2026-07-06,BLR,Curd,150.0,81.0,231.0,215
 2026-07-06,BLR,Double Toned A2 Buffalo Milk,431.0,87.0,518.0,374
+2026-07-06,BLR,High Protein Toned Milk,108.0,37.0,145.0,103
 2026-07-06,BLR,Skim Milk,425.0,70.0,495.0,363
 2026-07-06,BLR,Toned Milk,471.0,67.0,538.0,394
 2026-07-06,HYD,A2 Buffalo Milk,15304.0,875.0,16179.0,10134
@@ -10748,6 +10851,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-06,HYD,Cow Milk,8690.0,486.0,9176.0,5520
 2026-07-06,HYD,Curd,906.0,497.0,1403.0,1244
 2026-07-06,HYD,Double Toned A2 Buffalo Milk,4852.0,382.0,5234.0,3389
+2026-07-06,HYD,High Protein Toned Milk,662.0,157.0,819.0,645
 2026-07-06,HYD,Skim Milk,2141.0,152.0,2293.0,1566
 2026-07-06,HYD,Toned Milk,8806.0,931.0,9737.0,6034
 2026-07-06,PNQ,A2 Buffalo Milk,182.0,32.0,214.0,130
@@ -10766,6 +10870,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-07,BLR,Cow Milk,1772.0,156.0,1928.0,1222
 2026-07-07,BLR,Curd,155.0,81.0,236.0,219
 2026-07-07,BLR,Double Toned A2 Buffalo Milk,429.0,76.0,505.0,362
+2026-07-07,BLR,High Protein Toned Milk,121.0,34.0,155.0,117
 2026-07-07,BLR,Skim Milk,409.0,52.0,461.0,349
 2026-07-07,BLR,Toned Milk,483.0,70.0,553.0,402
 2026-07-07,HYD,A2 Buffalo Milk,15662.0,933.0,16595.0,10374
@@ -10773,6 +10878,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-07,HYD,Cow Milk,8843.0,482.0,9325.0,5585
 2026-07-07,HYD,Curd,908.0,529.0,1437.0,1283
 2026-07-07,HYD,Double Toned A2 Buffalo Milk,4928.0,407.0,5335.0,3407
+2026-07-07,HYD,High Protein Toned Milk,669.0,195.0,864.0,661
 2026-07-07,HYD,Skim Milk,2130.0,164.0,2294.0,1573
 2026-07-07,HYD,Toned Milk,9041.0,1046.0,10087.0,6247
 2026-07-07,PNQ,A2 Buffalo Milk,171.0,36.0,207.0,131
@@ -10791,6 +10897,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-08,BLR,Cow Milk,1731.0,155.0,1886.0,1211
 2026-07-08,BLR,Curd,157.0,82.0,239.0,213
 2026-07-08,BLR,Double Toned A2 Buffalo Milk,442.0,80.0,522.0,392
+2026-07-08,BLR,High Protein Toned Milk,117.0,34.0,151.0,121
 2026-07-08,BLR,Skim Milk,450.0,57.0,507.0,375
 2026-07-08,BLR,Toned Milk,474.0,64.0,538.0,382
 2026-07-08,HYD,A2 Buffalo Milk,15865.0,955.0,16820.0,10522
@@ -10798,6 +10905,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-08,HYD,Cow Milk,8876.0,474.0,9350.0,5594
 2026-07-08,HYD,Curd,945.0,543.0,1488.0,1317
 2026-07-08,HYD,Double Toned A2 Buffalo Milk,4967.0,379.0,5346.0,3449
+2026-07-08,HYD,High Protein Toned Milk,686.0,162.0,848.0,653
 2026-07-08,HYD,Skim Milk,2157.0,141.0,2298.0,1591
 2026-07-08,HYD,Toned Milk,9047.0,1012.0,10059.0,6245
 2026-07-08,PNQ,A2 Buffalo Milk,184.0,35.0,219.0,130
@@ -10816,6 +10924,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-09,BLR,Cow Milk,1740.0,119.0,1859.0,1189
 2026-07-09,BLR,Curd,161.0,61.0,222.0,204
 2026-07-09,BLR,Double Toned A2 Buffalo Milk,425.0,61.0,486.0,369
+2026-07-09,BLR,High Protein Toned Milk,130.0,24.0,154.0,116
 2026-07-09,BLR,Skim Milk,431.0,42.0,473.0,357
 2026-07-09,BLR,Toned Milk,472.0,79.0,551.0,397
 2026-07-09,HYD,A2 Buffalo Milk,15698.0,917.0,16615.0,10364
@@ -10823,6 +10932,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-09,HYD,Cow Milk,8951.0,490.0,9441.0,5622
 2026-07-09,HYD,Curd,944.0,574.0,1518.0,1323
 2026-07-09,HYD,Double Toned A2 Buffalo Milk,4903.0,376.0,5279.0,3401
+2026-07-09,HYD,High Protein Toned Milk,708.0,172.0,880.0,681
 2026-07-09,HYD,Skim Milk,2126.0,133.0,2259.0,1554
 2026-07-09,HYD,Toned Milk,9148.0,1081.0,10229.0,6325
 2026-07-09,PNQ,A2 Buffalo Milk,169.0,25.0,194.0,125
@@ -10841,6 +10951,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-10,BLR,Cow Milk,1698.0,135.0,1833.0,1171
 2026-07-10,BLR,Curd,152.0,79.0,231.0,213
 2026-07-10,BLR,Double Toned A2 Buffalo Milk,423.0,96.0,519.0,377
+2026-07-10,BLR,High Protein Toned Milk,131.0,33.0,164.0,124
 2026-07-10,BLR,Skim Milk,436.0,58.0,494.0,368
 2026-07-10,BLR,Toned Milk,484.0,82.0,566.0,404
 2026-07-10,HYD,A2 Buffalo Milk,15852.0,902.0,16754.0,10366
@@ -10848,6 +10959,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-10,HYD,Cow Milk,8966.0,513.0,9479.0,5652
 2026-07-10,HYD,Curd,897.0,469.0,1366.0,1211
 2026-07-10,HYD,Double Toned A2 Buffalo Milk,4969.0,381.0,5350.0,3413
+2026-07-10,HYD,High Protein Toned Milk,746.0,165.0,911.0,701
 2026-07-10,HYD,Skim Milk,2183.0,177.0,2360.0,1607
 2026-07-10,HYD,Toned Milk,9040.0,1056.0,10096.0,6211
 2026-07-10,PNQ,A2 Buffalo Milk,169.0,28.0,197.0,128
@@ -10866,6 +10978,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-11,BLR,Cow Milk,1705.0,121.0,1826.0,1157
 2026-07-11,BLR,Curd,169.0,88.0,257.0,236
 2026-07-11,BLR,Double Toned A2 Buffalo Milk,435.0,72.0,507.0,364
+2026-07-11,BLR,High Protein Toned Milk,131.0,21.0,152.0,110
 2026-07-11,BLR,Skim Milk,413.0,47.0,460.0,341
 2026-07-11,BLR,Toned Milk,483.0,76.0,559.0,396
 2026-07-11,HYD,A2 Buffalo Milk,15549.0,878.0,16427.0,10224
@@ -10873,6 +10986,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-11,HYD,Cow Milk,8918.0,476.0,9394.0,5568
 2026-07-11,HYD,Curd,918.0,529.0,1447.0,1250
 2026-07-11,HYD,Double Toned A2 Buffalo Milk,4836.0,345.0,5181.0,3336
+2026-07-11,HYD,High Protein Toned Milk,741.0,138.0,879.0,669
 2026-07-11,HYD,Skim Milk,2123.0,162.0,2285.0,1560
 2026-07-11,HYD,Toned Milk,8944.0,909.0,9853.0,6095
 2026-07-11,PNQ,A2 Buffalo Milk,158.0,27.0,185.0,116
@@ -10891,6 +11005,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-12,BLR,Cow Milk,1649.0,149.0,1798.0,1132
 2026-07-12,BLR,Curd,151.0,72.0,223.0,190
 2026-07-12,BLR,Double Toned A2 Buffalo Milk,425.0,69.0,494.0,374
+2026-07-12,BLR,High Protein Toned Milk,117.0,28.0,145.0,105
 2026-07-12,BLR,Skim Milk,393.0,47.0,440.0,334
 2026-07-12,BLR,Toned Milk,469.0,80.0,549.0,387
 2026-07-12,HYD,A2 Buffalo Milk,15236.0,904.0,16140.0,10022
@@ -10898,6 +11013,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-12,HYD,Cow Milk,8735.0,465.0,9200.0,5448
 2026-07-12,HYD,Curd,867.0,504.0,1371.0,1192
 2026-07-12,HYD,Double Toned A2 Buffalo Milk,4810.0,370.0,5180.0,3315
+2026-07-12,HYD,High Protein Toned Milk,705.0,158.0,863.0,660
 2026-07-12,HYD,Skim Milk,2040.0,128.0,2168.0,1491
 2026-07-12,HYD,Toned Milk,8718.0,893.0,9611.0,5899
 2026-07-12,PNQ,A2 Buffalo Milk,171.0,42.0,213.0,133
@@ -10916,6 +11032,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-13,BLR,Cow Milk,1683.0,153.0,1836.0,1177
 2026-07-13,BLR,Curd,168.0,72.0,240.0,222
 2026-07-13,BLR,Double Toned A2 Buffalo Milk,475.0,83.0,558.0,391
+2026-07-13,BLR,High Protein Toned Milk,132.0,32.0,164.0,121
 2026-07-13,BLR,Skim Milk,423.0,54.0,477.0,366
 2026-07-13,BLR,Toned Milk,479.0,73.0,552.0,407
 2026-07-13,HYD,A2 Buffalo Milk,15699.0,911.0,16610.0,10392
@@ -10923,6 +11040,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-13,HYD,Cow Milk,8963.0,625.0,9588.0,5791
 2026-07-13,HYD,Curd,902.0,573.0,1475.0,1316
 2026-07-13,HYD,Double Toned A2 Buffalo Milk,4850.0,375.0,5225.0,3389
+2026-07-13,HYD,High Protein Toned Milk,727.0,137.0,864.0,683
 2026-07-13,HYD,Skim Milk,2119.0,183.0,2302.0,1571
 2026-07-13,HYD,Toned Milk,8998.0,1019.0,10017.0,6187
 2026-07-13,PNQ,A2 Buffalo Milk,158.0,24.0,182.0,121
@@ -10941,6 +11059,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-14,BLR,Cow Milk,1685.0,149.0,1834.0,1176
 2026-07-14,BLR,Curd,171.0,84.0,255.0,235
 2026-07-14,BLR,Double Toned A2 Buffalo Milk,458.0,76.0,534.0,395
+2026-07-14,BLR,High Protein Toned Milk,125.0,35.0,160.0,115
 2026-07-14,BLR,Skim Milk,426.0,39.0,465.0,356
 2026-07-14,BLR,Toned Milk,480.0,61.0,541.0,385
 2026-07-14,HYD,A2 Buffalo Milk,15894.0,1039.0,16933.0,10568
@@ -10948,6 +11067,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-14,HYD,Cow Milk,8871.0,497.0,9368.0,5583
 2026-07-14,HYD,Curd,880.0,601.0,1481.0,1312
 2026-07-14,HYD,Double Toned A2 Buffalo Milk,4969.0,424.0,5393.0,3492
+2026-07-14,HYD,High Protein Toned Milk,758.0,187.0,945.0,721
 2026-07-14,HYD,Skim Milk,2186.0,159.0,2345.0,1611
 2026-07-14,HYD,Toned Milk,9111.0,1117.0,10228.0,6331
 2026-07-14,PNQ,A2 Buffalo Milk,184.0,41.0,225.0,141
@@ -10966,6 +11086,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-15,BLR,Cow Milk,1745.0,139.0,1884.0,1205
 2026-07-15,BLR,Curd,176.0,84.0,260.0,234
 2026-07-15,BLR,Double Toned A2 Buffalo Milk,431.0,75.0,506.0,380
+2026-07-15,BLR,High Protein Toned Milk,132.0,38.0,170.0,124
 2026-07-15,BLR,Skim Milk,436.0,71.0,507.0,373
 2026-07-15,BLR,Toned Milk,469.0,89.0,558.0,400
 2026-07-15,HYD,A2 Buffalo Milk,16026.0,1014.0,17040.0,10677
@@ -10973,6 +11094,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-15,HYD,Cow Milk,9069.0,498.0,9567.0,5722
 2026-07-15,HYD,Curd,978.0,601.0,1579.0,1392
 2026-07-15,HYD,Double Toned A2 Buffalo Milk,5040.0,440.0,5480.0,3521
+2026-07-15,HYD,High Protein Toned Milk,761.0,151.0,912.0,714
 2026-07-15,HYD,Skim Milk,2130.0,145.0,2275.0,1588
 2026-07-15,HYD,Toned Milk,9243.0,1119.0,10362.0,6416
 2026-07-15,PNQ,A2 Buffalo Milk,177.0,24.0,201.0,125
@@ -10991,6 +11113,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-16,BLR,Cow Milk,1732.0,137.0,1869.0,1204
 2026-07-16,BLR,Curd,170.0,87.0,257.0,232
 2026-07-16,BLR,Double Toned A2 Buffalo Milk,455.0,74.0,529.0,395
+2026-07-16,BLR,High Protein Toned Milk,115.0,32.0,147.0,113
 2026-07-16,BLR,Skim Milk,434.0,37.0,471.0,360
 2026-07-16,BLR,Toned Milk,512.0,81.0,593.0,416
 2026-07-16,HYD,A2 Buffalo Milk,16103.0,973.0,17076.0,10642
@@ -10998,6 +11121,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-16,HYD,Cow Milk,9028.0,473.0,9501.0,5654
 2026-07-16,HYD,Curd,964.0,574.0,1538.0,1361
 2026-07-16,HYD,Double Toned A2 Buffalo Milk,5086.0,379.0,5465.0,3510
+2026-07-16,HYD,High Protein Toned Milk,768.0,151.0,919.0,721
 2026-07-16,HYD,Skim Milk,2204.0,156.0,2360.0,1626
 2026-07-16,HYD,Toned Milk,9264.0,1086.0,10350.0,6378
 2026-07-16,PNQ,A2 Buffalo Milk,181.0,27.0,208.0,136
@@ -11016,6 +11140,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-17,BLR,Cow Milk,1667.0,125.0,1792.0,1152
 2026-07-17,BLR,Curd,157.0,82.0,239.0,215
 2026-07-17,BLR,Double Toned A2 Buffalo Milk,438.0,96.0,534.0,390
+2026-07-17,BLR,High Protein Toned Milk,123.0,24.0,147.0,111
 2026-07-17,BLR,Skim Milk,416.0,49.0,465.0,358
 2026-07-17,BLR,Toned Milk,489.0,80.0,569.0,411
 2026-07-17,HYD,A2 Buffalo Milk,16009.0,954.0,16963.0,10624
@@ -11023,6 +11148,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-17,HYD,Cow Milk,9051.0,504.0,9555.0,5740
 2026-07-17,HYD,Curd,955.0,599.0,1554.0,1374
 2026-07-17,HYD,Double Toned A2 Buffalo Milk,5009.0,408.0,5417.0,3475
+2026-07-17,HYD,High Protein Toned Milk,753.0,146.0,899.0,695
 2026-07-17,HYD,Skim Milk,2161.0,156.0,2317.0,1598
 2026-07-17,HYD,Toned Milk,9324.0,1157.0,10481.0,6411
 2026-07-17,PNQ,A2 Buffalo Milk,178.0,28.0,206.0,136
@@ -11041,6 +11167,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-18,BLR,Cow Milk,1614.0,151.0,1765.0,1137
 2026-07-18,BLR,Curd,167.0,77.0,244.0,221
 2026-07-18,BLR,Double Toned A2 Buffalo Milk,440.0,101.0,541.0,404
+2026-07-18,BLR,High Protein Toned Milk,115.0,27.0,142.0,110
 2026-07-18,BLR,Skim Milk,418.0,40.0,458.0,344
 2026-07-18,BLR,Toned Milk,485.0,74.0,559.0,385
 2026-07-18,HYD,A2 Buffalo Milk,15977.0,963.0,16940.0,10492
@@ -11048,6 +11175,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-18,HYD,Cow Milk,9043.0,451.0,9494.0,5640
 2026-07-18,HYD,Curd,967.0,533.0,1500.0,1302
 2026-07-18,HYD,Double Toned A2 Buffalo Milk,5026.0,380.0,5406.0,3441
+2026-07-18,HYD,High Protein Toned Milk,757.0,144.0,901.0,686
 2026-07-18,HYD,Skim Milk,2150.0,147.0,2297.0,1568
 2026-07-18,HYD,Toned Milk,9176.0,1108.0,10284.0,6299
 2026-07-18,PNQ,A2 Buffalo Milk,190.0,28.0,218.0,140
@@ -11066,6 +11194,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-19,BLR,Cow Milk,1582.0,135.0,1717.0,1093
 2026-07-19,BLR,Curd,160.0,79.0,239.0,216
 2026-07-19,BLR,Double Toned A2 Buffalo Milk,443.0,82.0,525.0,379
+2026-07-19,BLR,High Protein Toned Milk,116.0,33.0,149.0,111
 2026-07-19,BLR,Skim Milk,410.0,47.0,457.0,343
 2026-07-19,BLR,Toned Milk,466.0,59.0,525.0,380
 2026-07-19,HYD,A2 Buffalo Milk,15573.0,900.0,16473.0,10212
@@ -11073,6 +11202,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-19,HYD,Cow Milk,8740.0,439.0,9179.0,5456
 2026-07-19,HYD,Curd,923.0,491.0,1414.0,1251
 2026-07-19,HYD,Double Toned A2 Buffalo Milk,4905.0,370.0,5275.0,3355
+2026-07-19,HYD,High Protein Toned Milk,752.0,131.0,883.0,678
 2026-07-19,HYD,Skim Milk,2069.0,148.0,2217.0,1507
 2026-07-19,HYD,Toned Milk,9010.0,996.0,10006.0,6132
 2026-07-19,PNQ,A2 Buffalo Milk,177.0,20.0,197.0,131
@@ -11091,6 +11221,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-20,BLR,Cow Milk,1638.0,158.0,1796.0,1173
 2026-07-20,BLR,Curd,171.0,85.0,256.0,233
 2026-07-20,BLR,Double Toned A2 Buffalo Milk,439.0,69.0,508.0,375
+2026-07-20,BLR,High Protein Toned Milk,98.0,32.0,130.0,105
 2026-07-20,BLR,Skim Milk,456.0,48.0,504.0,385
 2026-07-20,BLR,Toned Milk,474.0,58.0,532.0,381
 2026-07-20,HYD,A2 Buffalo Milk,15725.0,911.0,16636.0,10430
@@ -11098,6 +11229,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-20,HYD,Cow Milk,8857.0,468.0,9325.0,5619
 2026-07-20,HYD,Curd,915.0,527.0,1442.0,1287
 2026-07-20,HYD,Double Toned A2 Buffalo Milk,4950.0,374.0,5324.0,3460
+2026-07-20,HYD,High Protein Toned Milk,748.0,151.0,899.0,702
 2026-07-20,HYD,Skim Milk,2172.0,169.0,2341.0,1592
 2026-07-20,HYD,Toned Milk,9173.0,1041.0,10214.0,6289
 2026-07-20,PNQ,A2 Buffalo Milk,193.0,31.0,224.0,141
@@ -11116,6 +11248,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-21,BLR,Cow Milk,1659.0,142.0,1801.0,1176
 2026-07-21,BLR,Curd,168.0,71.0,239.0,220
 2026-07-21,BLR,Double Toned A2 Buffalo Milk,451.0,99.0,550.0,397
+2026-07-21,BLR,High Protein Toned Milk,114.0,22.0,136.0,106
 2026-07-21,BLR,Skim Milk,431.0,80.0,511.0,368
 2026-07-21,BLR,Toned Milk,485.0,68.0,553.0,399
 2026-07-21,HYD,A2 Buffalo Milk,15929.0,985.0,16914.0,10582
@@ -11123,6 +11256,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-21,HYD,Cow Milk,8938.0,555.0,9493.0,5650
 2026-07-21,HYD,Curd,927.0,563.0,1490.0,1312
 2026-07-21,HYD,Double Toned A2 Buffalo Milk,4924.0,424.0,5348.0,3451
+2026-07-21,HYD,High Protein Toned Milk,771.0,149.0,920.0,719
 2026-07-21,HYD,Skim Milk,2168.0,190.0,2358.0,1605
 2026-07-21,HYD,Toned Milk,9297.0,1082.0,10379.0,6393
 2026-07-21,PNQ,A2 Buffalo Milk,192.0,35.0,227.0,147
@@ -11141,6 +11275,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-22,BLR,Cow Milk,1678.0,154.0,1832.0,1193
 2026-07-22,BLR,Curd,164.0,101.0,265.0,241
 2026-07-22,BLR,Double Toned A2 Buffalo Milk,462.0,86.0,548.0,403
+2026-07-22,BLR,High Protein Toned Milk,113.0,36.0,149.0,116
 2026-07-22,BLR,Skim Milk,442.0,42.0,484.0,371
 2026-07-22,BLR,Toned Milk,490.0,94.0,584.0,412
 2026-07-22,HYD,A2 Buffalo Milk,15988.0,1003.0,16991.0,10652
@@ -11148,6 +11283,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-22,HYD,Cow Milk,8884.0,488.0,9372.0,5613
 2026-07-22,HYD,Curd,918.0,545.0,1463.0,1303
 2026-07-22,HYD,Double Toned A2 Buffalo Milk,5035.0,398.0,5433.0,3506
+2026-07-22,HYD,High Protein Toned Milk,772.0,183.0,955.0,737
 2026-07-22,HYD,Skim Milk,2177.0,185.0,2362.0,1602
 2026-07-22,HYD,Toned Milk,9273.0,1099.0,10372.0,6369
 2026-07-22,PNQ,A2 Buffalo Milk,185.0,38.0,223.0,139
@@ -11166,6 +11302,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-23,BLR,Cow Milk,1651.0,138.0,1789.0,1136
 2026-07-23,BLR,Curd,175.0,81.0,256.0,237
 2026-07-23,BLR,Double Toned A2 Buffalo Milk,445.0,89.0,534.0,397
+2026-07-23,BLR,High Protein Toned Milk,117.0,37.0,154.0,121
 2026-07-23,BLR,Skim Milk,429.0,42.0,471.0,354
 2026-07-23,BLR,Toned Milk,487.0,59.0,546.0,392
 2026-07-23,HYD,A2 Buffalo Milk,15943.0,953.0,16896.0,10593
@@ -11173,6 +11310,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-23,HYD,Cow Milk,9060.0,473.0,9533.0,5657
 2026-07-23,HYD,Curd,883.0,549.0,1432.0,1263
 2026-07-23,HYD,Double Toned A2 Buffalo Milk,4934.0,372.0,5306.0,3413
+2026-07-23,HYD,High Protein Toned Milk,787.0,254.0,1041.0,801
 2026-07-23,HYD,Skim Milk,2119.0,161.0,2280.0,1575
 2026-07-23,HYD,Toned Milk,9332.0,1047.0,10379.0,6417
 2026-07-23,PNQ,A2 Buffalo Milk,200.0,44.0,244.0,146
@@ -11191,6 +11329,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-24,BLR,Cow Milk,1678.0,135.0,1813.0,1157
 2026-07-24,BLR,Curd,156.0,76.0,232.0,215
 2026-07-24,BLR,Double Toned A2 Buffalo Milk,447.0,85.0,532.0,391
+2026-07-24,BLR,High Protein Toned Milk,122.0,48.0,170.0,128
 2026-07-24,BLR,Skim Milk,440.0,58.0,498.0,361
 2026-07-24,BLR,Toned Milk,493.0,73.0,566.0,396
 2026-07-24,HYD,A2 Buffalo Milk,15912.0,955.0,16867.0,10539
@@ -11198,6 +11337,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-24,HYD,Cow Milk,9080.0,524.0,9604.0,5734
 2026-07-24,HYD,Curd,910.0,503.0,1413.0,1249
 2026-07-24,HYD,Double Toned A2 Buffalo Milk,4993.0,384.0,5377.0,3462
+2026-07-24,HYD,High Protein Toned Milk,867.0,306.0,1173.0,901
 2026-07-24,HYD,Skim Milk,2180.0,163.0,2343.0,1608
 2026-07-24,HYD,Toned Milk,9391.0,1054.0,10445.0,6420
 2026-07-24,PNQ,A2 Buffalo Milk,202.0,32.0,234.0,144
@@ -11216,6 +11356,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-25,BLR,Cow Milk,1650.0,123.0,1773.0,1123
 2026-07-25,BLR,Curd,164.0,78.0,242.0,222
 2026-07-25,BLR,Double Toned A2 Buffalo Milk,441.0,87.0,528.0,387
+2026-07-25,BLR,High Protein Toned Milk,126.0,57.0,183.0,139
 2026-07-25,BLR,Skim Milk,447.0,48.0,495.0,353
 2026-07-25,BLR,Toned Milk,484.0,73.0,557.0,391
 2026-07-25,HYD,A2 Buffalo Milk,15951.0,1096.0,17047.0,10492
@@ -11223,6 +11364,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-25,HYD,Cow Milk,8931.0,536.0,9467.0,5647
 2026-07-25,HYD,Curd,902.0,597.0,1499.0,1298
 2026-07-25,HYD,Double Toned A2 Buffalo Milk,4881.0,435.0,5316.0,3384
+2026-07-25,HYD,High Protein Toned Milk,941.0,500.0,1441.0,1097
 2026-07-25,HYD,Skim Milk,2097.0,167.0,2264.0,1547
 2026-07-25,HYD,Toned Milk,9153.0,1088.0,10241.0,6265
 2026-07-25,PNQ,A2 Buffalo Milk,195.0,25.0,220.0,135
@@ -11241,6 +11383,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-26,BLR,Cow Milk,1604.0,104.0,1708.0,1086
 2026-07-26,BLR,Curd,146.0,80.0,226.0,195
 2026-07-26,BLR,Double Toned A2 Buffalo Milk,434.0,71.0,505.0,370
+2026-07-26,BLR,High Protein Toned Milk,126.0,47.0,173.0,141
 2026-07-26,BLR,Skim Milk,416.0,65.0,481.0,345
 2026-07-26,BLR,Toned Milk,452.0,64.0,516.0,364
 2026-07-26,HYD,A2 Buffalo Milk,15421.0,843.0,16264.0,10143
@@ -11248,6 +11391,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-26,HYD,Cow Milk,8695.0,447.0,9142.0,5400
 2026-07-26,HYD,Curd,846.0,478.0,1324.0,1187
 2026-07-26,HYD,Double Toned A2 Buffalo Milk,4864.0,345.0,5209.0,3308
+2026-07-26,HYD,High Protein Toned Milk,943.0,467.0,1410.0,1058
 2026-07-26,HYD,Skim Milk,2009.0,136.0,2145.0,1455
 2026-07-26,HYD,Toned Milk,8797.0,854.0,9651.0,5967
 2026-07-26,PNQ,A2 Buffalo Milk,208.0,31.0,239.0,143
@@ -11266,6 +11410,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-27,BLR,Cow Milk,1625.0,155.0,1780.0,1138
 2026-07-27,BLR,Curd,152.0,77.0,229.0,217
 2026-07-27,BLR,Double Toned A2 Buffalo Milk,465.0,61.0,526.0,384
+2026-07-27,BLR,High Protein Toned Milk,143.0,55.0,198.0,154
 2026-07-27,BLR,Skim Milk,397.0,52.0,449.0,339
 2026-07-27,BLR,Toned Milk,468.0,65.0,533.0,382
 2026-07-27,HYD,A2 Buffalo Milk,15718.0,898.0,16616.0,10415
@@ -11273,6 +11418,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-27,HYD,Cow Milk,8929.0,479.0,9408.0,5645
 2026-07-27,HYD,Curd,877.0,558.0,1435.0,1289
 2026-07-27,HYD,Double Toned A2 Buffalo Milk,4888.0,382.0,5270.0,3413
+2026-07-27,HYD,High Protein Toned Milk,1046.0,493.0,1539.0,1178
 2026-07-27,HYD,Skim Milk,2032.0,167.0,2199.0,1507
 2026-07-27,HYD,Toned Milk,9037.0,965.0,10002.0,6188
 2026-07-27,PNQ,A2 Buffalo Milk,180.0,33.0,213.0,135
@@ -11291,6 +11437,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-28,BLR,Cow Milk,1625.0,124.0,1749.0,1127
 2026-07-28,BLR,Curd,149.0,88.0,237.0,215
 2026-07-28,BLR,Double Toned A2 Buffalo Milk,442.0,90.0,532.0,372
+2026-07-28,BLR,High Protein Toned Milk,149.0,50.0,199.0,156
 2026-07-28,BLR,Skim Milk,417.0,37.0,454.0,345
 2026-07-28,BLR,Toned Milk,470.0,89.0,559.0,404
 2026-07-28,HYD,A2 Buffalo Milk,15684.0,995.0,16679.0,10478
@@ -11298,6 +11445,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-28,HYD,Cow Milk,8836.0,495.0,9331.0,5585
 2026-07-28,HYD,Curd,872.0,539.0,1411.0,1227
 2026-07-28,HYD,Double Toned A2 Buffalo Milk,4901.0,380.0,5281.0,3403
+2026-07-28,HYD,High Protein Toned Milk,1084.0,487.0,1571.0,1210
 2026-07-28,HYD,Skim Milk,2091.0,158.0,2249.0,1540
 2026-07-28,HYD,Toned Milk,8986.0,982.0,9968.0,6182
 2026-07-28,PNQ,A2 Buffalo Milk,196.0,28.0,224.0,143
@@ -11316,6 +11464,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-29,BLR,Cow Milk,1668.0,118.0,1786.0,1142
 2026-07-29,BLR,Curd,153.0,66.0,219.0,204
 2026-07-29,BLR,Double Toned A2 Buffalo Milk,479.0,98.0,577.0,412
+2026-07-29,BLR,High Protein Toned Milk,165.0,64.0,229.0,181
 2026-07-29,BLR,Skim Milk,440.0,45.0,485.0,363
 2026-07-29,BLR,Toned Milk,475.0,74.0,549.0,395
 2026-07-29,HYD,A2 Buffalo Milk,15938.0,966.0,16904.0,10582
@@ -11323,6 +11472,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-29,HYD,Cow Milk,8988.0,506.0,9494.0,5687
 2026-07-29,HYD,Curd,919.0,553.0,1472.0,1318
 2026-07-29,HYD,Double Toned A2 Buffalo Milk,4882.0,406.0,5288.0,3427
+2026-07-29,HYD,High Protein Toned Milk,1160.0,508.0,1668.0,1281
 2026-07-29,HYD,Skim Milk,2086.0,190.0,2276.0,1542
 2026-07-29,HYD,Toned Milk,9076.0,966.0,10042.0,6232
 2026-07-29,PNQ,A2 Buffalo Milk,207.0,62.0,269.0,165
@@ -11341,6 +11491,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-30,BLR,Cow Milk,1644.0,114.0,1758.0,1133
 2026-07-30,BLR,Curd,154.0,75.0,229.0,209
 2026-07-30,BLR,Double Toned A2 Buffalo Milk,456.0,83.0,539.0,396
+2026-07-30,BLR,High Protein Toned Milk,148.0,56.0,204.0,166
 2026-07-30,BLR,Skim Milk,431.0,51.0,482.0,362
 2026-07-30,BLR,Toned Milk,484.0,73.0,557.0,389
 2026-07-30,HYD,A2 Buffalo Milk,15896.0,958.0,16854.0,10542
@@ -11348,6 +11499,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-30,HYD,Cow Milk,8878.0,455.0,9333.0,5564
 2026-07-30,HYD,Curd,907.0,563.0,1470.0,1291
 2026-07-30,HYD,Double Toned A2 Buffalo Milk,4905.0,379.0,5284.0,3427
+2026-07-30,HYD,High Protein Toned Milk,1206.0,488.0,1694.0,1309
 2026-07-30,HYD,Skim Milk,2110.0,162.0,2272.0,1546
 2026-07-30,HYD,Toned Milk,9088.0,1004.0,10092.0,6245
 2026-07-30,PNQ,A2 Buffalo Milk,202.0,22.0,224.0,137
@@ -11366,6 +11518,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-31,BLR,Cow Milk,1646.0,141.0,1787.0,1144
 2026-07-31,BLR,Curd,140.0,70.0,210.0,189
 2026-07-31,BLR,Double Toned A2 Buffalo Milk,458.0,84.0,542.0,399
+2026-07-31,BLR,High Protein Toned Milk,162.0,52.0,214.0,162
 2026-07-31,BLR,Skim Milk,427.0,41.0,468.0,341
 2026-07-31,BLR,Toned Milk,461.0,66.0,527.0,371
 2026-07-31,HYD,A2 Buffalo Milk,15766.0,1023.0,16789.0,10482
@@ -11373,6 +11526,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-07-31,HYD,Cow Milk,8967.0,524.0,9491.0,5663
 2026-07-31,HYD,Curd,881.0,548.0,1429.0,1247
 2026-07-31,HYD,Double Toned A2 Buffalo Milk,4880.0,391.0,5271.0,3379
+2026-07-31,HYD,High Protein Toned Milk,1248.0,534.0,1782.0,1359
 2026-07-31,HYD,Skim Milk,2072.0,175.0,2247.0,1532
 2026-07-31,HYD,Toned Milk,8939.0,975.0,9914.0,6141
 2026-07-31,PNQ,A2 Buffalo Milk,171.0,36.0,207.0,130
@@ -11391,6 +11545,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-01,BLR,Cow Milk,1662.0,131.0,1793.0,1156
 2026-08-01,BLR,Curd,159.0,55.0,214.0,190
 2026-08-01,BLR,Double Toned A2 Buffalo Milk,450.0,101.0,551.0,398
+2026-08-01,BLR,High Protein Toned Milk,170.0,41.0,211.0,162
 2026-08-01,BLR,Skim Milk,421.0,48.0,469.0,349
 2026-08-01,BLR,Toned Milk,470.0,70.0,540.0,388
 2026-08-01,HYD,A2 Buffalo Milk,15853.0,939.0,16792.0,10444
@@ -11398,6 +11553,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-01,HYD,Cow Milk,8916.0,450.0,9366.0,5576
 2026-08-01,HYD,Curd,934.0,475.0,1409.0,1244
 2026-08-01,HYD,Double Toned A2 Buffalo Milk,4850.0,411.0,5261.0,3394
+2026-08-01,HYD,High Protein Toned Milk,1301.0,420.0,1721.0,1292
 2026-08-01,HYD,Skim Milk,2111.0,171.0,2282.0,1563
 2026-08-01,HYD,Toned Milk,9007.0,937.0,9944.0,6152
 2026-08-01,PNQ,A2 Buffalo Milk,172.0,43.0,215.0,139
@@ -11416,6 +11572,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-02,BLR,Cow Milk,1615.0,118.0,1733.0,1099
 2026-08-02,BLR,Curd,139.0,70.0,209.0,184
 2026-08-02,BLR,Double Toned A2 Buffalo Milk,458.0,73.0,531.0,379
+2026-08-02,BLR,High Protein Toned Milk,163.0,40.0,203.0,156
 2026-08-02,BLR,Skim Milk,416.0,54.0,470.0,339
 2026-08-02,BLR,Toned Milk,478.0,63.0,541.0,376
 2026-08-02,HYD,A2 Buffalo Milk,15459.0,883.0,16342.0,10159
@@ -11423,6 +11580,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-02,HYD,Cow Milk,8897.0,460.0,9357.0,5527
 2026-08-02,HYD,Curd,858.0,501.0,1359.0,1217
 2026-08-02,HYD,Double Toned A2 Buffalo Milk,4741.0,345.0,5086.0,3266
+2026-08-02,HYD,High Protein Toned Milk,1318.0,372.0,1690.0,1240
 2026-08-02,HYD,Skim Milk,2033.0,149.0,2182.0,1495
 2026-08-02,HYD,Toned Milk,8792.0,913.0,9705.0,5964
 2026-08-02,PNQ,A2 Buffalo Milk,187.0,40.0,227.0,143
@@ -11441,6 +11599,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-03,BLR,Cow Milk,1658.0,118.0,1776.0,1149
 2026-08-03,BLR,Curd,179.0,79.0,258.0,231
 2026-08-03,BLR,Double Toned A2 Buffalo Milk,450.0,81.0,531.0,387
+2026-08-03,BLR,High Protein Toned Milk,170.0,43.0,213.0,165
 2026-08-03,BLR,Skim Milk,419.0,54.0,473.0,358
 2026-08-03,BLR,Toned Milk,485.0,70.0,555.0,393
 2026-08-03,HYD,A2 Buffalo Milk,15733.0,944.0,16677.0,10459
@@ -11448,6 +11607,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-03,HYD,Cow Milk,8885.0,470.0,9355.0,5659
 2026-08-03,HYD,Curd,875.0,510.0,1385.0,1241
 2026-08-03,HYD,Double Toned A2 Buffalo Milk,4901.0,338.0,5239.0,3408
+2026-08-03,HYD,High Protein Toned Milk,1321.0,380.0,1701.0,1287
 2026-08-03,HYD,Skim Milk,2060.0,178.0,2238.0,1552
 2026-08-03,HYD,Toned Milk,9083.0,996.0,10079.0,6229
 2026-08-03,PNQ,A2 Buffalo Milk,206.0,33.0,239.0,143
@@ -11466,6 +11626,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-04,BLR,Cow Milk,1683.0,136.0,1819.0,1154
 2026-08-04,BLR,Curd,146.0,92.0,238.0,220
 2026-08-04,BLR,Double Toned A2 Buffalo Milk,462.0,101.0,563.0,397
+2026-08-04,BLR,High Protein Toned Milk,165.0,47.0,212.0,168
 2026-08-04,BLR,Skim Milk,414.0,54.0,468.0,350
 2026-08-04,BLR,Toned Milk,498.0,70.0,568.0,407
 2026-08-04,HYD,A2 Buffalo Milk,15818.0,1036.0,16854.0,10540
@@ -11473,6 +11634,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-04,HYD,Cow Milk,8974.0,534.0,9508.0,5688
 2026-08-04,HYD,Curd,892.0,615.0,1507.0,1348
 2026-08-04,HYD,Double Toned A2 Buffalo Milk,4952.0,382.0,5334.0,3457
+2026-08-04,HYD,High Protein Toned Milk,1387.0,379.0,1766.0,1341
 2026-08-04,HYD,Skim Milk,2076.0,221.0,2297.0,1547
 2026-08-04,HYD,Toned Milk,9069.0,953.0,10022.0,6227
 2026-08-04,PNQ,A2 Buffalo Milk,200.0,50.0,250.0,149
@@ -11491,6 +11653,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-05,BLR,Cow Milk,1727.0,141.0,1868.0,1208
 2026-08-05,BLR,Curd,160.0,70.0,230.0,211
 2026-08-05,BLR,Double Toned A2 Buffalo Milk,464.0,94.0,558.0,407
+2026-08-05,BLR,High Protein Toned Milk,187.0,51.0,238.0,183
 2026-08-05,BLR,Skim Milk,428.0,59.0,487.0,362
 2026-08-05,BLR,Toned Milk,496.0,83.0,579.0,419
 2026-08-05,HYD,A2 Buffalo Milk,15966.0,1037.0,17003.0,10673
@@ -11498,6 +11661,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-05,HYD,Cow Milk,8953.0,450.0,9403.0,5646
 2026-08-05,HYD,Curd,916.0,584.0,1500.0,1333
 2026-08-05,HYD,Double Toned A2 Buffalo Milk,4996.0,401.0,5397.0,3477
+2026-08-05,HYD,High Protein Toned Milk,1376.0,400.0,1776.0,1346
 2026-08-05,HYD,Skim Milk,2081.0,171.0,2252.0,1574
 2026-08-05,HYD,Toned Milk,9190.0,1049.0,10239.0,6322
 2026-08-05,PNQ,A2 Buffalo Milk,191.0,31.0,222.0,141
@@ -11516,6 +11680,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-06,BLR,Cow Milk,1698.0,124.0,1822.0,1171
 2026-08-06,BLR,Curd,162.0,91.0,253.0,234
 2026-08-06,BLR,Double Toned A2 Buffalo Milk,481.0,96.0,577.0,410
+2026-08-06,BLR,High Protein Toned Milk,180.0,59.0,239.0,185
 2026-08-06,BLR,Skim Milk,446.0,46.0,492.0,371
 2026-08-06,BLR,Toned Milk,513.0,72.0,585.0,411
 2026-08-06,HYD,A2 Buffalo Milk,16024.0,1016.0,17040.0,10683
@@ -11523,6 +11688,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-06,HYD,Cow Milk,9060.0,505.0,9565.0,5745
 2026-08-06,HYD,Curd,936.0,571.0,1507.0,1334
 2026-08-06,HYD,Double Toned A2 Buffalo Milk,4966.0,431.0,5397.0,3478
+2026-08-06,HYD,High Protein Toned Milk,1489.0,385.0,1874.0,1417
 2026-08-06,HYD,Skim Milk,2137.0,170.0,2307.0,1597
 2026-08-06,HYD,Toned Milk,9217.0,1093.0,10310.0,6363
 2026-08-06,PNQ,A2 Buffalo Milk,189.0,28.0,217.0,139
@@ -11541,6 +11707,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-07,BLR,Cow Milk,1699.0,128.0,1827.0,1176
 2026-08-07,BLR,Curd,166.0,81.0,247.0,225
 2026-08-07,BLR,Double Toned A2 Buffalo Milk,459.0,79.0,538.0,399
+2026-08-07,BLR,High Protein Toned Milk,202.0,50.0,252.0,187
 2026-08-07,BLR,Skim Milk,432.0,65.0,497.0,367
 2026-08-07,BLR,Toned Milk,486.0,82.0,568.0,402
 2026-08-07,HYD,A2 Buffalo Milk,15986.0,1002.0,16988.0,10662
@@ -11548,6 +11715,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-07,HYD,Cow Milk,8993.0,509.0,9502.0,5736
 2026-08-07,HYD,Curd,896.0,544.0,1440.0,1271
 2026-08-07,HYD,Double Toned A2 Buffalo Milk,4898.0,383.0,5281.0,3428
+2026-08-07,HYD,High Protein Toned Milk,1477.0,383.0,1860.0,1405
 2026-08-07,HYD,Skim Milk,2084.0,155.0,2239.0,1555
 2026-08-07,HYD,Toned Milk,9269.0,998.0,10267.0,6340
 2026-08-07,PNQ,A2 Buffalo Milk,190.0,43.0,233.0,146
@@ -11566,6 +11734,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-08,BLR,Cow Milk,1648.0,112.0,1760.0,1112
 2026-08-08,BLR,Curd,163.0,69.0,232.0,209
 2026-08-08,BLR,Double Toned A2 Buffalo Milk,455.0,81.0,536.0,376
+2026-08-08,BLR,High Protein Toned Milk,179.0,40.0,219.0,170
 2026-08-08,BLR,Skim Milk,447.0,39.0,486.0,358
 2026-08-08,BLR,Toned Milk,514.0,75.0,589.0,410
 2026-08-08,HYD,A2 Buffalo Milk,15639.0,1008.0,16647.0,10304
@@ -11573,6 +11742,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-08,HYD,Cow Milk,8948.0,505.0,9453.0,5618
 2026-08-08,HYD,Curd,946.0,555.0,1501.0,1292
 2026-08-08,HYD,Double Toned A2 Buffalo Milk,4859.0,420.0,5279.0,3360
+2026-08-08,HYD,High Protein Toned Milk,1489.0,300.0,1789.0,1329
 2026-08-08,HYD,Skim Milk,2066.0,160.0,2226.0,1547
 2026-08-08,HYD,Toned Milk,9022.0,953.0,9975.0,6133
 2026-08-08,PNQ,A2 Buffalo Milk,196.0,52.0,248.0,154
@@ -11591,6 +11761,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-09,BLR,Cow Milk,1604.0,128.0,1732.0,1096
 2026-08-09,BLR,Curd,163.0,63.0,226.0,206
 2026-08-09,BLR,Double Toned A2 Buffalo Milk,426.0,88.0,514.0,381
+2026-08-09,BLR,High Protein Toned Milk,175.0,44.0,219.0,162
 2026-08-09,BLR,Skim Milk,426.0,43.0,469.0,343
 2026-08-09,BLR,Toned Milk,481.0,59.0,540.0,385
 2026-08-09,HYD,A2 Buffalo Milk,15267.0,1035.0,16302.0,10038
@@ -11598,6 +11769,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-09,HYD,Cow Milk,8747.0,551.0,9298.0,5502
 2026-08-09,HYD,Curd,882.0,541.0,1423.0,1253
 2026-08-09,HYD,Double Toned A2 Buffalo Milk,4777.0,411.0,5188.0,3330
+2026-08-09,HYD,High Protein Toned Milk,1442.0,330.0,1772.0,1314
 2026-08-09,HYD,Skim Milk,2026.0,149.0,2175.0,1491
 2026-08-09,HYD,Toned Milk,8818.0,962.0,9780.0,5989
 2026-08-09,PNQ,A2 Buffalo Milk,204.0,36.0,240.0,150
@@ -11616,6 +11788,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-10,BLR,Cow Milk,1699.0,127.0,1826.0,1164
 2026-08-10,BLR,Curd,170.0,72.0,242.0,220
 2026-08-10,BLR,Double Toned A2 Buffalo Milk,481.0,74.0,555.0,389
+2026-08-10,BLR,High Protein Toned Milk,195.0,47.0,242.0,181
 2026-08-10,BLR,Skim Milk,448.0,66.0,514.0,392
 2026-08-10,BLR,Toned Milk,496.0,84.0,580.0,410
 2026-08-10,HYD,A2 Buffalo Milk,15401.0,850.0,16251.0,10186
@@ -11623,6 +11796,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-10,HYD,Cow Milk,8959.0,538.0,9497.0,5647
 2026-08-10,HYD,Curd,900.0,530.0,1430.0,1275
 2026-08-10,HYD,Double Toned A2 Buffalo Milk,4847.0,325.0,5172.0,3344
+2026-08-10,HYD,High Protein Toned Milk,1542.0,322.0,1864.0,1387
 2026-08-10,HYD,Skim Milk,2051.0,158.0,2209.0,1520
 2026-08-10,HYD,Toned Milk,8931.0,884.0,9815.0,6102
 2026-08-10,PNQ,A2 Buffalo Milk,197.0,41.0,238.0,146
@@ -11641,6 +11815,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-11,BLR,Cow Milk,1688.0,123.0,1811.0,1163
 2026-08-11,BLR,Curd,161.0,87.0,248.0,223
 2026-08-11,BLR,Double Toned A2 Buffalo Milk,437.0,75.0,512.0,374
+2026-08-11,BLR,High Protein Toned Milk,202.0,41.0,243.0,185
 2026-08-11,BLR,Skim Milk,427.0,65.0,492.0,367
 2026-08-11,BLR,Toned Milk,485.0,71.0,556.0,393
 2026-08-11,HYD,A2 Buffalo Milk,15655.0,1047.0,16702.0,10484
@@ -11648,6 +11823,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-11,HYD,Cow Milk,9035.0,527.0,9562.0,5712
 2026-08-11,HYD,Curd,892.0,590.0,1482.0,1313
 2026-08-11,HYD,Double Toned A2 Buffalo Milk,4938.0,370.0,5308.0,3435
+2026-08-11,HYD,High Protein Toned Milk,1520.0,365.0,1885.0,1386
 2026-08-11,HYD,Skim Milk,2126.0,190.0,2316.0,1596
 2026-08-11,HYD,Toned Milk,9139.0,1053.0,10192.0,6305
 2026-08-11,PNQ,A2 Buffalo Milk,206.0,46.0,252.0,160
@@ -11666,6 +11842,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-12,BLR,Cow Milk,1740.0,140.0,1880.0,1205
 2026-08-12,BLR,Curd,155.0,71.0,226.0,207
 2026-08-12,BLR,Double Toned A2 Buffalo Milk,474.0,80.0,554.0,405
+2026-08-12,BLR,High Protein Toned Milk,210.0,61.0,271.0,204
 2026-08-12,BLR,Skim Milk,438.0,59.0,497.0,371
 2026-08-12,BLR,Toned Milk,505.0,105.0,610.0,434
 2026-08-12,HYD,A2 Buffalo Milk,15886.0,1032.0,16918.0,10591
@@ -11673,6 +11850,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-12,HYD,Cow Milk,9075.0,512.0,9587.0,5716
 2026-08-12,HYD,Curd,912.0,576.0,1488.0,1328
 2026-08-12,HYD,Double Toned A2 Buffalo Milk,4927.0,391.0,5318.0,3464
+2026-08-12,HYD,High Protein Toned Milk,1558.0,349.0,1907.0,1444
 2026-08-12,HYD,Skim Milk,2113.0,178.0,2291.0,1589
 2026-08-12,HYD,Toned Milk,9292.0,1052.0,10344.0,6368
 2026-08-12,PNQ,A2 Buffalo Milk,204.0,17.0,221.0,140
@@ -11691,6 +11869,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-13,BLR,Cow Milk,1689.0,120.0,1809.0,1156
 2026-08-13,BLR,Curd,159.0,82.0,241.0,218
 2026-08-13,BLR,Double Toned A2 Buffalo Milk,462.0,73.0,535.0,382
+2026-08-13,BLR,High Protein Toned Milk,149.0,20.0,169.0,127
 2026-08-13,BLR,Skim Milk,442.0,63.0,505.0,372
 2026-08-13,BLR,Toned Milk,509.0,91.0,600.0,424
 2026-08-13,HYD,A2 Buffalo Milk,16061.0,1052.0,17113.0,10698
@@ -11698,6 +11877,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-13,HYD,Cow Milk,8986.0,561.0,9547.0,5699
 2026-08-13,HYD,Curd,913.0,593.0,1506.0,1334
 2026-08-13,HYD,Double Toned A2 Buffalo Milk,4931.0,408.0,5339.0,3453
+2026-08-13,HYD,High Protein Toned Milk,1551.0,420.0,1971.0,1483
 2026-08-13,HYD,Skim Milk,2137.0,190.0,2327.0,1601
 2026-08-13,HYD,Toned Milk,9211.0,1152.0,10363.0,6350
 2026-08-13,PNQ,A2 Buffalo Milk,218.0,49.0,267.0,164
@@ -11716,6 +11896,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-14,BLR,Cow Milk,1706.0,123.0,1829.0,1170
 2026-08-14,BLR,Curd,158.0,97.0,255.0,225
 2026-08-14,BLR,Double Toned A2 Buffalo Milk,476.0,21.0,497.0,356
+2026-08-14,BLR,High Protein Toned Milk,195.0,29.0,224.0,170
 2026-08-14,BLR,Skim Milk,425.0,80.0,505.0,368
 2026-08-14,BLR,Toned Milk,492.0,93.0,585.0,422
 2026-08-14,HYD,A2 Buffalo Milk,16104.0,1131.0,17235.0,10723
@@ -11723,6 +11904,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-14,HYD,Cow Milk,9408.0,1210.0,10618.0,6410
 2026-08-14,HYD,Curd,931.0,604.0,1535.0,1346
 2026-08-14,HYD,Double Toned A2 Buffalo Milk,5002.0,285.0,5287.0,3422
+2026-08-14,HYD,High Protein Toned Milk,1637.0,429.0,2066.0,1529
 2026-08-14,HYD,Skim Milk,2097.0,195.0,2292.0,1601
 2026-08-14,HYD,Toned Milk,9311.0,998.0,10309.0,6324
 2026-08-14,PNQ,A2 Buffalo Milk,191.0,33.0,224.0,146
@@ -11741,6 +11923,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-15,BLR,Cow Milk,1631.0,107.0,1738.0,1117
 2026-08-15,BLR,Curd,155.0,77.0,232.0,210
 2026-08-15,BLR,Double Toned A2 Buffalo Milk,442.0,62.0,504.0,365
+2026-08-15,BLR,High Protein Toned Milk,194.0,41.0,235.0,186
 2026-08-15,BLR,Skim Milk,406.0,52.0,458.0,329
 2026-08-15,BLR,Toned Milk,493.0,81.0,574.0,402
 2026-08-15,HYD,A2 Buffalo Milk,15569.0,963.0,16532.0,10315
@@ -11748,6 +11931,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-15,HYD,Cow Milk,9080.0,546.0,9626.0,5667
 2026-08-15,HYD,Curd,959.0,503.0,1462.0,1281
 2026-08-15,HYD,Double Toned A2 Buffalo Milk,4901.0,447.0,5348.0,3413
+2026-08-15,HYD,High Protein Toned Milk,1579.0,305.0,1884.0,1377
 2026-08-15,HYD,Skim Milk,2082.0,135.0,2217.0,1524
 2026-08-15,HYD,Toned Milk,9011.0,1033.0,10044.0,6169
 2026-08-15,PNQ,A2 Buffalo Milk,205.0,28.0,233.0,144
@@ -11766,6 +11950,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-16,BLR,Cow Milk,1609.0,118.0,1727.0,1099
 2026-08-16,BLR,Curd,137.0,62.0,199.0,180
 2026-08-16,BLR,Double Toned A2 Buffalo Milk,430.0,71.0,501.0,348
+2026-08-16,BLR,High Protein Toned Milk,189.0,20.0,209.0,154
 2026-08-16,BLR,Skim Milk,401.0,35.0,436.0,326
 2026-08-16,BLR,Toned Milk,480.0,75.0,555.0,394
 2026-08-16,HYD,A2 Buffalo Milk,15043.0,824.0,15867.0,9933
@@ -11773,6 +11958,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-16,HYD,Cow Milk,8833.0,566.0,9399.0,5564
 2026-08-16,HYD,Curd,897.0,475.0,1372.0,1223
 2026-08-16,HYD,Double Toned A2 Buffalo Milk,4718.0,333.0,5051.0,3241
+2026-08-16,HYD,High Protein Toned Milk,1498.0,158.0,1656.0,1229
 2026-08-16,HYD,Skim Milk,1959.0,165.0,2124.0,1475
 2026-08-16,HYD,Toned Milk,8774.0,995.0,9769.0,6013
 2026-08-16,PNQ,A2 Buffalo Milk,210.0,37.0,247.0,151
@@ -11791,6 +11977,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-17,BLR,Cow Milk,1638.0,182.0,1820.0,1162
 2026-08-17,BLR,Curd,169.0,75.0,244.0,220
 2026-08-17,BLR,Double Toned A2 Buffalo Milk,421.0,68.0,489.0,353
+2026-08-17,BLR,High Protein Toned Milk,194.0,30.0,224.0,174
 2026-08-17,BLR,Skim Milk,409.0,76.0,485.0,357
 2026-08-17,BLR,Toned Milk,509.0,72.0,581.0,415
 2026-08-17,HYD,A2 Buffalo Milk,15508.0,998.0,16506.0,10385
@@ -11798,6 +11985,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-17,HYD,Cow Milk,9069.0,1036.0,10105.0,6157
 2026-08-17,HYD,Curd,926.0,587.0,1513.0,1319
 2026-08-17,HYD,Double Toned A2 Buffalo Milk,4884.0,404.0,5288.0,3412
+2026-08-17,HYD,High Protein Toned Milk,1527.0,210.0,1737.0,1309
 2026-08-17,HYD,Skim Milk,2071.0,195.0,2266.0,1580
 2026-08-17,HYD,Toned Milk,9063.0,1095.0,10158.0,6280
 2026-08-17,PNQ,A2 Buffalo Milk,202.0,41.0,243.0,155
@@ -11816,6 +12004,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-18,BLR,Cow Milk,1696.0,111.0,1807.0,1164
 2026-08-18,BLR,Curd,135.0,89.0,224.0,207
 2026-08-18,BLR,Double Toned A2 Buffalo Milk,436.0,81.0,517.0,369
+2026-08-18,BLR,High Protein Toned Milk,213.0,31.0,244.0,181
 2026-08-18,BLR,Skim Milk,429.0,58.0,487.0,355
 2026-08-18,BLR,Toned Milk,502.0,86.0,588.0,421
 2026-08-18,HYD,A2 Buffalo Milk,15845.0,1024.0,16869.0,10617
@@ -11823,6 +12012,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-18,HYD,Cow Milk,9170.0,575.0,9745.0,5859
 2026-08-18,HYD,Curd,886.0,573.0,1459.0,1302
 2026-08-18,HYD,Double Toned A2 Buffalo Milk,4889.0,371.0,5260.0,3414
+2026-08-18,HYD,High Protein Toned Milk,1548.0,159.0,1707.0,1286
 2026-08-18,HYD,Skim Milk,2111.0,164.0,2275.0,1577
 2026-08-18,HYD,Toned Milk,9252.0,1120.0,10372.0,6385
 2026-08-18,PNQ,A2 Buffalo Milk,220.0,29.0,249.0,161
@@ -11841,6 +12031,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-19,BLR,Cow Milk,1710.0,126.0,1836.0,1189
 2026-08-19,BLR,Curd,177.0,74.0,251.0,224
 2026-08-19,BLR,Double Toned A2 Buffalo Milk,430.0,71.0,501.0,373
+2026-08-19,BLR,High Protein Toned Milk,204.0,28.0,232.0,175
 2026-08-19,BLR,Skim Milk,417.0,47.0,464.0,346
 2026-08-19,BLR,Toned Milk,498.0,92.0,590.0,427
 2026-08-19,HYD,A2 Buffalo Milk,15945.0,959.0,16904.0,10638
@@ -11848,6 +12039,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-19,HYD,Cow Milk,9041.0,490.0,9531.0,5682
 2026-08-19,HYD,Curd,925.0,528.0,1453.0,1295
 2026-08-19,HYD,Double Toned A2 Buffalo Milk,4971.0,432.0,5403.0,3464
+2026-08-19,HYD,High Protein Toned Milk,1540.0,192.0,1732.0,1290
 2026-08-19,HYD,Skim Milk,2110.0,193.0,2303.0,1581
 2026-08-19,HYD,Toned Milk,9236.0,1201.0,10437.0,6470
 2026-08-19,PNQ,A2 Buffalo Milk,223.0,41.0,264.0,165
@@ -11866,6 +12058,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-20,BLR,Cow Milk,1665.0,128.0,1793.0,1144
 2026-08-20,BLR,Curd,154.0,83.0,237.0,213
 2026-08-20,BLR,Double Toned A2 Buffalo Milk,432.0,73.0,505.0,367
+2026-08-20,BLR,High Protein Toned Milk,199.0,27.0,226.0,171
 2026-08-20,BLR,Skim Milk,415.0,50.0,465.0,354
 2026-08-20,BLR,Toned Milk,484.0,98.0,582.0,414
 2026-08-20,HYD,A2 Buffalo Milk,15854.0,1165.0,17019.0,10583
@@ -11873,6 +12066,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-20,HYD,Cow Milk,9186.0,950.0,10136.0,6026
 2026-08-20,HYD,Curd,942.0,580.0,1522.0,1327
 2026-08-20,HYD,Double Toned A2 Buffalo Milk,4898.0,448.0,5346.0,3460
+2026-08-20,HYD,High Protein Toned Milk,1490.0,218.0,1708.0,1284
 2026-08-20,HYD,Skim Milk,2051.0,237.0,2288.0,1571
 2026-08-20,HYD,Toned Milk,9364.0,1267.0,10631.0,6499
 2026-08-20,PNQ,A2 Buffalo Milk,202.0,25.0,227.0,153
@@ -11891,6 +12085,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-21,BLR,Cow Milk,1705.0,215.0,1920.0,1194
 2026-08-21,BLR,Curd,165.0,128.0,293.0,263
 2026-08-21,BLR,Double Toned A2 Buffalo Milk,445.0,90.0,535.0,366
+2026-08-21,BLR,High Protein Toned Milk,210.0,33.0,243.0,170
 2026-08-21,BLR,Skim Milk,402.0,74.0,476.0,351
 2026-08-21,BLR,Toned Milk,488.0,135.0,623.0,431
 2026-08-21,HYD,A2 Buffalo Milk,16976.0,1791.0,18767.0,11106
@@ -11898,6 +12093,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-21,HYD,Cow Milk,9910.0,2904.0,12814.0,7678
 2026-08-21,HYD,Curd,953.0,1143.0,2096.0,1781
 2026-08-21,HYD,Double Toned A2 Buffalo Milk,5210.0,547.0,5757.0,3548
+2026-08-21,HYD,High Protein Toned Milk,1522.0,273.0,1795.0,1306
 2026-08-21,HYD,Skim Milk,2110.0,224.0,2334.0,1576
 2026-08-21,HYD,Toned Milk,10006.0,1629.0,11635.0,6775
 2026-08-21,PNQ,A2 Buffalo Milk,201.0,30.0,231.0,151
@@ -11916,6 +12112,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-22,BLR,Cow Milk,1589.0,99.0,1688.0,1079
 2026-08-22,BLR,Curd,142.0,54.0,196.0,182
 2026-08-22,BLR,Double Toned A2 Buffalo Milk,414.0,59.0,473.0,336
+2026-08-22,BLR,High Protein Toned Milk,206.0,33.0,239.0,171
 2026-08-22,BLR,Skim Milk,390.0,38.0,428.0,317
 2026-08-22,BLR,Toned Milk,474.0,81.0,555.0,386
 2026-08-22,HYD,A2 Buffalo Milk,15602.0,809.0,16411.0,10217
@@ -11923,6 +12120,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-22,HYD,Cow Milk,9174.0,464.0,9638.0,5682
 2026-08-22,HYD,Curd,928.0,417.0,1345.0,1176
 2026-08-22,HYD,Double Toned A2 Buffalo Milk,4853.0,303.0,5156.0,3304
+2026-08-22,HYD,High Protein Toned Milk,1481.0,152.0,1633.0,1219
 2026-08-22,HYD,Skim Milk,1995.0,144.0,2139.0,1466
 2026-08-22,HYD,Toned Milk,9176.0,876.0,10052.0,6160
 2026-08-22,PNQ,A2 Buffalo Milk,200.0,36.0,236.0,155
@@ -11941,6 +12139,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-23,BLR,Cow Milk,1534.0,105.0,1639.0,1041
 2026-08-23,BLR,Curd,137.0,52.0,189.0,168
 2026-08-23,BLR,Double Toned A2 Buffalo Milk,369.0,63.0,432.0,317
+2026-08-23,BLR,High Protein Toned Milk,175.0,23.0,198.0,146
 2026-08-23,BLR,Skim Milk,360.0,40.0,400.0,298
 2026-08-23,BLR,Toned Milk,457.0,73.0,530.0,373
 2026-08-23,HYD,A2 Buffalo Milk,15029.0,909.0,15938.0,9953
@@ -11948,6 +12147,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-23,HYD,Cow Milk,8795.0,478.0,9273.0,5460
 2026-08-23,HYD,Curd,840.0,454.0,1294.0,1162
 2026-08-23,HYD,Double Toned A2 Buffalo Milk,4677.0,369.0,5046.0,3211
+2026-08-23,HYD,High Protein Toned Milk,1400.0,150.0,1550.0,1151
 2026-08-23,HYD,Skim Milk,1973.0,148.0,2121.0,1434
 2026-08-23,HYD,Toned Milk,8768.0,961.0,9729.0,6015
 2026-08-23,PNQ,A2 Buffalo Milk,193.0,28.0,221.0,140
@@ -11966,6 +12166,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-24,BLR,Cow Milk,1640.0,131.0,1771.0,1125
 2026-08-24,BLR,Curd,147.0,81.0,228.0,210
 2026-08-24,BLR,Double Toned A2 Buffalo Milk,418.0,81.0,499.0,364
+2026-08-24,BLR,High Protein Toned Milk,194.0,29.0,223.0,167
 2026-08-24,BLR,Skim Milk,390.0,58.0,448.0,344
 2026-08-24,BLR,Toned Milk,474.0,91.0,565.0,390
 2026-08-24,HYD,A2 Buffalo Milk,15404.0,1042.0,16446.0,10320
@@ -11973,6 +12174,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-24,HYD,Cow Milk,8961.0,573.0,9534.0,5681
 2026-08-24,HYD,Curd,864.0,607.0,1471.0,1299
 2026-08-24,HYD,Double Toned A2 Buffalo Milk,4816.0,386.0,5202.0,3361
+2026-08-24,HYD,High Protein Toned Milk,1391.0,148.0,1539.0,1180
 2026-08-24,HYD,Skim Milk,1981.0,186.0,2167.0,1506
 2026-08-24,HYD,Toned Milk,9098.0,1130.0,10228.0,6338
 2026-08-24,PNQ,A2 Buffalo Milk,203.0,22.0,225.0,150
@@ -11991,6 +12193,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-25,BLR,Cow Milk,1640.0,143.0,1783.0,1136
 2026-08-25,BLR,Curd,146.0,70.0,216.0,198
 2026-08-25,BLR,Double Toned A2 Buffalo Milk,418.0,83.0,501.0,358
+2026-08-25,BLR,High Protein Toned Milk,179.0,38.0,217.0,165
 2026-08-25,BLR,Skim Milk,373.0,65.0,438.0,321
 2026-08-25,BLR,Toned Milk,453.0,90.0,543.0,389
 2026-08-25,HYD,A2 Buffalo Milk,15454.0,1089.0,16543.0,10403
@@ -11998,6 +12201,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-25,HYD,Cow Milk,8940.0,523.0,9463.0,5642
 2026-08-25,HYD,Curd,874.0,536.0,1410.0,1249
 2026-08-25,HYD,Double Toned A2 Buffalo Milk,4791.0,360.0,5151.0,3342
+2026-08-25,HYD,High Protein Toned Milk,1466.0,174.0,1640.0,1234
 2026-08-25,HYD,Skim Milk,2026.0,173.0,2199.0,1521
 2026-08-25,HYD,Toned Milk,9346.0,1039.0,10385.0,6385
 2026-08-25,PNQ,A2 Buffalo Milk,203.0,28.0,231.0,152
@@ -12016,6 +12220,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-26,BLR,Cow Milk,1673.0,121.0,1794.0,1113
 2026-08-26,BLR,Curd,125.0,56.0,181.0,168
 2026-08-26,BLR,Double Toned A2 Buffalo Milk,413.0,54.0,467.0,337
+2026-08-26,BLR,High Protein Toned Milk,202.0,26.0,228.0,164
 2026-08-26,BLR,Skim Milk,397.0,62.0,459.0,342
 2026-08-26,BLR,Toned Milk,450.0,98.0,548.0,391
 2026-08-26,HYD,A2 Buffalo Milk,15421.0,974.0,16395.0,10312
@@ -12023,6 +12228,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-26,HYD,Cow Milk,8932.0,491.0,9423.0,5536
 2026-08-26,HYD,Curd,895.0,508.0,1403.0,1220
 2026-08-26,HYD,Double Toned A2 Buffalo Milk,4825.0,405.0,5230.0,3372
+2026-08-26,HYD,High Protein Toned Milk,1433.0,178.0,1611.0,1215
 2026-08-26,HYD,Skim Milk,2023.0,173.0,2196.0,1509
 2026-08-26,HYD,Toned Milk,9163.0,1095.0,10258.0,6326
 2026-08-26,PNQ,A2 Buffalo Milk,211.0,22.0,233.0,150
@@ -12041,6 +12247,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-27,BLR,Cow Milk,1563.0,141.0,1704.0,1096
 2026-08-27,BLR,Curd,141.0,66.0,207.0,194
 2026-08-27,BLR,Double Toned A2 Buffalo Milk,375.0,66.0,441.0,315
+2026-08-27,BLR,High Protein Toned Milk,177.0,21.0,198.0,150
 2026-08-27,BLR,Skim Milk,396.0,45.0,441.0,329
 2026-08-27,BLR,Toned Milk,474.0,92.0,566.0,392
 2026-08-27,HYD,A2 Buffalo Milk,15183.0,1047.0,16230.0,10082
@@ -12048,6 +12255,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-27,HYD,Cow Milk,8685.0,593.0,9278.0,5455
 2026-08-27,HYD,Curd,846.0,527.0,1373.0,1215
 2026-08-27,HYD,Double Toned A2 Buffalo Milk,4778.0,361.0,5139.0,3334
+2026-08-27,HYD,High Protein Toned Milk,1372.0,219.0,1591.0,1191
 2026-08-27,HYD,Skim Milk,2049.0,153.0,2202.0,1512
 2026-08-27,HYD,Toned Milk,9096.0,999.0,10095.0,6218
 2026-08-27,PNQ,A2 Buffalo Milk,199.0,32.0,231.0,151
@@ -12066,6 +12274,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-28,BLR,Cow Milk,1630.0,148.0,1778.0,1092
 2026-08-28,BLR,Curd,134.0,103.0,237.0,205
 2026-08-28,BLR,Double Toned A2 Buffalo Milk,401.0,68.0,469.0,333
+2026-08-28,BLR,High Protein Toned Milk,201.0,37.0,238.0,167
 2026-08-28,BLR,Skim Milk,391.0,61.0,452.0,336
 2026-08-28,BLR,Toned Milk,477.0,94.0,571.0,390
 2026-08-28,HYD,A2 Buffalo Milk,15491.0,1142.0,16633.0,10073
@@ -12073,6 +12282,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-28,HYD,Cow Milk,9108.0,1148.0,10256.0,6009
 2026-08-28,HYD,Curd,920.0,654.0,1574.0,1349
 2026-08-28,HYD,Double Toned A2 Buffalo Milk,4857.0,456.0,5313.0,3304
+2026-08-28,HYD,High Protein Toned Milk,1413.0,160.0,1573.0,1150
 2026-08-28,HYD,Skim Milk,1998.0,158.0,2156.0,1485
 2026-08-28,HYD,Toned Milk,9299.0,1192.0,10491.0,6256
 2026-08-28,PNQ,A2 Buffalo Milk,189.0,41.0,230.0,139
@@ -12091,6 +12301,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-29,BLR,Cow Milk,1517.0,138.0,1655.0,1041
 2026-08-29,BLR,Curd,146.0,63.0,209.0,188
 2026-08-29,BLR,Double Toned A2 Buffalo Milk,391.0,61.0,452.0,320
+2026-08-29,BLR,High Protein Toned Milk,176.0,25.0,201.0,145
 2026-08-29,BLR,Skim Milk,375.0,51.0,426.0,311
 2026-08-29,BLR,Toned Milk,436.0,74.0,510.0,355
 2026-08-29,HYD,A2 Buffalo Milk,14677.0,818.0,15495.0,9622
@@ -12098,6 +12309,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-29,HYD,Cow Milk,8608.0,447.0,9055.0,5328
 2026-08-29,HYD,Curd,853.0,429.0,1282.0,1134
 2026-08-29,HYD,Double Toned A2 Buffalo Milk,4624.0,368.0,4992.0,3193
+2026-08-29,HYD,High Protein Toned Milk,1348.0,166.0,1514.0,1114
 2026-08-29,HYD,Skim Milk,1943.0,126.0,2069.0,1413
 2026-08-29,HYD,Toned Milk,8756.0,855.0,9611.0,5915
 2026-08-29,PNQ,A2 Buffalo Milk,186.0,17.0,203.0,132
@@ -12116,6 +12328,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-30,BLR,Cow Milk,1520.0,115.0,1635.0,1018
 2026-08-30,BLR,Curd,126.0,90.0,216.0,187
 2026-08-30,BLR,Double Toned A2 Buffalo Milk,395.0,70.0,465.0,324
+2026-08-30,BLR,High Protein Toned Milk,165.0,32.0,197.0,133
 2026-08-30,BLR,Skim Milk,378.0,41.0,419.0,301
 2026-08-30,BLR,Toned Milk,456.0,92.0,548.0,366
 2026-08-30,HYD,A2 Buffalo Milk,14402.0,970.0,15372.0,9480
@@ -12123,6 +12336,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-30,HYD,Cow Milk,8367.0,438.0,8805.0,5143
 2026-08-30,HYD,Curd,782.0,508.0,1290.0,1143
 2026-08-30,HYD,Double Toned A2 Buffalo Milk,4486.0,350.0,4836.0,3127
+2026-08-30,HYD,High Protein Toned Milk,1338.0,193.0,1531.0,1135
 2026-08-30,HYD,Skim Milk,1817.0,159.0,1976.0,1362
 2026-08-30,HYD,Toned Milk,8500.0,966.0,9466.0,5812
 2026-08-30,PNQ,A2 Buffalo Milk,195.0,25.0,220.0,142
@@ -12141,6 +12355,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-31,BLR,Cow Milk,1567.0,122.0,1689.0,1068
 2026-08-31,BLR,Curd,163.0,87.0,250.0,223
 2026-08-31,BLR,Double Toned A2 Buffalo Milk,397.0,69.0,466.0,330
+2026-08-31,BLR,High Protein Toned Milk,174.0,36.0,210.0,148
 2026-08-31,BLR,Skim Milk,419.0,41.0,460.0,340
 2026-08-31,BLR,Toned Milk,477.0,91.0,568.0,398
 2026-08-31,HYD,A2 Buffalo Milk,14981.0,1029.0,16010.0,10112
@@ -12148,6 +12363,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-08-31,HYD,Cow Milk,8655.0,624.0,9279.0,5586
 2026-08-31,HYD,Curd,838.0,571.0,1409.0,1266
 2026-08-31,HYD,Double Toned A2 Buffalo Milk,4580.0,382.0,4962.0,3234
+2026-08-31,HYD,High Protein Toned Milk,1410.0,239.0,1649.0,1229
 2026-08-31,HYD,Skim Milk,1956.0,127.0,2083.0,1431
 2026-08-31,HYD,Toned Milk,8923.0,1017.0,9940.0,6170
 2026-08-31,PNQ,A2 Buffalo Milk,197.0,31.0,228.0,147
@@ -12166,6 +12382,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-01,BLR,Cow Milk,1561.0,132.0,1693.0,1079
 2026-09-01,BLR,Curd,139.0,74.0,213.0,191
 2026-09-01,BLR,Double Toned A2 Buffalo Milk,411.0,75.0,486.0,347
+2026-09-01,BLR,High Protein Toned Milk,187.0,31.0,218.0,157
 2026-09-01,BLR,Skim Milk,406.0,59.0,465.0,345
 2026-09-01,BLR,Toned Milk,468.0,84.0,552.0,387
 2026-09-01,HYD,A2 Buffalo Milk,15678.0,1069.0,16747.0,10556
@@ -12173,6 +12390,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-01,HYD,Cow Milk,8994.0,518.0,9512.0,5673
 2026-09-01,HYD,Curd,893.0,575.0,1468.0,1313
 2026-09-01,HYD,Double Toned A2 Buffalo Milk,4849.0,393.0,5242.0,3402
+2026-09-01,HYD,High Protein Toned Milk,1479.0,214.0,1693.0,1278
 2026-09-01,HYD,Skim Milk,2011.0,175.0,2186.0,1538
 2026-09-01,HYD,Toned Milk,9390.0,1165.0,10555.0,6539
 2026-09-01,PNQ,A2 Buffalo Milk,208.0,35.0,243.0,155
@@ -12191,6 +12409,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-02,BLR,Cow Milk,1537.0,144.0,1681.0,1087
 2026-09-02,BLR,Curd,142.0,84.0,226.0,209
 2026-09-02,BLR,Double Toned A2 Buffalo Milk,409.0,88.0,497.0,356
+2026-09-02,BLR,High Protein Toned Milk,168.0,29.0,197.0,148
 2026-09-02,BLR,Skim Milk,407.0,72.0,479.0,346
 2026-09-02,BLR,Toned Milk,467.0,98.0,565.0,392
 2026-09-02,HYD,A2 Buffalo Milk,15625.0,1210.0,16835.0,10583
@@ -12198,6 +12417,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-02,HYD,Cow Milk,8857.0,536.0,9393.0,5645
 2026-09-02,HYD,Curd,882.0,584.0,1466.0,1310
 2026-09-02,HYD,Double Toned A2 Buffalo Milk,4821.0,430.0,5251.0,3407
+2026-09-02,HYD,High Protein Toned Milk,1484.0,245.0,1729.0,1290
 2026-09-02,HYD,Skim Milk,1984.0,171.0,2155.0,1486
 2026-09-02,HYD,Toned Milk,9348.0,1145.0,10493.0,6485
 2026-09-02,PNQ,A2 Buffalo Milk,208.0,39.0,247.0,155
@@ -12216,6 +12436,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-03,BLR,Cow Milk,1528.0,134.0,1662.0,1056
 2026-09-03,BLR,Curd,131.0,95.0,226.0,204
 2026-09-03,BLR,Double Toned A2 Buffalo Milk,434.0,74.0,508.0,364
+2026-09-03,BLR,High Protein Toned Milk,179.0,20.0,199.0,152
 2026-09-03,BLR,Skim Milk,413.0,60.0,473.0,352
 2026-09-03,BLR,Toned Milk,480.0,75.0,555.0,390
 2026-09-03,HYD,A2 Buffalo Milk,15759.0,1114.0,16873.0,10553
@@ -12223,6 +12444,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-03,HYD,Cow Milk,9068.0,607.0,9675.0,5747
 2026-09-03,HYD,Curd,909.0,586.0,1495.0,1324
 2026-09-03,HYD,Double Toned A2 Buffalo Milk,4953.0,396.0,5349.0,3432
+2026-09-03,HYD,High Protein Toned Milk,1491.0,220.0,1711.0,1290
 2026-09-03,HYD,Skim Milk,1994.0,206.0,2200.0,1515
 2026-09-03,HYD,Toned Milk,9386.0,1083.0,10469.0,6472
 2026-09-03,PNQ,A2 Buffalo Milk,222.0,23.0,245.0,159
@@ -12241,6 +12463,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-04,BLR,Cow Milk,1564.0,189.0,1753.0,1089
 2026-09-04,BLR,Curd,144.0,107.0,251.0,227
 2026-09-04,BLR,Double Toned A2 Buffalo Milk,412.0,65.0,477.0,341
+2026-09-04,BLR,High Protein Toned Milk,174.0,25.0,199.0,142
 2026-09-04,BLR,Skim Milk,396.0,62.0,458.0,334
 2026-09-04,BLR,Toned Milk,502.0,100.0,602.0,406
 2026-09-04,HYD,A2 Buffalo Milk,16090.0,1278.0,17368.0,10750
@@ -12248,6 +12471,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-04,HYD,Cow Milk,9391.0,1130.0,10521.0,6275
 2026-09-04,HYD,Curd,921.0,740.0,1661.0,1444
 2026-09-04,HYD,Double Toned A2 Buffalo Milk,5055.0,500.0,5555.0,3538
+2026-09-04,HYD,High Protein Toned Milk,1480.0,258.0,1738.0,1302
 2026-09-04,HYD,Skim Milk,2029.0,186.0,2215.0,1549
 2026-09-04,HYD,Toned Milk,9644.0,1319.0,10963.0,6674
 2026-09-04,PNQ,A2 Buffalo Milk,223.0,43.0,266.0,163
@@ -12266,6 +12490,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-05,BLR,Cow Milk,1503.0,92.0,1595.0,1009
 2026-09-05,BLR,Curd,131.0,66.0,197.0,170
 2026-09-05,BLR,Double Toned A2 Buffalo Milk,422.0,57.0,479.0,332
+2026-09-05,BLR,High Protein Toned Milk,181.0,15.0,196.0,146
 2026-09-05,BLR,Skim Milk,378.0,40.0,418.0,305
 2026-09-05,BLR,Toned Milk,485.0,66.0,551.0,375
 2026-09-05,HYD,A2 Buffalo Milk,15468.0,962.0,16430.0,10314
@@ -12273,6 +12498,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-05,HYD,Cow Milk,9106.0,540.0,9646.0,5737
 2026-09-05,HYD,Curd,913.0,433.0,1346.0,1209
 2026-09-05,HYD,Double Toned A2 Buffalo Milk,4826.0,379.0,5205.0,3337
+2026-09-05,HYD,High Protein Toned Milk,1443.0,193.0,1636.0,1211
 2026-09-05,HYD,Skim Milk,1932.0,157.0,2089.0,1449
 2026-09-05,HYD,Toned Milk,9408.0,987.0,10395.0,6423
 2026-09-05,PNQ,A2 Buffalo Milk,223.0,34.0,257.0,167
@@ -12291,6 +12517,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-06,BLR,Cow Milk,1465.0,114.0,1579.0,996
 2026-09-06,BLR,Curd,125.0,78.0,203.0,185
 2026-09-06,BLR,Double Toned A2 Buffalo Milk,390.0,64.0,454.0,324
+2026-09-06,BLR,High Protein Toned Milk,157.0,30.0,187.0,138
 2026-09-06,BLR,Skim Milk,366.0,35.0,401.0,292
 2026-09-06,BLR,Toned Milk,433.0,65.0,498.0,347
 2026-09-06,HYD,A2 Buffalo Milk,15346.0,1046.0,16392.0,10196
@@ -12298,6 +12525,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-06,HYD,Cow Milk,8841.0,493.0,9334.0,5524
 2026-09-06,HYD,Curd,820.0,536.0,1356.0,1218
 2026-09-06,HYD,Double Toned A2 Buffalo Milk,4678.0,332.0,5010.0,3257
+2026-09-06,HYD,High Protein Toned Milk,1438.0,197.0,1635.0,1206
 2026-09-06,HYD,Skim Milk,1915.0,170.0,2085.0,1441
 2026-09-06,HYD,Toned Milk,9222.0,1038.0,10260.0,6332
 2026-09-06,PNQ,A2 Buffalo Milk,207.0,32.0,239.0,156
@@ -12316,6 +12544,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-07,BLR,Cow Milk,1550.0,139.0,1689.0,1084
 2026-09-07,BLR,Curd,148.0,77.0,225.0,203
 2026-09-07,BLR,Double Toned A2 Buffalo Milk,399.0,70.0,469.0,340
+2026-09-07,BLR,High Protein Toned Milk,183.0,23.0,206.0,152
 2026-09-07,BLR,Skim Milk,387.0,69.0,456.0,340
 2026-09-07,BLR,Toned Milk,464.0,88.0,552.0,387
 2026-09-07,HYD,A2 Buffalo Milk,15767.0,1113.0,16880.0,10621
@@ -12323,6 +12552,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-07,HYD,Cow Milk,9089.0,603.0,9692.0,5834
 2026-09-07,HYD,Curd,907.0,600.0,1507.0,1352
 2026-09-07,HYD,Double Toned A2 Buffalo Milk,4821.0,431.0,5252.0,3434
+2026-09-07,HYD,High Protein Toned Milk,1490.0,230.0,1720.0,1295
 2026-09-07,HYD,Skim Milk,2031.0,182.0,2213.0,1532
 2026-09-07,HYD,Toned Milk,9432.0,1136.0,10568.0,6541
 2026-09-07,PNQ,A2 Buffalo Milk,225.0,40.0,265.0,161
@@ -12341,6 +12571,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-08,BLR,Cow Milk,1516.0,160.0,1676.0,1069
 2026-09-08,BLR,Curd,142.0,90.0,232.0,211
 2026-09-08,BLR,Double Toned A2 Buffalo Milk,390.0,81.0,471.0,333
+2026-09-08,BLR,High Protein Toned Milk,172.0,30.0,202.0,153
 2026-09-08,BLR,Skim Milk,387.0,62.0,449.0,327
 2026-09-08,BLR,Toned Milk,468.0,87.0,555.0,387
 2026-09-08,HYD,A2 Buffalo Milk,16045.0,1146.0,17191.0,10843
@@ -12348,6 +12579,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-08,HYD,Cow Milk,9073.0,573.0,9646.0,5807
 2026-09-08,HYD,Curd,878.0,639.0,1517.0,1353
 2026-09-08,HYD,Double Toned A2 Buffalo Milk,4897.0,476.0,5373.0,3499
+2026-09-08,HYD,High Protein Toned Milk,1496.0,242.0,1738.0,1302
 2026-09-08,HYD,Skim Milk,2053.0,175.0,2228.0,1550
 2026-09-08,HYD,Toned Milk,9647.0,1224.0,10871.0,6737
 2026-09-08,PNQ,A2 Buffalo Milk,234.0,39.0,273.0,176
@@ -12366,6 +12598,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-09,BLR,Cow Milk,1609.0,144.0,1753.0,1110
 2026-09-09,BLR,Curd,135.0,99.0,234.0,214
 2026-09-09,BLR,Double Toned A2 Buffalo Milk,413.0,71.0,484.0,346
+2026-09-09,BLR,High Protein Toned Milk,182.0,28.0,210.0,155
 2026-09-09,BLR,Skim Milk,398.0,53.0,451.0,325
 2026-09-09,BLR,Toned Milk,482.0,81.0,563.0,407
 2026-09-09,HYD,A2 Buffalo Milk,16352.0,1139.0,17491.0,10965
@@ -12373,6 +12606,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-09,HYD,Cow Milk,9264.0,572.0,9836.0,5865
 2026-09-09,HYD,Curd,939.0,642.0,1581.0,1397
 2026-09-09,HYD,Double Toned A2 Buffalo Milk,4990.0,430.0,5420.0,3541
+2026-09-09,HYD,High Protein Toned Milk,1544.0,269.0,1813.0,1358
 2026-09-09,HYD,Skim Milk,2040.0,199.0,2239.0,1561
 2026-09-09,HYD,Toned Milk,9814.0,1222.0,11036.0,6837
 2026-09-09,PNQ,A2 Buffalo Milk,234.0,28.0,262.0,172
@@ -12391,6 +12625,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-10,BLR,Cow Milk,1560.0,129.0,1689.0,1089
 2026-09-10,BLR,Curd,135.0,93.0,228.0,206
 2026-09-10,BLR,Double Toned A2 Buffalo Milk,387.0,66.0,453.0,336
+2026-09-10,BLR,High Protein Toned Milk,169.0,22.0,191.0,146
 2026-09-10,BLR,Skim Milk,402.0,42.0,444.0,328
 2026-09-10,BLR,Toned Milk,480.0,86.0,566.0,393
 2026-09-10,HYD,A2 Buffalo Milk,16285.0,1120.0,17405.0,10994
@@ -12398,6 +12633,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-10,HYD,Cow Milk,9187.0,547.0,9734.0,5846
 2026-09-10,HYD,Curd,883.0,635.0,1518.0,1360
 2026-09-10,HYD,Double Toned A2 Buffalo Milk,5060.0,383.0,5443.0,3534
+2026-09-10,HYD,High Protein Toned Milk,1522.0,225.0,1747.0,1297
 2026-09-10,HYD,Skim Milk,2034.0,184.0,2218.0,1540
 2026-09-10,HYD,Toned Milk,9797.0,1181.0,10978.0,6758
 2026-09-10,PNQ,A2 Buffalo Milk,215.0,28.0,243.0,161
@@ -12416,6 +12652,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-11,BLR,Cow Milk,1590.0,145.0,1735.0,1079
 2026-09-11,BLR,Curd,144.0,75.0,219.0,194
 2026-09-11,BLR,Double Toned A2 Buffalo Milk,404.0,79.0,483.0,340
+2026-09-11,BLR,High Protein Toned Milk,173.0,34.0,207.0,154
 2026-09-11,BLR,Skim Milk,401.0,64.0,465.0,331
 2026-09-11,BLR,Toned Milk,462.0,82.0,544.0,381
 2026-09-11,HYD,A2 Buffalo Milk,16163.0,1150.0,17313.0,10864
@@ -12423,6 +12660,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-11,HYD,Cow Milk,9242.0,769.0,10011.0,6027
 2026-09-11,HYD,Curd,953.0,656.0,1609.0,1415
 2026-09-11,HYD,Double Toned A2 Buffalo Milk,4940.0,499.0,5439.0,3503
+2026-09-11,HYD,High Protein Toned Milk,1510.0,220.0,1730.0,1305
 2026-09-11,HYD,Skim Milk,2036.0,198.0,2234.0,1521
 2026-09-11,HYD,Toned Milk,9832.0,1219.0,11051.0,6798
 2026-09-11,PNQ,A2 Buffalo Milk,218.0,28.0,246.0,162
@@ -12441,6 +12679,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-12,BLR,Cow Milk,1479.0,116.0,1595.0,990
 2026-09-12,BLR,Curd,153.0,60.0,213.0,189
 2026-09-12,BLR,Double Toned A2 Buffalo Milk,388.0,67.0,455.0,318
+2026-09-12,BLR,High Protein Toned Milk,172.0,28.0,200.0,148
 2026-09-12,BLR,Skim Milk,387.0,31.0,418.0,304
 2026-09-12,BLR,Toned Milk,456.0,76.0,532.0,361
 2026-09-12,HYD,A2 Buffalo Milk,16095.0,1154.0,17249.0,10741
@@ -12448,6 +12687,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-12,HYD,Cow Milk,9180.0,543.0,9723.0,5791
 2026-09-12,HYD,Curd,923.0,556.0,1479.0,1302
 2026-09-12,HYD,Double Toned A2 Buffalo Milk,4940.0,406.0,5346.0,3456
+2026-09-12,HYD,High Protein Toned Milk,1533.0,213.0,1746.0,1293
 2026-09-12,HYD,Skim Milk,2023.0,127.0,2150.0,1474
 2026-09-12,HYD,Toned Milk,9704.0,1203.0,10907.0,6632
 2026-09-12,PNQ,A2 Buffalo Milk,225.0,24.0,249.0,158
@@ -12466,6 +12706,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-13,BLR,Cow Milk,1468.0,140.0,1608.0,981
 2026-09-13,BLR,Curd,125.0,66.0,191.0,171
 2026-09-13,BLR,Double Toned A2 Buffalo Milk,409.0,59.0,468.0,326
+2026-09-13,BLR,High Protein Toned Milk,177.0,22.0,199.0,151
 2026-09-13,BLR,Skim Milk,375.0,36.0,411.0,301
 2026-09-13,BLR,Toned Milk,447.0,71.0,518.0,362
 2026-09-13,HYD,A2 Buffalo Milk,16052.0,1116.0,17168.0,10529
@@ -12473,6 +12714,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-13,HYD,Cow Milk,9187.0,715.0,9902.0,5856
 2026-09-13,HYD,Curd,887.0,569.0,1456.0,1294
 2026-09-13,HYD,Double Toned A2 Buffalo Milk,4882.0,408.0,5290.0,3397
+2026-09-13,HYD,High Protein Toned Milk,1493.0,182.0,1675.0,1236
 2026-09-13,HYD,Skim Milk,1920.0,146.0,2066.0,1425
 2026-09-13,HYD,Toned Milk,9697.0,1161.0,10858.0,6581
 2026-09-13,PNQ,A2 Buffalo Milk,218.0,41.0,259.0,164
@@ -12491,6 +12733,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-14,BLR,Cow Milk,1539.0,212.0,1751.0,1062
 2026-09-14,BLR,Curd,150.0,121.0,271.0,239
 2026-09-14,BLR,Double Toned A2 Buffalo Milk,434.0,72.0,506.0,338
+2026-09-14,BLR,High Protein Toned Milk,163.0,33.0,196.0,138
 2026-09-14,BLR,Skim Milk,388.0,58.0,446.0,317
 2026-09-14,BLR,Toned Milk,489.0,129.0,618.0,388
 2026-09-14,HYD,A2 Buffalo Milk,17674.0,2030.0,19704.0,11452
@@ -12498,6 +12741,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-14,HYD,Cow Milk,10279.0,2738.0,13017.0,7585
 2026-09-14,HYD,Curd,941.0,1163.0,2104.0,1826
 2026-09-14,HYD,Double Toned A2 Buffalo Milk,5378.0,738.0,6116.0,3676
+2026-09-14,HYD,High Protein Toned Milk,1591.0,248.0,1839.0,1297
 2026-09-14,HYD,Skim Milk,2110.0,246.0,2356.0,1561
 2026-09-14,HYD,Toned Milk,10700.0,1892.0,12592.0,7131
 2026-09-14,PNQ,A2 Buffalo Milk,233.0,43.0,276.0,166
@@ -12516,6 +12760,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-15,BLR,Cow Milk,1559.0,116.0,1675.0,1042
 2026-09-15,BLR,Curd,119.0,70.0,189.0,176
 2026-09-15,BLR,Double Toned A2 Buffalo Milk,397.0,78.0,475.0,329
+2026-09-15,BLR,High Protein Toned Milk,185.0,26.0,211.0,155
 2026-09-15,BLR,Skim Milk,376.0,37.0,413.0,309
 2026-09-15,BLR,Toned Milk,478.0,79.0,557.0,373
 2026-09-15,HYD,A2 Buffalo Milk,16044.0,886.0,16930.0,10636
@@ -12523,6 +12768,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-15,HYD,Cow Milk,9133.0,471.0,9604.0,5758
 2026-09-15,HYD,Curd,868.0,435.0,1303.0,1162
 2026-09-15,HYD,Double Toned A2 Buffalo Milk,4866.0,324.0,5190.0,3419
+2026-09-15,HYD,High Protein Toned Milk,1504.0,168.0,1672.0,1256
 2026-09-15,HYD,Skim Milk,2034.0,111.0,2145.0,1488
 2026-09-15,HYD,Toned Milk,9808.0,944.0,10752.0,6624
 2026-09-15,PNQ,A2 Buffalo Milk,220.0,27.0,247.0,156
@@ -12541,6 +12787,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-16,BLR,Cow Milk,1567.0,130.0,1697.0,1067
 2026-09-16,BLR,Curd,139.0,79.0,218.0,202
 2026-09-16,BLR,Double Toned A2 Buffalo Milk,399.0,56.0,455.0,325
+2026-09-16,BLR,High Protein Toned Milk,164.0,29.0,193.0,149
 2026-09-16,BLR,Skim Milk,392.0,59.0,451.0,321
 2026-09-16,BLR,Toned Milk,505.0,76.0,581.0,399
 2026-09-16,HYD,A2 Buffalo Milk,16407.0,1047.0,17454.0,10993
@@ -12548,6 +12795,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-16,HYD,Cow Milk,9168.0,666.0,9834.0,5892
 2026-09-16,HYD,Curd,912.0,542.0,1454.0,1318
 2026-09-16,HYD,Double Toned A2 Buffalo Milk,5019.0,393.0,5412.0,3516
+2026-09-16,HYD,High Protein Toned Milk,1522.0,198.0,1720.0,1296
 2026-09-16,HYD,Skim Milk,2046.0,177.0,2223.0,1547
 2026-09-16,HYD,Toned Milk,9683.0,1182.0,10865.0,6717
 2026-09-16,PNQ,A2 Buffalo Milk,219.0,29.0,248.0,159
@@ -12566,6 +12814,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-17,BLR,Cow Milk,1552.0,140.0,1692.0,1068
 2026-09-17,BLR,Curd,4.0,0,4.0,4
 2026-09-17,BLR,Double Toned A2 Buffalo Milk,412.0,69.0,481.0,347
+2026-09-17,BLR,High Protein Toned Milk,192.0,42.0,234.0,169
 2026-09-17,BLR,Skim Milk,401.0,64.0,465.0,332
 2026-09-17,BLR,Toned Milk,497.0,80.0,577.0,387
 2026-09-17,HYD,A2 Buffalo Milk,16072.0,1048.0,17120.0,10787
@@ -12573,6 +12822,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-17,HYD,Cow Milk,9205.0,573.0,9778.0,5834
 2026-09-17,HYD,Curd,905.0,576.0,1481.0,1311
 2026-09-17,HYD,Double Toned A2 Buffalo Milk,4928.0,415.0,5343.0,3468
+2026-09-17,HYD,High Protein Toned Milk,1464.0,181.0,1645.0,1260
 2026-09-17,HYD,Skim Milk,1993.0,159.0,2152.0,1499
 2026-09-17,HYD,Toned Milk,9737.0,1177.0,10914.0,6748
 2026-09-17,PNQ,A2 Buffalo Milk,205.0,32.0,237.0,154
@@ -12591,6 +12841,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-18,BLR,Cow Milk,1554.0,135.0,1689.0,1065
 2026-09-18,BLR,Curd,158.0,87.0,245.0,216
 2026-09-18,BLR,Double Toned A2 Buffalo Milk,405.0,66.0,471.0,338
+2026-09-18,BLR,High Protein Toned Milk,167.0,26.0,193.0,139
 2026-09-18,BLR,Skim Milk,397.0,55.0,452.0,334
 2026-09-18,BLR,Toned Milk,514.0,87.0,601.0,410
 2026-09-18,HYD,A2 Buffalo Milk,16096.0,1092.0,17188.0,10841
@@ -12598,6 +12849,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-18,HYD,Cow Milk,9200.0,595.0,9795.0,5883
 2026-09-18,HYD,Curd,913.0,601.0,1514.0,1327
 2026-09-18,HYD,Double Toned A2 Buffalo Milk,4952.0,403.0,5355.0,3485
+2026-09-18,HYD,High Protein Toned Milk,1506.0,216.0,1722.0,1288
 2026-09-18,HYD,Skim Milk,2059.0,162.0,2221.0,1528
 2026-09-18,HYD,Toned Milk,9750.0,1177.0,10927.0,6737
 2026-09-18,PNQ,A2 Buffalo Milk,209.0,34.0,243.0,153
@@ -12616,6 +12868,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-19,BLR,Cow Milk,1562.0,126.0,1688.0,1057
 2026-09-19,BLR,Curd,140.0,87.0,227.0,203
 2026-09-19,BLR,Double Toned A2 Buffalo Milk,389.0,66.0,455.0,325
+2026-09-19,BLR,High Protein Toned Milk,196.0,21.0,217.0,159
 2026-09-19,BLR,Skim Milk,381.0,39.0,420.0,306
 2026-09-19,BLR,Toned Milk,498.0,82.0,580.0,390
 2026-09-19,HYD,A2 Buffalo Milk,16090.0,1049.0,17139.0,10752
@@ -12623,6 +12876,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-19,HYD,Cow Milk,9169.0,598.0,9767.0,5811
 2026-09-19,HYD,Curd,946.0,544.0,1490.0,1313
 2026-09-19,HYD,Double Toned A2 Buffalo Milk,4939.0,386.0,5325.0,3460
+2026-09-19,HYD,High Protein Toned Milk,1482.0,199.0,1681.0,1257
 2026-09-19,HYD,Skim Milk,1971.0,132.0,2103.0,1460
 2026-09-19,HYD,Toned Milk,9706.0,1012.0,10718.0,6614
 2026-09-19,PNQ,A2 Buffalo Milk,198.0,27.0,225.0,151
@@ -12641,6 +12895,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-20,BLR,Cow Milk,1485.0,136.0,1621.0,1035
 2026-09-20,BLR,Curd,143.0,66.0,209.0,193
 2026-09-20,BLR,Double Toned A2 Buffalo Milk,371.0,70.0,441.0,313
+2026-09-20,BLR,High Protein Toned Milk,166.0,24.0,190.0,146
 2026-09-20,BLR,Skim Milk,377.0,34.0,411.0,304
 2026-09-20,BLR,Toned Milk,471.0,92.0,563.0,391
 2026-09-20,HYD,A2 Buffalo Milk,15751.0,966.0,16717.0,10484
@@ -12648,6 +12903,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-20,HYD,Cow Milk,8887.0,519.0,9406.0,5597
 2026-09-20,HYD,Curd,849.0,484.0,1333.0,1198
 2026-09-20,HYD,Double Toned A2 Buffalo Milk,4751.0,360.0,5111.0,3374
+2026-09-20,HYD,High Protein Toned Milk,1471.0,129.0,1600.0,1202
 2026-09-20,HYD,Skim Milk,1920.0,158.0,2078.0,1429
 2026-09-20,HYD,Toned Milk,9381.0,1041.0,10422.0,6461
 2026-09-20,PNQ,A2 Buffalo Milk,227.0,25.0,252.0,153
@@ -12666,6 +12922,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-21,BLR,Cow Milk,1572.0,130.0,1702.0,1094
 2026-09-21,BLR,Curd,164.0,90.0,254.0,230
 2026-09-21,BLR,Double Toned A2 Buffalo Milk,399.0,71.0,470.0,346
+2026-09-21,BLR,High Protein Toned Milk,180.0,31.0,211.0,155
 2026-09-21,BLR,Skim Milk,401.0,63.0,464.0,340
 2026-09-21,BLR,Toned Milk,513.0,106.0,619.0,424
 2026-09-21,HYD,A2 Buffalo Milk,15676.0,1018.0,16694.0,10563
@@ -12673,6 +12930,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-21,HYD,Cow Milk,8951.0,552.0,9503.0,5807
 2026-09-21,HYD,Curd,909.0,559.0,1468.0,1310
 2026-09-21,HYD,Double Toned A2 Buffalo Milk,4757.0,381.0,5138.0,3347
+2026-09-21,HYD,High Protein Toned Milk,1498.0,221.0,1719.0,1276
 2026-09-21,HYD,Skim Milk,2003.0,187.0,2190.0,1506
 2026-09-21,HYD,Toned Milk,9681.0,1095.0,10776.0,6666
 2026-09-21,PNQ,A2 Buffalo Milk,231.0,41.0,272.0,174
@@ -12691,6 +12949,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-22,BLR,Cow Milk,1539.0,168.0,1707.0,1088
 2026-09-22,BLR,Curd,159.0,96.0,255.0,225
 2026-09-22,BLR,Double Toned A2 Buffalo Milk,439.0,87.0,526.0,371
+2026-09-22,BLR,High Protein Toned Milk,193.0,32.0,225.0,167
 2026-09-22,BLR,Skim Milk,388.0,47.0,435.0,326
 2026-09-22,BLR,Toned Milk,480.0,94.0,574.0,408
 2026-09-22,HYD,A2 Buffalo Milk,15978.0,1097.0,17075.0,10806
@@ -12698,6 +12957,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-22,HYD,Cow Milk,9089.0,618.0,9707.0,5820
 2026-09-22,HYD,Curd,840.0,634.0,1474.0,1323
 2026-09-22,HYD,Double Toned A2 Buffalo Milk,4843.0,423.0,5266.0,3429
+2026-09-22,HYD,High Protein Toned Milk,1487.0,219.0,1706.0,1288
 2026-09-22,HYD,Skim Milk,2010.0,185.0,2195.0,1517
 2026-09-22,HYD,Toned Milk,9702.0,1265.0,10967.0,6810
 2026-09-22,PNQ,A2 Buffalo Milk,214.0,46.0,260.0,163
@@ -12716,6 +12976,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-23,BLR,Cow Milk,1612.0,120.0,1732.0,1115
 2026-09-23,BLR,Curd,147.0,92.0,239.0,221
 2026-09-23,BLR,Double Toned A2 Buffalo Milk,437.0,77.0,514.0,359
+2026-09-23,BLR,High Protein Toned Milk,192.0,19.0,211.0,155
 2026-09-23,BLR,Skim Milk,405.0,53.0,458.0,333
 2026-09-23,BLR,Toned Milk,468.0,93.0,561.0,403
 2026-09-23,HYD,A2 Buffalo Milk,16124.0,1176.0,17300.0,10925
@@ -12723,6 +12984,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-23,HYD,Cow Milk,9249.0,560.0,9809.0,5900
 2026-09-23,HYD,Curd,944.0,580.0,1524.0,1366
 2026-09-23,HYD,Double Toned A2 Buffalo Milk,4921.0,383.0,5304.0,3475
+2026-09-23,HYD,High Protein Toned Milk,1534.0,186.0,1720.0,1307
 2026-09-23,HYD,Skim Milk,2026.0,192.0,2218.0,1542
 2026-09-23,HYD,Toned Milk,9918.0,1209.0,11127.0,6896
 2026-09-23,PNQ,A2 Buffalo Milk,226.0,36.0,262.0,171
@@ -12741,6 +13003,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-24,BLR,Cow Milk,1612.0,131.0,1743.0,1091
 2026-09-24,BLR,Curd,153.0,90.0,243.0,223
 2026-09-24,BLR,Double Toned A2 Buffalo Milk,436.0,66.0,502.0,361
+2026-09-24,BLR,High Protein Toned Milk,183.0,26.0,209.0,154
 2026-09-24,BLR,Skim Milk,395.0,44.0,439.0,331
 2026-09-24,BLR,Toned Milk,511.0,99.0,610.0,422
 2026-09-24,HYD,A2 Buffalo Milk,16206.0,1129.0,17335.0,10951
@@ -12748,6 +13011,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-24,HYD,Cow Milk,9257.0,520.0,9777.0,5856
 2026-09-24,HYD,Curd,897.0,605.0,1502.0,1346
 2026-09-24,HYD,Double Toned A2 Buffalo Milk,4908.0,429.0,5337.0,3499
+2026-09-24,HYD,High Protein Toned Milk,1524.0,225.0,1749.0,1317
 2026-09-24,HYD,Skim Milk,2039.0,174.0,2213.0,1529
 2026-09-24,HYD,Toned Milk,9972.0,1275.0,11247.0,6951
 2026-09-24,PNQ,A2 Buffalo Milk,230.0,42.0,272.0,172
@@ -12766,6 +13030,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-25,BLR,Cow Milk,1635.0,143.0,1778.0,1109
 2026-09-25,BLR,Curd,146.0,86.0,232.0,209
 2026-09-25,BLR,Double Toned A2 Buffalo Milk,441.0,78.0,519.0,377
+2026-09-25,BLR,High Protein Toned Milk,195.0,19.0,214.0,157
 2026-09-25,BLR,Skim Milk,385.0,42.0,427.0,309
 2026-09-25,BLR,Toned Milk,483.0,85.0,568.0,403
 2026-09-25,HYD,A2 Buffalo Milk,16194.0,1090.0,17284.0,10871
@@ -12773,6 +13038,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-25,HYD,Cow Milk,9282.0,641.0,9923.0,5941
 2026-09-25,HYD,Curd,909.0,614.0,1523.0,1355
 2026-09-25,HYD,Double Toned A2 Buffalo Milk,4939.0,428.0,5367.0,3497
+2026-09-25,HYD,High Protein Toned Milk,1536.0,136.0,1672.0,1261
 2026-09-25,HYD,Skim Milk,2009.0,173.0,2182.0,1510
 2026-09-25,HYD,Toned Milk,9980.0,1179.0,11159.0,6869
 2026-09-25,PNQ,A2 Buffalo Milk,235.0,40.0,275.0,178
@@ -12791,6 +13057,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-26,BLR,Cow Milk,1527.0,138.0,1665.0,1058
 2026-09-26,BLR,Curd,148.0,84.0,232.0,213
 2026-09-26,BLR,Double Toned A2 Buffalo Milk,423.0,63.0,486.0,344
+2026-09-26,BLR,High Protein Toned Milk,184.0,28.0,212.0,161
 2026-09-26,BLR,Skim Milk,375.0,58.0,433.0,305
 2026-09-26,BLR,Toned Milk,486.0,102.0,588.0,404
 2026-09-26,HYD,A2 Buffalo Milk,16033.0,1163.0,17196.0,10755
@@ -12798,6 +13065,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-26,HYD,Cow Milk,9190.0,587.0,9777.0,5813
 2026-09-26,HYD,Curd,934.0,552.0,1486.0,1316
 2026-09-26,HYD,Double Toned A2 Buffalo Milk,4870.0,429.0,5299.0,3458
+2026-09-26,HYD,High Protein Toned Milk,1515.0,204.0,1719.0,1278
 2026-09-26,HYD,Skim Milk,1988.0,160.0,2148.0,1478
 2026-09-26,HYD,Toned Milk,9800.0,1216.0,11016.0,6775
 2026-09-26,PNQ,A2 Buffalo Milk,223.0,38.0,261.0,169
@@ -12816,6 +13084,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-27,BLR,Cow Milk,1568.0,119.0,1687.0,1061
 2026-09-27,BLR,Curd,141.0,70.0,211.0,193
 2026-09-27,BLR,Double Toned A2 Buffalo Milk,417.0,77.0,494.0,348
+2026-09-27,BLR,High Protein Toned Milk,176.0,28.0,204.0,150
 2026-09-27,BLR,Skim Milk,358.0,44.0,402.0,290
 2026-09-27,BLR,Toned Milk,481.0,78.0,559.0,386
 2026-09-27,HYD,A2 Buffalo Milk,15740.0,1005.0,16745.0,10497
@@ -12823,6 +13092,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-27,HYD,Cow Milk,9077.0,486.0,9563.0,5689
 2026-09-27,HYD,Curd,895.0,554.0,1449.0,1311
 2026-09-27,HYD,Double Toned A2 Buffalo Milk,4800.0,420.0,5220.0,3417
+2026-09-27,HYD,High Protein Toned Milk,1525.0,183.0,1708.0,1260
 2026-09-27,HYD,Skim Milk,1894.0,175.0,2069.0,1438
 2026-09-27,HYD,Toned Milk,9663.0,1127.0,10790.0,6685
 2026-09-27,PNQ,A2 Buffalo Milk,228.0,42.0,270.0,173
@@ -12841,6 +13111,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-28,BLR,Cow Milk,1540.0,156.0,1696.0,1096
 2026-09-28,BLR,Curd,173.0,98.0,271.0,244
 2026-09-28,BLR,Double Toned A2 Buffalo Milk,430.0,65.0,495.0,362
+2026-09-28,BLR,High Protein Toned Milk,175.0,22.0,197.0,154
 2026-09-28,BLR,Skim Milk,385.0,68.0,453.0,325
 2026-09-28,BLR,Toned Milk,494.0,100.0,594.0,423
 2026-09-28,HYD,A2 Buffalo Milk,16086.0,1159.0,17245.0,10878
@@ -12848,6 +13119,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-28,HYD,Cow Milk,9006.0,587.0,9593.0,5813
 2026-09-28,HYD,Curd,918.0,641.0,1559.0,1393
 2026-09-28,HYD,Double Toned A2 Buffalo Milk,4850.0,422.0,5272.0,3450
+2026-09-28,HYD,High Protein Toned Milk,1537.0,242.0,1779.0,1319
 2026-09-28,HYD,Skim Milk,2020.0,183.0,2203.0,1522
 2026-09-28,HYD,Toned Milk,9935.0,1206.0,11141.0,6918
 2026-09-28,PNQ,A2 Buffalo Milk,225.0,39.0,264.0,167
@@ -12866,6 +13138,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-29,BLR,Cow Milk,1606.0,160.0,1766.0,1110
 2026-09-29,BLR,Curd,148.0,93.0,241.0,215
 2026-09-29,BLR,Double Toned A2 Buffalo Milk,438.0,73.0,511.0,369
+2026-09-29,BLR,High Protein Toned Milk,185.0,36.0,221.0,168
 2026-09-29,BLR,Skim Milk,351.0,52.0,403.0,290
 2026-09-29,BLR,Toned Milk,495.0,107.0,602.0,422
 2026-09-29,HYD,A2 Buffalo Milk,16098.0,1221.0,17319.0,10927
@@ -12873,6 +13146,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-29,HYD,Cow Milk,9090.0,637.0,9727.0,5882
 2026-09-29,HYD,Curd,916.0,619.0,1535.0,1383
 2026-09-29,HYD,Double Toned A2 Buffalo Milk,4933.0,472.0,5405.0,3530
+2026-09-29,HYD,High Protein Toned Milk,1510.0,199.0,1709.0,1296
 2026-09-29,HYD,Skim Milk,2034.0,224.0,2258.0,1527
 2026-09-29,HYD,Toned Milk,10014.0,1263.0,11277.0,7003
 2026-09-29,PNQ,A2 Buffalo Milk,233.0,38.0,271.0,178
@@ -12891,6 +13165,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-30,BLR,Cow Milk,1586.0,122.0,1708.0,1092
 2026-09-30,BLR,Curd,158.0,91.0,249.0,227
 2026-09-30,BLR,Double Toned A2 Buffalo Milk,446.0,67.0,513.0,362
+2026-09-30,BLR,High Protein Toned Milk,176.0,29.0,205.0,159
 2026-09-30,BLR,Skim Milk,385.0,50.0,435.0,316
 2026-09-30,BLR,Toned Milk,508.0,81.0,589.0,412
 2026-09-30,HYD,A2 Buffalo Milk,16163.0,1241.0,17404.0,10995
@@ -12898,6 +13173,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-09-30,HYD,Cow Milk,9111.0,550.0,9661.0,5785
 2026-09-30,HYD,Curd,932.0,657.0,1589.0,1421
 2026-09-30,HYD,Double Toned A2 Buffalo Milk,4907.0,438.0,5345.0,3494
+2026-09-30,HYD,High Protein Toned Milk,1539.0,253.0,1792.0,1360
 2026-09-30,HYD,Skim Milk,2035.0,184.0,2219.0,1546
 2026-09-30,HYD,Toned Milk,10043.0,1290.0,11333.0,7004
 2026-09-30,PNQ,A2 Buffalo Milk,226.0,35.0,261.0,173
@@ -12916,6 +13192,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-01,BLR,Cow Milk,1633.0,153.0,1786.0,1132
 2026-10-01,BLR,Curd,161.0,66.0,227.0,210
 2026-10-01,BLR,Double Toned A2 Buffalo Milk,414.0,68.0,482.0,350
+2026-10-01,BLR,High Protein Toned Milk,179.0,32.0,211.0,162
 2026-10-01,BLR,Skim Milk,377.0,49.0,426.0,303
 2026-10-01,BLR,Toned Milk,496.0,115.0,611.0,428
 2026-10-01,HYD,A2 Buffalo Milk,16265.0,1202.0,17467.0,11043
@@ -12923,6 +13200,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-01,HYD,Cow Milk,9243.0,565.0,9808.0,5914
 2026-10-01,HYD,Curd,937.0,653.0,1590.0,1437
 2026-10-01,HYD,Double Toned A2 Buffalo Milk,4951.0,444.0,5395.0,3549
+2026-10-01,HYD,High Protein Toned Milk,1580.0,211.0,1791.0,1344
 2026-10-01,HYD,Skim Milk,2060.0,179.0,2239.0,1550
 2026-10-01,HYD,Toned Milk,10243.0,1274.0,11517.0,7160
 2026-10-01,PNQ,A2 Buffalo Milk,239.0,28.0,267.0,173
@@ -12941,6 +13219,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-02,BLR,Cow Milk,1566.0,142.0,1708.0,1054
 2026-10-02,BLR,Curd,154.0,66.0,220.0,199
 2026-10-02,BLR,Double Toned A2 Buffalo Milk,411.0,81.0,492.0,355
+2026-10-02,BLR,High Protein Toned Milk,159.0,23.0,182.0,132
 2026-10-02,BLR,Skim Milk,355.0,51.0,406.0,282
 2026-10-02,BLR,Toned Milk,513.0,93.0,606.0,416
 2026-10-02,HYD,A2 Buffalo Milk,16109.0,1195.0,17304.0,10799
@@ -12948,6 +13227,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-02,HYD,Cow Milk,9155.0,594.0,9749.0,5829
 2026-10-02,HYD,Curd,920.0,663.0,1583.0,1394
 2026-10-02,HYD,Double Toned A2 Buffalo Milk,4842.0,492.0,5334.0,3460
+2026-10-02,HYD,High Protein Toned Milk,1541.0,242.0,1783.0,1329
 2026-10-02,HYD,Skim Milk,2008.0,208.0,2216.0,1521
 2026-10-02,HYD,Toned Milk,9964.0,1329.0,11293.0,6931
 2026-10-02,PNQ,A2 Buffalo Milk,218.0,53.0,271.0,161
@@ -12966,6 +13246,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-03,BLR,Cow Milk,1482.0,133.0,1615.0,1011
 2026-10-03,BLR,Curd,147.0,67.0,214.0,197
 2026-10-03,BLR,Double Toned A2 Buffalo Milk,397.0,74.0,471.0,340
+2026-10-03,BLR,High Protein Toned Milk,173.0,18.0,191.0,141
 2026-10-03,BLR,Skim Milk,347.0,63.0,410.0,273
 2026-10-03,BLR,Toned Milk,507.0,74.0,581.0,401
 2026-10-03,HYD,A2 Buffalo Milk,15860.0,1200.0,17060.0,10551
@@ -12973,6 +13254,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-03,HYD,Cow Milk,8949.0,575.0,9524.0,5680
 2026-10-03,HYD,Curd,914.0,579.0,1493.0,1301
 2026-10-03,HYD,Double Toned A2 Buffalo Milk,4798.0,416.0,5214.0,3385
+2026-10-03,HYD,High Protein Toned Milk,1549.0,193.0,1742.0,1286
 2026-10-03,HYD,Skim Milk,1945.0,205.0,2150.0,1462
 2026-10-03,HYD,Toned Milk,9947.0,1311.0,11258.0,6871
 2026-10-03,PNQ,A2 Buffalo Milk,216.0,34.0,250.0,158
@@ -12991,6 +13273,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-04,BLR,Cow Milk,1464.0,113.0,1577.0,989
 2026-10-04,BLR,Curd,138.0,86.0,224.0,203
 2026-10-04,BLR,Double Toned A2 Buffalo Milk,405.0,88.0,493.0,351
+2026-10-04,BLR,High Protein Toned Milk,162.0,19.0,181.0,129
 2026-10-04,BLR,Skim Milk,316.0,57.0,373.0,266
 2026-10-04,BLR,Toned Milk,477.0,85.0,562.0,388
 2026-10-04,HYD,A2 Buffalo Milk,15349.0,1019.0,16368.0,10266
@@ -12998,6 +13281,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-04,HYD,Cow Milk,8763.0,477.0,9240.0,5512
 2026-10-04,HYD,Curd,862.0,537.0,1399.0,1256
 2026-10-04,HYD,Double Toned A2 Buffalo Milk,4777.0,439.0,5216.0,3369
+2026-10-04,HYD,High Protein Toned Milk,1483.0,221.0,1704.0,1252
 2026-10-04,HYD,Skim Milk,1959.0,187.0,2146.0,1456
 2026-10-04,HYD,Toned Milk,9738.0,1086.0,10824.0,6671
 2026-10-04,PNQ,A2 Buffalo Milk,200.0,42.0,242.0,155
@@ -13016,6 +13300,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-05,BLR,Cow Milk,1568.0,145.0,1713.0,1091
 2026-10-05,BLR,Curd,168.0,73.0,241.0,218
 2026-10-05,BLR,Double Toned A2 Buffalo Milk,418.0,87.0,505.0,371
+2026-10-05,BLR,High Protein Toned Milk,180.0,28.0,208.0,155
 2026-10-05,BLR,Skim Milk,393.0,61.0,454.0,332
 2026-10-05,BLR,Toned Milk,536.0,68.0,604.0,425
 2026-10-05,HYD,A2 Buffalo Milk,15718.0,1037.0,16755.0,10544
@@ -13023,6 +13308,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-05,HYD,Cow Milk,9019.0,545.0,9564.0,5804
 2026-10-05,HYD,Curd,936.0,545.0,1481.0,1318
 2026-10-05,HYD,Double Toned A2 Buffalo Milk,4830.0,462.0,5292.0,3456
+2026-10-05,HYD,High Protein Toned Milk,1553.0,193.0,1746.0,1320
 2026-10-05,HYD,Skim Milk,1966.0,215.0,2181.0,1510
 2026-10-05,HYD,Toned Milk,10034.0,1186.0,11220.0,6951
 2026-10-05,PNQ,A2 Buffalo Milk,223.0,34.0,257.0,165
@@ -13041,6 +13327,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-06,BLR,Cow Milk,1561.0,171.0,1732.0,1098
 2026-10-06,BLR,Curd,152.0,82.0,234.0,217
 2026-10-06,BLR,Double Toned A2 Buffalo Milk,425.0,85.0,510.0,369
+2026-10-06,BLR,High Protein Toned Milk,173.0,28.0,201.0,153
 2026-10-06,BLR,Skim Milk,391.0,72.0,463.0,329
 2026-10-06,BLR,Toned Milk,532.0,113.0,645.0,463
 2026-10-06,HYD,A2 Buffalo Milk,15786.0,1127.0,16913.0,10701
@@ -13048,6 +13335,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-06,HYD,Cow Milk,9204.0,558.0,9762.0,5874
 2026-10-06,HYD,Curd,900.0,591.0,1491.0,1350
 2026-10-06,HYD,Double Toned A2 Buffalo Milk,4934.0,452.0,5386.0,3502
+2026-10-06,HYD,High Protein Toned Milk,1563.0,199.0,1762.0,1344
 2026-10-06,HYD,Skim Milk,2080.0,242.0,2322.0,1584
 2026-10-06,HYD,Toned Milk,10167.0,1218.0,11385.0,7079
 2026-10-06,PNQ,A2 Buffalo Milk,229.0,43.0,272.0,180
@@ -13067,6 +13355,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-07,BLR,Cow Milk,1583.0,155.0,1738.0,1114
 2026-10-07,BLR,Curd,157.0,80.0,237.0,216
 2026-10-07,BLR,Double Toned A2 Buffalo Milk,461.0,83.0,544.0,384
+2026-10-07,BLR,High Protein Toned Milk,184.0,32.0,216.0,164
 2026-10-07,BLR,Skim Milk,375.0,60.0,435.0,308
 2026-10-07,BLR,Toned Milk,540.0,107.0,647.0,454
 2026-10-07,HYD,A2 Buffalo Milk,15957.0,1037.0,16994.0,10788
@@ -13074,6 +13363,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-07,HYD,Cow Milk,9098.0,547.0,9645.0,5830
 2026-10-07,HYD,Curd,945.0,625.0,1570.0,1397
 2026-10-07,HYD,Double Toned A2 Buffalo Milk,4980.0,443.0,5423.0,3546
+2026-10-07,HYD,High Protein Toned Milk,1582.0,199.0,1781.0,1353
 2026-10-07,HYD,Skim Milk,2069.0,229.0,2298.0,1590
 2026-10-07,HYD,Toned Milk,10233.0,1249.0,11482.0,7120
 2026-10-07,PNQ,A2 Buffalo Milk,247.0,30.0,277.0,180
@@ -13092,6 +13382,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-08,BLR,Cow Milk,1550.0,159.0,1709.0,1084
 2026-10-08,BLR,Curd,152.0,80.0,232.0,210
 2026-10-08,BLR,Double Toned A2 Buffalo Milk,419.0,65.0,484.0,357
+2026-10-08,BLR,High Protein Toned Milk,167.0,28.0,195.0,150
 2026-10-08,BLR,Skim Milk,381.0,65.0,446.0,318
 2026-10-08,BLR,Toned Milk,549.0,87.0,636.0,447
 2026-10-08,HYD,A2 Buffalo Milk,15762.0,1083.0,16845.0,10677
@@ -13099,6 +13390,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-08,HYD,Cow Milk,9057.0,542.0,9599.0,5799
 2026-10-08,HYD,Curd,901.0,617.0,1518.0,1346
 2026-10-08,HYD,Double Toned A2 Buffalo Milk,4986.0,444.0,5430.0,3528
+2026-10-08,HYD,High Protein Toned Milk,1576.0,203.0,1779.0,1342
 2026-10-08,HYD,Skim Milk,2070.0,204.0,2274.0,1587
 2026-10-08,HYD,Toned Milk,10170.0,1198.0,11368.0,7028
 2026-10-08,PNQ,A2 Buffalo Milk,243.0,44.0,287.0,186
@@ -13117,6 +13409,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-09,BLR,Cow Milk,1537.0,122.0,1659.0,1051
 2026-10-09,BLR,Curd,140.0,60.0,200.0,181
 2026-10-09,BLR,Double Toned A2 Buffalo Milk,437.0,69.0,506.0,359
+2026-10-09,BLR,High Protein Toned Milk,190.0,23.0,213.0,153
 2026-10-09,BLR,Skim Milk,397.0,64.0,461.0,330
 2026-10-09,BLR,Toned Milk,511.0,79.0,590.0,423
 2026-10-09,HYD,A2 Buffalo Milk,15645.0,1042.0,16687.0,10512
@@ -13124,6 +13417,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-09,HYD,Cow Milk,8892.0,578.0,9470.0,5734
 2026-10-09,HYD,Curd,946.0,571.0,1517.0,1337
 2026-10-09,HYD,Double Toned A2 Buffalo Milk,4907.0,393.0,5300.0,3460
+2026-10-09,HYD,High Protein Toned Milk,1555.0,188.0,1743.0,1329
 2026-10-09,HYD,Skim Milk,1985.0,250.0,2235.0,1507
 2026-10-09,HYD,Toned Milk,10129.0,1209.0,11338.0,6962
 2026-10-09,PNQ,A2 Buffalo Milk,227.0,40.0,267.0,171
@@ -13142,6 +13436,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-10,BLR,Cow Milk,1471.0,138.0,1609.0,1017
 2026-10-10,BLR,Curd,144.0,75.0,219.0,195
 2026-10-10,BLR,Double Toned A2 Buffalo Milk,394.0,64.0,458.0,338
+2026-10-10,BLR,High Protein Toned Milk,161.0,24.0,185.0,140
 2026-10-10,BLR,Skim Milk,384.0,44.0,428.0,295
 2026-10-10,BLR,Toned Milk,496.0,102.0,598.0,419
 2026-10-10,HYD,A2 Buffalo Milk,15007.0,1044.0,16051.0,10027
@@ -13149,6 +13444,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-10,HYD,Cow Milk,8691.0,595.0,9286.0,5539
 2026-10-10,HYD,Curd,914.0,521.0,1435.0,1238
 2026-10-10,HYD,Double Toned A2 Buffalo Milk,4744.0,397.0,5141.0,3324
+2026-10-10,HYD,High Protein Toned Milk,1511.0,185.0,1696.0,1268
 2026-10-10,HYD,Skim Milk,2012.0,210.0,2222.0,1509
 2026-10-10,HYD,Toned Milk,9918.0,1143.0,11061.0,6758
 2026-10-10,PNQ,A2 Buffalo Milk,233.0,35.0,268.0,172
@@ -13167,6 +13463,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-11,BLR,Cow Milk,1433.0,124.0,1557.0,981
 2026-10-11,BLR,Curd,120.0,62.0,182.0,168
 2026-10-11,BLR,Double Toned A2 Buffalo Milk,396.0,66.0,462.0,336
+2026-10-11,BLR,High Protein Toned Milk,167.0,23.0,190.0,143
 2026-10-11,BLR,Skim Milk,350.0,53.0,403.0,273
 2026-10-11,BLR,Toned Milk,482.0,75.0,557.0,385
 2026-10-11,HYD,A2 Buffalo Milk,14309.0,835.0,15144.0,9479
@@ -13174,6 +13471,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-11,HYD,Cow Milk,8324.0,645.0,8969.0,5424
 2026-10-11,HYD,Curd,815.0,440.0,1255.0,1111
 2026-10-11,HYD,Double Toned A2 Buffalo Milk,4604.0,373.0,4977.0,3209
+2026-10-11,HYD,High Protein Toned Milk,1498.0,166.0,1664.0,1226
 2026-10-11,HYD,Skim Milk,1848.0,161.0,2009.0,1389
 2026-10-11,HYD,Toned Milk,9440.0,1017.0,10457.0,6438
 2026-10-11,PNQ,A2 Buffalo Milk,251.0,46.0,297.0,183
@@ -13192,6 +13490,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-12,BLR,Cow Milk,1465.0,148.0,1613.0,1017
 2026-10-12,BLR,Curd,148.0,80.0,228.0,208
 2026-10-12,BLR,Double Toned A2 Buffalo Milk,361.0,63.0,424.0,312
+2026-10-12,BLR,High Protein Toned Milk,154.0,18.0,172.0,135
 2026-10-12,BLR,Skim Milk,381.0,49.0,430.0,297
 2026-10-12,BLR,Toned Milk,491.0,79.0,570.0,393
 2026-10-12,HYD,A2 Buffalo Milk,14021.0,868.0,14889.0,9328
@@ -13199,6 +13498,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-12,HYD,Cow Milk,8136.0,576.0,8712.0,5359
 2026-10-12,HYD,Curd,845.0,491.0,1336.0,1172
 2026-10-12,HYD,Double Toned A2 Buffalo Milk,4500.0,349.0,4849.0,3155
+2026-10-12,HYD,High Protein Toned Milk,1442.0,186.0,1628.0,1238
 2026-10-12,HYD,Skim Milk,1958.0,177.0,2135.0,1449
 2026-10-12,HYD,Toned Milk,9413.0,1092.0,10505.0,6455
 2026-10-12,PNQ,A2 Buffalo Milk,241.0,48.0,289.0,193
@@ -13217,6 +13517,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-13,BLR,Cow Milk,1443.0,100.0,1543.0,973
 2026-10-13,BLR,Curd,126.0,59.0,185.0,172
 2026-10-13,BLR,Double Toned A2 Buffalo Milk,360.0,82.0,442.0,319
+2026-10-13,BLR,High Protein Toned Milk,170.0,20.0,190.0,144
 2026-10-13,BLR,Skim Milk,334.0,53.0,387.0,271
 2026-10-13,BLR,Toned Milk,486.0,84.0,570.0,382
 2026-10-13,HYD,A2 Buffalo Milk,13720.0,946.0,14666.0,9216
@@ -13224,6 +13525,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-13,HYD,Cow Milk,8095.0,575.0,8670.0,5227
 2026-10-13,HYD,Curd,821.0,514.0,1335.0,1177
 2026-10-13,HYD,Double Toned A2 Buffalo Milk,4432.0,387.0,4819.0,3145
+2026-10-13,HYD,High Protein Toned Milk,1420.0,151.0,1571.0,1200
 2026-10-13,HYD,Skim Milk,1873.0,198.0,2071.0,1402
 2026-10-13,HYD,Toned Milk,9365.0,1078.0,10443.0,6422
 2026-10-13,PNQ,A2 Buffalo Milk,230.0,36.0,266.0,178
@@ -13242,6 +13544,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-14,BLR,Cow Milk,1432.0,118.0,1550.0,976
 2026-10-14,BLR,Curd,141.0,76.0,217.0,199
 2026-10-14,BLR,Double Toned A2 Buffalo Milk,371.0,64.0,435.0,303
+2026-10-14,BLR,High Protein Toned Milk,153.0,26.0,179.0,138
 2026-10-14,BLR,Skim Milk,371.0,63.0,434.0,300
 2026-10-14,BLR,Toned Milk,493.0,98.0,591.0,399
 2026-10-14,HYD,A2 Buffalo Milk,13530.0,864.0,14394.0,9035
@@ -13249,6 +13552,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-14,HYD,Cow Milk,7965.0,497.0,8462.0,5143
 2026-10-14,HYD,Curd,849.0,483.0,1332.0,1165
 2026-10-14,HYD,Double Toned A2 Buffalo Milk,4330.0,364.0,4694.0,3048
+2026-10-14,HYD,High Protein Toned Milk,1364.0,178.0,1542.0,1172
 2026-10-14,HYD,Skim Milk,1894.0,170.0,2064.0,1424
 2026-10-14,HYD,Toned Milk,9172.0,1148.0,10320.0,6336
 2026-10-14,PNQ,A2 Buffalo Milk,243.0,41.0,284.0,186
@@ -13267,6 +13571,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-15,BLR,Cow Milk,1364.0,89.0,1453.0,912
 2026-10-15,BLR,Curd,131.0,74.0,205.0,185
 2026-10-15,BLR,Double Toned A2 Buffalo Milk,352.0,55.0,407.0,298
+2026-10-15,BLR,High Protein Toned Milk,170.0,25.0,195.0,149
 2026-10-15,BLR,Skim Milk,352.0,45.0,397.0,282
 2026-10-15,BLR,Toned Milk,486.0,93.0,579.0,386
 2026-10-15,HYD,A2 Buffalo Milk,13028.0,839.0,13867.0,8673
@@ -13274,6 +13579,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-15,HYD,Cow Milk,7868.0,520.0,8388.0,5024
 2026-10-15,HYD,Curd,802.0,452.0,1254.0,1090
 2026-10-15,HYD,Double Toned A2 Buffalo Milk,4314.0,371.0,4685.0,2991
+2026-10-15,HYD,High Protein Toned Milk,1329.0,168.0,1497.0,1144
 2026-10-15,HYD,Skim Milk,1852.0,158.0,2010.0,1364
 2026-10-15,HYD,Toned Milk,9107.0,1050.0,10157.0,6214
 2026-10-15,PNQ,A2 Buffalo Milk,238.0,44.0,282.0,178
@@ -13292,6 +13598,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-16,BLR,Cow Milk,1367.0,122.0,1489.0,932
 2026-10-16,BLR,Curd,113.0,72.0,185.0,173
 2026-10-16,BLR,Double Toned A2 Buffalo Milk,351.0,46.0,397.0,290
+2026-10-16,BLR,High Protein Toned Milk,156.0,15.0,171.0,127
 2026-10-16,BLR,Skim Milk,325.0,49.0,374.0,260
 2026-10-16,BLR,Toned Milk,474.0,63.0,537.0,359
 2026-10-16,HYD,A2 Buffalo Milk,12958.0,804.0,13762.0,8610
@@ -13299,6 +13606,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-16,HYD,Cow Milk,7775.0,594.0,8369.0,5032
 2026-10-16,HYD,Curd,783.0,459.0,1242.0,1078
 2026-10-16,HYD,Double Toned A2 Buffalo Milk,4236.0,330.0,4566.0,2951
+2026-10-16,HYD,High Protein Toned Milk,1277.0,133.0,1410.0,1069
 2026-10-16,HYD,Skim Milk,1833.0,166.0,1999.0,1347
 2026-10-16,HYD,Toned Milk,8817.0,1004.0,9821.0,6004
 2026-10-16,PNQ,A2 Buffalo Milk,231.0,43.0,274.0,177
@@ -13317,6 +13625,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-17,BLR,Cow Milk,1279.0,85.0,1364.0,856
 2026-10-17,BLR,Curd,114.0,62.0,176.0,154
 2026-10-17,BLR,Double Toned A2 Buffalo Milk,325.0,65.0,390.0,284
+2026-10-17,BLR,High Protein Toned Milk,166.0,17.0,183.0,138
 2026-10-17,BLR,Skim Milk,322.0,31.0,353.0,249
 2026-10-17,BLR,Toned Milk,467.0,93.0,560.0,371
 2026-10-17,HYD,A2 Buffalo Milk,12370.0,784.0,13154.0,8127
@@ -13324,6 +13633,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-17,HYD,Cow Milk,7683.0,542.0,8225.0,4847
 2026-10-17,HYD,Curd,808.0,432.0,1240.0,1084
 2026-10-17,HYD,Double Toned A2 Buffalo Milk,4089.0,346.0,4435.0,2816
+2026-10-17,HYD,High Protein Toned Milk,1259.0,172.0,1431.0,1067
 2026-10-17,HYD,Skim Milk,1666.0,139.0,1805.0,1241
 2026-10-17,HYD,Toned Milk,8535.0,1022.0,9557.0,5815
 2026-10-17,PNQ,A2 Buffalo Milk,235.0,43.0,278.0,177
@@ -13342,6 +13652,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-18,BLR,Cow Milk,1212.0,101.0,1313.0,808
 2026-10-18,BLR,Curd,113.0,56.0,169.0,158
 2026-10-18,BLR,Double Toned A2 Buffalo Milk,303.0,47.0,350.0,253
+2026-10-18,BLR,High Protein Toned Milk,130.0,4.0,134.0,101
 2026-10-18,BLR,Skim Milk,312.0,49.0,361.0,246
 2026-10-18,BLR,Toned Milk,429.0,65.0,494.0,336
 2026-10-18,HYD,A2 Buffalo Milk,12038.0,723.0,12761.0,7855
@@ -13349,6 +13660,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-18,HYD,Cow Milk,7545.0,495.0,8040.0,4723
 2026-10-18,HYD,Curd,704.0,475.0,1179.0,1024
 2026-10-18,HYD,Double Toned A2 Buffalo Milk,3883.0,342.0,4225.0,2706
+2026-10-18,HYD,High Protein Toned Milk,1242.0,136.0,1378.0,1021
 2026-10-18,HYD,Skim Milk,1713.0,161.0,1874.0,1273
 2026-10-18,HYD,Toned Milk,8436.0,980.0,9416.0,5624
 2026-10-18,PNQ,A2 Buffalo Milk,228.0,35.0,263.0,169
@@ -13367,6 +13679,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-19,BLR,Cow Milk,1238.0,106.0,1344.0,833
 2026-10-19,BLR,Curd,128.0,65.0,193.0,176
 2026-10-19,BLR,Double Toned A2 Buffalo Milk,329.0,50.0,379.0,265
+2026-10-19,BLR,High Protein Toned Milk,159.0,18.0,177.0,133
 2026-10-19,BLR,Skim Milk,282.0,45.0,327.0,225
 2026-10-19,BLR,Toned Milk,461.0,78.0,539.0,365
 2026-10-19,HYD,A2 Buffalo Milk,12077.0,750.0,12827.0,7884
@@ -13374,6 +13687,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-19,HYD,Cow Milk,7767.0,529.0,8296.0,4910
 2026-10-19,HYD,Curd,754.0,438.0,1192.0,1037
 2026-10-19,HYD,Double Toned A2 Buffalo Milk,4019.0,305.0,4324.0,2725
+2026-10-19,HYD,High Protein Toned Milk,1242.0,125.0,1367.0,1020
 2026-10-19,HYD,Skim Milk,1707.0,138.0,1845.0,1272
 2026-10-19,HYD,Toned Milk,8466.0,961.0,9427.0,5651
 2026-10-19,PNQ,A2 Buffalo Milk,214.0,57.0,271.0,171
@@ -13392,6 +13706,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-20,BLR,Cow Milk,1214.0,130.0,1344.0,838
 2026-10-20,BLR,Curd,107.0,67.0,174.0,160
 2026-10-20,BLR,Double Toned A2 Buffalo Milk,315.0,55.0,370.0,255
+2026-10-20,BLR,High Protein Toned Milk,122.0,23.0,145.0,107
 2026-10-20,BLR,Skim Milk,316.0,57.0,373.0,254
 2026-10-20,BLR,Toned Milk,436.0,75.0,511.0,343
 2026-10-20,HYD,A2 Buffalo Milk,12444.0,1026.0,13470.0,8027
@@ -13399,6 +13714,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-20,HYD,Cow Milk,7861.0,793.0,8654.0,5074
 2026-10-20,HYD,Curd,737.0,565.0,1302.0,1111
 2026-10-20,HYD,Double Toned A2 Buffalo Milk,4143.0,396.0,4539.0,2786
+2026-10-20,HYD,High Protein Toned Milk,1277.0,159.0,1436.0,1026
 2026-10-20,HYD,Skim Milk,1762.0,169.0,1931.0,1304
 2026-10-20,HYD,Toned Milk,8823.0,1080.0,9903.0,5824
 2026-10-20,PNQ,A2 Buffalo Milk,248.0,46.0,294.0,183
@@ -13417,6 +13733,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-21,BLR,Cow Milk,1232.0,101.0,1333.0,833
 2026-10-21,BLR,Curd,105.0,40.0,145.0,136
 2026-10-21,BLR,Double Toned A2 Buffalo Milk,327.0,35.0,362.0,258
+2026-10-21,BLR,High Protein Toned Milk,144.0,18.0,162.0,123
 2026-10-21,BLR,Skim Milk,285.0,43.0,328.0,227
 2026-10-21,BLR,Toned Milk,448.0,87.0,535.0,358
 2026-10-21,HYD,A2 Buffalo Milk,12521.0,692.0,13213.0,8166
@@ -13424,6 +13741,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-21,HYD,Cow Milk,7769.0,371.0,8140.0,4871
 2026-10-21,HYD,Curd,753.0,406.0,1159.0,1029
 2026-10-21,HYD,Double Toned A2 Buffalo Milk,4189.0,298.0,4487.0,2846
+2026-10-21,HYD,High Protein Toned Milk,1269.0,130.0,1399.0,1046
 2026-10-21,HYD,Skim Milk,1821.0,159.0,1980.0,1329
 2026-10-21,HYD,Toned Milk,8631.0,871.0,9502.0,5747
 2026-10-21,PNQ,A2 Buffalo Milk,226.0,33.0,259.0,165
@@ -13442,6 +13760,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-22,BLR,Cow Milk,1244.0,96.0,1340.0,852
 2026-10-22,BLR,Curd,123.0,76.0,199.0,181
 2026-10-22,BLR,Double Toned A2 Buffalo Milk,337.0,70.0,407.0,283
+2026-10-22,BLR,High Protein Toned Milk,143.0,19.0,162.0,127
 2026-10-22,BLR,Skim Milk,303.0,61.0,364.0,257
 2026-10-22,BLR,Toned Milk,457.0,75.0,532.0,364
 2026-10-22,HYD,A2 Buffalo Milk,13614.0,867.0,14481.0,9031
@@ -13449,6 +13768,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-22,HYD,Cow Milk,8139.0,463.0,8602.0,5131
 2026-10-22,HYD,Curd,796.0,601.0,1397.0,1252
 2026-10-22,HYD,Double Toned A2 Buffalo Milk,4391.0,368.0,4759.0,3054
+2026-10-22,HYD,High Protein Toned Milk,1381.0,194.0,1575.0,1174
 2026-10-22,HYD,Skim Milk,1917.0,178.0,2095.0,1416
 2026-10-22,HYD,Toned Milk,9212.0,1063.0,10275.0,6270
 2026-10-22,PNQ,A2 Buffalo Milk,232.0,23.0,255.0,168
@@ -13467,6 +13787,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-23,BLR,Cow Milk,1281.0,104.0,1385.0,881
 2026-10-23,BLR,Curd,123.0,68.0,191.0,165
 2026-10-23,BLR,Double Toned A2 Buffalo Milk,349.0,47.0,396.0,281
+2026-10-23,BLR,High Protein Toned Milk,153.0,13.0,166.0,125
 2026-10-23,BLR,Skim Milk,314.0,50.0,364.0,249
 2026-10-23,BLR,Toned Milk,459.0,84.0,543.0,371
 2026-10-23,HYD,A2 Buffalo Milk,14275.0,949.0,15224.0,9451
@@ -13474,6 +13795,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-23,HYD,Cow Milk,8413.0,507.0,8920.0,5333
 2026-10-23,HYD,Curd,837.0,575.0,1412.0,1254
 2026-10-23,HYD,Double Toned A2 Buffalo Milk,4567.0,431.0,4998.0,3222
+2026-10-23,HYD,High Protein Toned Milk,1398.0,181.0,1579.0,1181
 2026-10-23,HYD,Skim Milk,1895.0,214.0,2109.0,1426
 2026-10-23,HYD,Toned Milk,9524.0,1163.0,10687.0,6530
 2026-10-23,PNQ,A2 Buffalo Milk,225.0,49.0,274.0,183
@@ -13492,6 +13814,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-24,BLR,Cow Milk,1313.0,92.0,1405.0,882
 2026-10-24,BLR,Curd,132.0,54.0,186.0,169
 2026-10-24,BLR,Double Toned A2 Buffalo Milk,357.0,57.0,414.0,283
+2026-10-24,BLR,High Protein Toned Milk,133.0,17.0,150.0,117
 2026-10-24,BLR,Skim Milk,296.0,39.0,335.0,233
 2026-10-24,BLR,Toned Milk,455.0,60.0,515.0,355
 2026-10-24,HYD,A2 Buffalo Milk,14394.0,930.0,15324.0,9564
@@ -13499,6 +13822,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-24,HYD,Cow Milk,8362.0,509.0,8871.0,5290
 2026-10-24,HYD,Curd,853.0,464.0,1317.0,1169
 2026-10-24,HYD,Double Toned A2 Buffalo Milk,4576.0,408.0,4984.0,3225
+2026-10-24,HYD,High Protein Toned Milk,1396.0,165.0,1561.0,1154
 2026-10-24,HYD,Skim Milk,1937.0,175.0,2112.0,1436
 2026-10-24,HYD,Toned Milk,9573.0,1035.0,10608.0,6538
 2026-10-24,PNQ,A2 Buffalo Milk,239.0,37.0,276.0,182
@@ -13517,6 +13841,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-25,BLR,Cow Milk,1329.0,124.0,1453.0,897
 2026-10-25,BLR,Curd,117.0,55.0,172.0,153
 2026-10-25,BLR,Double Toned A2 Buffalo Milk,355.0,57.0,412.0,287
+2026-10-25,BLR,High Protein Toned Milk,160.0,13.0,173.0,131
 2026-10-25,BLR,Skim Milk,296.0,51.0,347.0,249
 2026-10-25,BLR,Toned Milk,469.0,78.0,547.0,359
 2026-10-25,HYD,A2 Buffalo Milk,14679.0,971.0,15650.0,9767
@@ -13524,6 +13849,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-25,HYD,Cow Milk,8709.0,496.0,9205.0,5426
 2026-10-25,HYD,Curd,813.0,556.0,1369.0,1225
 2026-10-25,HYD,Double Toned A2 Buffalo Milk,4664.0,367.0,5031.0,3252
+2026-10-25,HYD,High Protein Toned Milk,1353.0,164.0,1517.0,1143
 2026-10-25,HYD,Skim Milk,1895.0,184.0,2079.0,1428
 2026-10-25,HYD,Toned Milk,9617.0,1079.0,10696.0,6550
 2026-10-25,PNQ,A2 Buffalo Milk,243.0,115.0,358.0,205
@@ -13542,6 +13868,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-26,BLR,Cow Milk,1442.0,112.0,1554.0,986
 2026-10-26,BLR,Curd,163.0,67.0,230.0,209
 2026-10-26,BLR,Double Toned A2 Buffalo Milk,376.0,66.0,442.0,314
+2026-10-26,BLR,High Protein Toned Milk,140.0,21.0,161.0,131
 2026-10-26,BLR,Skim Milk,343.0,42.0,385.0,278
 2026-10-26,BLR,Toned Milk,494.0,76.0,570.0,395
 2026-10-26,HYD,A2 Buffalo Milk,15268.0,997.0,16265.0,10319
@@ -13549,12 +13876,14 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-26,HYD,Cow Milk,8766.0,568.0,9334.0,5655
 2026-10-26,HYD,Curd,866.0,563.0,1429.0,1287
 2026-10-26,HYD,Double Toned A2 Buffalo Milk,4859.0,470.0,5329.0,3464
+2026-10-26,HYD,High Protein Toned Milk,1480.0,186.0,1666.0,1257
 2026-10-26,HYD,Skim Milk,1968.0,202.0,2170.0,1515
 2026-10-26,HYD,Toned Milk,9904.0,1149.0,11053.0,6833
 2026-10-26,PNQ,A2 Buffalo Milk,229.0,44.0,273.0,181
 2026-10-26,PNQ,A2 Desi Cow Milk,473.0,67.0,540.0,371
 2026-10-26,PNQ,Cow Milk,416.0,63.0,479.0,303
 2026-10-26,PNQ,Curd,8.0,21.0,29.0,26
+2026-10-26,PNQ,High Protein Toned Milk,1.0,0,1.0,1
 2026-10-26,VGA,A2 Buffalo Milk,129.0,38.0,167.0,109
 2026-10-26,VGA,A2 Desi Cow Milk,16.0,4.0,20.0,14
 2026-10-26,VGA,Cow Milk,44.0,9.0,53.0,35
@@ -13567,6 +13896,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-27,BLR,Cow Milk,1465.0,123.0,1588.0,1009
 2026-10-27,BLR,Curd,123.0,66.0,189.0,172
 2026-10-27,BLR,Double Toned A2 Buffalo Milk,394.0,59.0,453.0,323
+2026-10-27,BLR,High Protein Toned Milk,170.0,32.0,202.0,149
 2026-10-27,BLR,Skim Milk,334.0,48.0,382.0,276
 2026-10-27,BLR,Toned Milk,508.0,95.0,603.0,407
 2026-10-27,HYD,A2 Buffalo Milk,15411.0,1022.0,16433.0,10403
@@ -13574,6 +13904,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-27,HYD,Cow Milk,8918.0,572.0,9490.0,5729
 2026-10-27,HYD,Curd,852.0,539.0,1391.0,1244
 2026-10-27,HYD,Double Toned A2 Buffalo Milk,4873.0,450.0,5323.0,3480
+2026-10-27,HYD,High Protein Toned Milk,1509.0,185.0,1694.0,1287
 2026-10-27,HYD,Skim Milk,2020.0,201.0,2221.0,1538
 2026-10-27,HYD,Toned Milk,10075.0,1196.0,11271.0,6969
 2026-10-27,PNQ,A2 Buffalo Milk,254.0,43.0,297.0,195
@@ -13592,6 +13923,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-28,BLR,Cow Milk,1499.0,136.0,1635.0,1036
 2026-10-28,BLR,Curd,151.0,84.0,235.0,212
 2026-10-28,BLR,Double Toned A2 Buffalo Milk,387.0,67.0,454.0,325
+2026-10-28,BLR,High Protein Toned Milk,153.0,21.0,174.0,132
 2026-10-28,BLR,Skim Milk,349.0,41.0,390.0,280
 2026-10-28,BLR,Toned Milk,520.0,93.0,613.0,430
 2026-10-28,HYD,A2 Buffalo Milk,15777.0,1091.0,16868.0,10647
@@ -13599,6 +13931,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-28,HYD,Cow Milk,8946.0,532.0,9478.0,5716
 2026-10-28,HYD,Curd,899.0,545.0,1444.0,1293
 2026-10-28,HYD,Double Toned A2 Buffalo Milk,4930.0,425.0,5355.0,3499
+2026-10-28,HYD,High Protein Toned Milk,1523.0,190.0,1713.0,1306
 2026-10-28,HYD,Skim Milk,2054.0,231.0,2285.0,1564
 2026-10-28,HYD,Toned Milk,10254.0,1185.0,11439.0,7044
 2026-10-28,PNQ,A2 Buffalo Milk,239.0,35.0,274.0,180
@@ -13617,6 +13950,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-29,BLR,Cow Milk,1472.0,120.0,1592.0,1004
 2026-10-29,BLR,Curd,143.0,61.0,204.0,182
 2026-10-29,BLR,Double Toned A2 Buffalo Milk,423.0,70.0,493.0,333
+2026-10-29,BLR,High Protein Toned Milk,171.0,31.0,202.0,151
 2026-10-29,BLR,Skim Milk,340.0,45.0,385.0,283
 2026-10-29,BLR,Toned Milk,534.0,94.0,628.0,418
 2026-10-29,HYD,A2 Buffalo Milk,15515.0,1041.0,16556.0,10495
@@ -13624,6 +13958,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-29,HYD,Cow Milk,8994.0,567.0,9561.0,5752
 2026-10-29,HYD,Curd,904.0,543.0,1447.0,1286
 2026-10-29,HYD,Double Toned A2 Buffalo Milk,4885.0,390.0,5275.0,3449
+2026-10-29,HYD,High Protein Toned Milk,1526.0,212.0,1738.0,1304
 2026-10-29,HYD,Skim Milk,2025.0,213.0,2238.0,1552
 2026-10-29,HYD,Toned Milk,10145.0,1205.0,11350.0,6978
 2026-10-29,PNQ,A2 Buffalo Milk,233.0,49.0,282.0,183
@@ -13642,6 +13977,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-30,BLR,Cow Milk,1443.0,110.0,1553.0,995
 2026-10-30,BLR,Curd,155.0,64.0,219.0,195
 2026-10-30,BLR,Double Toned A2 Buffalo Milk,384.0,66.0,450.0,326
+2026-10-30,BLR,High Protein Toned Milk,150.0,20.0,170.0,131
 2026-10-30,BLR,Skim Milk,339.0,36.0,375.0,267
 2026-10-30,BLR,Toned Milk,501.0,91.0,592.0,413
 2026-10-30,HYD,A2 Buffalo Milk,15530.0,1046.0,16576.0,10470
@@ -13649,6 +13985,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-30,HYD,Cow Milk,8921.0,551.0,9472.0,5685
 2026-10-30,HYD,Curd,847.0,527.0,1374.0,1243
 2026-10-30,HYD,Double Toned A2 Buffalo Milk,4825.0,444.0,5269.0,3449
+2026-10-30,HYD,High Protein Toned Milk,1480.0,189.0,1669.0,1252
 2026-10-30,HYD,Skim Milk,2057.0,195.0,2252.0,1562
 2026-10-30,HYD,Toned Milk,10114.0,1155.0,11269.0,6970
 2026-10-30,PNQ,A2 Buffalo Milk,231.0,24.0,255.0,173
@@ -13667,6 +14004,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-31,BLR,Cow Milk,1387.0,137.0,1524.0,966
 2026-10-31,BLR,Curd,135.0,70.0,205.0,183
 2026-10-31,BLR,Double Toned A2 Buffalo Milk,400.0,58.0,458.0,327
+2026-10-31,BLR,High Protein Toned Milk,156.0,22.0,178.0,135
 2026-10-31,BLR,Skim Milk,324.0,42.0,366.0,259
 2026-10-31,BLR,Toned Milk,475.0,101.0,576.0,391
 2026-10-31,HYD,A2 Buffalo Milk,15252.0,1079.0,16331.0,10278
@@ -13674,6 +14012,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-10-31,HYD,Cow Milk,8802.0,528.0,9330.0,5551
 2026-10-31,HYD,Curd,907.0,521.0,1428.0,1260
 2026-10-31,HYD,Double Toned A2 Buffalo Milk,4759.0,384.0,5143.0,3351
+2026-10-31,HYD,High Protein Toned Milk,1479.0,181.0,1660.0,1240
 2026-10-31,HYD,Skim Milk,2031.0,179.0,2210.0,1501
 2026-10-31,HYD,Toned Milk,9996.0,1189.0,11185.0,6875
 2026-10-31,PNQ,A2 Buffalo Milk,196.0,39.0,235.0,160
@@ -13692,6 +14031,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-01,BLR,Cow Milk,1381.0,91.0,1472.0,949
 2026-11-01,BLR,Curd,143.0,66.0,209.0,195
 2026-11-01,BLR,Double Toned A2 Buffalo Milk,395.0,61.0,456.0,331
+2026-11-01,BLR,High Protein Toned Milk,143.0,28.0,171.0,127
 2026-11-01,BLR,Skim Milk,322.0,28.0,350.0,246
 2026-11-01,BLR,Toned Milk,502.0,67.0,569.0,398
 2026-11-01,HYD,A2 Buffalo Milk,15393.0,1000.0,16393.0,10349
@@ -13699,6 +14039,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-01,HYD,Cow Milk,8650.0,477.0,9127.0,5478
 2026-11-01,HYD,Curd,863.0,475.0,1338.0,1187
 2026-11-01,HYD,Double Toned A2 Buffalo Milk,4755.0,394.0,5149.0,3401
+2026-11-01,HYD,High Protein Toned Milk,1499.0,165.0,1664.0,1231
 2026-11-01,HYD,Skim Milk,2027.0,174.0,2201.0,1509
 2026-11-01,HYD,Toned Milk,9919.0,1050.0,10969.0,6782
 2026-11-01,PNQ,A2 Buffalo Milk,208.0,28.0,236.0,164
@@ -13710,6 +14051,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-01,VGA,Cow Milk,40.0,14.0,54.0,38
 2026-11-01,VGA,Curd,6.0,8.0,14.0,12
 2026-11-01,VGA,Double Toned A2 Buffalo Milk,48.0,18.0,66.0,46
+2026-11-01,VGA,High Protein Toned Milk,0,11.0,11.0,8
 2026-11-01,VGA,Skim Milk,14.0,12.0,26.0,19
 2026-11-01,VGA,Toned Milk,123.0,34.0,157.0,92
 2026-11-02,BLR,A2 Buffalo Milk,1826.0,168.0,1994.0,1324
@@ -13717,6 +14059,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-02,BLR,Cow Milk,1396.0,133.0,1529.0,977
 2026-11-02,BLR,Curd,138.0,70.0,208.0,193
 2026-11-02,BLR,Double Toned A2 Buffalo Milk,402.0,69.0,471.0,337
+2026-11-02,BLR,High Protein Toned Milk,143.0,23.0,166.0,129
 2026-11-02,BLR,Skim Milk,314.0,47.0,361.0,261
 2026-11-02,BLR,Toned Milk,515.0,75.0,590.0,402
 2026-11-02,HYD,A2 Buffalo Milk,15464.0,1061.0,16525.0,10434
@@ -13724,6 +14067,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-02,HYD,Cow Milk,8834.0,523.0,9357.0,5685
 2026-11-02,HYD,Curd,888.0,540.0,1428.0,1282
 2026-11-02,HYD,Double Toned A2 Buffalo Milk,4784.0,438.0,5222.0,3411
+2026-11-02,HYD,High Protein Toned Milk,1529.0,177.0,1706.0,1278
 2026-11-02,HYD,Skim Milk,2039.0,180.0,2219.0,1517
 2026-11-02,HYD,Toned Milk,9988.0,1172.0,11160.0,6935
 2026-11-02,PNQ,A2 Buffalo Milk,205.0,51.0,256.0,171
@@ -13735,6 +14079,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-02,VGA,Cow Milk,43.0,14.0,57.0,40
 2026-11-02,VGA,Curd,8.0,7.0,15.0,14
 2026-11-02,VGA,Double Toned A2 Buffalo Milk,40.0,15.0,55.0,44
+2026-11-02,VGA,High Protein Toned Milk,1.0,12.0,13.0,12
 2026-11-02,VGA,Skim Milk,12.0,2.0,14.0,12
 2026-11-02,VGA,Toned Milk,110.0,29.0,139.0,86
 2026-11-03,BLR,A2 Buffalo Milk,1773.0,209.0,1982.0,1299
@@ -13742,6 +14087,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-03,BLR,Cow Milk,1403.0,110.0,1513.0,970
 2026-11-03,BLR,Curd,153.0,83.0,236.0,219
 2026-11-03,BLR,Double Toned A2 Buffalo Milk,387.0,87.0,474.0,332
+2026-11-03,BLR,High Protein Toned Milk,141.0,30.0,171.0,134
 2026-11-03,BLR,Skim Milk,321.0,38.0,359.0,254
 2026-11-03,BLR,Toned Milk,528.0,97.0,625.0,417
 2026-11-03,HYD,A2 Buffalo Milk,15567.0,1179.0,16746.0,10611
@@ -13749,6 +14095,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-03,HYD,Cow Milk,8886.0,544.0,9430.0,5668
 2026-11-03,HYD,Curd,850.0,550.0,1400.0,1268
 2026-11-03,HYD,Double Toned A2 Buffalo Milk,4910.0,477.0,5387.0,3512
+2026-11-03,HYD,High Protein Toned Milk,1484.0,186.0,1670.0,1251
 2026-11-03,HYD,Skim Milk,2075.0,175.0,2250.0,1576
 2026-11-03,HYD,Toned Milk,10211.0,1224.0,11435.0,7101
 2026-11-03,PNQ,A2 Buffalo Milk,207.0,33.0,240.0,162
@@ -13760,6 +14107,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-03,VGA,Cow Milk,48.0,14.0,62.0,38
 2026-11-03,VGA,Curd,6.0,6.0,12.0,11
 2026-11-03,VGA,Double Toned A2 Buffalo Milk,47.0,19.0,66.0,50
+2026-11-03,VGA,High Protein Toned Milk,2.0,15.0,17.0,15
 2026-11-03,VGA,Skim Milk,12.0,5.0,17.0,15
 2026-11-03,VGA,Toned Milk,120.0,50.0,170.0,104
 2026-11-04,BLR,A2 Buffalo Milk,1836.0,172.0,2008.0,1329
@@ -13767,6 +14115,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-04,BLR,Cow Milk,1421.0,118.0,1539.0,974
 2026-11-04,BLR,Curd,154.0,72.0,226.0,205
 2026-11-04,BLR,Double Toned A2 Buffalo Milk,387.0,65.0,452.0,328
+2026-11-04,BLR,High Protein Toned Milk,142.0,22.0,164.0,129
 2026-11-04,BLR,Skim Milk,317.0,50.0,367.0,270
 2026-11-04,BLR,Toned Milk,520.0,96.0,616.0,419
 2026-11-04,HYD,A2 Buffalo Milk,15749.0,1146.0,16895.0,10698
@@ -13774,6 +14123,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-04,HYD,Cow Milk,8922.0,488.0,9410.0,5697
 2026-11-04,HYD,Curd,894.0,521.0,1415.0,1265
 2026-11-04,HYD,Double Toned A2 Buffalo Milk,4921.0,427.0,5348.0,3488
+2026-11-04,HYD,High Protein Toned Milk,1573.0,183.0,1756.0,1317
 2026-11-04,HYD,Skim Milk,2066.0,207.0,2273.0,1559
 2026-11-04,HYD,Toned Milk,10237.0,1241.0,11478.0,7140
 2026-11-04,PNQ,A2 Buffalo Milk,194.0,19.0,213.0,141
@@ -13785,6 +14135,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-04,VGA,Cow Milk,47.0,15.0,62.0,42
 2026-11-04,VGA,Curd,10.0,4.0,14.0,12
 2026-11-04,VGA,Double Toned A2 Buffalo Milk,46.0,14.0,60.0,45
+2026-11-04,VGA,High Protein Toned Milk,2.0,20.0,22.0,15
 2026-11-04,VGA,Skim Milk,9.0,6.0,15.0,14
 2026-11-04,VGA,Toned Milk,121.0,41.0,162.0,102
 2026-11-05,BLR,A2 Buffalo Milk,1802.0,176.0,1978.0,1298
@@ -13792,6 +14143,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-05,BLR,Cow Milk,1386.0,139.0,1525.0,959
 2026-11-05,BLR,Curd,157.0,75.0,232.0,214
 2026-11-05,BLR,Double Toned A2 Buffalo Milk,390.0,52.0,442.0,326
+2026-11-05,BLR,High Protein Toned Milk,124.0,19.0,143.0,115
 2026-11-05,BLR,Skim Milk,302.0,40.0,342.0,251
 2026-11-05,BLR,Toned Milk,491.0,116.0,607.0,407
 2026-11-05,HYD,A2 Buffalo Milk,15643.0,976.0,16619.0,10547
@@ -13799,6 +14151,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-05,HYD,Cow Milk,8878.0,507.0,9385.0,5690
 2026-11-05,HYD,Curd,889.0,536.0,1425.0,1271
 2026-11-05,HYD,Double Toned A2 Buffalo Milk,4860.0,427.0,5287.0,3445
+2026-11-05,HYD,High Protein Toned Milk,1549.0,185.0,1734.0,1291
 2026-11-05,HYD,Skim Milk,2081.0,190.0,2271.0,1565
 2026-11-05,HYD,Toned Milk,10421.0,1170.0,11591.0,7131
 2026-11-05,PNQ,A2 Buffalo Milk,211.0,37.0,248.0,153
@@ -13810,6 +14163,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-05,VGA,Cow Milk,50.0,12.0,62.0,40
 2026-11-05,VGA,Curd,5.0,7.0,12.0,10
 2026-11-05,VGA,Double Toned A2 Buffalo Milk,48.0,12.0,60.0,45
+2026-11-05,VGA,High Protein Toned Milk,2.0,8.0,10.0,9
 2026-11-05,VGA,Skim Milk,12.0,10.0,22.0,16
 2026-11-05,VGA,Toned Milk,122.0,30.0,152.0,94
 2026-11-06,BLR,A2 Buffalo Milk,1837.0,169.0,2006.0,1285
@@ -13817,6 +14171,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-06,BLR,Cow Milk,1351.0,115.0,1466.0,917
 2026-11-06,BLR,Curd,131.0,70.0,201.0,184
 2026-11-06,BLR,Double Toned A2 Buffalo Milk,387.0,56.0,443.0,311
+2026-11-06,BLR,High Protein Toned Milk,135.0,16.0,151.0,112
 2026-11-06,BLR,Skim Milk,299.0,45.0,344.0,250
 2026-11-06,BLR,Toned Milk,488.0,82.0,570.0,386
 2026-11-06,HYD,A2 Buffalo Milk,15775.0,1053.0,16828.0,10591
@@ -13824,6 +14179,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-06,HYD,Cow Milk,8953.0,662.0,9615.0,5791
 2026-11-06,HYD,Curd,903.0,505.0,1408.0,1261
 2026-11-06,HYD,Double Toned A2 Buffalo Milk,4959.0,402.0,5361.0,3496
+2026-11-06,HYD,High Protein Toned Milk,1537.0,118.0,1655.0,1240
 2026-11-06,HYD,Skim Milk,2040.0,198.0,2238.0,1543
 2026-11-06,HYD,Toned Milk,10465.0,1268.0,11733.0,7203
 2026-11-06,PNQ,A2 Buffalo Milk,191.0,33.0,224.0,141
@@ -13835,6 +14191,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-06,VGA,Cow Milk,49.0,11.0,60.0,36
 2026-11-06,VGA,Curd,8.0,4.0,12.0,11
 2026-11-06,VGA,Double Toned A2 Buffalo Milk,44.0,23.0,67.0,49
+2026-11-06,VGA,High Protein Toned Milk,2.0,4.0,6.0,5
 2026-11-06,VGA,Skim Milk,11.0,9.0,20.0,16
 2026-11-06,VGA,Toned Milk,126.0,39.0,165.0,105
 2026-11-07,BLR,A2 Buffalo Milk,1764.0,191.0,1955.0,1215
@@ -13842,6 +14199,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-07,BLR,Cow Milk,1290.0,117.0,1407.0,859
 2026-11-07,BLR,Curd,144.0,64.0,208.0,189
 2026-11-07,BLR,Double Toned A2 Buffalo Milk,367.0,66.0,433.0,295
+2026-11-07,BLR,High Protein Toned Milk,110.0,19.0,129.0,100
 2026-11-07,BLR,Skim Milk,285.0,44.0,329.0,237
 2026-11-07,BLR,Toned Milk,489.0,84.0,573.0,376
 2026-11-07,HYD,A2 Buffalo Milk,15788.0,1095.0,16883.0,10461
@@ -13849,6 +14207,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-07,HYD,Cow Milk,8931.0,634.0,9565.0,5653
 2026-11-07,HYD,Curd,895.0,529.0,1424.0,1253
 2026-11-07,HYD,Double Toned A2 Buffalo Milk,4950.0,437.0,5387.0,3484
+2026-11-07,HYD,High Protein Toned Milk,1476.0,177.0,1653.0,1211
 2026-11-07,HYD,Skim Milk,2072.0,178.0,2250.0,1525
 2026-11-07,HYD,Toned Milk,10484.0,1171.0,11655.0,7029
 2026-11-07,PNQ,A2 Buffalo Milk,177.0,54.0,231.0,134
@@ -13860,6 +14219,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-07,VGA,Cow Milk,51.0,6.0,57.0,34
 2026-11-07,VGA,Curd,5.0,5.0,10.0,8
 2026-11-07,VGA,Double Toned A2 Buffalo Milk,51.0,17.0,68.0,55
+2026-11-07,VGA,High Protein Toned Milk,3.0,8.0,11.0,10
 2026-11-07,VGA,Skim Milk,15.0,4.0,19.0,15
 2026-11-07,VGA,Toned Milk,118.0,42.0,160.0,101
 2026-11-08,BLR,A2 Buffalo Milk,1736.0,206.0,1942.0,1205
@@ -13867,6 +14227,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-08,BLR,Cow Milk,1283.0,144.0,1427.0,857
 2026-11-08,BLR,Curd,135.0,86.0,221.0,195
 2026-11-08,BLR,Double Toned A2 Buffalo Milk,374.0,82.0,456.0,302
+2026-11-08,BLR,High Protein Toned Milk,120.0,16.0,136.0,95
 2026-11-08,BLR,Skim Milk,270.0,40.0,310.0,217
 2026-11-08,BLR,Toned Milk,483.0,94.0,577.0,367
 2026-11-08,HYD,A2 Buffalo Milk,16285.0,1614.0,17899.0,10575
@@ -13874,6 +14235,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-08,HYD,Cow Milk,9331.0,1385.0,10716.0,6196
 2026-11-08,HYD,Curd,889.0,797.0,1686.0,1421
 2026-11-08,HYD,Double Toned A2 Buffalo Milk,5047.0,558.0,5605.0,3455
+2026-11-08,HYD,High Protein Toned Milk,1511.0,187.0,1698.0,1210
 2026-11-08,HYD,Skim Milk,1986.0,210.0,2196.0,1486
 2026-11-08,HYD,Toned Milk,10901.0,1732.0,12633.0,7222
 2026-11-08,PNQ,A2 Buffalo Milk,169.0,36.0,205.0,123
@@ -13885,6 +14247,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-08,VGA,Cow Milk,43.0,15.0,58.0,38
 2026-11-08,VGA,Curd,7.0,7.0,14.0,10
 2026-11-08,VGA,Double Toned A2 Buffalo Milk,44.0,16.0,60.0,43
+2026-11-08,VGA,High Protein Toned Milk,3.0,12.0,15.0,11
 2026-11-08,VGA,Skim Milk,13.0,1.0,14.0,11
 2026-11-08,VGA,Toned Milk,121.0,41.0,162.0,99
 2026-11-10,BLR,A2 Buffalo Milk,1635.0,173.0,1808.0,1161
@@ -13892,6 +14255,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-10,BLR,Cow Milk,1220.0,77.0,1297.0,804
 2026-11-10,BLR,Curd,110.0,67.0,177.0,165
 2026-11-10,BLR,Double Toned A2 Buffalo Milk,355.0,69.0,424.0,292
+2026-11-10,BLR,High Protein Toned Milk,119.0,22.0,141.0,104
 2026-11-10,BLR,Skim Milk,288.0,40.0,328.0,240
 2026-11-10,BLR,Toned Milk,460.0,81.0,541.0,347
 2026-11-10,HYD,A2 Buffalo Milk,15551.0,1054.0,16605.0,10425
@@ -13899,6 +14263,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-10,HYD,Cow Milk,8690.0,548.0,9238.0,5585
 2026-11-10,HYD,Curd,845.0,572.0,1417.0,1273
 2026-11-10,HYD,Double Toned A2 Buffalo Milk,4811.0,410.0,5221.0,3395
+2026-11-10,HYD,High Protein Toned Milk,1474.0,154.0,1628.0,1203
 2026-11-10,HYD,Skim Milk,1959.0,186.0,2145.0,1473
 2026-11-10,HYD,Toned Milk,10306.0,1262.0,11568.0,7086
 2026-11-10,PNQ,A2 Buffalo Milk,147.0,20.0,167.0,94
@@ -13910,6 +14275,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-10,VGA,Cow Milk,43.0,12.0,55.0,34
 2026-11-10,VGA,Curd,6.0,7.0,13.0,11
 2026-11-10,VGA,Double Toned A2 Buffalo Milk,43.0,13.0,56.0,39
+2026-11-10,VGA,High Protein Toned Milk,6.0,7.0,13.0,12
 2026-11-10,VGA,Skim Milk,17.0,6.0,23.0,16
 2026-11-10,VGA,Toned Milk,125.0,35.0,160.0,100
 2026-11-11,BLR,A2 Buffalo Milk,1734.0,174.0,1908.0,1240
@@ -13917,6 +14283,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-11,BLR,Cow Milk,1322.0,119.0,1441.0,907
 2026-11-11,BLR,Curd,148.0,69.0,217.0,195
 2026-11-11,BLR,Double Toned A2 Buffalo Milk,374.0,51.0,425.0,297
+2026-11-11,BLR,High Protein Toned Milk,122.0,19.0,141.0,107
 2026-11-11,BLR,Skim Milk,312.0,28.0,340.0,244
 2026-11-11,BLR,Toned Milk,513.0,76.0,589.0,394
 2026-11-11,HYD,A2 Buffalo Milk,15719.0,1055.0,16774.0,10587
@@ -13924,6 +14291,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-11,HYD,Cow Milk,8691.0,549.0,9240.0,5585
 2026-11-11,HYD,Curd,880.0,574.0,1454.0,1294
 2026-11-11,HYD,Double Toned A2 Buffalo Milk,4975.0,411.0,5386.0,3523
+2026-11-11,HYD,High Protein Toned Milk,1493.0,183.0,1676.0,1231
 2026-11-11,HYD,Skim Milk,2088.0,223.0,2311.0,1580
 2026-11-11,HYD,Toned Milk,10508.0,1283.0,11791.0,7224
 2026-11-11,PNQ,A2 Buffalo Milk,136.0,23.0,159.0,95
@@ -13935,6 +14303,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-11,VGA,Cow Milk,40.0,18.0,58.0,37
 2026-11-11,VGA,Curd,8.0,8.0,16.0,15
 2026-11-11,VGA,Double Toned A2 Buffalo Milk,49.0,17.0,66.0,48
+2026-11-11,VGA,High Protein Toned Milk,4.0,7.0,11.0,10
 2026-11-11,VGA,Skim Milk,16.0,5.0,21.0,17
 2026-11-11,VGA,Toned Milk,116.0,31.0,147.0,94
 2026-11-12,BLR,A2 Buffalo Milk,1823.0,181.0,2004.0,1316
@@ -13942,6 +14311,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-12,BLR,Cow Milk,1315.0,112.0,1427.0,902
 2026-11-12,BLR,Curd,147.0,78.0,225.0,203
 2026-11-12,BLR,Double Toned A2 Buffalo Milk,377.0,67.0,444.0,320
+2026-11-12,BLR,High Protein Toned Milk,130.0,21.0,151.0,118
 2026-11-12,BLR,Skim Milk,306.0,45.0,351.0,258
 2026-11-12,BLR,Toned Milk,528.0,108.0,636.0,415
 2026-11-12,HYD,A2 Buffalo Milk,15747.0,984.0,16731.0,10586
@@ -13949,6 +14319,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-12,HYD,Cow Milk,8832.0,606.0,9438.0,5742
 2026-11-12,HYD,Curd,854.0,522.0,1376.0,1240
 2026-11-12,HYD,Double Toned A2 Buffalo Milk,4922.0,432.0,5354.0,3515
+2026-11-12,HYD,High Protein Toned Milk,1513.0,174.0,1687.0,1254
 2026-11-12,HYD,Skim Milk,2018.0,190.0,2208.0,1523
 2026-11-12,HYD,Toned Milk,10555.0,1196.0,11751.0,7231
 2026-11-12,PNQ,A2 Buffalo Milk,137.0,29.0,166.0,103
@@ -13960,6 +14331,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-12,VGA,Cow Milk,35.0,15.0,50.0,33
 2026-11-12,VGA,Curd,6.0,11.0,17.0,15
 2026-11-12,VGA,Double Toned A2 Buffalo Milk,47.0,13.0,60.0,45
+2026-11-12,VGA,High Protein Toned Milk,3.0,9.0,12.0,11
 2026-11-12,VGA,Skim Milk,15.0,8.0,23.0,16
 2026-11-12,VGA,Toned Milk,119.0,41.0,160.0,97
 2026-11-13,BLR,A2 Buffalo Milk,1814.0,194.0,2008.0,1294
@@ -13967,6 +14339,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-13,BLR,Cow Milk,1347.0,133.0,1480.0,952
 2026-11-13,BLR,Curd,162.0,73.0,235.0,207
 2026-11-13,BLR,Double Toned A2 Buffalo Milk,387.0,87.0,474.0,331
+2026-11-13,BLR,High Protein Toned Milk,122.0,23.0,145.0,113
 2026-11-13,BLR,Skim Milk,330.0,36.0,366.0,263
 2026-11-13,BLR,Toned Milk,548.0,74.0,622.0,404
 2026-11-13,HYD,A2 Buffalo Milk,15747.0,1101.0,16848.0,10626
@@ -13974,6 +14347,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-13,HYD,Cow Milk,9060.0,2050.0,11110.0,7127
 2026-11-13,HYD,Curd,874.0,554.0,1428.0,1293
 2026-11-13,HYD,Double Toned A2 Buffalo Milk,4911.0,439.0,5350.0,3507
+2026-11-13,HYD,High Protein Toned Milk,1499.0,185.0,1684.0,1260
 2026-11-13,HYD,Skim Milk,2040.0,208.0,2248.0,1554
 2026-11-13,HYD,Toned Milk,10462.0,1324.0,11786.0,7259
 2026-11-13,PNQ,A2 Buffalo Milk,141.0,31.0,172.0,111
@@ -13985,6 +14359,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-13,VGA,Cow Milk,40.0,31.0,71.0,50
 2026-11-13,VGA,Curd,7.0,8.0,15.0,13
 2026-11-13,VGA,Double Toned A2 Buffalo Milk,47.0,16.0,63.0,49
+2026-11-13,VGA,High Protein Toned Milk,4.0,3.0,7.0,7
 2026-11-13,VGA,Skim Milk,16.0,1.0,17.0,13
 2026-11-13,VGA,Toned Milk,120.0,35.0,155.0,92
 2026-11-14,BLR,A2 Buffalo Milk,1812.0,186.0,1998.0,1275
@@ -13992,6 +14367,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-14,BLR,Cow Milk,1392.0,103.0,1495.0,915
 2026-11-14,BLR,Curd,125.0,66.0,191.0,177
 2026-11-14,BLR,Double Toned A2 Buffalo Milk,377.0,67.0,444.0,302
+2026-11-14,BLR,High Protein Toned Milk,133.0,17.0,150.0,116
 2026-11-14,BLR,Skim Milk,320.0,55.0,375.0,262
 2026-11-14,BLR,Toned Milk,535.0,100.0,635.0,413
 2026-11-14,HYD,A2 Buffalo Milk,15641.0,995.0,16636.0,10441
@@ -13999,6 +14375,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-14,HYD,Cow Milk,8930.0,667.0,9597.0,5728
 2026-11-14,HYD,Curd,909.0,478.0,1387.0,1224
 2026-11-14,HYD,Double Toned A2 Buffalo Milk,4842.0,364.0,5206.0,3392
+2026-11-14,HYD,High Protein Toned Milk,1470.0,173.0,1643.0,1210
 2026-11-14,HYD,Skim Milk,1995.0,189.0,2184.0,1487
 2026-11-14,HYD,Toned Milk,10325.0,1227.0,11552.0,7045
 2026-11-14,PNQ,A2 Buffalo Milk,158.0,32.0,190.0,114
@@ -14010,6 +14387,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-14,VGA,Cow Milk,37.0,11.0,48.0,33
 2026-11-14,VGA,Curd,7.0,7.0,14.0,12
 2026-11-14,VGA,Double Toned A2 Buffalo Milk,41.0,16.0,57.0,45
+2026-11-14,VGA,High Protein Toned Milk,4.0,12.0,16.0,12
 2026-11-14,VGA,Skim Milk,14.0,7.0,21.0,16
 2026-11-14,VGA,Toned Milk,111.0,36.0,147.0,88
 2026-11-15,BLR,A2 Buffalo Milk,1788.0,203.0,1991.0,1281
@@ -14017,6 +14395,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-15,BLR,Cow Milk,1320.0,108.0,1428.0,917
 2026-11-15,BLR,Curd,147.0,72.0,219.0,197
 2026-11-15,BLR,Double Toned A2 Buffalo Milk,380.0,70.0,450.0,316
+2026-11-15,BLR,High Protein Toned Milk,131.0,23.0,154.0,118
 2026-11-15,BLR,Skim Milk,318.0,51.0,369.0,261
 2026-11-15,BLR,Toned Milk,506.0,88.0,594.0,396
 2026-11-15,HYD,A2 Buffalo Milk,15117.0,980.0,16097.0,10133
@@ -14024,6 +14403,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-15,HYD,Cow Milk,8528.0,629.0,9157.0,5526
 2026-11-15,HYD,Curd,859.0,519.0,1378.0,1207
 2026-11-15,HYD,Double Toned A2 Buffalo Milk,4696.0,376.0,5072.0,3327
+2026-11-15,HYD,High Protein Toned Milk,1423.0,177.0,1600.0,1166
 2026-11-15,HYD,Skim Milk,2013.0,173.0,2186.0,1490
 2026-11-15,HYD,Toned Milk,10083.0,1119.0,11202.0,6900
 2026-11-15,PNQ,A2 Buffalo Milk,161.0,22.0,183.0,121
@@ -14035,6 +14415,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-15,VGA,Cow Milk,38.0,13.0,51.0,33
 2026-11-15,VGA,Curd,7.0,11.0,18.0,15
 2026-11-15,VGA,Double Toned A2 Buffalo Milk,49.0,14.0,63.0,47
+2026-11-15,VGA,High Protein Toned Milk,6.0,13.0,19.0,15
 2026-11-15,VGA,Skim Milk,19.0,6.0,25.0,17
 2026-11-15,VGA,Toned Milk,103.0,35.0,138.0,87
 2026-11-16,BLR,A2 Buffalo Milk,1904.0,219.0,2123.0,1376
@@ -14042,6 +14423,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-16,BLR,Cow Milk,1391.0,141.0,1532.0,985
 2026-11-16,BLR,Curd,139.0,77.0,216.0,199
 2026-11-16,BLR,Double Toned A2 Buffalo Milk,389.0,77.0,466.0,334
+2026-11-16,BLR,High Protein Toned Milk,143.0,21.0,164.0,130
 2026-11-16,BLR,Skim Milk,332.0,44.0,376.0,272
 2026-11-16,BLR,Toned Milk,542.0,103.0,645.0,431
 2026-11-16,HYD,A2 Buffalo Milk,15452.0,980.0,16432.0,10424
@@ -14049,6 +14431,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-16,HYD,Cow Milk,8881.0,1052.0,9933.0,6167
 2026-11-16,HYD,Curd,853.0,555.0,1408.0,1265
 2026-11-16,HYD,Double Toned A2 Buffalo Milk,4884.0,380.0,5264.0,3435
+2026-11-16,HYD,High Protein Toned Milk,1465.0,162.0,1627.0,1212
 2026-11-16,HYD,Skim Milk,2023.0,181.0,2204.0,1521
 2026-11-16,HYD,Toned Milk,10266.0,1211.0,11477.0,7115
 2026-11-16,PNQ,A2 Buffalo Milk,205.0,33.0,238.0,150
@@ -14060,6 +14443,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-16,VGA,Cow Milk,47.0,24.0,71.0,47
 2026-11-16,VGA,Curd,8.0,4.0,12.0,10
 2026-11-16,VGA,Double Toned A2 Buffalo Milk,45.0,17.0,62.0,49
+2026-11-16,VGA,High Protein Toned Milk,9.0,8.0,17.0,14
 2026-11-16,VGA,Skim Milk,14.0,3.0,17.0,14
 2026-11-16,VGA,Toned Milk,111.0,43.0,154.0,93
 2026-11-17,BLR,A2 Buffalo Milk,1888.0,208.0,2096.0,1368
@@ -14067,6 +14451,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-17,BLR,Cow Milk,1429.0,118.0,1547.0,1007
 2026-11-17,BLR,Curd,150.0,71.0,221.0,203
 2026-11-17,BLR,Double Toned A2 Buffalo Milk,400.0,85.0,485.0,338
+2026-11-17,BLR,High Protein Toned Milk,133.0,20.0,153.0,121
 2026-11-17,BLR,Skim Milk,367.0,48.0,415.0,301
 2026-11-17,BLR,Toned Milk,546.0,89.0,635.0,435
 2026-11-17,HYD,A2 Buffalo Milk,15654.0,1057.0,16711.0,10576
@@ -14074,6 +14459,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-17,HYD,Cow Milk,8854.0,603.0,9457.0,5739
 2026-11-17,HYD,Curd,839.0,522.0,1361.0,1230
 2026-11-17,HYD,Double Toned A2 Buffalo Milk,4943.0,378.0,5321.0,3473
+2026-11-17,HYD,High Protein Toned Milk,1492.0,172.0,1664.0,1221
 2026-11-17,HYD,Skim Milk,2080.0,193.0,2273.0,1584
 2026-11-17,HYD,Toned Milk,10530.0,1234.0,11764.0,7311
 2026-11-17,PNQ,A2 Buffalo Milk,213.0,37.0,250.0,161
@@ -14085,6 +14471,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-17,VGA,Cow Milk,38.0,13.0,51.0,33
 2026-11-17,VGA,Curd,5.0,7.0,12.0,10
 2026-11-17,VGA,Double Toned A2 Buffalo Milk,48.0,12.0,60.0,45
+2026-11-17,VGA,High Protein Toned Milk,7.0,7.0,14.0,13
 2026-11-17,VGA,Skim Milk,15.0,5.0,20.0,14
 2026-11-17,VGA,Toned Milk,121.0,34.0,155.0,90
 2026-11-18,BLR,A2 Buffalo Milk,1948.0,164.0,2112.0,1381
@@ -14092,6 +14479,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-18,BLR,Cow Milk,1465.0,138.0,1603.0,1028
 2026-11-18,BLR,Curd,142.0,70.0,212.0,197
 2026-11-18,BLR,Double Toned A2 Buffalo Milk,391.0,85.0,476.0,343
+2026-11-18,BLR,High Protein Toned Milk,147.0,18.0,165.0,132
 2026-11-18,BLR,Skim Milk,377.0,53.0,430.0,298
 2026-11-18,BLR,Toned Milk,561.0,86.0,647.0,444
 2026-11-18,HYD,A2 Buffalo Milk,15706.0,1042.0,16748.0,10594
@@ -14099,6 +14487,7 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-18,HYD,Cow Milk,8918.0,544.0,9462.0,5792
 2026-11-18,HYD,Curd,900.0,539.0,1439.0,1289
 2026-11-18,HYD,Double Toned A2 Buffalo Milk,4929.0,432.0,5361.0,3516
+2026-11-18,HYD,High Protein Toned Milk,1513.0,188.0,1701.0,1283
 2026-11-18,HYD,Skim Milk,2066.0,191.0,2257.0,1549
 2026-11-18,HYD,Toned Milk,10533.0,1372.0,11905.0,7314
 2026-11-18,PNQ,A2 Buffalo Milk,224.0,43.0,267.0,171
@@ -14110,5 +14499,6 @@ target_date,city_cd,product_name,final_subscription_qty,final_buy_once_qty,final
 2026-11-18,VGA,Cow Milk,43.0,13.0,56.0,37
 2026-11-18,VGA,Curd,9.0,9.0,18.0,17
 2026-11-18,VGA,Double Toned A2 Buffalo Milk,43.0,13.0,56.0,41
+2026-11-18,VGA,High Protein Toned Milk,8.0,10.0,18.0,15
 2026-11-18,VGA,Skim Milk,11.0,11.0,22.0,16
 2026-11-18,VGA,Toned Milk,114.0,47.0,161.0,99

@@ -97,7 +97,8 @@ with_issue_date AS (
           'Double Toned A2 Buffalo Milk',
           'Skim Milk',
           'Toned Milk',
-          'Curd'
+          'Curd',
+          'High Protein Toned Milk'
       )
 )
 

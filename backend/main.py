@@ -160,7 +160,16 @@ MILK_EXPORT_PRODUCTS = [
     "Skim Milk",
     "Toned Milk",
     "Curd",
+    "High Protein Toned Milk",
 ]
+# Products the trained models were not built with (launched after the last
+# full retrain). They get a same-weekday baseline instead; see
+# _same_weekday_baseline. Remove a product once a retrained model covers it.
+BASELINE_PRODUCTS = {"High Protein Toned Milk"}
+BASELINE_WEEKS = 4
+# Issuance requires this many products per city. Baseline products are
+# optional, so a small city with no sales of one never blocks issuance.
+CORE_EXPORT_PRODUCT_COUNT = len([p for p in MILK_EXPORT_PRODUCTS if p not in BASELINE_PRODUCTS])
 
 BLR_BLEND_PRODUCTS = {
     "A2 Buffalo Milk",
@@ -2138,7 +2147,55 @@ def build_forecast_for_dates(forecast_dates, sub_df, known_df, recent_df=None) -
             not in replaced_keys
         ] + replacements
 
+    ml_rows += _baseline_model_rows(forecast_dates, sub_dict, known_dict, recent_actuals)
     return sub_rows + known_rows + ml_rows
+
+
+def _same_weekday_baseline(city, product, target_date, recent_actuals) -> float | None:
+    """Median of the same weekday over the last BASELINE_WEEKS weeks with sales."""
+    target = pd.Timestamp(target_date).normalize()
+    values = [
+        _historical_actual_value(city, product, target - pd.Timedelta(days=7 * week), recent_actuals)
+        for week in range(1, BASELINE_WEEKS + 1)
+    ]
+    values = [value for value in values if value > 0]
+    if len(values) < 2:
+        return None
+    return float(np.median(values))
+
+
+def _baseline_model_rows(forecast_dates, sub_dict, known_dict, recent_actuals) -> list[dict]:
+    """Model rows for BASELINE_PRODUCTS: same-weekday baseline minus visible orders."""
+    rows = []
+    for city in MILK_EXPORT_CITIES:
+        for product in sorted(BASELINE_PRODUCTS):
+            for target_date in sorted({pd.Timestamp(date).normalize() for date in forecast_dates}):
+                total = _same_weekday_baseline(city, product, target_date, recent_actuals)
+                if total is None:
+                    continue
+                total, festival_name, festival_factor, festival_offset = _apply_festival_guardrail(
+                    total, city, product, target_date, {}
+                )
+                if _series_discontinued(city, product, recent_actuals):
+                    total = 0
+                visible = sub_dict.get((city, product), 0) + known_dict.get((city, product), 0)
+                unknown = int(max(0, round(total - visible)))
+                if unknown <= 0:
+                    continue
+                rows.append({
+                    "forecast_date": str(target_date.date()),
+                    "city_cd": city,
+                    "product_name": product,
+                    "predicted_qty": unknown,
+                    "predicted_orders": max(1, round(unknown / 1.15)),
+                    "method": "ml_unknown_adhoc",
+                    "prediction_source": "baseline:same_weekday_median",
+                    "blr_forecast_method": "baseline:same_weekday_median",
+                    "festival_guardrail_name": festival_name,
+                    "festival_guardrail_factor": festival_factor,
+                    "festival_guardrail_offset": festival_offset,
+                })
+    return rows
 
 
 def build_as_issued_forecast_rows(target_date, recent_df=None) -> list[dict]:
@@ -2541,7 +2598,7 @@ async def _build_operational_forecast_df(
 # issue but 7 for accuracy eligibility, so PNQ could never be compared; both
 # checks now use this one table.
 MIN_ISSUED_PRODUCTS_PER_CITY = {
-    city: len(MILK_EXPORT_PRODUCTS) for city in FORECAST_LEAD_DAYS
+    city: CORE_EXPORT_PRODUCT_COUNT for city in FORECAST_LEAD_DAYS
 }
 MIN_ISSUED_PRODUCTS_PER_CITY["PNQ"] = 4
 
@@ -2979,7 +3036,7 @@ def _is_complete_official_forecast(forecast_df: pd.DataFrame) -> bool:
         products = set(group["product_name"])
         if not products.issubset(MILK_EXPORT_PRODUCTS):
             return False
-        if len(products) < MIN_ISSUED_PRODUCTS_PER_CITY.get(city, len(MILK_EXPORT_PRODUCTS)):
+        if len(products) < MIN_ISSUED_PRODUCTS_PER_CITY.get(city, CORE_EXPORT_PRODUCT_COUNT):
             return False
     expected_leads = forecast_df["city"].map(FORECAST_LEAD_DAYS)
     actual_leads = pd.to_numeric(forecast_df["lead_time_days"], errors="coerce")

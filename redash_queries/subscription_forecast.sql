@@ -119,6 +119,8 @@
                     THEN 'Toned Milk'
                 WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) = 'curd'
                     THEN 'Curd'
+                WHEN LOWER(TRIM(REPLACE(pp.name, E'\t', ''))) = 'high protein toned milk'
+                    THEN 'High Protein Toned Milk'
             END AS product_name
         FROM product_productvariant pv
         JOIN product_product pp
@@ -139,7 +141,8 @@
             'skim milk',
             'toned_milk',
             'toned milk',
-            'curd'
+            'curd',
+            'high protein toned milk'
         )
     ),
 
@@ -241,7 +244,8 @@
         'Double Toned A2 Buffalo Milk',
         'Skim Milk',
         'Toned Milk',
-        'Curd'
+        'Curd',
+        'High Protein Toned Milk'
     )
     GROUP BY
         t.target_date,

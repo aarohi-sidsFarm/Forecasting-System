@@ -98,7 +98,8 @@ row_level AS (
           'Double Toned A2 Buffalo Milk',
           'Skim Milk',
           'Toned Milk',
-          'Curd'
+          'Curd',
+          'High Protein Toned Milk'
       )
       AND n.created_at_ist <= (
           n.target_date

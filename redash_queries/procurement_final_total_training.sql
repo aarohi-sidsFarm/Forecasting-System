@@ -82,7 +82,8 @@ WHERE product_name IN (
     'Double Toned A2 Buffalo Milk',
     'Skim Milk',
     'Toned Milk',
-    'Curd'
+    'Curd',
+    'High Protein Toned Milk'
 )
 GROUP BY
     target_date,

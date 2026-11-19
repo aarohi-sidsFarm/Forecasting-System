@@ -188,7 +188,8 @@ WHERE product_name IN (
     'Double Toned A2 Buffalo Milk',
     'Skim Milk',
     'Toned Milk',
-    'Curd'
+    'Curd',
+    'High Protein Toned Milk'
 )
 GROUP BY
     EXTRACT(YEAR FROM delivery_date)::int,
