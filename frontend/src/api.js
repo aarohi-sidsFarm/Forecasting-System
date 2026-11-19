@@ -39,3 +39,7 @@ export const getOperationalForecast = async (targetDate, refresh = false) => {
 };
 
 export const getStatus = () => fetchJson("/status");
+
+export const getTrends = ({ start, end, city, product }) => fetchJson(
+  `/trends?${new URLSearchParams({ start, end, city, product })}`,
+);

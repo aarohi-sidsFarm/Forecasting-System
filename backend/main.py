@@ -19,6 +19,7 @@ try:
     from backend.direct_features import add_relative_features
     from backend.forecast_history import (
         issued_forecast_for_date,
+        issued_forecasts_between,
         issued_run_for_issue_date,
         record_run as record_forecast_run,
     )
@@ -26,6 +27,7 @@ except ModuleNotFoundError:
     from direct_features import add_relative_features
     from forecast_history import (
         issued_forecast_for_date,
+        issued_forecasts_between,
         issued_run_for_issue_date,
         record_run as record_forecast_run,
     )
@@ -4206,6 +4208,219 @@ async def export_accuracy_report_csv(
         media_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+TRENDS_MAX_DAYS = 400
+# A product with no sales for this many days at the end of the range is
+# reported as stopped.
+TRENDS_STOPPED_AFTER_DAYS = 7
+# Smaller products starting or stopping move nothing; leave them out.
+TRENDS_EVENT_MIN_PER_DAY = 10
+
+
+def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, product: str) -> dict:
+    """Daily sales, issued forecasts and festivals for the Trends view.
+
+    Sales come from the training history (refreshed weekly), so the latest
+    days can be missing until the next refresh; actuals_through says how far
+    it reaches. Days are returned unaggregated; the dashboard groups them by
+    week or month.
+    """
+    span_days = (end_dt - start_dt).days + 1
+    prev_start = start_dt - pd.Timedelta(days=span_days)
+    prev_end = start_dt - pd.Timedelta(days=1)
+
+    history = _train_df
+    in_scope = pd.Series(True, index=history.index)
+    if city != "ALL":
+        in_scope &= history["city_cd"] == city
+    if product != "ALL":
+        in_scope &= history["product_name"] == product
+    scoped = history[in_scope]
+    current = scoped[scoped["target_date"].between(start_dt, end_dt)]
+    previous = scoped[scoped["target_date"].between(prev_start, prev_end)]
+
+    issued = issued_forecasts_between(str(start_dt.date()), str(end_dt.date()))
+    if not issued.empty:
+        issued["city_cd"] = issued["city_cd"].apply(_normalize_city_code)
+        issued["product_name"] = issued["product_name"].apply(_normalize_product_name)
+        issued["target_date"] = pd.to_datetime(issued["forecast_date"])
+        if city != "ALL":
+            issued = issued[issued["city_cd"] == city]
+        if product != "ALL":
+            issued = issued[issued["product_name"] == product]
+        issued = issued.merge(
+            current[["target_date", "city_cd", "product_name", "total_qty"]],
+            on=["target_date", "city_cd", "product_name"],
+            how="left",
+        )
+
+    # A forecast total is only comparable with the sales total when every
+    # city in scope was issued that day; a partly issued day (e.g. only
+    # BLR/PNQ) would read as a huge miss.
+    scope_cities = set(current["city_cd"]) or ({city} if city != "ALL" else set(KNOWN_CITIES))
+    daily_actuals = current.groupby("target_date").agg(
+        actual=("total_qty", "sum"),
+        subscription=("final_subscription_qty", "sum"),
+        buy_once=("final_buy_once_qty", "sum"),
+        orders=("total_orders", "sum"),
+    )
+    days = []
+    for day in pd.date_range(start_dt, end_dt, freq="D"):
+        row = {"date": str(day.date())}
+        if day in daily_actuals.index:
+            sales = daily_actuals.loc[day]
+            row.update({key: int(round(float(sales[key]))) for key in ("actual", "subscription", "buy_once", "orders")})
+        else:
+            row.update({"actual": None, "subscription": None, "buy_once": None, "orders": None})
+        day_issued = issued[issued["target_date"] == day] if not issued.empty else issued
+        if not day_issued.empty and scope_cities.issubset(set(day_issued["city_cd"])):
+            row["forecast"] = int(round(float(day_issued["p50_qty"].sum())))
+        else:
+            row["forecast"] = None
+        compared = day_issued[day_issued["total_qty"].notna()] if not day_issued.empty else day_issued
+        if compared.empty:
+            row.update({"compared_forecast": None, "compared_actual": None, "abs_error": None})
+        else:
+            row.update({
+                "compared_forecast": int(round(float(compared["p50_qty"].sum()))),
+                "compared_actual": int(round(float(compared["total_qty"].sum()))),
+                "abs_error": int(round(float((compared["p50_qty"] - compared["total_qty"]).abs().sum()))),
+            })
+        days.append(row)
+
+    group_key = "product_name" if city != "ALL" else "city_cd"
+
+    def _period_totals(frame: pd.DataFrame) -> pd.DataFrame:
+        if frame.empty:
+            return pd.DataFrame(columns=["total", "subscription", "days"])
+        return frame.groupby(group_key).agg(
+            total=("total_qty", "sum"),
+            subscription=("final_subscription_qty", "sum"),
+            days=("target_date", "nunique"),
+        )
+
+    now_totals = _period_totals(current)
+    before_totals = _period_totals(previous)
+    breakdown = []
+    for key, sales in now_totals.sort_values("total", ascending=False).iterrows():
+        avg = float(sales["total"]) / max(int(sales["days"]), 1)
+        prev_avg = None
+        if key in before_totals.index and int(before_totals.loc[key, "days"]):
+            prev_avg = float(before_totals.loc[key, "total"]) / int(before_totals.loc[key, "days"])
+        breakdown.append({
+            "key": key,
+            "total": int(round(float(sales["total"]))),
+            "avg_per_day": round(avg, 1),
+            "prev_avg_per_day": round(prev_avg, 1) if prev_avg is not None else None,
+            "subscription_share": round(100 * float(sales["subscription"]) / float(sales["total"]), 1)
+            if float(sales["total"]) else None,
+        })
+
+    current_days = int(current["target_date"].nunique())
+    previous_days = int(previous["target_date"].nunique())
+    total = float(current["total_qty"].sum())
+    compared_actual = sum(row["compared_actual"] or 0 for row in days)
+    compared_forecast = sum(row["compared_forecast"] or 0 for row in days)
+    abs_error = sum(row["abs_error"] or 0 for row in days)
+    summary = {
+        "total": int(round(total)),
+        "days_with_sales": current_days,
+        "avg_per_day": round(total / current_days, 1) if current_days else None,
+        "prev_avg_per_day": round(float(previous["total_qty"].sum()) / previous_days, 1) if previous_days else None,
+        "prev_start": str(prev_start.date()),
+        "prev_end": str(prev_end.date()),
+        "subscription_share": round(100 * float(current["final_subscription_qty"].sum()) / total, 1) if total else None,
+        "compared_days": sum(1 for row in days if row["compared_actual"]),
+        "error_pct": round(100 * abs_error / compared_actual, 2) if compared_actual else None,
+        "bias_pct": round(100 * (compared_forecast - compared_actual) / compared_actual, 2) if compared_actual else None,
+    }
+
+    # Products that stopped or started selling explain most sudden level
+    # changes; the forecast keeps a stopped product for up to
+    # DISCONTINUED_AFTER_DAYS.
+    sales_end = min(end_dt, history["target_date"].max())
+    events = []
+    window = scoped[scoped["target_date"].between(prev_start, sales_end)]
+    for (event_city, event_product), series in window.groupby(["city_cd", "product_name"]):
+        selling = series[series["total_qty"] > 0].sort_values("target_date")
+        if selling.empty or selling["total_qty"].tail(14).mean() < TRENDS_EVENT_MIN_PER_DAY:
+            continue
+        last_sale = selling["target_date"].max()
+        first_sale = selling["target_date"].min()
+        if (sales_end - last_sale).days >= TRENDS_STOPPED_AFTER_DAYS:
+            events.append({
+                "type": "stopped",
+                "city": event_city,
+                "product": event_product,
+                "date": str((last_sale + pd.Timedelta(days=1)).date()),
+                "avg_per_day": round(float(selling["total_qty"].tail(14).mean()), 1),
+            })
+        elif first_sale >= start_dt and (first_sale - prev_start).days >= TRENDS_STOPPED_AFTER_DAYS:
+            events.append({
+                "type": "started",
+                "city": event_city,
+                "product": event_product,
+                "date": str(first_sale.date()),
+                "avg_per_day": round(float(selling["total_qty"].mean()), 1),
+            })
+    events.sort(key=lambda event: -event["avg_per_day"])
+
+    festivals = fest_df[fest_df["date"].between(start_dt, end_dt)]
+    if city != "ALL":
+        festivals = festivals[festivals["cities"].apply(lambda value: _festival_applies_to_city(value, city))]
+    festival_rows = (
+        festivals.assign(date=festivals["date"].dt.strftime("%Y-%m-%d"))
+        [["date", "festival", "cities", "impact"]]
+        .drop_duplicates()
+        .sort_values("date")
+        .to_dict(orient="records")
+    )
+
+    product_pool = history if city == "ALL" else history[history["city_cd"] == city]
+    all_issued = issued_forecasts_between("2000-01-01", str((_today_ist() + pd.Timedelta(days=7)).date()))
+    return {
+        "start": str(start_dt.date()),
+        "end": str(end_dt.date()),
+        "city": city,
+        "product": product,
+        "breakdown_by": "product" if group_key == "product_name" else "city",
+        "days": days,
+        "summary": summary,
+        "breakdown": breakdown,
+        "events": events,
+        "festivals": festival_rows,
+        "options": {
+            "cities": sorted(history["city_cd"].unique().tolist()),
+            "products": sorted(product_pool["product_name"].unique().tolist()),
+        },
+        "meta": {
+            "actuals_through": str(history["target_date"].max().date()),
+            "actuals_from": str(history["target_date"].min().date()),
+            "issued_from": all_issued["forecast_date"].min() if not all_issued.empty else None,
+            "issued_to": all_issued["forecast_date"].max() if not all_issued.empty else None,
+        },
+    }
+
+
+@app.get("/api/trends")
+async def get_trends(
+    start: str = Query(..., description="YYYY-MM-DD"),
+    end: str = Query(..., description="YYYY-MM-DD"),
+    city: str = Query("ALL"),
+    product: str = Query("ALL"),
+):
+    start_dt = _parse_forecast_date(start)
+    end_dt = _parse_forecast_date(end)
+    if end_dt < start_dt:
+        raise HTTPException(status_code=400, detail="end must be on or after start")
+    if (end_dt - start_dt).days >= TRENDS_MAX_DAYS:
+        raise HTTPException(status_code=400, detail=f"trends support at most {TRENDS_MAX_DAYS} days")
+    city = city.upper().strip()
+    if city != "ALL" and city not in KNOWN_CITIES:
+        raise HTTPException(status_code=400, detail=f"unknown city {city}")
+    product = product.strip() or "ALL"
+    return await run_in_threadpool(_trends_payload, start_dt, end_dt, city, product)
 
 
 @app.get("/api/forecast_trend")

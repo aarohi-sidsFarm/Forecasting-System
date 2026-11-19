@@ -1,16 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getOperationalForecast, getStatus } from "./api";
+import {
+  cityName,
+  cityRank,
+  daysBetween,
+  downloadCsv as saveCsv,
+  fmt,
+  fmtPct,
+  fmtSigned,
+  formatDate,
+  shiftDate,
+  todayInIndia,
+} from "./format";
+import Brand from "./Brand";
+import Trends from "./Trends";
 import "./App.css";
-
-const CITY_NAMES = {
-  HYD: "Hyderabad",
-  VGA: "Vijayawada",
-  BLR: "Bengaluru",
-  PNQ: "Pune",
-};
-
-// Order of cities on screen and in shared text.
-const CITY_ORDER = ["HYD", "BLR", "PNQ", "VGA"];
 
 // Sales history older than this many days gets a stronger notice.
 const STALE_DATA_WARN_DAYS = 7;
@@ -19,53 +23,7 @@ const STALE_DATA_WARN_DAYS = 7;
 const ISSUE_TIME = "22:05";
 const ISSUE_TIME_LABEL = "10:05 PM";
 
-const fmt = (value) => Number(value ?? 0).toLocaleString("en-IN");
-const fmtSigned = (value) => `${Number(value) > 0 ? "+" : ""}${fmt(value)}`;
-const fmtPct = (value) => `${Number(value ?? 0).toFixed(1)}%`;
-const cityName = (city) => CITY_NAMES[city] ?? city;
-const cityRank = (city) => {
-  const index = CITY_ORDER.indexOf(city);
-  return index === -1 ? CITY_ORDER.length : index;
-};
-
-const isoInIndia = (date) => new Intl.DateTimeFormat("en-CA", {
-  timeZone: "Asia/Kolkata",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-}).format(date);
-
-const todayInIndia = () => isoInIndia(new Date());
-
-const shiftDate = (iso, days) => {
-  const date = new Date(`${iso}T12:00:00+05:30`);
-  date.setUTCDate(date.getUTCDate() + days);
-  return isoInIndia(date);
-};
-
-const daysBetween = (fromIso, toIso) => Math.round(
-  (new Date(`${toIso}T12:00:00+05:30`) - new Date(`${fromIso}T12:00:00+05:30`)) / 86400000,
-);
-
-// One date format everywhere: "Mon, 26 Oct" (year only where it matters).
-const formatDate = (iso, withYear = false) => {
-  const parts = new Intl.DateTimeFormat("en-IN", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "Asia/Kolkata",
-  }).formatToParts(new Date(`${iso}T12:00:00+05:30`));
-  const part = (type) => parts.find((p) => p.type === type)?.value;
-  return `${part("weekday")}, ${part("day")} ${part("month")}${withYear ? ` ${part("year")}` : ""}`;
-};
-
 const lockTime = (issueDate) => new Date(`${issueDate}T${ISSUE_TIME}:00+05:30`).getTime();
-
-const csvCell = (value) => {
-  const text = String(value ?? "");
-  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
-};
 
 const isFrozen = (row) => ["official_issued", "legacy_issued", "archived_export"].includes(row.forecast_status)
   || Boolean(row.forecast_run_id);
@@ -125,7 +83,42 @@ function SkeletonRows({ count = 6, columns = 2 }) {
   ));
 }
 
+function ViewTabs({ view, onChange }) {
+  return (
+    <nav className="view-tabs" aria-label="View">
+      {[["forecast", "Forecast"], ["trends", "Trends"]].map(([key, label]) => (
+        <button
+          key={key}
+          type="button"
+          className="view-tab"
+          aria-current={view === key ? "page" : undefined}
+          onClick={() => onChange(key)}
+        >
+          {label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 export default function App() {
+  const [view, setView] = useState(
+    () => (new URLSearchParams(window.location.search).get("view") === "trends" ? "trends" : "forecast"),
+  );
+  const switchView = (next) => {
+    if (next === view) return;
+    // Each view keeps its own settings in the URL; start the other one clean.
+    const url = new URL(window.location);
+    url.search = "";
+    if (next === "trends") url.searchParams.set("view", "trends");
+    window.history.replaceState({}, "", url);
+    setView(next);
+  };
+  const tabs = <ViewTabs view={view} onChange={switchView} />;
+  return view === "trends" ? <Trends tabs={tabs} /> : <ForecastView tabs={tabs} />;
+}
+
+function ForecastView({ tabs }) {
   const params = new URLSearchParams(window.location.search);
   const today = todayInIndia();
   const initialDate = params.get("target") || params.get("as_of") || shiftDate(today, 1);
@@ -416,20 +409,11 @@ export default function App() {
         ["Error %", (row) => (row.actual_available ? Number(row.absolute_error_pct).toFixed(2) : "")],
       ] : []),
     ];
-    const csv = [
-      columns.map(([header]) => csvCell(header)).join(","),
-      ...visibleRows.map((row) => columns.map(([, value]) => csvCell(value(row))).join(",")),
-    ].join("\r\n");
-    // The byte-order mark makes Excel read the file as UTF-8.
-    const href = URL.createObjectURL(new Blob(["﻿", csv], { type: "text/csv;charset=utf-8" }));
-    const anchor = document.createElement("a");
-    anchor.href = href;
-    anchor.download = `order_forecast_${targetDate}${cityFilter !== "All" ? `_${cityFilter}` : ""}.csv`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    // Revoking straight away cancels the download in Firefox and Safari.
-    setTimeout(() => URL.revokeObjectURL(href), 1000);
+    saveCsv(
+      `order_forecast_${targetDate}${cityFilter !== "All" ? `_${cityFilter}` : ""}.csv`,
+      columns.map(([header]) => header),
+      visibleRows.map((row) => columns.map(([, value]) => value(row))),
+    );
     notify("CSV downloaded");
   };
 
@@ -461,10 +445,7 @@ export default function App() {
     <div className="app">
       <header className="header">
         <div className="header-inner">
-          <div className="brand">
-            <img className="brand-logo" src="/apple-touch-icon.png" alt="Sid's Farm" width="28" height="28" />
-            <span className="brand-title">Order Forecasting</span>
-          </div>
+          <Brand>{tabs}</Brand>
           <nav className="date-nav" aria-label="Delivery date">
             <div className="segmented" role="group" aria-label="Quick dates">
               {quickDates.map(([label, date]) => (

@@ -330,6 +330,43 @@ def issued_forecast_for_date(
         ), info
 
 
+def issued_forecasts_between(
+    start_date: str,
+    end_date: str,
+    db_path: str | None = None,
+) -> pd.DataFrame:
+    """Issued p50 per target date and city/SKU, using the same precedence as
+    issued_forecast_for_date (official_issued first, then the latest run)."""
+    start = pd.Timestamp(start_date).strftime("%Y-%m-%d")
+    end = pd.Timestamp(end_date).strftime("%Y-%m-%d")
+    initialize(db_path)
+    with db_connection(db_path) as connection:
+        return pd.read_sql_query(
+            """
+            WITH ranked AS (
+                SELECT fr.forecast_date, fr.city_cd, fr.product_name,
+                       fr.p50_qty, fr.issue_date,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY fr.forecast_date, fr.city_cd, fr.product_name
+                           ORDER BY
+                               CASE r.run_kind WHEN 'official_issued' THEN 0 ELSE 1 END,
+                               r.generated_at DESC
+                       ) AS row_rank
+                FROM forecast_rows fr
+                JOIN forecast_runs r ON r.run_id=fr.run_id
+                WHERE r.run_kind IN ('official_issued', 'official_import')
+                  AND r.status='complete'
+                  AND fr.forecast_date BETWEEN ? AND ?
+            )
+            SELECT forecast_date, city_cd, product_name, p50_qty, issue_date
+            FROM ranked
+            WHERE row_rank=1
+            """,
+            connection,
+            params=(start, end),
+        )
+
+
 def issued_run_for_issue_date(
     issue_date: str, db_path: str | None = None
 ) -> dict | None:
