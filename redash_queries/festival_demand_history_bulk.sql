@@ -109,7 +109,7 @@ row_level AS (
             WHEN LOWER(TRIM(REPLACE(f.product_name, E'\t', ''))) IN (
                 'double toned a2 buffalo milk',
                 'a2 buffalo milk double toned',
-                'double toned milk'
+                'double toned milk', 'double toned buffalo milk'
             )
                 THEN 'Double Toned A2 Buffalo Milk'
             WHEN LOWER(TRIM(REPLACE(f.product_name, E'\t', ''))) IN (

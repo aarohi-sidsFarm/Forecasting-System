@@ -29,8 +29,9 @@ class TrendsTests(unittest.TestCase):
             rows.append((day, "HYD", "Double Toned", 500 if day < "2026-10-31" else 0))
         self.history = _history(rows)
 
-    def payload(self, issued, city="ALL", product="ALL"):
+    def payload(self, issued, city="ALL", product="ALL", gaps=frozenset()):
         with patch.object(main, "_train_df", self.history), \
+                patch.object(main, "_DATA_GAP_DAYS", set(gaps)), \
                 patch.object(main, "issued_forecasts_between", return_value=issued):
             return main._trends_payload(
                 pd.Timestamp("2026-10-25"), pd.Timestamp("2026-11-09"), city, product,
@@ -72,6 +73,33 @@ class TrendsTests(unittest.TestCase):
         payload = self.payload(pd.DataFrame(), city="HYD")
         self.assertEqual(payload["breakdown_by"], "product")
         self.assertEqual([row["key"] for row in payload["breakdown"]], ["Cow Milk", "Double Toned"])
+
+    def test_missing_data_day_is_left_out(self):
+        gap = pd.Timestamp("2026-11-01")
+        self.history.loc[self.history["target_date"] == gap, "total_qty"] = 0
+        issued = pd.DataFrame([
+            ("2026-11-01", "HYD", "Cow Milk", 1000.0, "2026-10-30"),
+            ("2026-11-01", "BLR", "Cow Milk", 200.0, "2026-10-29"),
+        ], columns=["forecast_date", "city_cd", "product_name", "p50_qty", "issue_date"])
+        payload = self.payload(issued, gaps={("HYD", gap), ("BLR", gap)})
+        day = {row["date"]: row for row in payload["days"]}["2026-11-01"]
+        self.assertIsNone(day["actual"])
+        self.assertIsNone(day["forecast"])
+        self.assertEqual(day["missing_data_cities"], ["BLR", "HYD"])
+        self.assertEqual(payload["summary"]["compared_days"], 0)
+        self.assertEqual(payload["summary"]["missing_data_days"], ["2026-11-01"])
+        # 15 of the 16 days have data; the average ignores the missing one.
+        self.assertEqual(payload["summary"]["days_with_sales"], 15)
+
+    def test_previous_period_matches_the_days_with_sales(self):
+        # History ends Nov 9; asking to Dec 7 must still compare 16 with 16 days.
+        with patch.object(main, "_train_df", self.history),                 patch.object(main, "_DATA_GAP_DAYS", set()),                 patch.object(main, "issued_forecasts_between", return_value=pd.DataFrame()):
+            summary = main._trends_payload(
+                pd.Timestamp("2026-10-25"), pd.Timestamp("2026-12-07"), "ALL", "ALL",
+            )["summary"]
+        self.assertEqual(summary["prev_start"], "2026-10-09")
+        self.assertEqual(summary["prev_end"], "2026-10-24")
+        self.assertEqual(summary["compared_through"], "2026-11-09")
 
 
 if __name__ == "__main__":

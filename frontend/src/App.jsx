@@ -268,6 +268,7 @@ function ForecastView({ tabs }) {
           difference: compared.reduce((sum, row) => sum + Number(row.difference), 0),
           errorPct: actual ? (100 * absError) / actual : null,
           compared: compared.length,
+          comparedForecast: compared.reduce((sum, row) => sum + Number(row.forecast_quantity), 0),
         };
       });
   }, [rows]);
@@ -292,6 +293,10 @@ function ForecastView({ tabs }) {
   const differenceTotal = comparedRows.reduce((sum, row) => sum + Number(row.difference), 0);
   const absErrorTotal = comparedRows.reduce((sum, row) => sum + Math.abs(Number(row.difference)), 0);
   const errorPct = actualTotal ? (100 * absErrorTotal) / actualTotal : 0;
+  // Difference and error only cover products that have an actual, so when
+  // some are missing the headline forecast is not what the actual is set against.
+  const comparedForecastTotal = comparedRows.reduce((sum, row) => sum + Number(row.forecast_quantity), 0);
+  const partialComparison = comparedRows.length > 0 && comparedRows.length < visibleRows.length;
 
   // Status, shown once. Cities lock separately (HYD/VGA at D-2, BLR/PNQ at D-3).
   const forecastView = data?.meta?.forecast_view ?? "live_preview";
@@ -367,6 +372,9 @@ function ForecastView({ tabs }) {
     lines.push(`*Total: ${fmt(visibleTotal)}*`);
     if (comparisonAvailable && comparedRows.length) {
       lines.push(`Actual: ${fmt(actualTotal)} | Difference: ${fmtSigned(differenceTotal)} | Error: ${fmtPct(errorPct)}`);
+      if (partialComparison) {
+        lines.push(`(${comparedRows.length} of ${visibleRows.length} products have an actual; their forecast was ${fmt(comparedForecastTotal)})`);
+      }
     }
     lines.push("", shareUrl());
     return lines.join("\n");
@@ -506,6 +514,13 @@ function ForecastView({ tabs }) {
                 <span className="num-inline">{fmtSigned(differenceTotal)}</span> vs forecast
                 <span className="sep">·</span>
                 <span className="num-inline">{fmtPct(errorPct)}</span> error
+                {partialComparison && (
+                  <>
+                    <span className="sep">·</span>
+                    {comparedRows.length} of {visibleRows.length} products have an actual so far; their forecast was{" "}
+                    <span className="num-inline">{fmt(comparedForecastTotal)}</span>
+                  </>
+                )}
               </p>
             )}
 
@@ -678,7 +693,17 @@ function ForecastView({ tabs }) {
                           {fmt(group.shownRows.reduce((sum, row) => sum + Number(row.plan_up_to_qty ?? row.forecast_quantity), 0))}
                         </td>
                       )}
-                      {comparisonAvailable && <td className="num">{group.compared ? fmt(group.actual) : "-"}</td>}
+                      {comparisonAvailable && (
+                        <td
+                          className="num"
+                          title={group.compared && group.compared < group.rows.length
+                            ? `${group.compared} of ${group.rows.length} products have an actual; their forecast was ${fmt(group.comparedForecast)}`
+                            : undefined}
+                        >
+                          {group.compared ? fmt(group.actual) : "-"}
+                          {group.compared > 0 && group.compared < group.rows.length && <span className="partial-mark" aria-hidden="true">*</span>}
+                        </td>
+                      )}
                       {comparisonAvailable && <td className="num col-diff">{group.compared ? fmtSigned(group.difference) : "-"}</td>}
                       {comparisonAvailable && <td className="num">{group.errorPct != null ? fmtPct(group.errorPct) : "-"}</td>}
                     </tr>

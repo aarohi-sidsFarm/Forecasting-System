@@ -212,11 +212,18 @@ function insights(data, scopeLabel) {
       text: `No issued forecast for ${missing.length} day${missing.length > 1 ? "s" : ""} (${dateRuns(missing).join(", ")}), so these are left out of the accuracy figures.`,
     });
   }
+  const missingData = days.filter((day) => day.missing_data_cities?.length).map((day) => day.date);
+  if (missingData.length) {
+    notes.push({
+      key: "missing-data",
+      text: `Sales for ${dateRuns(missingData).join(", ")} are missing from the sales data (the orders exist, but the day was not loaded). These days are left out of the totals, averages and accuracy, and the forecast models skip them too.`,
+    });
+  }
   const zeroDays = days.filter((day) => day.actual === 0).map((day) => day.date);
   if (zeroDays.length) {
     notes.push({
       key: "zero",
-      text: `No sales recorded on ${dateRuns(zeroDays).join(", ")}. That is usually a no-delivery day or missing data, and it pulls the averages down.`,
+      text: `No sales recorded on ${dateRuns(zeroDays).join(", ")}.`,
     });
   }
   const major = festivals.filter((festival) => festival.impact === "HIGH");

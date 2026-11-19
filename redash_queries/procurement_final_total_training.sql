@@ -28,7 +28,7 @@ row_level AS (
         f.delivery_date::date AS target_date,
         UPPER(TRIM(f.customer_city)) AS city_cd,
         CASE
-            WHEN LOWER(TRIM(REPLACE(f.product_name, E'\t', ''))) IN ('double toned a2 buffalo milk', 'a2 buffalo milk double toned', 'double toned milk')
+            WHEN LOWER(TRIM(REPLACE(f.product_name, E'\t', ''))) IN ('double toned a2 buffalo milk', 'a2 buffalo milk double toned', 'double toned milk', 'double toned buffalo milk')
                 THEN 'Double Toned A2 Buffalo Milk'
             WHEN LOWER(TRIM(REPLACE(f.product_name, E'\t', ''))) IN ('a2 buffalo milk', 'buffalo_milk', 'buffalo milk')
                 THEN 'A2 Buffalo Milk'

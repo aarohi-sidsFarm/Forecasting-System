@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 
 try:
+    from backend.data_gaps import fill_gap_days, fill_gap_days_in_lookup, gap_days_in_frame
     from backend.direct_features import add_relative_features
     from backend.forecast_history import (
         issued_forecast_for_date,
@@ -24,6 +25,7 @@ try:
         record_run as record_forecast_run,
     )
 except ModuleNotFoundError:
+    from data_gaps import fill_gap_days, fill_gap_days_in_lookup, gap_days_in_frame
     from direct_features import add_relative_features
     from forecast_history import (
         issued_forecast_for_date,
@@ -246,8 +248,19 @@ _train_df = pd.read_csv(_train_path, parse_dates=["target_date"])
 _train_df["product_name"] = _train_df["product_name"].apply(lambda x: str(x).strip())
 _train_df = _train_df[~_train_df["product_name"].str.contains(JUNK_PATTERN, case=False, na=False)]
 
+# Days whose sales never reached the data (a whole city at 0 after a normal
+# week, e.g. 9 Nov 2026). _train_df keeps the raw values for reports, which
+# leave these days out; the models read _model_train_df, where each such day
+# holds the same weekday's value from a week earlier. See data_gaps.py.
+_DATA_GAP_DAYS = gap_days_in_frame(_train_df)
+_model_train_df = fill_gap_days(_train_df, _DATA_GAP_DAYS)
+if _DATA_GAP_DAYS:
+    print("  Missing-data days filled for the models: " + ", ".join(
+        f"{city} {date.date()}" for city, date in sorted(_DATA_GAP_DAYS)
+    ))
+
 _train_lookup = {}
-for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
+for (city, product), grp in _model_train_df.groupby(["city_cd", "product_name"]):
     series = grp.sort_values("target_date")
     _train_lookup[(city, product)] = {
         "dates": series["target_date"].values,
@@ -255,8 +268,9 @@ for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
     }
 
 _train_df["day_of_week"] = _train_df["target_date"].dt.dayofweek
+_model_train_df["day_of_week"] = _model_train_df["target_date"].dt.dayofweek
 _dow_ratio_lookup = {}
-for (city, product), grp in _train_df.groupby(["city_cd", "product_name"]):
+for (city, product), grp in _model_train_df.groupby(["city_cd", "product_name"]):
     week_mean = grp["total_qty"].mean()
     dow_means = grp.groupby("day_of_week")["total_qty"].mean()
     _dow_ratio_lookup[(city, product)] = {
@@ -674,6 +688,7 @@ def _normalize_product_name(raw_name: str) -> str:
         "buffalo milk": "A2 Buffalo Milk",
         "a2 buffalo milk": "A2 Buffalo Milk",
         "double toned milk": "Double Toned A2 Buffalo Milk",
+        "double toned buffalo milk": "Double Toned A2 Buffalo Milk",
         "a2 buffalo milk double toned": "Double Toned A2 Buffalo Milk",
         "double toned a2 buffalo milk": "Double Toned A2 Buffalo Milk",
         "a2 buffalo milk double toned": "Double Toned A2 Buffalo Milk",
@@ -1397,10 +1412,22 @@ def _component_orders_dict(df: pd.DataFrame) -> dict[tuple[str, str], float]:
 def _recent_actual_lookup(recent_df: pd.DataFrame) -> dict[tuple[str, str, pd.Timestamp], float]:
     if recent_df.empty:
         return {}
-    return {
+    lookup = {
         (r["city_cd"], r["product_name"], pd.Timestamp(r["target_date"]).normalize()): float(r["total_qty"])
         for _, r in recent_df.iterrows()
     }
+    # A day missing from the recent query (no rows for a whole city) must not
+    # read as zero sales; fill it the way the training history is filled.
+    repaired, _ = fill_gap_days_in_lookup(lookup, fallback=_training_value_or_none)
+    return repaired
+
+
+def _training_value_or_none(city: str, product: str, date: pd.Timestamp) -> float | None:
+    data = _train_lookup.get((city, product))
+    if not data:
+        return None
+    indices = np.where(data["dates"] == np.datetime64(pd.Timestamp(date).normalize()))[0]
+    return float(data["qty"][indices[0]]) if len(indices) else None
 
 
 # Latest delivery date whose actuals may be used. None means "everything
@@ -1756,6 +1783,13 @@ def _historical_actual_value(
     return float(data["qty"][indices[0]]) if len(indices) else 0.0
 
 
+# When the same weekday last week was a festival, D-7 is unreliable.
+# "override": use the median of older clean same-weekday values instead.
+# "high_only": only after a HIGH-impact festival. "blend": average the two.
+# "off": keep the normal selector.
+DIRECT_FESTIVAL_LAG_POLICY = "blend"
+
+
 def _predict_city_direct(
     artifact: dict | None,
     city: str,
@@ -1831,11 +1865,21 @@ def _predict_city_direct(
     # D-7 is one of the strongest predictors. On a normal target, never let a
     # festival-contaminated D-7 value drive either the ML or seasonal selector;
     # use the median of clean same-weekday observations instead.
-    if lag_events[7] and not any(
+    lag_7_date = target - pd.Timedelta(days=7)
+    lag_7_major = lag_7_date in _high_impact_dates or lag_7_date in _city_high_impact_dates.get(city, set())
+    policy = DIRECT_FESTIVAL_LAG_POLICY
+    festival_lag = lag_events[7] and not any(
         target_event[key] for key in ("is_festival", "is_city_festival")
-    ):
+    )
+    blend = False
+    if festival_lag and (policy == "override" or (policy == "high_only" and lag_7_major)):
         method = "same_dow_median"
+    elif festival_lag and policy == "blend":
+        blend = True
     prediction = model_prediction if method == "model" else float(row[method])
+    if blend:
+        prediction = 0.5 * prediction + 0.5 * float(row["same_dow_median"])
+        method = f"{method}+same_dow_median"
     prefix = f"{city.lower()}_d{int(artifact['lead_days'])}_direct"
     return int(max(0, round(prediction))), f"{prefix}:{method}"
 
@@ -4226,11 +4270,20 @@ def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, pro
     it reaches. Days are returned unaggregated; the dashboard groups them by
     week or month.
     """
-    span_days = (end_dt - start_dt).days + 1
+    history = _train_df
+    actuals_through = pd.Timestamp(history["target_date"].max()).normalize()
+    # Compare with a previous period as long as the part of the range that
+    # has sales, not the whole requested range: 13 days of data set against
+    # the 33 days before reads as a fall that did not happen.
+    sales_through = min(end_dt, actuals_through)
+    span_days = max((sales_through - start_dt).days + 1, 1)
     prev_start = start_dt - pd.Timedelta(days=span_days)
     prev_end = start_dt - pd.Timedelta(days=1)
 
-    history = _train_df
+    # Days whose sales never reached the data (see data_gaps.py) are left out
+    # of every total, average and accuracy figure instead of counting as 0.
+    gap_keys = pd.Series(list(zip(history["city_cd"], history["target_date"])), index=history.index)
+    history = history[~gap_keys.isin(_DATA_GAP_DAYS)]
     in_scope = pd.Series(True, index=history.index)
     if city != "ALL":
         in_scope &= history["city_cd"] == city
@@ -4239,6 +4292,11 @@ def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, pro
     scoped = history[in_scope]
     current = scoped[scoped["target_date"].between(start_dt, end_dt)]
     previous = scoped[scoped["target_date"].between(prev_start, prev_end)]
+    # A day with one city missing would make the all-city total look low,
+    # so the whole day is left out when any city in scope is missing.
+    scope_gap_dates = {gap_day for gap_city, gap_day in _DATA_GAP_DAYS if city in ("ALL", gap_city)}
+    current = current[~current["target_date"].isin(scope_gap_dates)]
+    previous = previous[~previous["target_date"].isin(scope_gap_dates)]
 
     issued = issued_forecasts_between(str(start_dt.date()), str(end_dt.date()))
     if not issued.empty:
@@ -4265,16 +4323,24 @@ def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, pro
         buy_once=("final_buy_once_qty", "sum"),
         orders=("total_orders", "sum"),
     )
+    gap_cities_by_day: dict[pd.Timestamp, list[str]] = {}
+    for gap_city, gap_day in _DATA_GAP_DAYS:
+        if city in ("ALL", gap_city):
+            gap_cities_by_day.setdefault(gap_day, []).append(gap_city)
     days = []
     for day in pd.date_range(start_dt, end_dt, freq="D"):
-        row = {"date": str(day.date())}
+        row = {"date": str(day.date()), "missing_data_cities": sorted(gap_cities_by_day.get(day, []))}
         if day in daily_actuals.index:
             sales = daily_actuals.loc[day]
             row.update({key: int(round(float(sales[key]))) for key in ("actual", "subscription", "buy_once", "orders")})
         else:
             row.update({"actual": None, "subscription": None, "buy_once": None, "orders": None})
         day_issued = issued[issued["target_date"] == day] if not issued.empty else issued
-        if not day_issued.empty and scope_cities.issubset(set(day_issued["city_cd"])):
+        if (
+            not day_issued.empty
+            and not row["missing_data_cities"]
+            and scope_cities.issubset(set(day_issued["city_cd"]))
+        ):
             row["forecast"] = int(round(float(day_issued["p50_qty"].sum())))
         else:
             row["forecast"] = None
@@ -4330,6 +4396,10 @@ def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, pro
         "prev_avg_per_day": round(float(previous["total_qty"].sum()) / previous_days, 1) if previous_days else None,
         "prev_start": str(prev_start.date()),
         "prev_end": str(prev_end.date()),
+        "compared_through": str(sales_through.date()),
+        "missing_data_days": sorted(
+            str(day.date()) for day in gap_cities_by_day if start_dt <= day <= end_dt
+        ),
         "subscription_share": round(100 * float(current["final_subscription_qty"].sum()) / total, 1) if total else None,
         "compared_days": sum(1 for row in days if row["compared_actual"]),
         "error_pct": round(100 * abs_error / compared_actual, 2) if compared_actual else None,
@@ -4339,7 +4409,7 @@ def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, pro
     # Products that stopped or started selling explain most sudden level
     # changes; the forecast keeps a stopped product for up to
     # DISCONTINUED_AFTER_DAYS.
-    sales_end = min(end_dt, history["target_date"].max())
+    sales_end = sales_through
     events = []
     window = scoped[scoped["target_date"].between(prev_start, sales_end)]
     for (event_city, event_product), series in window.groupby(["city_cd", "product_name"]):
@@ -4395,7 +4465,7 @@ def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, pro
             "products": sorted(product_pool["product_name"].unique().tolist()),
         },
         "meta": {
-            "actuals_through": str(history["target_date"].max().date()),
+            "actuals_through": str(actuals_through.date()),
             "actuals_from": str(history["target_date"].min().date()),
             "issued_from": all_issued["forecast_date"].min() if not all_issued.empty else None,
             "issued_to": all_issued["forecast_date"].max() if not all_issued.empty else None,
