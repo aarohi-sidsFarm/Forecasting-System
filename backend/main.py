@@ -437,6 +437,12 @@ FESTIVAL_SPIKE_MAX_DISTANCE = 1
 # Validated on the Aug-Oct 2026 holdout for HYD and BLR only. PNQ and VGA
 # were still launching in 2025, their few clean festivals are noisy, and no
 # PNQ/VGA day was adjusted in the holdout, so they keep the one-day guardrail.
+# Tested 2026-11-19 for PNQ, which dips 20-40% around Diwali (customers
+# travel): learning from its 2025 festivals raised as-issued error for
+# 22 Oct - 18 Nov from 14.2% to 24.3%. Its 2025 profile adds false +12-17%
+# boosts (fast launch growth) and the recursive model already follows the
+# dip, so the two stack. Retest once Diwali 2026 has a complete occurrence
+# (after 27 Dec 2026), for Diwali 2027.
 FESTIVAL_PERIOD_CITIES = {"HYD", "BLR"}
 if os.path.exists(FESTIVAL_PERIOD_OCCURRENCES_PATH):
     _festival_period_occurrences = pd.read_csv(
@@ -4329,7 +4335,7 @@ TRENDS_EVENT_MIN_PER_DAY = 10
 def _trends_payload(start_dt: pd.Timestamp, end_dt: pd.Timestamp, city: str, product: str) -> dict:
     """Daily sales, issued forecasts and festivals for the Trends view.
 
-    Sales come from the training history (refreshed weekly), so the latest
+    Sales come from the training history (refreshed every night), so the latest
     days can be missing until the next refresh; actuals_through says how far
     it reaches. Days are returned unaggregated; the dashboard groups them by
     week or month.

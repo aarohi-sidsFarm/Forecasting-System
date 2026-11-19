@@ -237,7 +237,7 @@ function insights(data, scopeLabel) {
   if (meta.actuals_through < data.end) {
     notes.push({
       key: "fresh",
-      text: `Sales data runs to ${formatDay(meta.actuals_through, true)}; it is refreshed weekly, so later days are not shown yet.`,
+      text: `Sales data runs to ${formatDay(meta.actuals_through, true)}; it is refreshed every night after the forecast is issued, so later days are not shown yet.`,
     });
   }
   return notes;

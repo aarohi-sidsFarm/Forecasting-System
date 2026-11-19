@@ -90,6 +90,22 @@ jobs:
           GOOGLE_CHAT_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
         run: python scripts/check_forecast_accuracy.py
 
+      # Keeps the Trends view and the models' history at most a day behind
+      # (it was weekly). Runs after the issued forecast is safely pushed.
+      - name: Refresh the sales history
+        if: steps.commit.outputs.issued != ''
+        continue-on-error: true
+        run: |
+          python scripts/refresh_training_data.py
+          git add data/raw/redash_exports/procurement_final_total_training.csv             data/processed/training_clean.csv data/processed/training_filled.csv             data/processed/training_features.csv             backend/ml_models/training_clean.csv backend/ml_models/training_filled.csv             backend/ml_models/training_features.csv
+          if git diff --cached --quiet; then
+            echo "Sales history already up to date."
+            exit 0
+          fi
+          git commit -m "Daily refresh of sales history ($(date +%F))"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
       # Renamed products and days missing from the sales data both read as
       # 0 sales; catch them within a day or two instead of weeks.
       - name: Check the sales data
