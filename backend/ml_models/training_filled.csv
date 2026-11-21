@@ -567,6 +567,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,A2 Buffalo Milk,2096,1368,167680.0,1888.0,208.0
 2026-11-18,BLR,A2 Buffalo Milk,2112,1381,168960.0,1948.0,164.0
 2026-11-19,BLR,A2 Buffalo Milk,2089,1368,167120.0,1893.0,196.0
+2026-11-20,BLR,A2 Buffalo Milk,2131,1379,170480.0,1922.0,209.0
 2025-05-01,BLR,A2 Desi Cow Milk,318,224,25440.0,290.0,28.0
 2025-05-02,BLR,A2 Desi Cow Milk,326,219,26080.0,291.0,35.0
 2025-05-03,BLR,A2 Desi Cow Milk,307,217,24560.0,271.0,36.0
@@ -1135,6 +1136,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,A2 Desi Cow Milk,553,378,44240.0,513.0,40.0
 2026-11-18,BLR,A2 Desi Cow Milk,527,365,42160.0,490.0,37.0
 2026-11-19,BLR,A2 Desi Cow Milk,541,371,43280.0,497.0,44.0
+2026-11-20,BLR,A2 Desi Cow Milk,526,349,42080.0,484.0,42.0
 2025-05-01,BLR,Cow Milk,1739,1078,139120.0,1585.0,154.0
 2025-05-02,BLR,Cow Milk,1728,1060,138240.0,1570.0,158.0
 2025-05-03,BLR,Cow Milk,1742,1055,139360.0,1533.0,209.0
@@ -1703,6 +1705,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,Cow Milk,1547,1007,123760.0,1429.0,118.0
 2026-11-18,BLR,Cow Milk,1603,1028,128240.0,1465.0,138.0
 2026-11-19,BLR,Cow Milk,1548,992,123840.0,1430.0,118.0
+2026-11-20,BLR,Cow Milk,1597,1001,127760.0,1449.0,148.0
 2025-05-01,BLR,Curd,156,141,12480.0,89.0,67.0
 2025-05-02,BLR,Curd,152,137,12160.0,87.0,65.0
 2025-05-03,BLR,Curd,166,149,13280.0,83.0,83.0
@@ -2271,6 +2274,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,Curd,221,203,17680.0,150.0,71.0
 2026-11-18,BLR,Curd,212,197,16960.0,142.0,70.0
 2026-11-19,BLR,Curd,232,209,18560.0,159.0,73.0
+2026-11-20,BLR,Curd,221,195,17680.0,146.0,75.0
 2025-05-01,BLR,Double Toned A2 Buffalo Milk,376,270,30080.0,318.0,58.0
 2025-05-02,BLR,Double Toned A2 Buffalo Milk,420,291,33600.0,341.0,79.0
 2025-05-03,BLR,Double Toned A2 Buffalo Milk,420,285,33600.0,321.0,99.0
@@ -2839,6 +2843,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,Double Toned A2 Buffalo Milk,485,338,38800.0,400.0,85.0
 2026-11-18,BLR,Double Toned A2 Buffalo Milk,476,343,38080.0,391.0,85.0
 2026-11-19,BLR,Double Toned A2 Buffalo Milk,486,354,38880.0,413.0,73.0
+2026-11-20,BLR,Double Toned A2 Buffalo Milk,439,316,35120.0,383.0,56.0
 2025-05-01,BLR,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,BLR,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,BLR,High Protein Toned Milk,0,0,0.0,0.0,0.0
@@ -3407,6 +3412,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,High Protein Toned Milk,153,121,12240.0,133.0,20.0
 2026-11-18,BLR,High Protein Toned Milk,165,132,13200.0,147.0,18.0
 2026-11-19,BLR,High Protein Toned Milk,161,128,12880.0,144.0,17.0
+2026-11-20,BLR,High Protein Toned Milk,174,130,13920.0,149.0,25.0
 2025-05-01,BLR,Skim Milk,345,260,27600.0,291.0,54.0
 2025-05-02,BLR,Skim Milk,350,267,28000.0,313.0,37.0
 2025-05-03,BLR,Skim Milk,333,247,26640.0,303.0,30.0
@@ -3975,6 +3981,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,Skim Milk,415,301,33200.0,367.0,48.0
 2026-11-18,BLR,Skim Milk,430,298,34400.0,377.0,53.0
 2026-11-19,BLR,Skim Milk,417,291,33360.0,375.0,42.0
+2026-11-20,BLR,Skim Milk,415,289,33200.0,358.0,57.0
 2025-05-01,BLR,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,BLR,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,BLR,Toned Milk,0,0,0.0,0.0,0.0
@@ -4543,6 +4550,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,BLR,Toned Milk,635,435,50800.0,546.0,89.0
 2026-11-18,BLR,Toned Milk,647,444,51760.0,561.0,86.0
 2026-11-19,BLR,Toned Milk,651,441,52080.0,555.0,96.0
+2026-11-20,BLR,Toned Milk,644,433,51520.0,570.0,74.0
 2025-05-01,HYD,A2 Buffalo Milk,13718,8313,1097440.0,12947.0,771.0
 2025-05-02,HYD,A2 Buffalo Milk,13721,8188,1097680.0,12929.0,792.0
 2025-05-03,HYD,A2 Buffalo Milk,13413,8046,1073040.0,12603.0,810.0
@@ -5111,6 +5119,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,A2 Buffalo Milk,16711,10576,1336880.0,15654.0,1057.0
 2026-11-18,HYD,A2 Buffalo Milk,16748,10594,1339840.0,15706.0,1042.0
 2026-11-19,HYD,A2 Buffalo Milk,16596,10510,1327680.0,15531.0,1065.0
+2026-11-20,HYD,A2 Buffalo Milk,16543,10417,1323440.0,15523.0,1020.0
 2025-05-01,HYD,A2 Desi Cow Milk,1327,928,106160.0,1239.0,88.0
 2025-05-02,HYD,A2 Desi Cow Milk,1355,953,108400.0,1257.0,98.0
 2025-05-03,HYD,A2 Desi Cow Milk,1291,905,103280.0,1200.0,91.0
@@ -5679,6 +5688,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,A2 Desi Cow Milk,1612,1171,128960.0,1460.0,152.0
 2026-11-18,HYD,A2 Desi Cow Milk,1616,1136,129280.0,1480.0,136.0
 2026-11-19,HYD,A2 Desi Cow Milk,1597,1166,127760.0,1456.0,141.0
+2026-11-20,HYD,A2 Desi Cow Milk,1596,1150,127680.0,1451.0,145.0
 2025-05-01,HYD,Cow Milk,7707,4412,616560.0,7355.0,352.0
 2025-05-02,HYD,Cow Milk,7756,4465,620480.0,7296.0,460.0
 2025-05-03,HYD,Cow Milk,7669,4375,613520.0,7222.0,447.0
@@ -6247,6 +6257,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,Cow Milk,9457,5739,756560.0,8854.0,603.0
 2026-11-18,HYD,Cow Milk,9462,5792,756960.0,8918.0,544.0
 2026-11-19,HYD,Cow Milk,9392,5710,751360.0,8828.0,564.0
+2026-11-20,HYD,Cow Milk,9739,5949,779120.0,8938.0,801.0
 2025-05-01,HYD,Curd,1011,766,80880.0,494.0,517.0
 2025-05-02,HYD,Curd,1427,892,114160.0,483.0,944.0
 2025-05-03,HYD,Curd,1419,870,113520.0,450.0,969.0
@@ -6815,6 +6826,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,Curd,1361,1230,108880.0,839.0,522.0
 2026-11-18,HYD,Curd,1439,1289,115120.0,900.0,539.0
 2026-11-19,HYD,Curd,1338,1201,107040.0,841.0,497.0
+2026-11-20,HYD,Curd,1368,1215,109440.0,834.0,534.0
 2025-05-01,HYD,Double Toned A2 Buffalo Milk,5446,3379,435680.0,5021.0,425.0
 2025-05-02,HYD,Double Toned A2 Buffalo Milk,5520,3417,441600.0,5050.0,470.0
 2025-05-03,HYD,Double Toned A2 Buffalo Milk,5488,3376,439040.0,4979.0,509.0
@@ -7383,6 +7395,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,Double Toned A2 Buffalo Milk,5321,3473,425680.0,4943.0,378.0
 2026-11-18,HYD,Double Toned A2 Buffalo Milk,5361,3516,428880.0,4929.0,432.0
 2026-11-19,HYD,Double Toned A2 Buffalo Milk,5242,3466,419360.0,4853.0,389.0
+2026-11-20,HYD,Double Toned A2 Buffalo Milk,5247,3406,419760.0,4838.0,409.0
 2025-05-01,HYD,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,HYD,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,HYD,High Protein Toned Milk,0,0,0.0,0.0,0.0
@@ -7951,6 +7964,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,High Protein Toned Milk,1664,1221,133120.0,1492.0,172.0
 2026-11-18,HYD,High Protein Toned Milk,1701,1283,136080.0,1513.0,188.0
 2026-11-19,HYD,High Protein Toned Milk,1645,1228,131600.0,1485.0,160.0
+2026-11-20,HYD,High Protein Toned Milk,1651,1219,132080.0,1476.0,175.0
 2025-05-01,HYD,Skim Milk,2286,1514,182880.0,2098.0,188.0
 2025-05-02,HYD,Skim Milk,2289,1502,183120.0,2095.0,194.0
 2025-05-03,HYD,Skim Milk,2268,1502,181440.0,2087.0,181.0
@@ -8519,6 +8533,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,Skim Milk,2273,1584,181840.0,2080.0,193.0
 2026-11-18,HYD,Skim Milk,2257,1549,180560.0,2066.0,191.0
 2026-11-19,HYD,Skim Milk,2332,1592,186560.0,2101.0,231.0
+2026-11-20,HYD,Skim Milk,2252,1559,180160.0,2051.0,201.0
 2025-05-01,HYD,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,HYD,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,HYD,Toned Milk,0,0,0.0,0.0,0.0
@@ -9087,6 +9102,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,HYD,Toned Milk,11764,7311,941120.0,10530.0,1234.0
 2026-11-18,HYD,Toned Milk,11905,7314,952400.0,10533.0,1372.0
 2026-11-19,HYD,Toned Milk,11724,7244,937920.0,10425.0,1299.0
+2026-11-20,HYD,Toned Milk,11780,7275,942400.0,10442.0,1338.0
 2025-05-01,PNQ,A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,A2 Buffalo Milk,1,1,80.0,1.0,0.0
@@ -9655,6 +9671,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,A2 Buffalo Milk,250,161,20000.0,213.0,37.0
 2026-11-18,PNQ,A2 Buffalo Milk,267,171,21360.0,224.0,43.0
 2026-11-19,PNQ,A2 Buffalo Milk,262,168,20960.0,219.0,43.0
+2026-11-20,PNQ,A2 Buffalo Milk,258,164,20640.0,229.0,29.0
 2025-05-01,PNQ,A2 Desi Cow Milk,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,A2 Desi Cow Milk,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,A2 Desi Cow Milk,0,0,0.0,0.0,0.0
@@ -10223,6 +10240,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,A2 Desi Cow Milk,476,317,38080.0,420.0,56.0
 2026-11-18,PNQ,A2 Desi Cow Milk,503,332,40240.0,436.0,67.0
 2026-11-19,PNQ,A2 Desi Cow Milk,476,319,38080.0,416.0,60.0
+2026-11-20,PNQ,A2 Desi Cow Milk,489,332,39120.0,439.0,50.0
 2025-05-01,PNQ,Cow Milk,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,Cow Milk,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,Cow Milk,0,0,0.0,0.0,0.0
@@ -10791,6 +10809,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,Cow Milk,406,255,32480.0,349.0,57.0
 2026-11-18,PNQ,Cow Milk,429,270,34320.0,357.0,72.0
 2026-11-19,PNQ,Cow Milk,425,263,34000.0,374.0,51.0
+2026-11-20,PNQ,Cow Milk,435,277,34800.0,375.0,60.0
 2025-05-01,PNQ,Curd,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,Curd,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,Curd,0,0,0.0,0.0,0.0
@@ -11359,6 +11378,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,Curd,27,26,2160.0,7.0,20.0
 2026-11-18,PNQ,Curd,38,37,3040.0,9.0,29.0
 2026-11-19,PNQ,Curd,35,32,2800.0,11.0,24.0
+2026-11-20,PNQ,Curd,21,20,1680.0,8.0,13.0
 2025-05-01,PNQ,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
@@ -11927,6 +11947,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2026-11-18,PNQ,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2026-11-19,PNQ,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
+2026-11-20,PNQ,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-01,PNQ,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,High Protein Toned Milk,0,0,0.0,0.0,0.0
@@ -12495,6 +12516,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2026-11-18,PNQ,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2026-11-19,PNQ,High Protein Toned Milk,0,0,0.0,0.0,0.0
+2026-11-20,PNQ,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-01,PNQ,Skim Milk,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,Skim Milk,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,Skim Milk,0,0,0.0,0.0,0.0
@@ -13063,6 +13085,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,Skim Milk,0,0,0.0,0.0,0.0
 2026-11-18,PNQ,Skim Milk,0,0,0.0,0.0,0.0
 2026-11-19,PNQ,Skim Milk,0,0,0.0,0.0,0.0
+2026-11-20,PNQ,Skim Milk,0,0,0.0,0.0,0.0
 2025-05-01,PNQ,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,PNQ,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,PNQ,Toned Milk,0,0,0.0,0.0,0.0
@@ -13631,6 +13654,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,PNQ,Toned Milk,0,0,0.0,0.0,0.0
 2026-11-18,PNQ,Toned Milk,0,0,0.0,0.0,0.0
 2026-11-19,PNQ,Toned Milk,0,0,0.0,0.0,0.0
+2026-11-20,PNQ,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-01,VGA,A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-02,VGA,A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-03,VGA,A2 Buffalo Milk,0,0,0.0,0.0,0.0
@@ -14199,6 +14223,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,A2 Buffalo Milk,163,113,13040.0,135.0,28.0
 2026-11-18,VGA,A2 Buffalo Milk,184,118,14720.0,132.0,52.0
 2026-11-19,VGA,A2 Buffalo Milk,160,109,12800.0,129.0,31.0
+2026-11-20,VGA,A2 Buffalo Milk,158,106,12640.0,128.0,30.0
 2025-05-01,VGA,A2 Desi Cow Milk,0,0,0.0,0.0,0.0
 2025-05-02,VGA,A2 Desi Cow Milk,0,0,0.0,0.0,0.0
 2025-05-03,VGA,A2 Desi Cow Milk,0,0,0.0,0.0,0.0
@@ -14767,6 +14792,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,A2 Desi Cow Milk,21,13,1680.0,19.0,2.0
 2026-11-18,VGA,A2 Desi Cow Milk,20,13,1600.0,17.0,3.0
 2026-11-19,VGA,A2 Desi Cow Milk,21,12,1680.0,18.0,3.0
+2026-11-20,VGA,A2 Desi Cow Milk,22,14,1760.0,14.0,8.0
 2025-05-01,VGA,Cow Milk,3,2,240.0,3.0,0.0
 2025-05-02,VGA,Cow Milk,2,2,160.0,2.0,0.0
 2025-05-03,VGA,Cow Milk,2,2,160.0,2.0,0.0
@@ -15335,6 +15361,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,Cow Milk,51,33,4080.0,38.0,13.0
 2026-11-18,VGA,Cow Milk,56,37,4480.0,43.0,13.0
 2026-11-19,VGA,Cow Milk,59,36,4720.0,46.0,13.0
+2026-11-20,VGA,Cow Milk,60,36,4800.0,46.0,14.0
 2025-05-01,VGA,Curd,1,1,80.0,1.0,0.0
 2025-05-02,VGA,Curd,1,1,80.0,1.0,0.0
 2025-05-03,VGA,Curd,1,1,80.0,1.0,0.0
@@ -15903,6 +15930,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,Curd,12,10,960.0,5.0,7.0
 2026-11-18,VGA,Curd,18,17,1440.0,9.0,9.0
 2026-11-19,VGA,Curd,8,7,640.0,6.0,2.0
+2026-11-20,VGA,Curd,13,12,1040.0,7.0,6.0
 2025-05-01,VGA,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-02,VGA,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
 2025-05-03,VGA,Double Toned A2 Buffalo Milk,0,0,0.0,0.0,0.0
@@ -16471,6 +16499,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,Double Toned A2 Buffalo Milk,60,45,4800.0,48.0,12.0
 2026-11-18,VGA,Double Toned A2 Buffalo Milk,56,41,4480.0,43.0,13.0
 2026-11-19,VGA,Double Toned A2 Buffalo Milk,63,50,5040.0,49.0,14.0
+2026-11-20,VGA,Double Toned A2 Buffalo Milk,70,52,5600.0,52.0,18.0
 2025-05-01,VGA,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,VGA,High Protein Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,VGA,High Protein Toned Milk,0,0,0.0,0.0,0.0
@@ -17039,6 +17068,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,High Protein Toned Milk,14,13,1120.0,7.0,7.0
 2026-11-18,VGA,High Protein Toned Milk,18,15,1440.0,8.0,10.0
 2026-11-19,VGA,High Protein Toned Milk,28,21,2240.0,10.0,18.0
+2026-11-20,VGA,High Protein Toned Milk,14,13,1120.0,9.0,5.0
 2025-05-01,VGA,Skim Milk,0,0,0.0,0.0,0.0
 2025-05-02,VGA,Skim Milk,0,0,0.0,0.0,0.0
 2025-05-03,VGA,Skim Milk,0,0,0.0,0.0,0.0
@@ -17607,6 +17637,7 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,Skim Milk,20,14,1600.0,15.0,5.0
 2026-11-18,VGA,Skim Milk,22,16,1760.0,11.0,11.0
 2026-11-19,VGA,Skim Milk,25,18,2000.0,14.0,11.0
+2026-11-20,VGA,Skim Milk,22,13,1760.0,15.0,7.0
 2025-05-01,VGA,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-02,VGA,Toned Milk,0,0,0.0,0.0,0.0
 2025-05-03,VGA,Toned Milk,0,0,0.0,0.0,0.0
@@ -18175,3 +18206,4 @@ target_date,city_cd,product_name,total_qty,total_orders,total_value,final_subscr
 2026-11-17,VGA,Toned Milk,155,90,12400.0,121.0,34.0
 2026-11-18,VGA,Toned Milk,161,99,12880.0,114.0,47.0
 2026-11-19,VGA,Toned Milk,137,90,10960.0,104.0,33.0
+2026-11-20,VGA,Toned Milk,146,89,11680.0,107.0,39.0
