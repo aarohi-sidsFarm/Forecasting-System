@@ -739,7 +739,70 @@ def _normalize_city_code(raw_city: str) -> str:
     return aliases.get(city, city)
 
 
+# Errors from Redash's read replica that clear up on their own. The replica
+# cancels long queries while it applies changes from the main database
+# ("conflict with recovery"), so a fresh run usually succeeds.
+REDASH_TRANSIENT_ERRORS = (
+    "conflict with recovery",
+    "canceling statement due to",
+    "terminating connection",
+    "server closed the connection",
+    "could not connect to server",
+    "redash http 502",
+    "redash http 503",
+    "redash http 504",
+)
+REDASH_TRANSIENT_RETRIES = int(os.getenv("REDASH_TRANSIENT_RETRIES", "3"))
+REDASH_TRANSIENT_RETRY_DELAY_SECONDS = int(
+    os.getenv("REDASH_TRANSIENT_RETRY_DELAY_SECONDS", "60")
+)
+
+
+def _is_transient_redash_error(exc: BaseException) -> bool:
+    text = str(exc).lower()
+    return any(marker in text for marker in REDASH_TRANSIENT_ERRORS)
+
+
 async def _fetch_redash_rows(
+    query_id: int,
+    target_date_str: str,
+    cache_key: str,
+    force_refresh: bool = False,
+    *,
+    strict: bool = False,
+    wait_mode: str = "interactive",
+) -> pd.DataFrame:
+    """Fetch rows, re-running the query in issuance mode after a replica error.
+
+    One cancelled query used to fail the whole nightly issuance and wait for
+    the next scheduled retry, which GitHub can start hours late.
+    """
+    attempts = 1 + (REDASH_TRANSIENT_RETRIES if wait_mode == "issuance" and strict else 0)
+    for attempt in range(1, attempts + 1):
+        try:
+            return await _fetch_redash_rows_once(
+                query_id,
+                target_date_str,
+                cache_key,
+                force_refresh=force_refresh or attempt > 1,
+                strict=strict,
+                wait_mode=wait_mode,
+            )
+        except RedashRefreshInProgress:
+            raise
+        except Exception as exc:
+            if attempt >= attempts or not _is_transient_redash_error(exc):
+                raise
+            print(
+                f"Redash {cache_key} hit a temporary error for {target_date_str} "
+                f"(attempt {attempt} of {attempts}); retrying in "
+                f"{REDASH_TRANSIENT_RETRY_DELAY_SECONDS}s"
+            )
+            await asyncio.sleep(REDASH_TRANSIENT_RETRY_DELAY_SECONDS)
+    raise AssertionError("unreachable")
+
+
+async def _fetch_redash_rows_once(
     query_id: int,
     target_date_str: str,
     cache_key: str,
